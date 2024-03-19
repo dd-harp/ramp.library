@@ -1,0 +1,22 @@
+Package: ramp.library
+Type: Package
+Title: A library of models and algorithms for RAMP (Robust Analytics for Malaria Policy) 
+Version: 0.1.0
+Authors@R: c(
+      person("David L.", "Smith", email = "smitdave@uw.edu", role = c("aut","cre"), comment = c(ORCID = "0000-0003-4367-3849"))
+    )
+Description: 
+License: GPL-3 
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Depends:
+  ramp.xde,
+  ramp.work
+Imports:
+  knitr,
+  viridisLite
+Suggests:
+    viridis,
+    rmarkdown 
+VignetteBuilder: knitr

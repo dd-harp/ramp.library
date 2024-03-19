@@ -1,0 +1,12 @@
+pandoc: 3.1.1
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  MYZmod-RMG: MYZmod-RMG.html
+  X-How_To_Add_Model: X-How_To_Add_Model.html
+  Xmod-SIS: Xmod-SIS.html
+last_built: 2024-03-19T04:26Z
+urls:
+  reference: https://dd-harp.github.io/ramp.library/reference
+  article: https://dd-harp.github.io/ramp.library/articles
+

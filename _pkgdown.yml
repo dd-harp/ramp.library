@@ -1,0 +1,108 @@
+url: https://dd-harp.github.io/ramp.library/
+navbar:
+  left:
+  - text: Functions
+    href: reference/index.html
+  - text: MYZ
+    menu:
+    - text: The RMG Model
+      href: articles/MYZmod-RMG.html
+  - text: X
+    menu:
+    - text: How to add a new X model
+      href: articles/X-How_To_Add_Model.html
+    - text: The SIS model
+      href: articles/Xmod-SIS.html
+  right:
+  - icon: fa-github
+    href: https://github.com/dd-harp/ramp.library/
+home:
+  sidebar:
+    structure:
+    - links
+    - license
+    - community
+    - citation
+    - authors
+    - dev
+reference:
+- title: Adult Mosquito Models
+  desc: |
+     The model library for adult mosquito infection dynamics
+- subtitle: The Adult Mosquito RMG Model
+  contents:
+  - F_eggs.RMG
+  - F_fqZ.RMG
+  - F_fqM.RMG
+  - MBionomics.RMG
+  - dMYZdt.RMG
+  - get_inits_MYZ.RMG
+  - make_MYZinits_RMG
+  - make_MYZpar_RMG
+  - make_indices_MYZ.RMG
+  - make_inits_MYZ_RMG
+  - make_parameters_MYZ_RMG
+  - parse_deout_MYZ.RMG
+  - setup_MYZpar.RMG
+  - setup_MYZinits.RMG
+  - update_inits_MYZ.RMG
+- title: XH Component
+  desc: |
+    Models for parasites infecting human / vertebrate hosts
+- subtitle: The SIS Model
+  contents:
+  - split_stratum_by_biting.SIS
+- subtitle: The Garki model
+  contents:
+  - F_X.garki
+  - F_H.garki
+  - F_pr.garki
+  - F_b.garki
+  - dXdt.garki
+  - setup_Xpar.garki
+  - setup_Xinits.garki
+  - make_Xpar_garki
+  - make_Xinits_garki
+  - make_indices_X.garki
+  - parse_deout_X.garki
+  - get_inits_X.garki
+  - update_inits_X.garki
+  - HTC.garki
+  - xde_plot_X.garki
+  - xde_lines_X_garki
+- subtitle: The SIR model
+  contents:
+  - F_X.SIR
+  - F_H.SIR
+  - F_pr.SIR
+  - F_b.SIR
+  - dXdt.SIR
+  - setup_Xinits.SIR
+  - setup_Xpar.SIR
+  - make_Xpar_SIR
+  - make_Xinits_SIR
+  - make_indices_X.SIR
+  - parse_deout_X.SIR
+  - get_inits_X.SIR
+  - update_inits_X.SIR
+  - HTC.SIR
+  - xde_plot_X.SIR
+  - xde_lines_X_SIR
+- subtitle: The SEIR model
+  contents:
+  - F_X.SEIR
+  - F_H.SEIR
+  - F_pr.SEIR
+  - F_b.SEIR
+  - dXdt.SEIR
+  - setup_Xpar.SEIR
+  - setup_Xinits.SEIR
+  - make_Xpar_SEIR
+  - make_Xinits_SEIR
+  - make_indices_X.SEIR
+  - parse_deout_X.SEIR
+  - get_inits_X.SEIR
+  - update_inits_X.SEIR
+  - HTC.SEIR
+  - xde_plot_X.SEIR
+  - xde_lines_X_SEIR
