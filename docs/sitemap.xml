@@ -16,6 +16,9 @@
     <loc>https://dd-harp.github.io/ramp.library/articles/Xmod-SIS.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/Xmod-workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/index.html</loc>
   </url>
   <url>
@@ -34,6 +37,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_H.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_H.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_X.SEIR.html</loc>
   </url>
   <url>
@@ -43,6 +49,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_X.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_X.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_b.SEIR.html</loc>
   </url>
   <url>
@@ -50,6 +59,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_b.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_b.workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.RMG.html</loc>
@@ -70,6 +82,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_pr.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pr.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIR.html</loc>
   </url>
   <url>
@@ -77,6 +92,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/HTC.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/HTC.workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.RMG.html</loc>
@@ -94,6 +112,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_MYZ.RMG.html</loc>
   </url>
   <url>
@@ -106,10 +127,16 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_X.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_X.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/hello.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/list_Xvars.workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_RMG.html</loc>
@@ -127,6 +154,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SEIR.html</loc>
   </url>
   <url>
@@ -134,6 +164,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_MYZ.RMG.html</loc>
@@ -146,6 +179,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_X.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_X.workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_inits_MYZ_RMG.html</loc>
@@ -166,6 +202,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_deout_X.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_deout_X.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.RMG.html</loc>
   </url>
   <url>
@@ -181,6 +220,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SEIR.html</loc>
   </url>
   <url>
@@ -188,6 +230,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/split_stratum_by_biting.SIS.html</loc>
@@ -205,6 +250,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/update_inits_X.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/update_inits_X.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_lines_X_SEIR.html</loc>
   </url>
   <url>
@@ -214,6 +262,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_lines_X_garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xde_lines_X_workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_plot_X.SEIR.html</loc>
   </url>
   <url>
@@ -221,5 +272,8 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_plot_X.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xde_plot_X.workhorse.html</loc>
   </url>
 </urlset>

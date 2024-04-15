@@ -72,6 +72,25 @@ reference:
   - xde_lines_X_garki
 - subtitle: The SIR model
   contents:
+  - F_X.workhorse
+  - F_H.workhorse
+  - F_pr.workhorse
+  - F_b.workhorse
+  - dXdt.workhorse
+  - setup_Xinits.workhorse
+  - list_Xvars.workhorse
+  - setup_Xpar.workhorse
+  - make_Xpar_workhorse
+  - make_Xinits_workhorse
+  - make_indices_X.workhorse
+  - parse_deout_X.workhorse
+  - get_inits_X.workhorse
+  - update_inits_X.workhorse
+  - HTC.workhorse
+  - xde_plot_X.workhorse
+  - xde_lines_X_workhorse
+- subtitle: The SIR model
+  contents:
   - F_X.SIR
   - F_H.SIR
   - F_pr.SIR

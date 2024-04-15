@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="A library of models and algorithms for RAMP (Robust Analytics for Malaria Policy) ">
-<meta property="og:description" content="">
+<meta property="og:description" content="Reusable algorithms, encoded and rigorously tested, to implement dynamical systems models for malaria and other mosquito-transmitted pathogens. ">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -89,11 +89,24 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div class="section level1">
-<div class="page-header"><h1 id="ramplibrary">ramp.library<a class="anchor" aria-label="anchor" href="#ramplibrary"></a>
+<div class="page-header"><h1 id="ramplibrary----a-model-library-for-ramp">ramp.library <br><br> A Model Library for RAMP<a class="anchor" aria-label="anchor" href="#ramplibrary----a-model-library-for-ramp"></a>
 </h1></div>
-<p>The ramp models</p>
+<p>This package – <code>ramp.library</code> – contains reusable code that has been rigorously tested and that implements a large number of dynamical model families and other algorithms taken from the literature describing malaria and other mosquito-transmitted pathogens (see Reiner, <em>et al.</em> 2013)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The supporting code was designed to be modular, and plug-and-play. The modular design makes it possible to break down published models to serve as the dynamical components in new models for malaria. The model families in <code>ramp.library</code> supports nimble model building that can be used by:</p>
+<ul>
+<li><p><a href="https://github.com/dd-harp/ramp.xde" class="external-link"><code>ramp.xde</code></a> implements a modular, flexible, and extensible framework for building systems of ordinary and delay differential equations models for malaria and other mosquito-transmitted pathogens. The mathematic framework for <code>ramp.xde</code> was explained in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" target="_blank" class="external-link">Spatial Dynamics of Malaria Transmission</a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
+<li><p><a href="https://github.com/dd-harp/ramp.dts" class="external-link"><code>ramp.dts</code></a> implements a modular, flexible, and extensible framework for building discrete time systems, including both deterministic and stochastic difference equations for malaria and other mosquito-transmitted pathogens.</p></li>
+</ul>
 </div>
+<div class="footnotes footnotes-end-of-document">
+<hr>
+<ol>
+<li id="fn1"><p>Reiner RC Jr, Perkins TA, Barker CM, Niu T, Chaves LF, Ellis AM, et al. A systematic review of mathematical models of mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface. 2013;10: 20120921.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D, Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of malaria transmission. PLoS Comput Biol 19(6): e1010684. <a href="https://doi.org/10.1371/journal.pcbi.1010684" class="external-link uri">https://doi.org/10.1371/journal.pcbi.1010684</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

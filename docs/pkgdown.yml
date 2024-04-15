@@ -5,7 +5,8 @@ articles:
   MYZmod-RMG: MYZmod-RMG.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
   Xmod-SIS: Xmod-SIS.html
-last_built: 2024-03-19T04:26Z
+  Xmod-workhorse: Xmod-workhorse.html
+last_built: 2024-04-15T21:30Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles
