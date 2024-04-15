@@ -84,9 +84,15 @@ list_Xvars.workhorse <- function(y, pars, i) {
 #' @param nStrata the number of population strata
 #' @param Xopts a [list] that could overwrite defaults
 #' @param tau the incubation period
+#' @param b the probability of infection, per infectious bite
 #' @param r the clearance rate
 #' @param sigma the rate individuals lose chemoprotection
 #' @param phi the rate of transition from the acute to the chronic phase
+#' @param c1 the probability of infecting a mosquito, stage 1
+#' @param c2 the probability of infecting a mosquito, stage 2
+#' @param c3 the probability of infecting a mosquito, stage 3
+#' @param c4 the probability of infecting a mosquito, stage 4
+#' @param cG the probability of infecting a mosquito, prophylaxed
 #' @param xi_1 the rate of transition from stage 1 to stage 2
 #' @param xi_2 the rate of transition from stage 2 to stage 3
 #' @param xi_3 the rate of transition from stage 3 to stage 4
@@ -143,7 +149,7 @@ make_Xpar_workhorse = function(nStrata, Xopts=list(),
 #' @inheritParams ramp.xde::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.workhorse = function(workhorse, pars, i, Xopts=list()){
+setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_workhorse(pars$Hpar[[i]]$nStrata, Xopts)
   pars$xde = "dde"
   return(pars)

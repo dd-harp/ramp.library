@@ -35,11 +35,23 @@ make_Xpar_workhorse(
 
 \item{tau}{the incubation period}
 
+\item{b}{the probability of infection, per infectious bite}
+
 \item{r}{the clearance rate}
 
 \item{sigma}{the rate individuals lose chemoprotection}
 
 \item{phi}{the rate of transition from the acute to the chronic phase}
+
+\item{c1}{the probability of infecting a mosquito, stage 1}
+
+\item{c2}{the probability of infecting a mosquito, stage 2}
+
+\item{c3}{the probability of infecting a mosquito, stage 3}
+
+\item{c4}{the probability of infecting a mosquito, stage 4}
+
+\item{cG}{the probability of infecting a mosquito, prophylaxed}
 
 \item{xi_1}{the rate of transition from stage 1 to stage 2}
 

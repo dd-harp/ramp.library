@@ -11,7 +11,7 @@ navbar:
     menu:
     - text: How to add a new X model
       href: articles/X-How_To_Add_Model.html
-    - text: The SIS model
+    - text: SIS Model
       href: articles/Xmod-SIS.html
   right:
   - icon: fa-github

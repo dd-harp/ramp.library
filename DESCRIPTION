@@ -6,7 +6,7 @@ Authors@R: c(
       person("David L.", "Smith", email = "smitdave@uw.edu", role = c("aut","cre"), comment = c(ORCID = "0000-0003-4367-3849"))
     )
 Description: Reusable algorithms, encoded and rigorously tested, to implement dynamical systems models for malaria and other mosquito-transmitted pathogens. 
-License: GPL-3 
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1
@@ -15,6 +15,7 @@ Depends:
   ramp.work
 Imports:
   knitr,
+  deSolve,
   viridisLite
 Suggests:
     viridis,

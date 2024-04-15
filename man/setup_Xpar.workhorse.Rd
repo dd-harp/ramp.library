@@ -4,9 +4,11 @@
 \alias{setup_Xpar.workhorse}
 \title{Setup Xpar.workhorse}
 \usage{
-\method{setup_Xpar}{workhorse}(workhorse, pars, i, Xopts = list())
+\method{setup_Xpar}{workhorse}(Xname, pars, i, Xopts = list())
 }
 \arguments{
+\item{Xname}{a \link{character} string}
+
 \item{pars}{a \link{list}}
 
 \item{i}{the host species index}
