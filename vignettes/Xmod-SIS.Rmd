@@ -1,11 +1,11 @@
 ---
-title: "The SIS Model for Human Infection"
+title: "The SIS Model"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document:     
     theme: paper 
 vignette: >
-  %\VignetteIndexEntry{The SIS Model for Human Infection}
+  %\VignetteIndexEntry{The SIS Model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

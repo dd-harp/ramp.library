@@ -14,10 +14,10 @@ Depends:
   ramp.xde,
   ramp.work
 Imports:
-  knitr,
-  deSolve,
   viridisLite
 Suggests:
+    knitr,
+    deSolve,
     viridis,
     rmarkdown 
 VignetteBuilder: knitr

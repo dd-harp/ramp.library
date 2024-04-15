@@ -28,6 +28,8 @@ make_Xinits_workhorse(
 
 \item{Xopts}{a [list] to overwrite defaults}
 
+\item{H0}{the initial population size}
+
 \item{U}{the initial number uninfected}
 
 \item{A0}{the initial number in U and A}
