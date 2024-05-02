@@ -11,7 +11,8 @@ MBionomics.RMG <- function(t, y, pars, s) {
     pars$MYZpar[[s]]$q <- q0
     pars$MYZpar[[s]]$g <- g0
     pars$MYZpar[[s]]$phi <- phi0
-    pars$MYZpar[[s]]$sigma <- sigma0
+    pars$MYZpar[[s]]$sigma_b <- sigma_b0
+    pars$MYZpar[[s]]$sigma_q <- sigma_q0
     pars$MYZpar[[s]]$nu <- nu0
 
   return(pars)
@@ -72,8 +73,8 @@ dMYZdt.RMG <- function(t, y, pars, s){
 
     with(pars$MYZpar[[s]],{
 
-      Omega_b <- make_Omega(g, sigma, calKb, nPatches)
-      Omega_q <- make_Omega(g, sigma, calKq, nPatches)
+      Omega_b <- make_Omega(g, sigma_b, calKb, nPatches)
+      Omega_q <- make_Omega(g, sigma_q, calKq, nPatches)
 
       dU_bdt <- Lambda + nu*U_g - f*U_b - (Omega_b %*% U_b)
       dU_gdt <- f*(1-q*kappa)*U_b - nu*U_g - (Omega_q %*% U_g)
@@ -103,7 +104,8 @@ setup_MYZpar.RMG = function(MYZname, pars, s, MYZopts=list(), EIPmod, calK){
 #' @param EIPmod a [list] that defines the EIP model
 #' @param calK a mosquito dispersal matrix of dimensions `nPatches` by `nPatches`
 #' @param g mosquito mortality rate
-#' @param sigma emigration rate
+#' @param sigma_b emigration rate while blood feeding
+#' @param sigma_q emigration rate while egg laying
 #' @param f feeding rate
 #' @param q human blood fraction
 #' @param nu oviposition rate, per mosquito
@@ -111,7 +113,7 @@ setup_MYZpar.RMG = function(MYZname, pars, s, MYZopts=list(), EIPmod, calK){
 #' @return a [list]
 #' @export
 make_MYZpar_RMG = function(nPatches, MYZopts=list(), EIPmod, calK,
-                          g=1/12, sigma=1/8, f=0.5, q=0.95,
+                          g=1/12, sigma_b=1/8, sigma_q=1/8, f=0.5, q=0.95,
                           nu=1, eggsPerBatch=60){
 
   stopifnot(is.matrix(calK))
@@ -125,17 +127,19 @@ make_MYZpar_RMG = function(nPatches, MYZopts=list(), EIPmod, calK,
 
     MYZpar$nPatches <- nPatches
 
-    MYZpar$g      <- checkIt(g, nPatches)
-    MYZpar$sigma  <- checkIt(sigma, nPatches)
-    MYZpar$f      <- checkIt(f, nPatches)
-    MYZpar$q      <- checkIt(q, nPatches)
-    MYZpar$nu     <- checkIt(nu, nPatches)
+    MYZpar$g        <- checkIt(g, nPatches)
+    MYZpar$sigma_b  <- checkIt(sigma_b, nPatches)
+    MYZpar$sigma_q  <- checkIt(sigma_q, nPatches)
+    MYZpar$f        <- checkIt(f, nPatches)
+    MYZpar$q        <- checkIt(q, nPatches)
+    MYZpar$nu       <- checkIt(nu, nPatches)
     MYZpar$eggsPerBatch <- eggsPerBatch
     MYZpar$phi <- 1/MYZpar$eip
 
     # Store as baseline values
     MYZpar$g0      <- MYZpar$g
-    MYZpar$sigma0  <- MYZpar$sigma
+    MYZpar$sigma_b0  <- MYZpar$sigma_b
+    MYZpar$sigma_q0  <- MYZpar$sigma_q
     MYZpar$f0      <- MYZpar$f
     MYZpar$q0      <- MYZpar$q
     MYZpar$nu0     <- MYZpar$nu
@@ -148,8 +152,8 @@ make_MYZpar_RMG = function(nPatches, MYZopts=list(), EIPmod, calK,
     MYZpar$calKb <- calK
     MYZpar$calKq <- calK
 
-    MYZpar$Omega_b <- make_Omega(g, sigma, calK, nPatches)
-    MYZpar$Omega_q <- make_Omega(g, sigma, calK, nPatches)
+    MYZpar$Omega_b <- make_Omega(g, sigma_b, calK, nPatches)
+    MYZpar$Omega_q <- make_Omega(g, sigma_q, calK, nPatches)
 
     return(MYZpar)
 })}
@@ -224,7 +228,8 @@ make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
 #' @title Make parameters for RMG ODE adult mosquito model
 #' @param pars a [list]
 #' @param g mosquito mortality rate
-#' @param sigma emigration rate
+#' @param sigma_b emigration rate
+#' @param sigma_q emigration rate
 #' @param calK mosquito dispersal matrix of dimensions `nPatches` by `nPatches`
 #' @param f feeding rate
 #' @param q human blood fraction
@@ -233,7 +238,7 @@ make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
 #' @param eip length of extrinsic incubation period
 #' @return none
 #' @export
-make_parameters_MYZ_RMG <- function(pars, g, sigma, f, q, nu, eggsPerBatch, eip, calK) {
+make_parameters_MYZ_RMG <- function(pars, g, sigma_b, sigma_q, f, q, nu, eggsPerBatch, eip, calK) {
   stopifnot(is.numeric(g), is.numeric(sigma), is.numeric(f), is.numeric(q), is.numeric(nu), is.numeric(eggsPerBatch))
 
    nPatches = pars$nPatches
@@ -244,18 +249,20 @@ make_parameters_MYZ_RMG <- function(pars, g, sigma, f, q, nu, eggsPerBatch, eip,
   class(MYZpar) <- "RMG"
 
   MYZpar$g      <- checkIt(g, nPatches)
-  MYZpar$sigma  <- checkIt(sigma, nPatches)
+  MYZpar$sigma_b  <- checkIt(sigma_b, nPatches)
+  MYZpar$sigma_q  <- checkIt(sigma_q, nPatches)
   MYZpar$f      <- checkIt(f, nPatches)
   MYZpar$q      <- checkIt(q, nPatches)
   MYZpar$nu     <- checkIt(nu, nPatches)
   MYZpar$eggsPerBatch <- eggsPerBatch
 
   # Store as baseline values
-  MYZpar$g0      <- MYZpar$g
-  MYZpar$sigma0  <- MYZpar$sigma
-  MYZpar$f0      <- MYZpar$f
-  MYZpar$q0      <- MYZpar$q
-  MYZpar$nu0     <- MYZpar$nu
+  MYZpar$g0        <- MYZpar$g
+  MYZpar$sigma_b0  <- MYZpar$sigma_b
+  MYZpar$sigma_q0  <- MYZpar$sigma_q
+  MYZpar$f0        <- MYZpar$f
+  MYZpar$q0        <- MYZpar$q
+  MYZpar$nu0       <- MYZpar$nu
 
   pars$MYZpar[[1]] <- MYZpar
 
