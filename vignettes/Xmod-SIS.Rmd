@@ -14,7 +14,7 @@ vignette: >
 suppressMessages(library(knitr))
 library(ramp.xde) 
 library(ramp.work) 
-library(ramp.model.library) 
+library(ramp.library) 
 library(deSolve) 
 ```
 

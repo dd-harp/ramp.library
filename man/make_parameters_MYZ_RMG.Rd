@@ -4,14 +4,27 @@
 \alias{make_parameters_MYZ_RMG}
 \title{Make parameters for RMG ODE adult mosquito model}
 \usage{
-make_parameters_MYZ_RMG(pars, g, sigma, f, q, nu, eggsPerBatch, eip, calK)
+make_parameters_MYZ_RMG(
+  pars,
+  g,
+  sigma_b,
+  sigma_q,
+  f,
+  q,
+  nu,
+  eggsPerBatch,
+  eip,
+  calK
+)
 }
 \arguments{
 \item{pars}{a [list]}
 
 \item{g}{mosquito mortality rate}
 
-\item{sigma}{emigration rate}
+\item{sigma_b}{emigration rate}
+
+\item{sigma_q}{emigration rate}
 
 \item{f}{feeding rate}
 

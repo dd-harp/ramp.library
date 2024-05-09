@@ -10,7 +10,8 @@ make_MYZpar_RMG(
   EIPmod,
   calK,
   g = 1/12,
-  sigma = 1/8,
+  sigma_b = 1/8,
+  sigma_q = 1/8,
   f = 0.5,
   q = 0.95,
   nu = 1,
@@ -28,7 +29,9 @@ make_MYZpar_RMG(
 
 \item{g}{mosquito mortality rate}
 
-\item{sigma}{emigration rate}
+\item{sigma_b}{emigration rate while blood feeding}
+
+\item{sigma_q}{emigration rate while egg laying}
 
 \item{f}{feeding rate}
 

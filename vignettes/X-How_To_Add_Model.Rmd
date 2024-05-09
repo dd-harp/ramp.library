@@ -338,7 +338,7 @@ make_indices_X <- function(pars, i) {
 ```{r, eval=F, purl=F}
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for the SIS model.
-#' @inheritParams make_indices_X
+#' @inheritParams ramp.xde::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export

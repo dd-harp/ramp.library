@@ -70,7 +70,7 @@ reference:
   - HTC.garki
   - xde_plot_X.garki
   - xde_lines_X_garki
-- subtitle: The SIR model
+- subtitle: The workhorse model
   contents:
   - F_X.workhorse
   - F_H.workhorse
@@ -107,6 +107,24 @@ reference:
   - HTC.SIR
   - xde_plot_X.SIR
   - xde_lines_X_SIR
+- subtitle: The SIRS Model
+  contents:
+  - F_X.SIRS
+  - F_H.SIRS
+  - F_pr.SIRS
+  - F_b.SIRS
+  - dXdt.SIRS
+  - setup_Xpar.SIRS
+  - setup_Xinits.SIRS
+  - make_Xpar_SIRS
+  - make_Xinits_SIRS
+  - make_indices_X.SIRS
+  - parse_deout_X.SIRS
+  - get_inits_X.SIRS
+  - update_inits_X.SIRS
+  - HTC.SIRS
+  - xde_plot_X.SIRS
+  - xde_lines_X_SIRS
 - subtitle: The SEIR model
   contents:
   - F_X.SEIR

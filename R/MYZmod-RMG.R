@@ -239,7 +239,7 @@ make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
 #' @return none
 #' @export
 make_parameters_MYZ_RMG <- function(pars, g, sigma_b, sigma_q, f, q, nu, eggsPerBatch, eip, calK) {
-  stopifnot(is.numeric(g), is.numeric(sigma), is.numeric(f), is.numeric(q), is.numeric(nu), is.numeric(eggsPerBatch))
+  stopifnot(is.numeric(g), is.numeric(sigma_b), is.numeric(sigma_q), is.numeric(f), is.numeric(q), is.numeric(nu), is.numeric(eggsPerBatch))
 
    nPatches = pars$nPatches
 
