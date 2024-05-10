@@ -116,6 +116,7 @@ reference:
   - dXdt.SIRS
   - setup_Xpar.SIRS
   - setup_Xinits.SIRS
+  - list_Xvars.SIRS
   - make_Xpar_SIRS
   - make_Xinits_SIRS
   - make_indices_X.SIRS

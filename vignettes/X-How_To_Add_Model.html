@@ -1049,11 +1049,11 @@ setup_Xpar.SIS = function(Xname, pars, i, Xopts=list()){
 <p>To use this, simply to a search and replace on
 <code>Xname.</code></p>
 <pre class="r"><code>#&#39; @title Setup Xpar.Xname
-#&#39; @description Implements [setup_Xpar] for the Xname model
+#&#39; @description Implements [setup_Xpar] for the newXname model
 #&#39; @inheritParams ramp.xde::setup_Xpar
 #&#39; @return a [list] vector
 #&#39; @export
-setup_Xpar.Xname = function(Xname, pars, i, Xopts=list()){
+setup_Xpar.newXname = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_Xname(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }</code></pre>

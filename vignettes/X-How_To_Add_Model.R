@@ -140,11 +140,11 @@ make_Xpar_newXname = function(nStrata, Xopts=list(),
 
 ## -----------------------------------------------------------------------------
 #' @title Setup Xpar.Xname
-#' @description Implements [setup_Xpar] for the Xname model
+#' @description Implements [setup_Xpar] for the newXname model
 #' @inheritParams ramp.xde::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.Xname = function(Xname, pars, i, Xopts=list()){
+setup_Xpar.newXname = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_Xname(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
