@@ -114,6 +114,11 @@ wh1 <- xde_solve(wh1, Tmax = 5*365)
 ```
 
 ```{r}
+xde_plot_X(wh)
+xde_lines_X_workhorse(wh1$outputs$orbits$XH[[1]], 1, llty=2)
+```
+
+```{r}
 with(wh$outputs$orbits$XH[[1]],{
   A = A0+A1+A2+A3+A4
   I = I1+I2+I3+I4

@@ -16,11 +16,11 @@ This vignette discusses how to add a new model family to [`ramp.library`](https:
 
 *** 
 
-We have written this vignette to produce a new template file using `knitr::purl,` which can be modified to build a new model. Simply execute the following command, to create `Xmod-Xname.R.`  Then, rename `Xmod-Xname.R` by replacing `Xname` in the filename. Then open the file and do a global search for `Xname` and replace it with your new name. 
+We have written this vignette to produce a new template file using `knitr::purl,` which can be modified to build a new model. Simply execute the following command, to create `Xmod-newXname.R.`  Then, rename `Xmod-newXname.R` by replacing `newXname` in the filename. Then open the file and do a global search for `newXname` and replace it with your new name. 
 
 ```{r, purl=F, eval=F}
 knitr::purl("X-How_To_Add_Model.Rmd", 
-            output = "Xmod-Xname.R", 
+            output = "Xmod-newXname.R", 
             documentation = 0, 
             quiet=TRUE)
 ```
@@ -52,59 +52,59 @@ In planned companion to this vignette, we show how to add models of $\cal XH$ to
 A new model family of class $\cal XH$ -- human infection dynamics, including immunity -- 
 has 17 required functions encoded using a standard template. Some of these required functions are `S3` class functions in [human-interface.R](https://github.com/dd-harp/ramp.xde/blob/main/R/human-interface.R){target="_blank"}, and several examples are posted in the `ramp.xde` github repository, including the `SIS` model [human-SIS.R](https://github.com/dd-harp/ramp.xde/blob/main/R/human-SIS.R){target="_blank"}. 
 
-To configure a new model, you must choose a string called `Xname`. The only rule for choosing `Xname` is that it must be unique. No other ${\cal XH}$ class model in `ramp.xde` or `ramp.library` can be using that string already. All the `S3` functions get dispatched by the string that replaces `Xname.` 
+To configure a new model, you must choose a string called `newXname`. The only rule for choosing `newXname` is that it must be unique. No other ${\cal XH}$ class model in `ramp.xde` or `ramp.library` can be using that string already. All the `S3` functions get dispatched by the string that replaces `newXname.` 
 
 The 17 required functions are:
 
 **Derivatives** 
 
-1. `dXdt.Xname` - differential equations are defined by a system of differential equations. in `ramp.xde` these are encoded in a function called `dXdt` that  computes and returns the **derivatives.**  The function is set up so that the system can be solved by `deSolve::ode` or `deSolve::dede.` 
+1. `dXdt.newXname` - differential equations are defined by a system of differential equations. in `ramp.xde` these are encoded in a function called `dXdt` that  computes and returns the **derivatives.**  The function is set up so that the system can be solved by `deSolve::ode` or `deSolve::dede.` 
 
 **Variables** - A set of functions is set up that document the variables by name and assign each one an index, to store, assign and update initial values. These functions streamline setup, and guarantee consistency. 
 
-2. `make_Xinits_Xname` - each model requires a function that documents the variables by name and assigns initial values 
+2. `make_Xinits_newXname` - each model requires a function that documents the variables by name and assigns initial values 
     
-3. `setup_Xinits.Xname` - is a wrapper, that gets called by `ramp.xde::xde_setup.` It gets called by `make_Xinits_Xname,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
+3. `setup_Xinits.newXname` - is a wrapper, that gets called by `ramp.xde::xde_setup.` It gets called by `make_Xinits_newXname,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
 
-4. `make_indices_X.Xname` - is the function that assigns an index to each variable in the model, and stores it as `pars$ix$X[[i]].` The indices are returned as a named list.  
+4. `make_indices_X.newXname` - is the function that assigns an index to each variable in the model, and stores it as `pars$ix$X[[i]].` The indices are returned as a named list.  
 
-5. `list_Xvars.Xname` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_inits_X` and it can be useful in other contexts. 
+5. `list_Xvars.newXname` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_inits_X` and it can be useful in other contexts. 
 
-6. `get_inits_X.Xname` - retrieves the stored initial values in the same order that they are returned by `dXdt.Xname`
+6. `get_inits_X.newXname` - retrieves the stored initial values in the same order that they are returned by `dXdt.newXname`
 
-7. `update_inits_X.Xname` - a utility that makes it possible to extract and store a new set of initial values for `Xname` from a vector $y$ holding all the variables in a model. 
+7. `update_inits_X.newXname` - a utility that makes it possible to extract and store a new set of initial values for `newXname` from a vector $y$ holding all the variables in a model. 
 
 **Parameters**
 
-8. `make_Xpar_Xname` returns a formatted list: 
+8. `make_Xpar_newXname` returns a formatted list: 
 
     + the parameter values are stored by name 
    
-    + `class(pars)` = `Xname` 
+    + `class(pars)` = `newXname` 
     
-9. `setup_Xpar.Xname` is a wrapper that calls `make_Xpar_Xname` 
+9. `setup_Xpar.newXname` is a wrapper that calls `make_Xpar_newXname` 
 
 **Dynamical Terms** are Computed using a Standard Set of Functions 
 
-10. `F_X.Xname` - compute the effective infective density of the vertebrate hosts 
+10. `F_X.newXname` - compute the effective infective density of the vertebrate hosts 
 
-11. `F_H.Xname` - compute the human population density for the host strata
+11. `F_H.newXname` - compute the human population density for the host strata
 
-12. `F_b.Xname` - compute the probability a most will become infected after receiving an infective bite, which combines elements of this $\cal X$ model with a model of environmental heterogeneity in `Exposure.` 
-
-**Outputs**
-
-13. `parse_deout_X.Xname` - this function parses the output of `deSolve` and returns a named list that is either a vector or a matrix holding the values of the variables at each point in time. It works like `list_Xvars,` which accepts a vector holding $y$, the values of the variables at a single point in time. 
-
-14. `F_pr.Xname` - this function takes 
-
-15. `HTC.Xname`
+12. `F_b.newXname` - compute the probability a most will become infected after receiving an infective bite, which combines elements of this $\cal X$ model with a model of environmental heterogeneity in `Exposure.` 
 
 **Outputs**
 
-16. `xde_lines_X.Xname` 
+13. `parse_deout_X.newXname` - this function parses the output of `deSolve` and returns a named list that is either a vector or a matrix holding the values of the variables at each point in time. It works like `list_Xvars,` which accepts a vector holding $y$, the values of the variables at a single point in time. 
 
-17. `xde_plot_X.Xname` is a wrapper that calls `xde_lines_X` 
+14. `F_pr.newXname` - this function takes 
+
+15. `HTC.newXname`
+
+**Outputs**
+
+16. `xde_lines_X.newXname` 
+
+17. `xde_plot_X.newXname` is a wrapper that calls `xde_lines_X` 
 
 ### Style 
 
@@ -169,7 +169,7 @@ dXdt.SIS <- function(t, y, pars, i) {
 ```
 
 
-### dXdt.Xname 
+### dXdt.newXname 
 
 This *should* be straightforward, but there's one very important wrinkle. If you want to be able to use the `ramp.xde` capabilities for cohort dynamics and vital dynamics, then the dynamics must be extended carefully to call the demographic matrix function `dHdt.` This can become tricky, so we handle it elsewhere. When writing the code:
 
@@ -190,11 +190,11 @@ This *should* be straightforward, but there's one very important wrinkle. If you
 
 ```{r}
 #' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dXdt] for the Xname model
+#' @description Implements [dXdt] for the newXname model
 #' @inheritParams ramp.xde::dXdt
 #' @return a [numeric] vector
 #' @export
-dXdt.Xname <- function(t, y, pars, i) {
+dXdt.newXname <- function(t, y, pars, i) {
 
   # do not change this
   foi <- pars$FoI[[i]]
@@ -204,7 +204,7 @@ dXdt.Xname <- function(t, y, pars, i) {
     # compute H (if it isn't one of the variables) 
     H <- F_H(t, y, pars, i)
 
-    # expose the parameters (see make_Xpar_Xname) 
+    # expose the parameters (see make_Xpar_newXname) 
     with(pars$Xpar[[i]], {
       # compute the derivatives 
       dX1 <- ... 
@@ -245,17 +245,17 @@ make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with
 })}
 ```
 
-#### make_Xinits_Xname
+#### make_Xinits_newXname
 
 ```{r}
-#' @title Make initial values for the Xname human model, with defaults
+#' @title Make initial values for the newXname human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
 #' @param X10 the initial value for X1 
 #' @param X20 the initial value for X1 
 #' @return a [list]
 #' @export
-make_Xinits_Xname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
+make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
   stopifnot(is.numeric(X10))
   stopifnot(is.numeric(X20))
   X1 = checkIt(X10, nStrata)
@@ -266,7 +266,7 @@ make_Xinits_Xname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopt
 
 ### 3. setup_Xinits  
 
-In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `Xname` is set up by the function `setup_Xinits.` 
+In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xinits.` 
 
 #### Generic 
 
@@ -274,7 +274,7 @@ The `setup_Xinits` function dispatches on `pars$Xpar[[i]]`
 
 ```{r, eval=F, purl=F}
 #' @title A function to set up Xpar
-#' @description This method dispatches on `Xname`.
+#' @description This method dispatches on `newXname`.
 #' @param pars a [list]
 #' @param i the host species index
 #' @param Xopts a [list]
@@ -301,18 +301,18 @@ setup_Xinits.SIS = function(pars, i, Xopts=list()){
 }
 ```
 
-#### setup_Xinits.Xname
+#### setup_Xinits.newXname
 
-To modify, replace `Xname` 
+To modify, replace `newXname` 
 
 ```{r}
-#' @title Setup Xinits.Xname
-#' @description Implements [setup_Xinits] for the Xname model
+#' @title Setup Xinits.newXname
+#' @description Implements [setup_Xinits] for the newXname model
 #' @inheritParams ramp.xde::setup_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.Xname = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_Xname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+setup_Xinits.newXname = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 ```
@@ -356,16 +356,16 @@ make_indices_X.SIS <- function(pars, i) {with(pars,{
 })}
 ```
 
-#### make_indices_X.Xname
+#### make_indices_X.newXname
 
 ```{r}
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the Xname model.
+#' @description Implements [make_indices_X] for the newXname model.
 #' @inheritParams make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.Xname <- function(pars, i) {with(pars,{
+make_indices_X.newXname <- function(pars, i) {with(pars,{
 
   X1_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(X1_ix, 1)
@@ -417,7 +417,7 @@ list_Xvars.SIS <- function(y, pars, i) {
 }
 ``` 
 
-#### list_Xvars.Xname 
+#### list_Xvars.newXname 
 
 ```{r}
 #' @title Return the variables as a list
@@ -425,7 +425,7 @@ list_Xvars.SIS <- function(y, pars, i) {
 #' @inheritParams ramp.xde::list_Xvars
 #' @return a [list]
 #' @export
-list_Xvars.Xname <- function(y, pars, i) {
+list_Xvars.newXname <- function(y, pars, i) {
   with(pars$ix$X[[i]],
       return(list(
         X1 = y[X1_ix],
@@ -470,7 +470,7 @@ get_inits_X.SIS <- function(pars, i){
 }
 ```
 
-#### get_inits_X.Xname
+#### get_inits_X.newXname
 
 Write the function to return the initial values, in order, by name. 
 
@@ -480,7 +480,7 @@ Write the function to return the initial values, in order, by name.
 #' @inheritParams ramp.xde::get_inits_X
 #' @return a [numeric] vector
 #' @export
-get_inits_X.Xname <- function(pars, i){
+get_inits_X.newXname <- function(pars, i){
   with(pars$Xinits[[i]], return(c(X1,X2)))
 }
 ```
@@ -518,16 +518,16 @@ update_inits_X.SIS <- function(pars, y0, i) {
 })}
 ```
 
-#### update_inits_X.Xname
+#### update_inits_X.newXname
 
 ```{r}
-#' @title Update inits for the Xname human model from a vector of states
+#' @title Update inits for the newXname human model from a vector of states
 #' @inheritParams ramp.xde::update_inits_X 
 #' @return none
 #' @export
-update_inits_X.Xname <- function(pars, y0, i) {
+update_inits_X.newXname <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_Xname(pars, list(), X10=X1, X20=X2, ...)
+    pars = make_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
     return(pars)
 })}
 ```
@@ -576,12 +576,12 @@ make_Xpar_SIS = function(nStrata, Xopts=list(),
   })}
 ```
 
-#### make_Xpar_Xname
+#### make_Xpar_newXname
 
-To format this for a new function, do a search and replace on `Xname` and replace the parmeter names and values $p1$, $p2$, $\ldots$ 
+To format this for a new function, do a search and replace on `newXname` and replace the parmeter names and values $p1$, $p2$, $\ldots$ 
 
 ```{r}
-#' @title Make parameters for Xname human model, with defaults
+#' @title Make parameters for newXname human model, with defaults
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] that could overwrite defaults
 #' @param p1 the first parameter 
@@ -589,11 +589,11 @@ To format this for a new function, do a search and replace on `Xname` and replac
 #' @param p3 the third parameter 
 #' @return a [list]
 #' @export
-make_Xpar_Xname = function(nStrata, Xopts=list(),
+make_Xpar_newXname = function(nStrata, Xopts=list(),
                          p1=1, p2=2, p3=3){
   with(Xopts,{
     Xpar = list()
-    class(Xpar) <- c("Xname")
+    class(Xpar) <- c("newXname")
 
     Xpar$p1 = checkIt(p1, nStrata)
     Xpar$p2 = checkIt(p2, nStrata)
@@ -606,7 +606,7 @@ make_Xpar_Xname = function(nStrata, Xopts=list(),
 
 ### 9. setup_Xpar  
 
-In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `Xname` is set up by the function `setup_Xpar.` 
+In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xpar.` 
 
 #### Generic 
 
@@ -627,7 +627,6 @@ setup_Xpar = function(Xname, pars, i, Xopts=list()){
   class(Xname) <- Xname
   UseMethod("setup_Xpar", Xname)
 }
-
 ```
 
 #### setup_Xpar.SIS
@@ -717,9 +716,9 @@ F_X.SIS <- function(t, y, pars, i) {
 
 The commented code relevant code that must be changed is commented out. The preferred style is to *extract* the relevant variables by name, then *compute* the effective infectious density,or individuals in this stratum, then return the value. In the manuscript$^1$, this quantity was called **X.** 
 
-#### F_X.Xname
+#### F_X.newXname
 
-The following is a template for new model. The declaration of `inheritParams` from the `SIS` model in `ramp.xde` works naturally. The namespace from `ramp.xde` is needed, so our Xname function (above) has `ramp.xde::F_X.` 
+The following is a template for new model. The declaration of `inheritParams` from the `SIS` model in `ramp.xde` works naturally. The namespace from `ramp.xde` is needed, so our newXname function (above) has `ramp.xde::F_X.` 
 
 The steps are to extract the variables in 
 
@@ -729,7 +728,7 @@ The steps are to extract the variables in
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.Xname <- function(t, y, pars, i) {
+F_X.newXname <- function(t, y, pars, i) {
   ########################
   # extract: 
   # VAR <- y[pars$ix$X$...] 
@@ -778,18 +777,18 @@ F_H.SIS <- function(t, y, pars, i){
 }
 ```
 
-#### F_H.Xname
+#### F_H.newXname
 
 The function `F_X` returns the effective density of infectious humans for each stratum. 
 The following is a template for a model: 
 
 ```{r}
 #' @title Size of effective infectious human population
-#' @description Implements [F_H] for the Xname model.
+#' @description Implements [F_H] for the newXname model.
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.Xname <- function(t, y, pars, i){
+F_H.newXname <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), {
     H <- X1 + X2 + ...
     return(H)
@@ -834,17 +833,17 @@ F_b.SIS <- function(y, pars, i) {
 }
 ```
 
-#### F_b.Xname 
+#### F_b.newXname 
 
 Depending on the model, the value of `b` is either retrieved or it is computed from other variables in the model, and it is expected that `length(b) = nStrata` 
 
 ```{r}
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_b] for the Xname model.
+#' @description Implements [F_b] for the newXname model.
 #' @inheritParams ramp.xde::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_b.Xname <- function(y, pars, i) {
+F_b.newXname <- function(y, pars, i) {
   with(pars$Xpar[[i]],{ 
     ########################
     # retrieve or compute it 
@@ -903,15 +902,15 @@ parse_deout_X.SIS <- function(deout, pars, i) {
 ```
 
 
-#### parse_deout_X.Xname
+#### parse_deout_X.newXname
 
 ```{r}
-#' @title Parse the output of deSolve and return variables for the Xname model
-#' @description Implements [parse_deout_X] for the Xname model
+#' @title Parse the output of deSolve and return variables for the newXname model
+#' @description Implements [parse_deout_X] for the newXname model
 #' @inheritParams ramp.xde::parse_deout_X
 #' @return none
 #' @export
-parse_deout_X.Xname <- function(deout, pars, i) {
+parse_deout_X.newXname <- function(deout, pars, i) {
   time = deout[,1]
   with(pars$ix$X[[i]],{
     X1 = deout[,X1_ix+1]
@@ -957,15 +956,15 @@ F_pr.SIS <- function(varslist, pars, i) {
 
 The function `F_pr` computes the models *true* prevalence using the variable names. It is passed the `varslist` that is created by `parse_deout` (see above). 
 
-#### F_pr.Xname
+#### F_pr.newXname
 
 ```{r}
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the Xname model.
+#' @description Implements [F_pr] for the newXname model.
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.Xname <- function(varslist, pars) {
+F_pr.newXname <- function(varslist, pars) {
   pr = compute_pr_formula 
   return(pr)
 }
@@ -1004,15 +1003,15 @@ HTC.SIS <- function(pars, i) {
 }
 ```
 
-#### HTC.Xname
+#### HTC.newXname
 
 ```{r}
-#' @title Compute the HTC for the Xname model
-#' @description Implements [HTC] for the Xname model with demography.
+#' @title Compute the HTC for the newXname model
+#' @description Implements [HTC] for the newXname model with demography.
 #' @inheritParams ramp.xde::HTC
 #' @return a [numeric] vector
 #' @export
-HTC.Xname <- function(pars, i) {
+HTC.newXname <- function(pars, i) {
   with(pars$Xpar[[i]],
     #HTC <- 
     return(HTC)
@@ -1053,18 +1052,18 @@ xde_lines_X_SIS = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   })}
 ```
 
-#### xde_lines_X_Xname
+#### xde_lines_X_newXname
 
 ```{r}
-#' Add lines for the density of infected individuals for the Xname model
+#' Add lines for the density of infected individuals for the newXname model
 #'
-#' @param XH a list with the outputs of parse_deout_X_Xname
+#' @param XH a list with the outputs of parse_deout_X_newXname
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_Xname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
+xde_lines_X_newXname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
@@ -1108,7 +1107,7 @@ xde_plot_X = function(pars, i=1, clrs="black", llty=1, stable=FALSE, add_axes=TR
 #### xde_plot_X.SIS
 
 ```{r, eval=F, purl=F}
-#' Plot the density of infected individuals for the Xname model
+#' Plot the density of infected individuals for the newXname model
 #'
 #' @inheritParams ramp.xde::xde_plot_X
 #' @export
@@ -1125,14 +1124,14 @@ xde_plot_X.SIS = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stabl
 }
 ```
 
-#### xde_plot_X.Xname
+#### xde_plot_X.newXname
 
 ```{r}
-#' Plot the density of infected individuals for the Xname model
+#' Plot the density of infected individuals for the newXname model
 #'
 #' @inheritParams ramp.xde::xde_plot_X
 #' @export
-xde_plot_X.Xname = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
+xde_plot_X.newXname = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
 
   if(add_axes==TRUE)
@@ -1141,7 +1140,7 @@ xde_plot_X.Xname = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, sta
               ylab = "# Infected", xlab = "Time"))
 
 
-  xde_lines_X_Xname(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_newXname(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }
 ```
 
