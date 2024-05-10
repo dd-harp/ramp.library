@@ -113,6 +113,7 @@ make_Xpar_SEIR = function(nStrata, Xopts=list(),
     Xpar$c = checkIt(c, nStrata)
     Xpar$r = checkIt(r, nStrata)
 
+
     return(Xpar)
   })}
 
@@ -133,7 +134,7 @@ make_Xinits_SEIR = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, E0=0, I0=
   E = checkIt(E0, nStrata)
   I = checkIt(I0, nStrata)
   R = checkIt(R0, nStrata)
-  return(list(S=S, I=I, R=R))
+  return(list(S=S,E=E, I=I, R=R))
 })}
 
 #' @title Parse the output of deSolve and return variables for the SEIR model
