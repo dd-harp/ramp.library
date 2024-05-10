@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 #' @title Compute the derivatives for parasite infection dynamics in human population strata
-=======
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
->>>>>>> Stashed changes
 #' @description Implements [dXdt] for the SIRS model
 #' @inheritParams ramp.xde::dXdt
 #' @return a [numeric] vector
@@ -11,7 +7,6 @@ dXdt.SIRS <- function(t, y, pars, i) {
   # do not change this
   foi <- pars$FoI[[i]]
 
-<<<<<<< Updated upstream
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
     # compute H (if it isn't one of the variables)
@@ -28,24 +23,6 @@ dXdt.SIRS <- function(t, y, pars, i) {
       derivs = c(dS, dI, dR)
 
       # return the derivatives
-=======
-  # attach the variables by name 
-  with(list_Xvars(y, pars, i),{
-    # compute H (if it isn't one of the variables) 
-    H <- F_H(t, y, pars, i)
-
-    # expose the parameters (see make_Xpar_SIRS) 
-    with(pars$Xpar[[i]], {
-      # compute the derivatives 
-      dS <- Births(t, H, pars,i) + dHdt(t, S, pars,i) - foi*S + gam*R
-      dI <- foi*S- r*I + dHdt(t, I, pars,i) 
-      dR <- r*I - gam*R + dHdt(t, R, pars,i) 
-      
-      # concatenate the derivatives 
-      derivs = c(dS, dI, dR) 
-      
-      # return the derivatives 
->>>>>>> Stashed changes
       return(derivs)
     })
   })
@@ -56,20 +33,13 @@ dXdt.SIRS <- function(t, y, pars, i) {
 #' @title Make initial values for the SIRS human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
-<<<<<<< Updated upstream
 #' @param H0 the initial value for H
-=======
->>>>>>> Stashed changes
 #' @param S0 the initial value for S
 #' @param I0 the initial value for I
 #' @param R0 the initial values for R
 #' @return a [list]
 #' @export
-<<<<<<< Updated upstream
-make_Xinits_SIRS = function(nStrata, Xopts = list(), H0 = NULL, S0=NULL, I0=1, R0 = 1){with(Xopts,{
-=======
 make_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0 = 1){with(Xopts,{
->>>>>>> Stashed changes
   if(is.null(S0)) S0 = H0-(I0+R0)
   stopifnot(is.numeric(S0))
   S = checkIt(S0, nStrata)
@@ -98,11 +68,7 @@ setup_Xinits.SIRS = function(pars, i, Xopts=list()){
 
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for the SIRS model.
-<<<<<<< Updated upstream
 #' @inheritParams ramp.xde::make_indices_X
-=======
-#' @inheritParams make_indices_X
->>>>>>> Stashed changes
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -118,11 +84,7 @@ make_indices_X.SIRS <- function(pars, i) {with(pars,{
   max_ix <- tail(R_ix, 1)
 
 
-<<<<<<< Updated upstream
 
-=======
-  
->>>>>>> Stashed changes
   pars$max_ix = max_ix
   pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
@@ -139,21 +101,12 @@ make_indices_X.SIRS <- function(pars, i) {with(pars,{
 #' @export
 list_Xvars.SIRS <- function(y, pars, i) {
   with(pars$ix$X[[i]],
-<<<<<<< Updated upstream
        return(list(
          S = y[S_ix],
          I = y[I_ix],
          R = y[R_ix]
        )
        ))
-=======
-      return(list(
-        S = y[S_ix],
-        I = y[I_ix], 
-        R = y[R_ix]
-      )
-  ))
->>>>>>> Stashed changes
 }
 
 
@@ -174,46 +127,28 @@ get_inits_X.SIRS <- function(pars, i){
 
 
 #' @title Update inits for the SIRS human model from a vector of states
-<<<<<<< Updated upstream
 #' @inheritParams ramp.xde::update_inits_X
-=======
-#' @inheritParams ramp.xde::update_inits_X 
->>>>>>> Stashed changes
 #' @return none
 #' @export
 update_inits_X.SIRS <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
     pars = make_Xinits_SIRS(pars, list(), S0=S, I0=I, R0=R)
     return(pars)
-<<<<<<< Updated upstream
   })}
-=======
-})}
->>>>>>> Stashed changes
 
 
 
 #' @title Make parameters for SIRS human model, with defaults
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] that could overwrite defaults
-<<<<<<< Updated upstream
-#' @param b the probability of an infection per infectious bite
-#' @param r the duration of an infection
-#' @param c the probability of infecting a blood feeding mosquito
-=======
-#' @param b probability of an infection per infectious bite
-#' @param r the duration of an infection 
-#' @param c the probability of infecting a blood feeding mosquito 
->>>>>>> Stashed changes
+#' @param b the proportion of infective bites that cause an infection
+#' @param r the the duration of an infection
+#' @param c the proportion of bites on infected humans that infect a mosquito
 #' @param gam the rate of loss of immunity
 #' @return a [list]
 #' @export
 make_Xpar_SIRS = function(nStrata, Xopts=list(),
-<<<<<<< Updated upstream
                           b=0.55, r=1/180, c=0.15,gam=0.5){
-=======
-                         b=0.55, r=1/180, c=0.15,gam=0.5){
->>>>>>> Stashed changes
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SIRS")
@@ -268,11 +203,7 @@ F_H.SIRS <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), {
     H <- S + I+R
     return(H)
-<<<<<<< Updated upstream
   })}
-=======
-})}
->>>>>>> Stashed changes
 
 
 
@@ -284,7 +215,6 @@ F_H.SIRS <- function(t, y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SIRS <- function(y, pars, i) {
-<<<<<<< Updated upstream
   with(pars$Xpar[[i]],{
     ########################
     # retrieve or compute it
@@ -292,15 +222,6 @@ F_b.SIRS <- function(y, pars, i) {
     b = pars$Xpar[[i]]$b
     ########################
     # return it
-=======
-  with(pars$Xpar[[i]],{ 
-    ########################
-    # retrieve or compute it 
-    ########################
-    b = pars$Xpar[[i]]$b
-    ########################
-    # return it 
->>>>>>> Stashed changes
     ########################
     return(b)
   })
@@ -321,17 +242,10 @@ parse_deout_X.SIRS <- function(deout, pars, i) {
     S = deout[,S_ix+1]
     I = deout[,I_ix+1]
     R = deout[,R_ix+1]
-<<<<<<< Updated upstream
 
     H = S+I+R
     return(list(time=time, S=S, I=I, R=R, H=H))
   })}
-=======
-    
-    H = S+I+R
-    return(list(time=time, S=S, I=I, R=R, H=H))
-})}
->>>>>>> Stashed changes
 
 
 
@@ -358,13 +272,8 @@ F_pr.SIRS <- function(varslist, pars,i) {
 #' @export
 HTC.SIRS <- function(pars, i) {
   with(pars$Xpar[[i]],
-<<<<<<< Updated upstream
        HTC <- c/r,
        return(HTC)
-=======
-    HTC <- c/r,
-    return(HTC)
->>>>>>> Stashed changes
   )
 }
 

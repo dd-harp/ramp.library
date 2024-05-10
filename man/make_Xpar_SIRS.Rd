@@ -18,11 +18,11 @@ make_Xpar_SIRS(
 
 \item{Xopts}{a [list] that could overwrite defaults}
 
-\item{b}{the probability of an infection per infectious bite}
+\item{b}{the proportion of infective bites that cause an infection}
 
-\item{r}{the duration of an infection}
+\item{r}{the the duration of an infection}
 
-\item{c}{the probability of infecting a blood feeding mosquito}
+\item{c}{the proportion of bites on infected humans that infect a mosquito}
 
 \item{gam}{the rate of loss of immunity}
 }
