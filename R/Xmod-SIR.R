@@ -49,23 +49,27 @@ F_b.SIR <- function(y, pars, i) {
 #' @inheritParams ramp.xde::dXdt
 #' @return a [numeric] vector
 #' @export
-dXdt.SIR <- function(t, y, pars, i) {
-
+dXdt.SIRnew<- function(t, y, pars, i) {
+  # do not change this
   foi <- pars$FoI[[i]]
 
-  with(pars$ix$X[[i]],{
-    S = y[S_ix]
-    I = y[I_ix]
-    R = y[R_ix]
+  # attach the variables by name
+  with(list_Xvars(y, pars, i),{
+    # compute H (if it isn't one of the variables)
     H <- F_H(t, y, pars, i)
 
-    with(pars$Xpar[[i]],{
+    # expose the parameters (see make_Xpar_SIRnew)
+    with(pars$Xpar[[i]], {
+      # compute the derivatives
+      dS <- Births(t, H, pars,i) + dHdt(t, S, pars,i) - foi*S
+      dI <- foi*S- r*I + dHdt(t, I, pars,i)
+      dR <- r*I + dHdt(t, R, pars,i)
 
-      dS <- Births(t, H, pars) - foi*S + dHdt(t, S, pars)
-      dI <- foi*S - r*I + dHdt(t, I, pars)
-      dR <- r*I + dHdt(t, R, pars)
+      # concatenate the derivatives
+      derivs = c(dS, dI, dR)
 
-      return(c(dS, dI, dR))
+      # return the derivatives
+      return(derivs)
     })
   })
 }
@@ -98,7 +102,6 @@ setup_Xinits.SIR = function(pars, i, Xopts=list()){
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @param r recovery rate
 #' @return a [list]
-#'
 #' @export
 make_Xpar_SIR = function(nStrata, Xopts=list(),
                          b=0.55, r=1/180, c=0.15){

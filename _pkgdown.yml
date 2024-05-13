@@ -144,3 +144,21 @@ reference:
   - HTC.SEIR
   - xde_plot_X.SEIR
   - xde_lines_X_SEIR
+  - subtitle: The SIRnew model
+  contents:
+  - F_X.SIRnew
+  - F_H.SIRnew
+  - F_pr.SIRnew
+  - F_b.SIRnew
+  - dXdt.SIRnew
+  - setup_Xpar.SIRnew
+  - setup_Xinits.SIRnew
+  - make_Xpar_SIRnew
+  - make_Xinits_SIRnew
+  - make_indices_X.SIRnew
+  - parse_deout_X.SIRnew
+  - get_inits_X.SIRnew
+  - update_inits_X.SIRnew
+  - HTC.SIRnew
+  - xde_plot_X.SIRnew
+  - xde_lines_X_SIRnew
