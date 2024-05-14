@@ -390,15 +390,15 @@ in humans or other hosts – the dynamical components we have denoted
 <p>We have written this vignette to produce a new template file using
 <code>knitr::purl,</code> which can be modified to build a new model.
 Simply execute the following command, to create
-<code>Xmod-SIRnew.R.</code> Then, rename <code>Xmod-SIRnew.R</code> by
-replacing <code>SIRnew</code> in the filename. Then open the file and do
-a global search for <code>SIRnew</code> and replace it with your new
+<code>Xmod-SEIRnew.R.</code> Then, rename <code>Xmod-SEIRnew.R</code> by
+replacing <code>SEIRnew</code> in the filename. Then open the file and
+do a global search for <code>SEIRnew</code> and replace it with your new
 name.</p>
 <pre class="r"><code>knitr::purl(&quot;X-How_To_Add_Model.Rmd&quot;, 
-            output = &quot;Xmod-SIRnew.R&quot;, 
+            output = &quot;Xmod-SEIRnew.R&quot;, 
             documentation = 0, 
             quiet=TRUE)</code></pre>
-<pre><code>## [1] &quot;Xmod-SIRnew.R&quot;</code></pre>
+<pre><code>## [1] &quot;Xmod-SEIRnew.R&quot;</code></pre>
 <p>This is a good start, but there’s more work to do. For more details,
 read the text that follows.</p>
 <p>This basic introduction is lacking some information that typical
@@ -443,17 +443,16 @@ required functions are <code>S3</code> class functions in <a href="https://githu
 in the <code>ramp.xde</code> github repository, including the
 <code>SIS</code> model <a href="https://github.com/dd-harp/ramp.xde/blob/main/R/human-SIS.R" target="_blank">human-SIS.R</a>.</p>
 <p>To configure a new model, you must choose a string called
-<code>SIRnew</code>. The only rule for choosing <code>SIRnew</code> is
-that it must be unique. No other <span class="math inline">\({\cal
-XH}\)</span> class model in <code>ramp.xde</code> or
-<code>ramp.library</code> can be using that string already. All the
-<code>S3</code> functions get dispatched by the string that replaces
-<code>SIRnew.</code></p>
+<code>SEIRnewnew</code>. The only rule for choosing
+<code>SEIRnewnew</code> is that it must be unique. No other <span class="math inline">\({\cal XH}\)</span> class model in
+<code>ramp.xde</code> or <code>ramp.library</code> can be using that
+string already. All the <code>S3</code> functions get dispatched by the
+string that replaces <code>SEIRnewnew.</code></p>
 <p>The 17 required functions are:</p>
 <p><strong>Derivatives</strong></p>
 <ol style="list-style-type: decimal">
-<li><code>dXdt.SIRnew</code> - differential equations are defined by a
-system of differential equations. in <code>ramp.xde</code> these are
+<li><code>dXdt.SEIRnewnew</code> - differential equations are defined by
+a system of differential equations. in <code>ramp.xde</code> these are
 encoded in a function called <code>dXdt</code> that computes and returns
 the <strong>derivatives.</strong> The function is set up so that the
 system can be solved by <code>deSolve::ode</code> or
@@ -464,47 +463,47 @@ document the variables by name and assign each one an index, to store,
 assign and update initial values. These functions streamline setup, and
 guarantee consistency.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p><code>make_Xinits_SIRnew</code> - each model requires a function
+<li><p><code>make_Xinits_SEIRnew</code> - each model requires a function
 that documents the variables by name and assigns initial values</p></li>
-<li><p><code>setup_Xinits.SIRnew</code> - is a wrapper, that gets called
-by <code>ramp.xde::xde_setup.</code> It gets called by
-<code>make_Xinits_SIRnew,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
+<li><p><code>setup_Xinits.SEIRnew</code> - is a wrapper, that gets
+called by <code>ramp.xde::xde_setup.</code> It gets called by
+<code>make_Xinits_SEIRnew,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
 stored as <code>pars$Xinits[[i]].</code></p></li>
-<li><p><code>make_indices_X.SIRnew</code> - is the function that assigns
-an index to each variable in the model, and stores it as
+<li><p><code>make_indices_X.SEIRnew</code> - is the function that
+assigns an index to each variable in the model, and stores it as
 <code>pars$ix$X[[i]].</code> The indices are returned as a named
 list.</p></li>
-<li><p><code>list_Xvars.SIRnew</code> - retrieves the value of variables
-at a point in time and returns the values by name in a list; the
-function gets called by <code>dXdt</code> and by
+<li><p><code>list_Xvars.SEIRnew</code> - retrieves the value of
+variables at a point in time and returns the values by name in a list;
+the function gets called by <code>dXdt</code> and by
 <code>update_inits_X</code> and it can be useful in other
 contexts.</p></li>
-<li><p><code>get_inits_X.SIRnew</code> - retrieves the stored initial
+<li><p><code>get_inits_X.SEIRnew</code> - retrieves the stored initial
 values in the same order that they are returned by
-<code>dXdt.SIRnew</code></p></li>
-<li><p><code>update_inits_X.SIRnew</code> - a utility that makes it
+<code>dXdt.SEIRnew</code></p></li>
+<li><p><code>update_inits_X.SEIRnew</code> - a utility that makes it
 possible to extract and store a new set of initial values for
-<code>SIRnew</code> from a vector <span class="math inline">\(y\)</span>
-holding all the variables in a model.</p></li>
+<code>SEIRnew</code> from a vector <span class="math inline">\(y\)</span> holding all the variables in a
+model.</p></li>
 </ol>
 <p><strong>Parameters</strong></p>
 <ol start="8" style="list-style-type: decimal">
-<li><p><code>make_Xpar_SIRnew</code> returns a formatted list:</p>
+<li><p><code>make_Xpar_SEIRnew</code> returns a formatted list:</p>
 <ul>
 <li><p>the parameter values are stored by name</p></li>
-<li><p><code>class(pars)</code> = <code>SIRnew</code></p></li>
+<li><p><code>class(pars)</code> = <code>SEIRnew</code></p></li>
 </ul></li>
-<li><p><code>setup_Xpar.SIRnew</code> is a wrapper that calls
-<code>make_Xpar_SIRnew</code></p></li>
+<li><p><code>setup_Xpar.SEIRnew</code> is a wrapper that calls
+<code>make_Xpar_SEIRnew</code></p></li>
 </ol>
 <p><strong>Dynamical Terms</strong> are Computed using a Standard Set of
 Functions</p>
 <ol start="10" style="list-style-type: decimal">
-<li><p><code>F_X.SIRnew</code> - compute the effective infective density
-of the vertebrate hosts</p></li>
-<li><p><code>F_H.SIRnew</code> - compute the human population density
+<li><p><code>F_X.SEIRnew</code> - compute the effective infective
+density of the vertebrate hosts</p></li>
+<li><p><code>F_H.SEIRnew</code> - compute the human population density
 for the host strata</p></li>
-<li><p><code>F_b.SIRnew</code> - compute the probability a most will
+<li><p><code>F_b.SEIRnew</code> - compute the probability a most will
 become infected after receiving an infective bite, which combines
 elements of this <span class="math inline">\(\cal X\)</span> model with
 a model of environmental heterogeneity in
@@ -512,19 +511,19 @@ a model of environmental heterogeneity in
 </ol>
 <p><strong>Outputs</strong></p>
 <ol start="13" style="list-style-type: decimal">
-<li><p><code>parse_deout_X.SIRnew</code> - this function parses the
+<li><p><code>parse_deout_X.SEIRnew</code> - this function parses the
 output of <code>deSolve</code> and returns a named list that is either a
 vector or a matrix holding the values of the variables at each point in
 time. It works like <code>list_Xvars,</code> which accepts a vector
 holding <span class="math inline">\(y\)</span>, the values of the
 variables at a single point in time.</p></li>
-<li><p><code>F_pr.SIRnew</code> - this function takes</p></li>
-<li><p><code>HTC.SIRnew</code></p></li>
+<li><p><code>F_pr.SEIRnew</code> - this function takes</p></li>
+<li><p><code>HTC.SEIRnew</code></p></li>
 </ol>
 <p><strong>Outputs</strong></p>
 <ol start="16" style="list-style-type: decimal">
-<li><p><code>xde_lines_X.SIRnew</code></p></li>
-<li><p><code>xde_plot_X.SIRnew</code> is a wrapper that calls
+<li><p><code>xde_lines_X.SEIRnew</code></p></li>
+<li><p><code>xde_plot_X.SEIRnew</code> is a wrapper that calls
 <code>xde_lines_X</code></p></li>
 </ol>
 </div>
@@ -594,8 +593,8 @@ dXdt.SIS &lt;- function(t, y, pars, i) {
   })
 }</code></pre>
 </div>
-<div id="dxdt.sirnew" class="section level3">
-<h3>dXdt.SIRnew</h3>
+<div id="dxdt.seirnew" class="section level3">
+<h3>dXdt.SEIRnew</h3>
 <p>This <em>should</em> be straightforward, but there’s one very
 important wrinkle. If you want to be able to use the
 <code>ramp.xde</code> capabilities for cohort dynamics and vital
@@ -620,11 +619,11 @@ maintain that order in every function. In particular:</p>
 calls.</p></li>
 </ul>
 <pre class="r"><code>#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata 
-#&#39; @description Implements [dXdt] for the SIRnew model
+#&#39; @description Implements [dXdt] for the SEIRnew model
 #&#39; @inheritParams ramp.xde::dXdt
 #&#39; @return a [numeric] vector
 #&#39; @export
-dXdt.SIRnew&lt;- function(t, y, pars, i) {
+dXdt.SEIRnew&lt;- function(t, y, pars, i) {
   # do not change this
   foi &lt;- pars$FoI[[i]]
   
@@ -633,15 +632,16 @@ dXdt.SIRnew&lt;- function(t, y, pars, i) {
     # compute H (if it isn&#39;t one of the variables)
     H &lt;- F_H(t, y, pars, i)
     
-    # expose the parameters (see make_Xpar_SIRnew)
+    # expose the parameters (see make_Xpar_SEIRnew)
     with(pars$Xpar[[i]], {
       # compute the derivatives
-      dS &lt;- Births(t, H, pars,i) + dHdt(t, S, pars,i) - foi*S 
-      dI &lt;- foi*S- r*I + dHdt(t, I, pars,i)
+      dS &lt;- Births(t, H, pars,i) - foi*S + dHdt(t, S, pars,i)
+      dE &lt;- foi*S - tau*E + dHdt(t, E, pars,i)
+      dI &lt;- tau*E - r*I + dHdt(t, I, pars,i)
       dR &lt;- r*I + dHdt(t, R, pars,i)
       
-      # concatenate the derivatives
-      derivs = c(dS, dI, dR)
+       # concatenate the derivatives
+      derivs = c(dS, dE, dI, dR)
       
       # return the derivatives
       return(derivs)
@@ -672,38 +672,40 @@ make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with
   return(list(S=S, I=I))
 })}</code></pre>
 </div>
-<div id="make_xinits_sirnew" class="section level4">
-<h4>make_Xinits_SIRnew</h4>
-<pre class="r"><code>#&#39; @title Make initial values for the SIRnew human model, with defaults
+<div id="make_xinits_seirnew" class="section level4">
+<h4>make_Xinits_SEIRnew</h4>
+<pre class="r"><code>#&#39; @title Make initial values for the SEIRnew human model, with defaults
 #&#39; @param nStrata the number of strata in the model
 #&#39; @param Xopts a [list] to overwrite defaults
 #&#39; @param H0 the initial value for H
 #&#39; @param S0 the initial value for S
+#&#39; @param E0 the initial value for E
 #&#39; @param I0 the initial value for I
 #&#39; @param R0 the initial values for R
 #&#39; @return a [list]
 #&#39; @export
-make_Xinits_SIRnew = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(I0+R0)
+make_Xinits_SEIRnew = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0=0,R0 = 1){with(Xopts,{
+  if(is.null(S0)) S0 = H0-(E0+I0+R0)
   stopifnot(is.numeric(S0))
   S = checkIt(S0, nStrata)
+  E = checkIt(E0, nStrata)
   I = checkIt(I0, nStrata)
   R = checkIt(R0, nStrata)
-  return(list(S=S, I=I, R =R))
+  return(list(S=S, E=E, I=I, R =R))
 })}</code></pre>
 </div>
 </div>
 <div id="setup_xinits" class="section level3">
 <h3>3. setup_Xinits</h3>
 <p>In the <code>xde_setup</code> family of setup functions, initial
-values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SIRnew</code> is set
-up by the function <code>setup_Xinits.</code></p>
+values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRnew</code> is
+set up by the function <code>setup_Xinits.</code></p>
 <div id="generic" class="section level4">
 <h4>Generic</h4>
 <p>The <code>setup_Xinits</code> function dispatches on
 <code>pars$Xpar[[i]]</code></p>
 <pre class="r"><code>#&#39; @title A function to set up Xpar
-#&#39; @description This method dispatches on `SIRnew`.
+#&#39; @description This method dispatches on `SEIRnew`.
 #&#39; @param pars a [list]
 #&#39; @param i the host species index
 #&#39; @param Xopts a [list]
@@ -727,16 +729,16 @@ setup_Xinits.SIS = function(pars, i, Xopts=list()){
   return(pars)
 }</code></pre>
 </div>
-<div id="setup_xinits.sirnew" class="section level4">
-<h4>setup_Xinits.SIRnew</h4>
-<p>To modify, replace <code>SIRnew</code></p>
-<pre class="r"><code>#&#39; @title Setup Xinits.SIRnew
-#&#39; @description Implements [setup_Xinits] for the SIRnew model
+<div id="setup_xinits.seirnew" class="section level4">
+<h4>setup_Xinits.SEIRnew</h4>
+<p>To modify, replace <code>SEIRnew</code></p>
+<pre class="r"><code>#&#39; @title Setup Xinits.SEIRnew
+#&#39; @description Implements [setup_Xinits] for the SEIRnew model
 #&#39; @inheritParams ramp.xde::setup_Xinits
 #&#39; @return a [list] vector
 #&#39; @export
-setup_Xinits.SIRnew = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SIRnew(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+setup_Xinits.SEIRnew = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_SEIRnew(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }</code></pre>
 </div>
@@ -776,18 +778,21 @@ make_indices_X.SIS &lt;- function(pars, i) {with(pars,{
   return(pars)
 })}</code></pre>
 </div>
-<div id="make_indices_x.sirnew" class="section level4">
-<h4>make_indices_X.SIRnew</h4>
+<div id="make_indices_x.seirnew" class="section level4">
+<h4>make_indices_X.SEIRnew</h4>
 <pre class="r"><code>#&#39; @title Add indices for human population to parameter list
-#&#39; @description Implements [make_indices_X] for the SIRnew model.
+#&#39; @description Implements [make_indices_X] for the SEIRnew model.
 #&#39; @inheritParams ramp.xde::make_indices_X
 #&#39; @return none
 #&#39; @importFrom utils tail
 #&#39; @export
-make_indices_X.SIRnew &lt;- function(pars, i) {with(pars,{
+make_indices_X.SEIRnew &lt;- function(pars, i) {with(pars,{
   
   S_ix &lt;- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix &lt;- tail(S_ix, 1)
+  
+  E_ix &lt;- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  max_ix &lt;- tail(E_ix, 1)
   
   I_ix &lt;- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix &lt;- tail(I_ix, 1)
@@ -798,7 +803,7 @@ make_indices_X.SIRnew &lt;- function(pars, i) {with(pars,{
   
   
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, R_ix=R_ix)
+  pars$ix$X[[i]] = list(S_ix=S_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
 })}</code></pre>
 </div>
@@ -834,17 +839,18 @@ list_Xvars.SIS &lt;- function(y, pars, i) {
   ))
 }</code></pre>
 </div>
-<div id="list_xvars.sirnew" class="section level4">
-<h4>list_Xvars.SIRnew</h4>
+<div id="list_xvars.seirnew" class="section level4">
+<h4>list_Xvars.SEIRnew</h4>
 <pre class="r"><code>#&#39; @title Return the variables as a list
 #&#39; @description This method dispatches on the type of `pars$Xpar`
 #&#39; @inheritParams ramp.xde::list_Xvars
 #&#39; @return a [list]
 #&#39; @export
-list_Xvars.SIRnew &lt;- function(y, pars, i) {
+list_Xvars.SEIRnew &lt;- function(y, pars, i) {
   with(pars$ix$X[[i]],
        return(list(
          S = y[S_ix],
+         E = y[E_ix],
          I = y[I_ix],
          R = y[R_ix]
        )
@@ -879,8 +885,8 @@ get_inits_X.SIS &lt;- function(pars, i){
   with(pars$Xinits[[i]], return(c(S,I)))
 }</code></pre>
 </div>
-<div id="get_inits_x.sirnew" class="section level4">
-<h4>get_inits_X.SIRnew</h4>
+<div id="get_inits_x.seirnew" class="section level4">
+<h4>get_inits_X.SEIRnew</h4>
 <p>Write the function to return the initial values, in order, by
 name.</p>
 <pre class="r"><code>#&#39; @title Return initial values as a vector
@@ -888,8 +894,8 @@ name.</p>
 #&#39; @inheritParams ramp.xde::get_inits_X
 #&#39; @return a [numeric] vector
 #&#39; @export
-get_inits_X.SIRnew &lt;- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S,I,R)))
+get_inits_X.SEIRnew &lt;- function(pars, i){
+  with(pars$Xinits[[i]], return(c(S,E,I,R)))
 }</code></pre>
 </div>
 </div>
@@ -922,15 +928,15 @@ update_inits_X.SIS &lt;- function(pars, y0, i) {
     return(pars)
 })}</code></pre>
 </div>
-<div id="update_inits_x.sirnew" class="section level4">
-<h4>update_inits_X.SIRnew</h4>
-<pre class="r"><code>#&#39; @title Update inits for the SIRnew human model from a vector of states
+<div id="update_inits_x.seirnew" class="section level4">
+<h4>update_inits_X.SEIRnew</h4>
+<pre class="r"><code>#&#39; @title Update inits for the SEIRnew human model from a vector of states
 #&#39; @inheritParams ramp.xde::update_inits_X
 #&#39; @return none
 #&#39; @export
-update_inits_X.SIRnew &lt;- function(pars, y0, i) {
+update_inits_X.SEIRnew &lt;- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SIRnew(pars, list(), S0=S, I0=I, R0=R)
+    pars = make_Xinits_SEIRnew(pars, list(), S0=S,E0= E, I0=I, R0=R)
     return(pars)
   })}</code></pre>
 </div>
@@ -984,25 +990,27 @@ make_Xpar_SIS = function(nStrata, Xopts=list(),
     return(Xpar)
   })}</code></pre>
 </div>
-<div id="make_xpar_sirnew" class="section level4">
-<h4>make_Xpar_SIRnew</h4>
+<div id="make_xpar_seirnew" class="section level4">
+<h4>make_Xpar_SEIRnew</h4>
 <p>To format this for a new function, do a search and replace on
-<code>SIRnew</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
-<pre class="r"><code>#&#39; @title Make parameters for SIRnew human model, with defaults
+<code>SEIRnew</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
+<pre class="r"><code>#&#39; @title Make parameters for SEIRnew human model, with defaults
 #&#39; @param nStrata is the number of population strata
 #&#39; @param Xopts a [list] that could overwrite defaults
+#&#39; @param tau  incubation rate
 #&#39; @param b the proportion of infective bites that cause an infection
 #&#39; @param r the the duration of an infection
 #&#39; @param c the proportion of bites on infected humans that infect a mosquito
 #&#39; @return a [list]
 #&#39; @export
-make_Xpar_SIRnew = function(nStrata, Xopts=list(),
-                          b=0.55, r=1/180, c=0.15){
+make_Xpar_SEIRnew = function(nStrata, Xopts=list(),
+                          b=0.55, r=1/180, c=0.15,tau= 0.5){
   with(Xopts,{
     Xpar = list()
-    class(Xpar) &lt;- c(&quot;SIRnew&quot;)
+    class(Xpar) &lt;- c(&quot;SEIRnew&quot;)
     
     Xpar$b = checkIt(b, nStrata)
+    Xpar$tau = checkIt(tau, nStrata)
     Xpar$c = checkIt(c, nStrata)
     Xpar$r = checkIt(r, nStrata)
     
@@ -1013,8 +1021,8 @@ make_Xpar_SIRnew = function(nStrata, Xopts=list(),
 <div id="setup_xpar" class="section level3">
 <h3>9. setup_Xpar</h3>
 <p>In the <code>xde_setup</code> family of setup functions, setup for a
-model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SIRnew</code> is set
-up by the function <code>setup_Xpar.</code></p>
+model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRnew</code> is
+set up by the function <code>setup_Xpar.</code></p>
 <div id="generic-5" class="section level4">
 <h4>Generic</h4>
 <p>This function must set up <code>Xpar</code> and it must also set up
@@ -1053,13 +1061,13 @@ setup_Xpar.SIS = function(Xname, pars, i, Xopts=list()){
 <h4>setup_Xpar.Xname</h4>
 <p>To use this, simply to a search and replace on
 <code>Xname.</code></p>
-<pre class="r"><code>#&#39; @title Setup Xpar.SIRnew
-#&#39; @description Implements [setup_Xpar] for the SIRnew model
+<pre class="r"><code>#&#39; @title Setup Xpar.SEIRnew
+#&#39; @description Implements [setup_Xpar] for the SEIRnew model
 #&#39; @inheritParams ramp.xde::setup_Xpar
 #&#39; @return a [list] vector
 #&#39; @export
-setup_Xpar.SIRnew = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIRnew(pars$Hpar[[i]]$nStrata, Xopts)
+setup_Xpar.SEIRnew = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_SEIRnew(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }</code></pre>
 </div>
@@ -1130,12 +1138,12 @@ individuals in this stratum, then return the value. In the
 manuscript<span class="math inline">\(^1\)</span>, this quantity was
 called <strong>X.</strong></p>
 </div>
-<div id="f_x.sirnew" class="section level4">
-<h4>F_X.SIRnew</h4>
+<div id="f_x.seirnew" class="section level4">
+<h4>F_X.SEIRnew</h4>
 <p>The following is a template for new model. The declaration of
 <code>inheritParams</code> from the <code>SIS</code> model in
 <code>ramp.xde</code> works naturally. The namespace from
-<code>ramp.xde</code> is needed, so our SIRnew function (above) has
+<code>ramp.xde</code> is needed, so our SEIRnew function (above) has
 <code>ramp.xde::F_X.</code></p>
 <p>The steps are to extract the variables in</p>
 <pre class="r"><code>#&#39; @title Size of effective infectious human population
@@ -1143,7 +1151,7 @@ called <strong>X.</strong></p>
 #&#39; @inheritParams ramp.xde::F_X
 #&#39; @return a [numeric] vector of length `nStrata`
 #&#39; @export
-F_X.SIRnew &lt;- function(t, y, pars, i) {
+F_X.SEIRnew &lt;- function(t, y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -1180,19 +1188,19 @@ F_H.SIS &lt;- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), return(S+I))
 }</code></pre>
 </div>
-<div id="f_h.sirnew" class="section level4">
-<h4>F_H.SIRnew</h4>
+<div id="f_h.seirnew" class="section level4">
+<h4>F_H.SEIRnew</h4>
 <p>The function <code>F_X</code> returns the effective density of
 infectious humans for each stratum. The following is a template for a
 model:</p>
 <pre class="r"><code>#&#39; @title Size of effective infectious human population
-#&#39; @description Implements [F_H] for the SIRnew model.
+#&#39; @description Implements [F_H] for the SEIRnew model.
 #&#39; @inheritParams ramp.xde::F_H
 #&#39; @return a [numeric] vector of length `nStrata`
 #&#39; @export
-F_H.SIRnew &lt;- function(t, y, pars, i){
+F_H.SEIRnew &lt;- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), {
-    H &lt;- S + I+R
+    H &lt;- S +E+ I+R
     return(H)
   })}</code></pre>
 </div>
@@ -1239,17 +1247,17 @@ F_b.SIS &lt;- function(y, pars, i) {
   return(with(pars$Xpar[[i]], b))
 }</code></pre>
 </div>
-<div id="f_b.sirnew" class="section level4">
-<h4>F_b.SIRnew</h4>
+<div id="f_b.seirnew" class="section level4">
+<h4>F_b.SEIRnew</h4>
 <p>Depending on the model, the value of <code>b</code> is either
 retrieved or it is computed from other variables in the model, and it is
 expected that <code>length(b) = nStrata</code></p>
 <pre class="r"><code>#&#39; @title Infection blocking pre-erythrocytic immunity
-#&#39; @description Implements [F_b] for the SIRnew model.
+#&#39; @description Implements [F_b] for the SEIRnew model.
 #&#39; @inheritParams ramp.xde::F_b
 #&#39; @return a [numeric] vector of length `nStrata`
 #&#39; @export
-F_b.SIRnew &lt;- function(y, pars, i) {
+F_b.SEIRnew &lt;- function(y, pars, i) {
   with(pars$Xpar[[i]],{ 
     ########################
     # retrieve or compute it 
@@ -1302,22 +1310,23 @@ parse_deout_X.SIS &lt;- function(deout, pars, i) {
     return(list(time=time, S=S, I=I, H=H))
 })}</code></pre>
 </div>
-<div id="parse_deout_x.sirnew" class="section level4">
-<h4>parse_deout_X.SIRnew</h4>
-<pre class="r"><code>#&#39; @title Parse the output of deSolve and return variables for the SIRnew model
-#&#39; @description Implements [parse_deout_X] for the SIRnew model
+<div id="parse_deout_x.seirnew" class="section level4">
+<h4>parse_deout_X.SEIRnew</h4>
+<pre class="r"><code>#&#39; @title Parse the output of deSolve and return variables for the SEIRnew model
+#&#39; @description Implements [parse_deout_X] for the SEIRnew model
 #&#39; @inheritParams ramp.xde::parse_deout_X
 #&#39; @return none
 #&#39; @export
-parse_deout_X.SIRnew &lt;- function(deout, pars, i) {
+parse_deout_X.SEIRnew &lt;- function(deout, pars, i) {
   time = deout[,1]
   with(pars$ix$X[[i]],{
     S = deout[,S_ix+1]
+    E = deout[,E_ix+1]
     I = deout[,I_ix+1]
     R = deout[,R_ix+1]
     
     H = S+I+R
-    return(list(time=time, S=S, I=I, R=R, H=H))
+    return(list(time=time, S=S, E=E,I=I, R=R, H=H))
   })}</code></pre>
 </div>
 </div>
@@ -1353,14 +1362,14 @@ prevalence using the variable names. It is passed the
 <code>varslist</code> that is created by <code>parse_deout</code> (see
 above).</p>
 </div>
-<div id="f_pr.sirnew" class="section level4">
-<h4>F_pr.SIRnew</h4>
+<div id="f_pr.seirnew" class="section level4">
+<h4>F_pr.SEIRnew</h4>
 <pre class="r"><code>#&#39; @title Compute the &quot;true&quot; prevalence of infection / parasite rate
-#&#39; @description Implements [F_pr] for the SIRnew model.
+#&#39; @description Implements [F_pr] for the SEIRnew model.
 #&#39; @inheritParams ramp.xde::F_pr
 #&#39; @return a [numeric] vector of length `nStrata`
 #&#39; @export
-F_pr.SIRnew &lt;- function(varslist, pars,i) {
+F_pr.SEIRnew &lt;- function(varslist, pars,i) {
   pr = with(varslist$XH[[i]], I/H)
   return(pr)
 }</code></pre>
@@ -1395,14 +1404,14 @@ HTC.SIS &lt;- function(pars, i) {
   )
 }</code></pre>
 </div>
-<div id="htc.sirnew" class="section level4">
-<h4>HTC.SIRnew</h4>
-<pre class="r"><code>#&#39; @title Compute the HTC for the SIRnew model
-#&#39; @description Implements [HTC] for the SIRnew model with demography.
+<div id="htc.seirnew" class="section level4">
+<h4>HTC.SEIRnew</h4>
+<pre class="r"><code>#&#39; @title Compute the HTC for the SEIRnew model
+#&#39; @description Implements [HTC] for the SEIRnew model with demography.
 #&#39; @inheritParams ramp.xde::HTC
 #&#39; @return a [numeric] vector
 #&#39; @export
-HTC.SIRnew &lt;- function(pars, i) {
+HTC.SEIRnew &lt;- function(pars, i) {
   with(pars$Xpar[[i]],
        HTC &lt;- c/r,
        return(HTC)
@@ -1442,22 +1451,23 @@ xde_lines_X_SIS = function(XH, nStrata, clrs=c(&quot;darkblue&quot;,&quot;darkre
     }
   })}</code></pre>
 </div>
-<div id="xde_lines_x_sirnew" class="section level4">
-<h4>xde_lines_X_SIRnew</h4>
-<pre class="r"><code>#&#39; Add lines for the density of infected individuals for the SIRnew model
+<div id="xde_lines_x_seirnew" class="section level4">
+<h4>xde_lines_X_SEIRnew</h4>
+<pre class="r"><code>#&#39; Add lines for the density of infected individuals for the SEIRnew model
 #&#39;
-#&#39; @param XH a list with the outputs of parse_deout_X_SIRnew
+#&#39; @param XH a list with the outputs of parse_deout_X_SEIRnew
 #&#39; @param nStrata the number of population strata
 #&#39; @param clrs a vector of colors
 #&#39; @param llty an integer (or integers) to set the `lty` for plotting
 #&#39;
 #&#39; @export
-xde_lines_X_SIRnew = function(XH, nStrata, clrs=c(&quot;darkblue&quot;,&quot;darkred&quot;,&quot;darkgreen&quot;), llty=1){
+xde_lines_X_SEIRnew = function(XH, nStrata, clrs=c(&quot;black&quot;,&quot;darkblue&quot;,&quot;darkred&quot;,&quot;darkgreen&quot;), llty=1){
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-      lines(time, R, col=clrs[3], lty = llty[1])
+      lines(time, E, col=clrs[2], lty = llty[1])
+      lines(time, I, col=clrs[3], lty = llty[1])
+      lines(time, R, col=clrs[4], lty = llty[1])
     }
     if(nStrata&gt;1){
       if (length(clrs)==3) clrs=matrix(clrs, 3, nStrata)
@@ -1465,8 +1475,9 @@ xde_lines_X_SIRnew = function(XH, nStrata, clrs=c(&quot;darkblue&quot;,&quot;dar
       
       for(i in 1:nStrata){
         lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-        lines(time, R[,i], col=clrs[3,i], lty = llty[i])
+        lines(time, E[,i], col=clrs[2,i], lty = llty[i])
+        lines(time, I[,i], col=clrs[3,i], lty = llty[i])
+        lines(time, R[,i], col=clrs[4,i], lty = llty[i])
       }
     }
   })}</code></pre>
@@ -1496,7 +1507,7 @@ xde_plot_X = function(pars, i=1, clrs=&quot;black&quot;, llty=1, stable=FALSE, a
 </div>
 <div id="xde_plot_x.sis" class="section level4">
 <h4>xde_plot_X.SIS</h4>
-<pre class="r"><code>#&#39; Plot the density of infected individuals for the SIRnew model
+<pre class="r"><code>#&#39; Plot the density of infected individuals for the SEIRnew model
 #&#39;
 #&#39; @inheritParams ramp.xde::xde_plot_X
 #&#39; @export
@@ -1512,13 +1523,13 @@ xde_plot_X.SIS = function(pars, i=1, clrs=c(&quot;darkblue&quot;,&quot;darkred&q
   xde_lines_X_SIS(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }</code></pre>
 </div>
-<div id="xde_plot_x.sirnew" class="section level4">
-<h4>xde_plot_X.SIRnew</h4>
-<pre class="r"><code>#&#39; Plot the density of infected individuals for the SIRnew model
+<div id="xde_plot_x.seirnew" class="section level4">
+<h4>xde_plot_X.SEIRnew</h4>
+<pre class="r"><code>#&#39; Plot the density of infected individuals for the SEIRnew model
 #&#39;
 #&#39; @inheritParams ramp.xde::xde_plot_X
 #&#39; @export
-xde_plot_X.SIRnew = function(pars, i=1, clrs=c(&quot;darkblue&quot;,&quot;darkred&quot;,&quot;darkgreen&quot;), llty=1, stable=FALSE, add_axes=TRUE){
+xde_plot_X.SEIRnew = function(pars, i=1, clrs=c(&quot;black&quot;,&quot;darkblue&quot;,&quot;darkred&quot;,&quot;darkgreen&quot;), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
   
   if(add_axes==TRUE)
@@ -1527,7 +1538,7 @@ xde_plot_X.SIRnew = function(pars, i=1, clrs=c(&quot;darkblue&quot;,&quot;darkre
               ylab = &quot;No of. Infected&quot;, xlab = &quot;Time&quot;))
   
   
-  xde_lines_X_SIRnew(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_SEIRnew(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }</code></pre>
 </div>
 </div>
