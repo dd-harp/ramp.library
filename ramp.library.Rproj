@@ -17,6 +17,6 @@ StripTrailingWhitespace: Yes
 
 BuildType: Package
 PackageUseDevtools: Yes
-PackagePath: C:/Users/Admin/Documents/ramp.library
+PackagePath: /Users/smitdave/git/ramp.library
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageRoxygenize: rd,collate,namespace,vignette
