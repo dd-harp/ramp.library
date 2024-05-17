@@ -4,18 +4,27 @@
 \alias{make_Xpar_SEIR}
 \title{Make parameters for SEIR human model, with defaults}
 \usage{
-make_Xpar_SEIR(nStrata, Xopts = list(), b = 0.55, r = 1/180, c = 0.15)
+make_Xpar_SEIR(
+  nStrata,
+  Xopts = list(),
+  b = 0.55,
+  r = 1/180,
+  c = 0.15,
+  tau = 0.5
+)
 }
 \arguments{
 \item{nStrata}{is the number of population strata}
 
 \item{Xopts}{a [list] that could overwrite defaults}
 
-\item{b}{transmission probability (efficiency) from mosquito to human}
+\item{b}{the proportion of infective bites that cause an infection}
 
-\item{r}{recovery rate}
+\item{r}{the the duration of an infection}
 
-\item{c}{transmission probability (efficiency) from human to mosquito}
+\item{c}{the proportion of bites on infected humans that infect a mosquito}
+
+\item{tau}{incubation rate}
 }
 \value{
 a [list]

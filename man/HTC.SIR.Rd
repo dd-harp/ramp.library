@@ -4,10 +4,12 @@
 \alias{HTC.SIR}
 \title{Compute the HTC for the SIR model}
 \usage{
-\method{HTC}{SIR}(pars)
+\method{HTC}{SIR}(pars, i)
 }
 \arguments{
 \item{pars}{a \link{list}}
+
+\item{i}{the host species index}
 }
 \value{
 a [numeric] vector

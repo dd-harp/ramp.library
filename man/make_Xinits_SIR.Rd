@@ -4,20 +4,20 @@
 \alias{make_Xinits_SIR}
 \title{Make initial values for the SIR human model, with defaults}
 \usage{
-make_Xinits_SIR(nStrata, Xopts = list(), H0 = NULL, S0 = NULL, I0 = 1, R0 = 0)
+make_Xinits_SIR(nStrata, Xopts = list(), H0 = NULL, S0 = NULL, I0 = 1, R0 = 1)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
 \item{Xopts}{a [list] to overwrite defaults}
 
-\item{H0}{the initial human population density}
+\item{H0}{the initial value for H}
 
-\item{S0}{the initial values of the parameter S}
+\item{S0}{the initial value for S}
 
-\item{I0}{the initial values of the parameter I}
+\item{I0}{the initial value for I}
 
-\item{R0}{the initial values of the parameter R}
+\item{R0}{the initial values for R}
 }
 \value{
 a [list]

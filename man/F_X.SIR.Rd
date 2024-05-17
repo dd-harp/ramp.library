@@ -19,5 +19,5 @@
 a [numeric] vector of length `nStrata`
 }
 \description{
-Implements [F_X] for the SIR model.
+Implements [F_X] for the SIS model.
 }
