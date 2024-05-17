@@ -6,8 +6,8 @@
 \usage{
 \method{xde_plot_X}{SIR}(
   pars,
-  i,
-  clrs = c("black", "darkred", "darkblue"),
+  i = 1,
+  clrs = c("darkblue", "darkred", "darkgreen"),
   llty = 1,
   stable = FALSE,
   add_axes = TRUE

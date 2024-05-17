@@ -2,7 +2,7 @@
 % Please edit documentation in R/Xmod-SEIR.R
 \name{F_H.SEIR}
 \alias{F_H.SEIR}
-\title{Size of human population}
+\title{Size of effective infectious human population}
 \usage{
 \method{F_H}{SEIR}(t, y, pars, i)
 }

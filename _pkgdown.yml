@@ -61,6 +61,7 @@ reference:
   - dXdt.garki
   - setup_Xpar.garki
   - setup_Xinits.garki
+  - list_Xvars.garki
   - make_Xpar_garki
   - make_Xinits_garki
   - make_indices_X.garki
@@ -97,6 +98,7 @@ reference:
   - F_b.SIR
   - dXdt.SIR
   - setup_Xinits.SIR
+  - list_Xvars.SIR
   - setup_Xpar.SIR
   - make_Xpar_SIR
   - make_Xinits_SIR
@@ -135,6 +137,7 @@ reference:
   - dXdt.SEIR
   - setup_Xpar.SEIR
   - setup_Xinits.SEIR
+  - list_Xvars.SEIR
   - make_Xpar_SEIR
   - make_Xinits_SEIR
   - make_indices_X.SEIR
@@ -144,3 +147,22 @@ reference:
   - HTC.SEIR
   - xde_plot_X.SEIR
   - xde_lines_X_SEIR
+- subtitle: The SEIRV model
+  contents:
+  - F_X.SEIRV
+  - F_H.SEIRV
+  - F_pr.SEIRV
+  - F_b.SEIRV
+  - dXdt.SEIRV
+  - list_Xvars.SEIRV
+  - setup_Xpar.SEIRV
+  - setup_Xinits.SEIRV
+  - make_Xpar_SEIRV
+  - make_Xinits_SEIRV
+  - make_indices_X.SEIRV
+  - parse_deout_X.SEIRV
+  - get_inits_X.SEIRV
+  - update_inits_X.SEIRV
+  - HTC.SEIRV
+  - xde_plot_X.SEIRV
+  - xde_lines_X_SEIRV

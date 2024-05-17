@@ -2,7 +2,7 @@
 % Please edit documentation in R/Xmod-SIR.R
 \name{dXdt.SIR}
 \alias{dXdt.SIR}
-\title{Derivatives for human population}
+\title{Compute the derivatives for parasite infection dynamics in human population strata}
 \usage{
 \method{dXdt}{SIR}(t, y, pars, i)
 }
@@ -19,5 +19,5 @@
 a [numeric] vector
 }
 \description{
-Implements [dXdt] for the SIR model with demography.
+Implements [dXdt] for the SIR model
 }

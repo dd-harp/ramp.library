@@ -2,7 +2,7 @@
 % Please edit documentation in R/Xmod-SEIR.R
 \name{dXdt.SEIR}
 \alias{dXdt.SEIR}
-\title{Derivatives for human population}
+\title{Compute the derivatives for parasite infection dynamics in human population strata}
 \usage{
 \method{dXdt}{SEIR}(t, y, pars, i)
 }
@@ -19,5 +19,5 @@
 a [numeric] vector
 }
 \description{
-Implements [dXdt] for the SEIR model with demography.
+Implements [dXdt] for the SEIR model
 }

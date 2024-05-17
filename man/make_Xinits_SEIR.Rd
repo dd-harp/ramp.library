@@ -9,9 +9,9 @@ make_Xinits_SEIR(
   Xopts = list(),
   H0 = NULL,
   S0 = NULL,
-  E0 = 0,
   I0 = 1,
-  R0 = 0
+  E0 = 0,
+  R0 = 1
 )
 }
 \arguments{
@@ -19,15 +19,15 @@ make_Xinits_SEIR(
 
 \item{Xopts}{a [list] to overwrite defaults}
 
-\item{H0}{the initial human population density}
+\item{H0}{the initial value for H}
 
-\item{S0}{the initial values of the parameter S}
+\item{S0}{the initial value for S}
 
-\item{E0}{the initial values of the parameter E}
+\item{I0}{the initial value for I}
 
-\item{I0}{the initial values of the parameter I}
+\item{E0}{the initial value for E}
 
-\item{R0}{the initial values of the parameter R}
+\item{R0}{the initial values for R}
 }
 \value{
 a [list]

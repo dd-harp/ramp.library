@@ -17,14 +17,10 @@ F_X.garki <- function(t, y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.garki <- function(t, y, pars, i){
-  x1 <- y[pars$ix$X[[i]]$x1_ix]
-  x2 <- y[pars$ix$X[[i]]$x2_ix]
-  x3 <- y[pars$ix$X[[i]]$x3_ix]
-  x4 <- y[pars$ix$X[[i]]$x4_ix]
-  y1 <- y[pars$ix$X[[i]]$y1_ix]
-  y2 <- y[pars$ix$X[[i]]$y2_ix]
-  y3 <- y[pars$ix$X[[i]]$y3_ix]
-  return(x1+x2+x3+x4+y1+y2+y3)
+  with(list_Xvars(y, pars,i),{
+    H = x1+x2+x3+x4+y1+y2+y3
+    return(H)
+  })
 }
 
 #' @title Infection blocking pre-erythrocytic immunity
@@ -55,15 +51,7 @@ dXdt.garki = function(t, y, pars, i){
 
   foi <- pars$FoI[[i]]
 
-  with(pars$ix$X[[i]],{
-    x1 <- y[x1_ix]
-    x2 <- y[x2_ix]
-    x3 <- y[x3_ix]
-    x4 <- y[x4_ix]
-    y1 <- y[y1_ix]
-    y2 <- y[y2_ix]
-    y3 <- y[y3_ix]
-    H  <- y[pars$H_ix]
+  with(list_Xvars(y, pars, i),{
 
     with(pars$Xpar[[i]],{
       R1 = foi/(exp(foi/r1) - 1)
@@ -82,6 +70,24 @@ dXdt.garki = function(t, y, pars, i){
       return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4, dH))
     })
   })
+}
+
+#' @title Return the variables as a list
+#' @description This method dispatches on the type of `pars$Xpar`
+#' @inheritParams ramp.xde::list_Xvars
+#' @return a [list]
+#' @export
+list_Xvars.garki <- function(y, pars, i) {
+  with(pars$ix$X[[i]],
+       return(list(
+         x1 <- y[x1_ix],
+         x2 <- y[x2_ix],
+         x3 <- y[x3_ix],
+         x4 <- y[x4_ix],
+         y1 <- y[y1_ix],
+         y2 <- y[y2_ix],
+         y3 <- y[y3_ix]
+       )))
 }
 
 #' @title Setup Xpar.garki
@@ -228,14 +234,7 @@ get_inits_X.garki <- function(pars, i){
 #' @return none
 #' @export
 update_inits_X.garki <- function(pars, y0, i){
-  with(pars$ix$X,{
-    x1 <- y0[x1_ix]
-    x2 <- y0[x2_ix]
-    x3 <- y0[x3_ix]
-    x4 <- y0[x4_ix]
-    y1 <- y0[y1_ix]
-    y2 <- y0[y2_ix]
-    y3 <- y0[y3_ix]
+  with(list_Xvars(y0, pars, i),{
     pars = make_Xinits_garki(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
     return(pars)
 })}

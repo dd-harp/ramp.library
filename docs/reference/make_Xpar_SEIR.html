@@ -73,7 +73,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_Xpar_SEIR</span><span class="op">(</span><span class="va">nStrata</span>, Xopts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, b <span class="op">=</span> <span class="fl">0.55</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">180</span>, c <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_Xpar_SEIR</span><span class="op">(</span></span>
+<span>  <span class="va">nStrata</span>,</span>
+<span>  Xopts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  b <span class="op">=</span> <span class="fl">0.55</span>,</span>
+<span>  r <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">180</span>,</span>
+<span>  c <span class="op">=</span> <span class="fl">0.15</span>,</span>
+<span>  tau <span class="op">=</span> <span class="fl">0.5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,15 +94,19 @@
 
 
 <dt>b</dt>
-<dd><p>transmission probability (efficiency) from mosquito to human</p></dd>
+<dd><p>the proportion of infective bites that cause an infection</p></dd>
 
 
 <dt>r</dt>
-<dd><p>recovery rate</p></dd>
+<dd><p>the the duration of an infection</p></dd>
 
 
 <dt>c</dt>
-<dd><p>transmission probability (efficiency) from human to mosquito</p></dd>
+<dd><p>the proportion of bites on infected humans that infect a mosquito</p></dd>
+
+
+<dt>tau</dt>
+<dd><p>incubation rate</p></dd>
 
 </dl></div>
     <div id="value">
