@@ -18,7 +18,7 @@ wh1 <- xde_solve(wh1, Tmax = 5*365)
 
 ## -----------------------------------------------------------------------------
 xde_plot_X(wh)
-xde_lines_X_workhorse(wh1$outputs$orbits$XH[[1]], 1, llty=2)
+xde_plot_X(wh1, llty=2, add_axes=FALSE)
 
 ## -----------------------------------------------------------------------------
 with(wh$outputs$orbits$XH[[1]],{
