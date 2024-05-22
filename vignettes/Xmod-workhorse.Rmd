@@ -19,8 +19,6 @@ library(ramp.library)
 
 #   
 
-test code
-
 **Warning:** `workhorse` is in development. 
 
 In the following, we present a stage of infection (SoI) model for malaria infection that recognizes an important difference between the two major phases of an infection: the acute phase characterized by geometrically increasing parasite numbers; and the chronic phase characterized by fluctuating parasite densities. The model explicitly considers *superinfection,*  which moves individuals from an infected state into a parallel set of states.  
