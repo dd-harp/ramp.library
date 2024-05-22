@@ -1,0 +1,19 @@
+---
+title: "Adding new L models to `ramp.xde`" 
+subtitle: "Models for Aquatic Mosquito Ecology" 
+output:
+  html_document: 
+    theme: paper 
+vignette: >
+  %\VignetteIndexEntry{Adding new L models to `ramp.xde`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+*** 
+
+This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by  [`ramp.xde`](https://github.com/dd-harp/ramp.xde). This vignette covers models of parasite infection dynamics and immunity in humans or other hosts -- the dynamical components we have denoted $\cal L.$ 
+
+*** 
+
+Needs to be done. 

@@ -3,16 +3,24 @@ navbar:
   left:
   - text: Functions
     href: reference/index.html
+  - text: Adding Models
+    menu:
+    - text: Adding Models
+      href: articles/Adding_models.html
+    - text: How to add a new X model
+      href: articles/X-How_To_Add_Model.html
+    - text: How to add a new MYZ model
+      href: articles/MYZ-How_To_Add_Model.html
+    - text: How to add a new L model
+      href: articles/L-How_To_Add_Model.html
+  - text: X
+    menu:
+    - text: SIS Model
+      href: articles/Xmod-SIS.html
   - text: MYZ
     menu:
     - text: The RMG Model
       href: articles/MYZmod-RMG.html
-  - text: X
-    menu:
-    - text: How to add a new X model
-      href: articles/X-How_To_Add_Model.html
-    - text: SIS Model
-      href: articles/Xmod-SIS.html
   right:
   - icon: fa-github
     href: https://github.com/dd-harp/ramp.library/

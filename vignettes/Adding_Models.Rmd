@@ -1,0 +1,27 @@
+---
+title: "Adding models to `ramp.xde`" 
+subtitle: "General Procedures for Adding Models" 
+output:
+  html_document: 
+    theme: paper 
+vignette: >
+  %\VignetteIndexEntry{Adding models to `ramp.xde`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+*** 
+
+This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by [`ramp.xde`](https://github.com/dd-harp/ramp.xde). There are specific instructions for new models of human infection and immunity [({\cal XH})](X-How_to_Add_Model.html); adult mosquito ecology and infection dynamics [${\cal MYZ}$](MYZ-How_To_Add_Model.html); and mosquito ecology [$\cal L$](L-How_To_Add_Model.html). 
+
+This vignette covers general procedures.  
+
+*** 
+
++ Build
+
++ Check
+
++ Documentation
+
++ 
