@@ -1,9 +1,7 @@
 ---
 title: "Adding new XH models to `ramp.xde`" 
 subtitle: "Models for Human / Vertebrate Host Infection Dynamics" 
-output:
-  html_document: 
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Adding new XH models to `ramp.xde`}
   %\VignetteEngine{knitr::rmarkdown}

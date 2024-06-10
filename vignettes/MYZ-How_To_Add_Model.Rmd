@@ -1,9 +1,7 @@
 ---
 title: "Adding new MYZ models to `ramp.xde`" 
 subtitle: "Models for Adult Mosquito Ecology and Infection Dynamics" 
-output:
-  html_document: 
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Adding new MYZ models to `ramp.xde`}
   %\VignetteEngine{knitr::rmarkdown}

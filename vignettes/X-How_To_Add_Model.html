@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Adding new XH models to ramp.xde</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Adding new XH models to
+<code>ramp.xde</code></h1>
+<h3 class="subtitle">Models for Human / Vertebrate Host Infection
+Dynamics</h3>
+
+
+
+<hr />
+<p>This vignette discusses how to add a new model family to <a href="https://github.com/dd-harp/ramp.library"><code>ramp.library</code></a>
+that can be used by <a href="https://github.com/dd-harp/ramp.xde"><code>ramp.xde</code></a>.
+This vignette covers models of parasite infection dynamics and immunity
+in humans or other hosts – the dynamical components we have denoted
+<span class="math inline">\(\cal X\)</span> and <span class="math inline">\(\cal H.\)</span></p>
+<hr />
+<p>We have written this vignette to produce a new template file using
+<code>knitr::purl,</code> which can be modified to build a new model.
+Simply execute the following command, to create
+<code>Xmod-SEIRV.R.</code> Then, rename <code>Xmod-SEIRV.R</code> by
+replacing <code>SEIRV</code> in the filename. Then open the file and do
+a global search for <code>SEIRV</code> and replace it with your new
+name.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">&quot;X-How_To_Add_Model.Rmd&quot;</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>            <span class="at">output =</span> <span class="st">&quot;Xmod-SEIRV.R&quot;</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>            <span class="at">documentation =</span> <span class="dv">0</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>            <span class="at">quiet=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Xmod-SEIRV.R&quot;</code></pre>
+<p>This is a good start, but there’s more work to do. For more details,
+read the text that follows.</p>
+<p>This basic introduction is lacking some information that typical
+users might find useful. In particular, we have defined best practices
+encoding the <span class="math inline">\(\cal H\)</span> component of
+models. A vignette is planned.</p>
+<div id="reusable-code" class="section level3">
+<h3>Reusable Code</h3>
+<p>This package – <code>ramp.library</code> – contains reusable code
+that has been rigorously tested and that implements a large number of
+dynamical model families and other algorithms taken from the literature
+describing malaria and other mosquito-transmitted pathogens (see Reiner,
+<em>et al.</em> 2013)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The supporting code was designed to be
+modular, and plug-and-play. The modular design makes it possible to
+break down published models to serve as the dynamical components in new
+models for malaria. The model families in <code>ramp.library</code>
+supports nimble model building that can be used by:</p>
+<ul>
+<li><p><a href="https://github.com/dd-harp/ramp.xde"><code>ramp.xde</code></a>
+implements a modular, flexible, and extensible framework for building
+systems of ordinary and delay differential equations models for malaria
+and other mosquito-transmitted pathogens. The mathematic framework for
+<code>ramp.xde</code> was explained in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" target="_blank">Spatial Dynamics of Malaria Transmission</a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
+<li><p><a href="https://github.com/dd-harp/ramp.dts"><code>ramp.dts</code></a>
+implements a modular, flexible, and extensible framework for building
+discrete time systems, including both deterministic and stochastic
+difference equations for malaria and other mosquito-transmitted
+pathogens.</p></li>
+</ul>
+<p>This vignette was written to help add new models to
+<code>ramp.xde.</code></p>
+<p>In planned companion to this vignette, we show how to add models of
+<span class="math inline">\(\cal XH\)</span> to <a href="https://github.com/dd-harp/ramp.dts"><code>ramp.dts</code></a>.</p>
+<hr />
+</div>
+<div id="functions" class="section level3">
+<h3>Functions</h3>
+<p>A new model family of class <span class="math inline">\(\cal
+XH\)</span> – human infection dynamics, including immunity – has 17
+required functions encoded using a standard template. Some of these
+required functions are <code>S3</code> class functions in <a href="https://github.com/dd-harp/ramp.xde/blob/main/R/human-interface.R" target="_blank">human-interface.R</a>, and several examples are posted
+in the <code>ramp.xde</code> github repository, including the
+<code>SIS</code> model <a href="https://github.com/dd-harp/ramp.xde/blob/main/R/human-SIS.R" target="_blank">human-SIS.R</a>.</p>
+<p>To configure a new model, you must choose a string called
+<code>SEIRV</code>. The only rule for choosing <code>SEIRV</code> is
+that it must be unique. No other <span class="math inline">\({\cal
+XH}\)</span> class model in <code>ramp.xde</code> or
+<code>ramp.library</code> can be using that string already. All the
+<code>S3</code> functions get dispatched by the string that replaces
+<code>SEIRV.</code></p>
+<p>The 17 required functions are:</p>
+<p><strong>Derivatives</strong></p>
+<ol style="list-style-type: decimal">
+<li><code>dXdt.SEIRV</code> - differential equations are defined by a
+system of differential equations. in <code>ramp.xde</code> these are
+encoded in a function called <code>dXdt</code> that computes and returns
+the <strong>derivatives.</strong> The function is set up so that the
+system can be solved by <code>deSolve::ode</code> or
+<code>deSolve::dede.</code></li>
+</ol>
+<p><strong>Variables</strong> - A set of functions is set up that
+document the variables by name and assign each one an index, to store,
+assign and update initial values. These functions streamline setup, and
+guarantee consistency.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p><code>make_Xinits_SEIRV</code> - each model requires a function
+that documents the variables by name and assigns initial values</p></li>
+<li><p><code>setup_Xinits.SEIRV</code> - is a wrapper, that gets called
+by <code>ramp.xde::xde_setup.</code> It gets called by
+<code>make_Xinits_SEIRV,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
+stored as <code>pars$Xinits[[i]].</code></p></li>
+<li><p><code>make_indices_X.SEIRV</code> - is the function that assigns
+an index to each variable in the model, and stores it as
+<code>pars$ix$X[[i]].</code> The indices are returned as a named
+list.</p></li>
+<li><p><code>list_Xvars.SEIRV</code> - retrieves the value of variables
+at a point in time and returns the values by name in a list; the
+function gets called by <code>dXdt</code> and by
+<code>update_inits_X</code> and it can be useful in other
+contexts.</p></li>
+<li><p><code>get_inits_X.SEIRV</code> - retrieves the stored initial
+values in the same order that they are returned by
+<code>dXdt.SEIRV</code></p></li>
+<li><p><code>update_inits_X.SEIRV</code> - a utility that makes it
+possible to extract and store a new set of initial values for
+<code>SEIRV</code> from a vector <span class="math inline">\(y\)</span>
+holding all the variables in a model.</p></li>
+</ol>
+<p><strong>Parameters</strong></p>
+<ol start="8" style="list-style-type: decimal">
+<li><p><code>make_Xpar_SEIRV</code> returns a formatted list:</p>
+<ul>
+<li><p>the parameter values are stored by name</p></li>
+<li><p><code>class(pars)</code> = <code>SEIRV</code></p></li>
+</ul></li>
+<li><p><code>setup_Xpar.SEIRV</code> is a wrapper that calls
+<code>make_Xpar_SEIRV</code></p></li>
+</ol>
+<p><strong>Dynamical Terms</strong> are Computed using a Standard Set of
+Functions</p>
+<ol start="10" style="list-style-type: decimal">
+<li><p><code>F_X.SEIRV</code> - compute the effective infective density
+of the vertebrate hosts</p></li>
+<li><p><code>F_H.SEIRV</code> - compute the human population density for
+the host strata</p></li>
+<li><p><code>F_b.SEIRV</code> - compute the probability a most will
+become infected after receiving an infective bite, which combines
+elements of this <span class="math inline">\(\cal X\)</span> model with
+a model of environmental heterogeneity in
+<code>Exposure.</code></p></li>
+</ol>
+<p><strong>Outputs</strong></p>
+<ol start="13" style="list-style-type: decimal">
+<li><p><code>parse_deout_X.SEIRV</code> - this function parses the
+output of <code>deSolve</code> and returns a named list that is either a
+vector or a matrix holding the values of the variables at each point in
+time. It works like <code>list_Xvars,</code> which accepts a vector
+holding <span class="math inline">\(y\)</span>, the values of the
+variables at a single point in time.</p></li>
+<li><p><code>F_pr.SEIRV</code> - this function takes</p></li>
+<li><p><code>HTC.SEIRV</code></p></li>
+</ol>
+<p><strong>Outputs</strong></p>
+<ol start="16" style="list-style-type: decimal">
+<li><p><code>xde_lines_X.SEIRV</code></p></li>
+<li><p><code>xde_plot_X.SEIRV</code> is a wrapper that calls
+<code>xde_lines_X</code></p></li>
+</ol>
+</div>
+<div id="style" class="section level3">
+<h3>Style</h3>
+<p>We recommend that new models conform to a set of style
+guidelines:</p>
+<ul>
+<li><p>All the names of the variables by name using the indices attached
+to <code>Xpar</code></p></li>
+<li><p>All documentation is written in <code>roxygen2</code></p></li>
+<li><p>Functions should use <code>with(*,{...})</code> to make the code
+easier to read.</p></li>
+<li><p>A vignette should accompany each model, including citations to
+the relevant publications, and proposed tests of the code.</p></li>
+<li><p>The functions should easy to relate to the equations defining a
+model, following notation defined in an accompanying vignette.</p></li>
+</ul>
+</div>
+<div id="derivatives" class="section level2">
+<h2>Derivatives</h2>
+<div id="dxdt" class="section level3">
+<h3>dXdt</h3>
+<p>The function <code>dXdt</code> is established as a generic function
+that dispatches on <code>Xpar.</code> Since there might be many host
+species, it actually dispatches on the <span class="math inline">\(i^{th}\)</span> element in a list,
+<code>pars$Xpar[[i]].</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&#39; @title Derivatives for human population</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&#39; @param t current simulation time</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>dXdt <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;dXdt&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="dxdt.sis" class="section level3">
+<h3>dXdt.SIS</h3>
+<p>This is a version of the <code>SIS</code> model in
+<code>ramp.xde</code> with demographics. If a model has any demographic
+processes (<em>e.g.</em> aging, migration, births and deaths), then each
+variable’s derivative must be transformed by the same matrix as the
+human population density, <code>H</code>. Any disease induced mortality
+should be included in a matrix that computes changes in human population
+density, <code>dHdt</code>.</p>
+<p>In the following, we use the <code>with()</code> function to expose
+parameter names attached to lists to make the code easy to read.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Derivatives for human population</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [dXdt] for the SIS model, no demography.</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams dXdt</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>dXdt.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  foi <span class="ot">&lt;-</span> pars<span class="sc">$</span>FoI[[i]]</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y, pars, i),{</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    H <span class="ot">&lt;-</span> <span class="fu">F_H</span>(t, y, pars, i)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], {</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>      dS <span class="ot">&lt;-</span> <span class="fu">Births</span>(t, H, pars, i) <span class="sc">-</span> foi<span class="sc">*</span>S <span class="sc">+</span> r<span class="sc">*</span>I <span class="sc">+</span> <span class="fu">dHdt</span>(t, S, pars, i)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>      dI <span class="ot">&lt;-</span> foi<span class="sc">*</span>S <span class="sc">-</span> r<span class="sc">*</span>I <span class="sc">+</span> <span class="fu">dHdt</span>(t, I, pars, i)</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">c</span>(dS, dI))</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    })</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  })</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="dxdt.seirv" class="section level3">
+<h3>dXdt.SEIRV</h3>
+<p>This <em>should</em> be straightforward, but there’s one very
+important wrinkle. If you want to be able to use the
+<code>ramp.xde</code> capabilities for cohort dynamics and vital
+dynamics, then the dynamics must be extended carefully to call the
+demographic matrix function <code>dHdt.</code> This can become tricky,
+so we handle it elsewhere. When writing the code:</p>
+<ul>
+<li><p>The foi gets computed in <code>Exposure</code> and stored as
+<code>pars$FoI[[i]]</code> for the <span class="math inline">\(i^{th}\)</span> host species.</p></li>
+<li><p>In the next step, the variables are extracted from the variable
+vector, <code>y</code>, using the indices, which are stored in
+<code>pars$ix$X[[i]]</code></p></li>
+<li><p>We compute the derivatives.</p></li>
+<li><p>We return the variables in order. Be sure to establish and then
+maintain a convention for ordering the variables in your model, and then
+maintain that order in every function. In particular:</p>
+<ul>
+<li><p>set up the initial values in that order</p></li>
+<li><p>return the derivatives in that order</p></li>
+</ul></li>
+<li><p>Be careful about how you nest the <code>with(*, ...)</code>
+calls.</p></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [dXdt] for the SEIRV model</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::dXdt</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>dXdt.SEIRV<span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="co"># do not change this</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  foi <span class="ot">&lt;-</span> pars<span class="sc">$</span>FoI[[i]]</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="co"># attach the variables by name</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y, pars, i),{</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="co"># compute H (if it isn&#39;t one of the variables)</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    H <span class="ot">&lt;-</span> <span class="fu">F_H</span>(t, y, pars, i)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    </span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>    <span class="co"># expose the parameters (see make_Xpar_SEIRV)</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], {</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>      <span class="co"># compute the derivatives</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>      dS <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>alpha)<span class="sc">*</span><span class="fu">Births</span>(t, H, pars,i) <span class="sc">-</span> foi<span class="sc">*</span>S <span class="sc">+</span> <span class="fu">dHdt</span>(t, S, pars,i)<span class="sc">+</span> eps<span class="sc">*</span>R</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>      dE <span class="ot">&lt;-</span> foi<span class="sc">*</span>S <span class="sc">-</span> tau<span class="sc">*</span>E <span class="sc">+</span> <span class="fu">dHdt</span>(t, E, pars,i)</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>      dI <span class="ot">&lt;-</span> tau<span class="sc">*</span>E <span class="sc">-</span> r<span class="sc">*</span>I <span class="sc">+</span> <span class="fu">dHdt</span>(t, I, pars,i)</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>      dR <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>delta)<span class="sc">*</span>r<span class="sc">*</span>I <span class="sc">-</span>sig<span class="sc">*</span>R <span class="sc">-</span>eps<span class="sc">*</span>R<span class="sc">+</span> <span class="fu">dHdt</span>(t, R, pars,i)</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>      dV <span class="ot">&lt;-</span> alpha<span class="sc">*</span><span class="fu">Births</span>(t, H, pars,i) <span class="sc">+</span> delta<span class="sc">*</span>r<span class="sc">*</span>I <span class="sc">+</span> sig<span class="sc">*</span>R <span class="sc">+</span> <span class="fu">dHdt</span>(t, V, pars,i)</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>      </span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>       <span class="co"># concatenate the derivatives</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>      derivs <span class="ot">=</span> <span class="fu">c</span>(dS, dE, dI, dR,dV)</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>      </span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>      <span class="co"># return the derivatives</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>      <span class="fu">return</span>(derivs)</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>    })</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>  })</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="variables" class="section level2">
+<h2>Variables</h2>
+<div id="make_xinits" class="section level3">
+<h3>2. make_Xinits</h3>
+<div id="make_xinits_sis" class="section level4">
+<h4>make_Xinits_SIS</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the SIS human model, with defaults</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] to overwrite defaults</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @param H0 the initial human population density</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @param S0 the initial values of the parameter S</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @param I0 the initial values of the parameter I</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>make_Xinits_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">H0=</span><span class="cn">NULL</span>, <span class="at">S0=</span><span class="cn">NULL</span>, <span class="at">I0=</span><span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(S0)) S0 <span class="ot">=</span> H0 <span class="sc">-</span> I0</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(S0))</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  S <span class="ot">=</span> <span class="fu">checkIt</span>(S0, nStrata)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">checkIt</span>(I0, nStrata)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">S=</span>S, <span class="at">I=</span>I))</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+<div id="make_xinits_seirv" class="section level4">
+<h4>make_Xinits_SEIRV</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the SEIRV human model, with defaults</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] to overwrite defaults</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @param H0 the initial value for H</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @param S0 the initial value for S</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&#39; @param E0 the initial value for E</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&#39; @param I0 the initial value for I</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&#39; @param R0 the initial values for R</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&#39; @param V0 the initial values for V</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>make_Xinits_SEIRV <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">H0=</span> <span class="cn">NULL</span>, <span class="at">S0=</span><span class="cn">NULL</span>, <span class="at">I0=</span><span class="dv">1</span>, <span class="at">E0=</span><span class="dv">0</span>,<span class="at">R0 =</span> <span class="dv">1</span>,<span class="at">V0 =</span> <span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(S0)) S0 <span class="ot">=</span> H0<span class="sc">-</span>(E0<span class="sc">+</span>I0<span class="sc">+</span>R0<span class="sc">+</span>V0)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(S0))</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  S <span class="ot">=</span> <span class="fu">checkIt</span>(S0, nStrata)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  E <span class="ot">=</span> <span class="fu">checkIt</span>(E0, nStrata)</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">checkIt</span>(I0, nStrata)</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  R <span class="ot">=</span> <span class="fu">checkIt</span>(R0, nStrata)</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  V <span class="ot">=</span> <span class="fu">checkIt</span>(V0, nStrata)</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">S=</span>S, <span class="at">E=</span>E, <span class="at">I=</span>I, <span class="at">R =</span>R,<span class="at">V=</span>V))</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+</div>
+<div id="setup_xinits" class="section level3">
+<h3>3. setup_Xinits</h3>
+<p>In the <code>xde_setup</code> family of setup functions, initial
+values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRV</code> is set
+up by the function <code>setup_Xinits.</code></p>
+<div id="generic" class="section level4">
+<h4>Generic</h4>
+<p>The <code>setup_Xinits</code> function dispatches on
+<code>pars$Xpar[[i]]</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title A function to set up Xpar</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on `SEIRV`.</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list]</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>setup_Xinits <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;setup_Xinits&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="setup_xinits.sis" class="section level4">
+<h4>setup_Xinits.SIS</h4>
+<p>The <code>setup_Xinits.SIS</code> calls
+<code>make_Xinits_SIS</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xinits.SIS</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xinits] for the SIS model</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams setup_Xinits</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>setup_Xinits.SIS <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">make_Xinits_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="setup_xinits.seirv" class="section level4">
+<h4>setup_Xinits.SEIRV</h4>
+<p>To modify, replace <code>SEIRV</code></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xinits.SEIRV</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xinits] for the SEIRV model</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::setup_Xinits</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>setup_Xinits.SEIRV <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">make_Xinits_SEIRV</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="make_indices_x" class="section level3">
+<h3>4. make_indices_X</h3>
+<div id="generic-1" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co">#&#39; @title Add indices for human population to parameter list</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>make_indices_X <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;make_indices_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="make_indices_x.sis" class="section level4">
+<h4>make_indices_X.SIS</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&#39; @title Add indices for human population to parameter list</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_indices_X] for the SIS model.</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::make_indices_X</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>make_indices_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {<span class="fu">with</span>(pars,{</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  S_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(S_ix, <span class="dv">1</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  I_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(I_ix, <span class="dv">1</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  pars<span class="sc">$</span>max_ix <span class="ot">=</span> max_ix</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>  pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]] <span class="ot">=</span> <span class="fu">list</span>(<span class="at">S_ix=</span>S_ix, <span class="at">I_ix=</span>I_ix)</span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+<div id="make_indices_x.seirv" class="section level4">
+<h4>make_indices_X.SEIRV</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co">#&#39; @title Add indices for human population to parameter list</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_indices_X] for the SEIRV model.</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::make_indices_X</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>make_indices_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {<span class="fu">with</span>(pars,{</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  </span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  S_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(S_ix, <span class="dv">1</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>  </span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>  E_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(E_ix, <span class="dv">1</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>  </span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>  I_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(I_ix, <span class="dv">1</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>  </span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  R_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(R_ix, <span class="dv">1</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  </span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>  V_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>Hpar[[i]]<span class="sc">$</span>nStrata)</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(V_ix, <span class="dv">1</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>  </span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>  </span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>  </span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>  pars<span class="sc">$</span>max_ix <span class="ot">=</span> max_ix</span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>  pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]] <span class="ot">=</span> <span class="fu">list</span>(<span class="at">S_ix=</span>S_ix,  <span class="at">E_ix=</span>E_ix, <span class="at">I_ix=</span>I_ix, <span class="at">R_ix=</span>R_ix, <span class="at">V_ix=</span>V_ix)</span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+</div>
+<div id="list_xvars" class="section level3">
+<h3>5. list_Xvars</h3>
+<div id="generic-2" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&#39; @title Return the variables as a list</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&#39; @param y the variables</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>list_Xvars <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;list_Xvars&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="list_xvars.sis" class="section level4">
+<h4>list_Xvars.SIS</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Return the variables as a list</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams list_Xvars</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>list_Xvars.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]],</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>        <span class="at">S =</span> y[S_ix],</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>        <span class="at">I =</span> y[I_ix]</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>      )</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>  ))</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="list_xvars.seirv" class="section level4">
+<h4>list_Xvars.SEIRV</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&#39; @title Return the variables as a list</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::list_Xvars</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>list_Xvars.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]],</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>       <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>         <span class="at">S =</span> y[S_ix],</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>         <span class="at">E =</span> y[E_ix],</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>         <span class="at">I =</span> y[I_ix],</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>         <span class="at">R =</span> y[R_ix],</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>         <span class="at">V =</span> y[V_ix]</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>       )</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>       ))</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="get_inits_x" class="section level3">
+<h3>6. get_inits_X</h3>
+<p>By now the pattern should be obvious.</p>
+<div id="generic-3" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co">#&#39; @title Return initial values as a vector</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>get_inits_X <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;get_inits_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="get_inits_x.sis" class="section level4">
+<h4>get_inits_X.SIS</h4>
+<p>Returns the initial values, in order, by name.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&#39; @title Return initial values as a vector</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams get_inits_X</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>get_inits_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i){</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>Xinits[[i]], <span class="fu">return</span>(<span class="fu">c</span>(S,I)))</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="get_inits_x.seirv" class="section level4">
+<h4>get_inits_X.SEIRV</h4>
+<p>Write the function to return the initial values, in order, by
+name.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co">#&#39; @title Return initial values as a vector</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::get_inits_X</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>get_inits_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i){</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>Xinits[[i]], <span class="fu">return</span>(<span class="fu">c</span>(S,E,I,R,V)))</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="update_inits_x" class="section level3">
+<h3>7. update_inits_X</h3>
+<p>Pass a vector <code>y</code>, extract the values of the variables,
+and modify the initial values.</p>
+<div id="generic-4" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&#39; @title Set the initial values from a vector of states</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&#39; @param y0 a vector of initial values</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>update_inits_X <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;update_inits_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="update_inits_x.sis" class="section level4">
+<h4>update_inits_X.SIS</h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#&#39; @title Update inits for the SIS human model from a vector of states</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams update_inits_X</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>update_inits_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y0, pars, i),{</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">make_Xinits_SIS</span>(pars, <span class="fu">list</span>(), <span class="at">S0=</span>S, <span class="at">I0=</span>I)</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>    <span class="fu">return</span>(pars)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+<div id="update_inits_x.seirv" class="section level4">
+<h4>update_inits_X.SEIRV</h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">#&#39; @title Update inits for the SEIRV human model from a vector of states</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::update_inits_X</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>update_inits_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y0, pars, i),{</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>    pars <span class="ot">=</span> <span class="fu">make_Xinits_SEIRV</span>(pars, <span class="fu">list</span>(), <span class="at">S0=</span>S,<span class="at">E0=</span> E, <span class="at">I0=</span>I, <span class="at">R0=</span>R,<span class="at">V0 =</span>V)</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>    <span class="fu">return</span>(pars)</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="parameters" class="section level2">
+<h2>Parameters</h2>
+<p>The second function sets up a list <code>Xpar</code> that dispatches
+<code>dXdt</code> and that has the parameter values.</p>
+<div id="make_xpar_sis" class="section level3">
+<h3>8. make_Xpar_SIS</h3>
+<p>There is no <code>S3</code> definition for the
+<code>make_Xpar_*</code> class of functions. Instead, we write a generic
+<code>S3</code> function called <code>setup_Xpar</code> that calls a
+function <code>make_Xpar_*</code> There is, nevertheless, a reasonably
+standard formula for <code>make_Xpar_*</code></p>
+<ul>
+<li><p>The first argument is <code>nStrata</code> the number of
+population strata for the species.</p></li>
+<li><p>The first argument is <code>Xopts().</code> Notice that
+<code>Xopts()</code> is an empty list by default, but if a non-empty
+list is passed, the values overwrite the defaults.</p></li>
+<li><p>The parameters are attached by name. These parameter names must
+be the same ones used in <code>dXdt</code></p></li>
+<li><p>By default, they should have
+<code>length(*)= nStrata</code></p></li>
+<li><p>The last part of the function name is the string that dispatches
+the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
+<code>class(Xpar) &lt;- &quot;SIS&quot;</code></p></li>
+</ul>
+<div id="make_xpar_sis-1" class="section level4">
+<h4>make_Xpar_SIS</h4>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for SIS human model, with defaults</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] that could overwrite defaults</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&#39; @param b transmission probability (efficiency) from mosquito to human</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&#39; @param c transmission probability (efficiency) from human to mosquito</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&#39; @param r recovery rate</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>make_Xpar_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>                         <span class="at">b=</span><span class="fl">0.55</span>, <span class="at">r=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">180</span>, <span class="at">c=</span><span class="fl">0.15</span>){</span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>  <span class="fu">with</span>(Xopts,{</span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    Xpar <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    <span class="fu">class</span>(Xpar) <span class="ot">&lt;-</span> <span class="st">&quot;SIS&quot;</span></span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a>    Xpar<span class="sc">$</span>b <span class="ot">=</span> <span class="fu">checkIt</span>(b, nStrata)</span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a>    Xpar<span class="sc">$</span>c <span class="ot">=</span> <span class="fu">checkIt</span>(c, nStrata)</span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a>    Xpar<span class="sc">$</span>r <span class="ot">=</span> <span class="fu">checkIt</span>(r, nStrata)</span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a>    <span class="fu">return</span>(Xpar)</span>
+<span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+<div id="make_xpar_seirv" class="section level4">
+<h4>make_Xpar_SEIRV</h4>
+<p>To format this for a new function, do a search and replace on
+<code>SEIRV</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for SEIRV human model, with defaults</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] that could overwrite defaults</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&#39; @param tau  incubation rate</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co">#&#39; @param b the proportion of infective bites that cause an infection</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&#39; @param r the the duration of an infection</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="co">#&#39; @param c the proportion of bites on infected humans that infect a mosquito</span></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&#39; @param alpha  travallers with immunity from malaria</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&#39; @param eps   loss of immunity rate</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a><span class="co">#&#39; @param delta   proportion of protected after recovery</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="co">#&#39; @param sig  progression rate of recovered individual to protected class</span></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>make_Xpar_SEIRV <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>                          <span class="at">alpha =</span><span class="fl">0.1</span>,<span class="at">b=</span><span class="fl">0.55</span>, <span class="at">r=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">180</span>, <span class="at">c=</span><span class="fl">0.15</span>,<span class="at">tau=</span> <span class="fl">0.5</span>,eps,<span class="at">sig=</span><span class="fl">0.3</span>,<span class="at">delta =</span><span class="fl">0.5</span>){</span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>  <span class="fu">with</span>(Xopts,{</span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>    Xpar <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>    <span class="fu">class</span>(Xpar) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SEIRV&quot;</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>    </span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>    Xpar<span class="sc">$</span>alpha <span class="ot">=</span> <span class="fu">checkIt</span>(alpha, nStrata)</span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a>    Xpar<span class="sc">$</span>b <span class="ot">=</span> <span class="fu">checkIt</span>(b, nStrata)</span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a>    Xpar<span class="sc">$</span>c <span class="ot">=</span> <span class="fu">checkIt</span>(c, nStrata)</span>
+<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a>    Xpar<span class="sc">$</span>r <span class="ot">=</span> <span class="fu">checkIt</span>(r, nStrata)</span>
+<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a>    Xpar<span class="sc">$</span>tau <span class="ot">=</span> <span class="fu">checkIt</span>(tau, nStrata)</span>
+<span id="cb24-25"><a href="#cb24-25" tabindex="-1"></a>    Xpar<span class="sc">$</span>eps <span class="ot">=</span> <span class="fu">checkIt</span>(eps, nStrata)</span>
+<span id="cb24-26"><a href="#cb24-26" tabindex="-1"></a>    Xpar<span class="sc">$</span>sig <span class="ot">=</span> <span class="fu">checkIt</span>(sig, nStrata)</span>
+<span id="cb24-27"><a href="#cb24-27" tabindex="-1"></a>    Xpar<span class="sc">$</span>delta <span class="ot">=</span> <span class="fu">checkIt</span>(delta, nStrata)</span>
+<span id="cb24-28"><a href="#cb24-28" tabindex="-1"></a>    </span>
+<span id="cb24-29"><a href="#cb24-29" tabindex="-1"></a>    <span class="fu">return</span>(Xpar)</span>
+<span id="cb24-30"><a href="#cb24-30" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+</div>
+<div id="setup_xpar" class="section level3">
+<h3>9. setup_Xpar</h3>
+<p>In the <code>xde_setup</code> family of setup functions, setup for a
+model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRV</code> is set
+up by the function <code>setup_Xpar.</code></p>
+<div id="generic-5" class="section level4">
+<h4>Generic</h4>
+<p>This function must set up <code>Xpar</code> and it must also set up
+the initial values. By convention, the functions that get called are not
+<code>S3</code> class functions.</p>
+<p>The <code>setup_Xpar</code> functions assigns to <code>Xname</code>
+the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co">#&#39; @title A function to set up Xpar</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on `Xname`.</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&#39; @param Xname a [character] string</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list]</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>setup_Xpar <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>  <span class="fu">class</span>(Xname) <span class="ot">&lt;-</span> Xname</span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;setup_Xpar&quot;</span>, Xname)</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="setup_xpar.sis" class="section level4">
+<h4>setup_Xpar.SIS</h4>
+<p>The dispatched function <code>SIS</code> ignores xname, but it calls
+a function <code>make_Xpar_SIS</code></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xpar.SIS</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xpar] for the SIS model</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams setup_Xpar</span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>setup_Xpar.SIS <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">make_Xpar_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="setup_xpar.xname" class="section level4">
+<h4>setup_Xpar.Xname</h4>
+<p>To use this, simply to a search and replace on
+<code>Xname.</code></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xpar.SEIRV</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xpar] for the SEIRV model</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::setup_Xpar</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>setup_Xpar.SEIRV <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">make_Xpar_SEIRV</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="terms" class="section level2">
+<h2>Terms</h2>
+<p>All models in <code>ramp.xde</code> the modular design dictates that
+we must define a few functions that compute a few key quantities:</p>
+<ul>
+<li><p><code>X</code> is defined to be the effective density of
+infectious humans, retrieved by <code>F_X</code></p></li>
+<li><p><code>H</code> is defined to be the size of each population
+stratum, retrieved by <code>F_H</code></p></li>
+<li><p><code>b</code> is defined to be the fraction of infective bites
+that cause an infection, retrieved by <code>F_b</code></p></li>
+</ul>
+<div id="f_x" class="section level3">
+<h3>10. F_X</h3>
+<p>The function <code>F_X</code> returns the effective density of
+infectious humans for each stratum. The notion is that <span class="math inline">\(X\)</span> is proportional to <span class="math inline">\(H\)</span>, where the constant is the fraction of
+bites on the strata that would infect a mosquito.</p>
+<div id="generic-6" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="co">#&#39; @param t current simulation time</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>F_X <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_x.sis" class="section level4">
+<h4>F_X.SIS</h4>
+<p>As an example, we include the <span class="math inline">\(SIS\)</span> model from <code>ramp.xde.</code> In
+the <code>SIS</code> model, the returned value is <span class="math inline">\(cI\)</span> where <span class="math inline">\(I\)</span> is the density of infected individuals;
+the prevalence of infection is <span class="math inline">\(X/H\)</span>.
+The constant <span class="math inline">\(c\)</span> is the probability a
+mosquito would become infected after blood feeding on an infected human.
+Two things to note:</p>
+<ul>
+<li>First, <code>ramp.xde</code> holds the indices by component under
+<code>pars$ix,</code> so <code>pars$ix$X</code> holds the indices for
+all the variables for all species, and <code>pars$ix$X[[i]]</code> holds
+the indices for the <span class="math inline">\(i^{th}\)</span> species.
+Putting them under <code>X</code> helps to avoid conflicts if, for
+example, another dynamical component happened to use the same variable
+name.</li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_X] for the SIS model.</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_X</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>F_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>  I <span class="ot">=</span> y[pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]]<span class="sc">$</span>I_ix]</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>  X <span class="ot">=</span> <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], c<span class="sc">*</span>I)</span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>  <span class="fu">return</span>(X)</span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>}</span></code></pre></div>
+<p>The commented code relevant code that must be changed is commented
+out. The preferred style is to <em>extract</em> the relevant variables
+by name, then <em>compute</em> the effective infectious density,or
+individuals in this stratum, then return the value. In the
+manuscript<span class="math inline">\(^1\)</span>, this quantity was
+called <strong>X.</strong></p>
+</div>
+<div id="f_x.seirv" class="section level4">
+<h4>F_X.SEIRV</h4>
+<p>The following is a template for new model. The declaration of
+<code>inheritParams</code> from the <code>SIS</code> model in
+<code>ramp.xde</code> works naturally. The namespace from
+<code>ramp.xde</code> is needed, so our SEIRV function (above) has
+<code>ramp.xde::F_X.</code></p>
+<p>The steps are to extract the variables in</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_X] for the SIS model.</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::F_X</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>F_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>  I <span class="ot">=</span> y[pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]]<span class="sc">$</span>I_ix]</span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], c<span class="sc">*</span>I)</span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>  <span class="fu">return</span>(Y)</span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="f_h" class="section level3">
+<h3>11. F_H</h3>
+<p>The total population size, <span class="math inline">\(H\)</span>, is
+often important, so we write a function that computes it.</p>
+<div id="generic-7" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co">#&#39; @param t current simulation time</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>F_H <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_H&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_h.sis" class="section level4">
+<h4>F_H.SIS</h4>
+<p>This is the function that computes <span class="math inline">\(H =
+S+I\)</span> for the <code>SIS</code> model.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_H] for the SIS model.</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_H</span></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a>F_H.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i){</span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y, pars, i), <span class="fu">return</span>(S<span class="sc">+</span>I))</span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_h.seirv" class="section level4">
+<h4>F_H.SEIRV</h4>
+<p>The function <code>F_X</code> returns the effective density of
+infectious humans for each stratum. The following is a template for a
+model:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_H] for the SEIRV model.</span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::F_H</span></span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>F_H.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i){</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y, pars, i), {</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>    H <span class="ot">&lt;-</span> S <span class="sc">+</span>E<span class="sc">+</span> I<span class="sc">+</span>R<span class="sc">+</span>V</span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>    <span class="fu">return</span>(H)</span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+</div>
+<div id="f_b" class="section level3">
+<h3>12. F_b</h3>
+<p>We use the short parameter name <code>b</code> to denote the fraction
+of infective bites by mosquitoes that cause an infection. This is
+computed in another function, called <code>Exposure</code> under a model
+for environmental heterogeneity that computes a local FoI based on the
+local daily EIR. Then, the total FoI is computed from a travel
+model.</p>
+<div id="generic-8" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co">#&#39; @title Infection blocking pre-erythrocytic immunity</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>F_b <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_b&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_b.sis" class="section level4">
+<h4><code>F_b.SIS</code></h4>
+<p>In <code>ramp.xde,</code> we recognize the problem of translating the
+local EIR into the FoI. The local EIR is computed as one of the core
+model terms for each one of the model strata.</p>
+<p>The function <code>F_b</code> returns the model-defined probability
+an infective bite by a mosquito would cause an infection. This could
+include the combined effects of inefficient transmission,
+pre-erytrocytic immunity, and perhaps some effects of blood stage
+immunity. In a model with no effect, the return value would be <span class="math inline">\(1\)</span>.</p>
+<p>Once again, we provide the <code>SIS</code> model from
+<code>ramp.xde</code> as our example:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co">#&#39; @title Infection blocking pre-erythrocytic immunity</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_b] for the SIS model.</span></span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_b</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a>F_b.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], b))</span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_b.seirv" class="section level4">
+<h4>F_b.SEIRV</h4>
+<p>Depending on the model, the value of <code>b</code> is either
+retrieved or it is computed from other variables in the model, and it is
+expected that <code>length(b) = nStrata</code></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co">#&#39; @title Infection blocking pre-erythrocytic immunity</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_b] for the SEIRV model.</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::F_b</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a>F_b.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]],{ </span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a>    <span class="co"># retrieve or compute it </span></span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb36-11"><a href="#cb36-11" tabindex="-1"></a>    b <span class="ot">=</span> pars<span class="sc">$</span>Xpar[[i]]<span class="sc">$</span>b</span>
+<span id="cb36-12"><a href="#cb36-12" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb36-13"><a href="#cb36-13" tabindex="-1"></a>    <span class="co"># return it </span></span>
+<span id="cb36-14"><a href="#cb36-14" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb36-15"><a href="#cb36-15" tabindex="-1"></a>    <span class="fu">return</span>(b)</span>
+<span id="cb36-16"><a href="#cb36-16" tabindex="-1"></a>  })</span>
+<span id="cb36-17"><a href="#cb36-17" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outputs" class="section level2">
+<h2>Outputs</h2>
+<p>To make <code>ramp.xde</code> easy to use, we provide some functions
+that parse the outputs and compute some standard metrics.</p>
+<div id="parse_deout_x" class="section level3">
+<h3>13. <code>parse_deout_X</code></h3>
+<p><code>parse_deout_X</code> takes the output of <code>deSolve,</code>
+parses the outputs using the variable indices, and returns the variables
+by name as a list.</p>
+<div id="generic-9" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co">#&#39; @title Parse the output of deSolve and return the variables by name in a list</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`. Adds the variables</span></span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="co">#&#39; from the X model to a list and returns it</span></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co">#&#39; @param deout a [matrix] of outputs from deSolve</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="co">#&#39; @param pars a [list] that defines a model</span></span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a>parse_deout_X <span class="ot">&lt;-</span> <span class="cf">function</span>(deout, pars, i) {</span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;parse_deout_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="parse_deout_x.sis" class="section level4">
+<h4>parse_deout_X.SIS</h4>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co">#&#39; @title Parse the output of deSolve and return variables for the SIS model</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [parse_deout_X] for the SIS model</span></span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams parse_deout_X</span></span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a>parse_deout_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(deout, pars, i) {</span>
+<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a>  time <span class="ot">=</span> deout[,<span class="dv">1</span>]</span>
+<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]],{</span>
+<span id="cb38-9"><a href="#cb38-9" tabindex="-1"></a>    S <span class="ot">=</span> deout[,S_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb38-10"><a href="#cb38-10" tabindex="-1"></a>    I <span class="ot">=</span> deout[,I_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb38-11"><a href="#cb38-11" tabindex="-1"></a>    H <span class="ot">=</span> S<span class="sc">+</span>I</span>
+<span id="cb38-12"><a href="#cb38-12" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">time=</span>time, <span class="at">S=</span>S, <span class="at">I=</span>I, <span class="at">H=</span>H))</span>
+<span id="cb38-13"><a href="#cb38-13" tabindex="-1"></a>})}</span></code></pre></div>
+</div>
+<div id="parse_deout_x.seirv" class="section level4">
+<h4>parse_deout_X.SEIRV</h4>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co">#&#39; @title Parse the output of deSolve and return variables for the SEIRV model</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [parse_deout_X] for the SEIRV model</span></span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::parse_deout_X</span></span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>parse_deout_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(deout, pars, i) {</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>  time <span class="ot">=</span> deout[,<span class="dv">1</span>]</span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]],{</span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>    S <span class="ot">=</span> deout[,S_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a>    E <span class="ot">=</span> deout[,E_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a>    I <span class="ot">=</span> deout[,I_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a>    R <span class="ot">=</span> deout[,R_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a>    V <span class="ot">=</span> deout[,V_ix<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a>    H <span class="ot">=</span> S<span class="sc">+</span>E<span class="sc">+</span>I<span class="sc">+</span>R<span class="sc">+</span>V</span>
+<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">time=</span>time, <span class="at">S=</span>S, <span class="at">E=</span>E,<span class="at">I=</span>I, <span class="at">R=</span>R, <span class="at">V=</span>V,<span class="at">H=</span>H))</span>
+<span id="cb39-16"><a href="#cb39-16" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+</div>
+<div id="f_pr" class="section level3">
+<h3>14. F_pr</h3>
+<p>We require each model to compute the true PR.</p>
+<div id="generic-10" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the &quot;true&quot; prevalence of infection / parasite rate</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="co">#&#39; @param varslist a list with variables attached by name</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a>F_pr <span class="ot">&lt;-</span> <span class="cf">function</span>(varslist, pars, i) {</span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_pr&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="f_pr.sis" class="section level4">
+<h4>F_pr.SIS</h4>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the &quot;true&quot; prevalence of infection / parasite rate</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_pr] for the SIS model.</span></span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_pr</span></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a>F_pr.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(varslist, pars, i) {</span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a>  pr <span class="ot">=</span> <span class="fu">with</span>(varslist<span class="sc">$</span>XH[[i]], I<span class="sc">/</span>H)</span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a>  <span class="fu">return</span>(pr)</span>
+<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a>}</span></code></pre></div>
+<p>The function <code>F_pr</code> computes the models <em>true</em>
+prevalence using the variable names. It is passed the
+<code>varslist</code> that is created by <code>parse_deout</code> (see
+above).</p>
+</div>
+<div id="f_pr.seirv" class="section level4">
+<h4>F_pr.SEIRV</h4>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the &quot;true&quot; prevalence of infection / parasite rate</span></span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_pr] for the SEIRV model.</span></span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::F_pr</span></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>F_pr.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(varslist, pars,i) {</span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a>  pr <span class="ot">=</span> <span class="fu">with</span>(varslist<span class="sc">$</span>XH[[i]], I<span class="sc">/</span>H)</span>
+<span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a>  <span class="fu">return</span>(pr)</span>
+<span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="htc" class="section level3">
+<h3>15. HTC</h3>
+<p>Similarly, we require each function to return the human transmitting
+capacity, or <code>HTC</code></p>
+<div id="generic-11" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the human transmitting capacity</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="co">#&#39; @param pars a [list]</span></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a>HTC <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {</span>
+<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;get_inits_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb43-9"><a href="#cb43-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="htc.sis" class="section level4">
+<h4>HTC.SIS</h4>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the HTC for the SIS model</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [HTC] for the SIS model with demography.</span></span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::HTC</span></span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a>HTC.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {</span>
+<span id="cb44-7"><a href="#cb44-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]],</span>
+<span id="cb44-8"><a href="#cb44-8" tabindex="-1"></a>    <span class="fu">return</span>(c<span class="sc">/</span>r)</span>
+<span id="cb44-9"><a href="#cb44-9" tabindex="-1"></a>  )</span>
+<span id="cb44-10"><a href="#cb44-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="htc.seirv" class="section level4">
+<h4>HTC.SEIRV</h4>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the HTC for the SEIRV model</span></span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [HTC] for the SEIRV model with demography.</span></span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::HTC</span></span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb45-6"><a href="#cb45-6" tabindex="-1"></a>HTC.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, i) {</span>
+<span id="cb45-7"><a href="#cb45-7" tabindex="-1"></a>  <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]],</span>
+<span id="cb45-8"><a href="#cb45-8" tabindex="-1"></a>       HTC <span class="ot">&lt;-</span> c<span class="sc">/</span>r,</span>
+<span id="cb45-9"><a href="#cb45-9" tabindex="-1"></a>       <span class="fu">return</span>(HTC)</span>
+<span id="cb45-10"><a href="#cb45-10" tabindex="-1"></a>  )</span>
+<span id="cb45-11"><a href="#cb45-11" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="plotting" class="section level2">
+<h2>Plotting</h2>
+<div id="xde_lines_x" class="section level3">
+<h3>16. xde_lines_X</h3>
+<div id="xde_lines_x_sis" class="section level4">
+<h4>xde_lines_X_SIS</h4>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the SIS model</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="co">#&#39; @param XH a list with the outputs of parse_deout_X_SIS</span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of population strata</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a>xde_lines_X_SIS <span class="ot">=</span> <span class="cf">function</span>(XH, nStrata, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a>  <span class="fu">with</span>(XH,{</span>
+<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a>    <span class="cf">if</span>(nStrata<span class="sc">==</span><span class="dv">1</span>) {</span>
+<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a>      <span class="fu">lines</span>(time, S, <span class="at">col=</span>clrs[<span class="dv">1</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb46-13"><a href="#cb46-13" tabindex="-1"></a>      <span class="fu">lines</span>(time, I, <span class="at">col=</span>clrs[<span class="dv">2</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb46-14"><a href="#cb46-14" tabindex="-1"></a>    }</span>
+<span id="cb46-15"><a href="#cb46-15" tabindex="-1"></a>    <span class="cf">if</span>(nStrata<span class="sc">&gt;</span><span class="dv">1</span>){</span>
+<span id="cb46-16"><a href="#cb46-16" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(clrs)<span class="sc">==</span><span class="dv">2</span>) clrs<span class="ot">=</span><span class="fu">matrix</span>(clrs, <span class="dv">2</span>, nStrata)</span>
+<span id="cb46-17"><a href="#cb46-17" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(llty)<span class="sc">==</span><span class="dv">1</span>) llty<span class="ot">=</span><span class="fu">rep</span>(llty, nStrata)</span>
+<span id="cb46-18"><a href="#cb46-18" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nStrata){</span>
+<span id="cb46-20"><a href="#cb46-20" tabindex="-1"></a>        <span class="fu">lines</span>(time, S[,i], <span class="at">col=</span>clrs[<span class="dv">1</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb46-21"><a href="#cb46-21" tabindex="-1"></a>        <span class="fu">lines</span>(time, I[,i], <span class="at">col=</span>clrs[<span class="dv">2</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb46-22"><a href="#cb46-22" tabindex="-1"></a>      }</span>
+<span id="cb46-23"><a href="#cb46-23" tabindex="-1"></a>    }</span>
+<span id="cb46-24"><a href="#cb46-24" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+<div id="xde_lines_x_seirv" class="section level4">
+<h4>xde_lines_X_SEIRV</h4>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the SEIRV model</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a><span class="co">#&#39; @param XH a list with the outputs of parse_deout_X_SEIRV</span></span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of population strata</span></span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
+<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
+<span id="cb47-7"><a href="#cb47-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb47-8"><a href="#cb47-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb47-9"><a href="#cb47-9" tabindex="-1"></a>xde_lines_X_SEIRV <span class="ot">=</span> <span class="cf">function</span>(XH, nStrata, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>,<span class="st">&quot;darkgreen&quot;</span>, <span class="st">&quot;purple&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
+<span id="cb47-10"><a href="#cb47-10" tabindex="-1"></a>  <span class="fu">with</span>(XH,{</span>
+<span id="cb47-11"><a href="#cb47-11" tabindex="-1"></a>    <span class="cf">if</span>(nStrata<span class="sc">==</span><span class="dv">1</span>) {</span>
+<span id="cb47-12"><a href="#cb47-12" tabindex="-1"></a>      <span class="fu">lines</span>(time, S, <span class="at">col=</span>clrs[<span class="dv">1</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb47-13"><a href="#cb47-13" tabindex="-1"></a>      <span class="fu">lines</span>(time, E, <span class="at">col=</span>clrs[<span class="dv">2</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb47-14"><a href="#cb47-14" tabindex="-1"></a>      <span class="fu">lines</span>(time, I, <span class="at">col=</span>clrs[<span class="dv">3</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb47-15"><a href="#cb47-15" tabindex="-1"></a>      <span class="fu">lines</span>(time, R, <span class="at">col=</span>clrs[<span class="dv">4</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb47-16"><a href="#cb47-16" tabindex="-1"></a>      <span class="fu">lines</span>(time, V, <span class="at">col=</span>clrs[<span class="dv">5</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
+<span id="cb47-17"><a href="#cb47-17" tabindex="-1"></a>    }</span>
+<span id="cb47-18"><a href="#cb47-18" tabindex="-1"></a>    <span class="cf">if</span>(nStrata<span class="sc">&gt;</span><span class="dv">1</span>){</span>
+<span id="cb47-19"><a href="#cb47-19" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(clrs)<span class="sc">==</span><span class="dv">5</span>) clrs<span class="ot">=</span><span class="fu">matrix</span>(clrs, <span class="dv">5</span>, nStrata)</span>
+<span id="cb47-20"><a href="#cb47-20" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(llty)<span class="sc">==</span><span class="dv">1</span>) llty<span class="ot">=</span><span class="fu">rep</span>(llty, nStrata)</span>
+<span id="cb47-21"><a href="#cb47-21" tabindex="-1"></a>      </span>
+<span id="cb47-22"><a href="#cb47-22" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nStrata){</span>
+<span id="cb47-23"><a href="#cb47-23" tabindex="-1"></a>        <span class="fu">lines</span>(time, S[,i], <span class="at">col=</span>clrs[<span class="dv">1</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb47-24"><a href="#cb47-24" tabindex="-1"></a>        <span class="fu">lines</span>(time, E[,i], <span class="at">col=</span>clrs[<span class="dv">2</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb47-25"><a href="#cb47-25" tabindex="-1"></a>        <span class="fu">lines</span>(time, I[,i], <span class="at">col=</span>clrs[<span class="dv">3</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb47-26"><a href="#cb47-26" tabindex="-1"></a>        <span class="fu">lines</span>(time, R[,i], <span class="at">col=</span>clrs[<span class="dv">4</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb47-27"><a href="#cb47-27" tabindex="-1"></a>        <span class="fu">lines</span>(time, V[,i], <span class="at">col=</span>clrs[<span class="dv">5</span>,i], <span class="at">lty =</span> llty[i])</span>
+<span id="cb47-28"><a href="#cb47-28" tabindex="-1"></a>      }</span>
+<span id="cb47-29"><a href="#cb47-29" tabindex="-1"></a>    }</span>
+<span id="cb47-30"><a href="#cb47-30" tabindex="-1"></a>  })}</span></code></pre></div>
+</div>
+</div>
+<div id="xde_plot_x" class="section level3">
+<h3>17. xde_plot_X</h3>
+<p>We provide a basic plotting function. The function
+<code>xde_lines_X_*</code> does not have an <code>S3</code> version.
+Instead, it is called by the <code>S3</code> function
+<code>xde_plot_X</code></p>
+<div id="generic-12" class="section level4">
+<h4>Generic</h4>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co">#&#39; Basic plotting for epidemiological models</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a><span class="co">#&#39; @param pars a list that defines an `ramp.xde` model (*e.g.*,  generated by `xde_setup()`)</span></span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
+<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
+<span id="cb48-7"><a href="#cb48-7" tabindex="-1"></a><span class="co">#&#39; @param stable a logical: set to FALSE for `orbits` and TRUE for `stable_orbits`</span></span>
+<span id="cb48-8"><a href="#cb48-8" tabindex="-1"></a><span class="co">#&#39; @param add_axes a logical: plot axes only if TRUE</span></span>
+<span id="cb48-9"><a href="#cb48-9" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb48-10"><a href="#cb48-10" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb48-11"><a href="#cb48-11" tabindex="-1"></a>xde_plot_X <span class="ot">=</span> <span class="cf">function</span>(pars, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="st">&quot;black&quot;</span>, <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
+<span id="cb48-12"><a href="#cb48-12" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;xde_plot_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb48-13"><a href="#cb48-13" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="xde_plot_x.sis" class="section level4">
+<h4>xde_plot_X.SIS</h4>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the SEIRV model</span></span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::xde_plot_X</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a>xde_plot_X.SIS <span class="ot">=</span> <span class="cf">function</span>(pars, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>  vars<span class="ot">=</span><span class="fu">with</span>(pars<span class="sc">$</span>outputs,<span class="cf">if</span>(stable<span class="sc">==</span><span class="cn">TRUE</span>){stable_orbits}<span class="cf">else</span>{orbits})</span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>  <span class="cf">if</span>(add_axes<span class="sc">==</span><span class="cn">TRUE</span>)</span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>    <span class="fu">with</span>(vars<span class="sc">$</span>XH[[i]],</span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>         <span class="fu">plot</span>(time, <span class="dv">0</span><span class="sc">*</span>time, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(H)),</span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;# Infected&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>))</span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>  <span class="fu">xde_lines_X_SIS</span>(vars<span class="sc">$</span>XH[[i]], pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, clrs, llty)</span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="xde_plot_x.seirv" class="section level4">
+<h4>xde_plot_X.SEIRV</h4>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the SEIRV model</span></span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::xde_plot_X</span></span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>xde_plot_X.SEIRV <span class="ot">=</span> <span class="cf">function</span>(pars, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>,<span class="st">&quot;darkgreen&quot;</span>,<span class="st">&quot;purple&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a>  vars<span class="ot">=</span><span class="fu">with</span>(pars<span class="sc">$</span>outputs,<span class="cf">if</span>(stable<span class="sc">==</span><span class="cn">TRUE</span>){stable_orbits}<span class="cf">else</span>{orbits})</span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>  </span>
+<span id="cb50-8"><a href="#cb50-8" tabindex="-1"></a>  <span class="cf">if</span>(add_axes<span class="sc">==</span><span class="cn">TRUE</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" tabindex="-1"></a>    <span class="fu">with</span>(vars<span class="sc">$</span>XH[[i]],</span>
+<span id="cb50-10"><a href="#cb50-10" tabindex="-1"></a>         <span class="fu">plot</span>(time, <span class="dv">0</span><span class="sc">*</span>time, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(H)),</span>
+<span id="cb50-11"><a href="#cb50-11" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;No of. Infected&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>))</span>
+<span id="cb50-12"><a href="#cb50-12" tabindex="-1"></a>  </span>
+<span id="cb50-13"><a href="#cb50-13" tabindex="-1"></a>  </span>
+<span id="cb50-14"><a href="#cb50-14" tabindex="-1"></a>  <span class="fu">xde_lines_X_SEIRV</span>(vars<span class="sc">$</span>XH[[i]], pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, clrs, llty)</span>
+<span id="cb50-15"><a href="#cb50-15" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Reiner RC Jr, Perkins TA, Barker CM, Niu T, Chaves LF,
+Ellis AM, et al. A systematic review of mathematical models of
+mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface.
+2013;10: 20120921.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D,
+Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of
+malaria transmission. PLoS Comput Biol 19(6): e1010684. <a href="https://doi.org/10.1371/journal.pcbi.1010684" class="uri">https://doi.org/10.1371/journal.pcbi.1010684</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,9 +1,7 @@
 ---
 title: "Adding new L models to `ramp.xde`" 
 subtitle: "Models for Aquatic Mosquito Ecology" 
-output:
-  html_document: 
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Adding new L models to `ramp.xde`}
   %\VignetteEngine{knitr::rmarkdown}

@@ -1,9 +1,7 @@
 ---
 title: "The SIR Model"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document:     
-    theme: paper 
+output: rmarkdown::html_vignette 
 vignette: >
   %\VignetteIndexEntry{The SIR Model}
   %\VignetteEngine{knitr::rmarkdown}

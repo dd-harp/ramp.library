@@ -1,9 +1,7 @@
 ---
 title: "The SEIR Model"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document:     
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{The SEIR Model}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,9 +9,7 @@ vignette: >
 ---
   
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
-suppressMessages(library(knitr))
-library(ramp.xde) 
-library(ramp.work) 
+library(knitr)
 library(ramp.library) 
 library(deSolve) 
 ```

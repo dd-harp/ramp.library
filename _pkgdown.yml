@@ -57,9 +57,6 @@ reference:
 - title: XH Component
   desc: |
     Models for parasites infecting human / vertebrate hosts
-- subtitle: The SIS Model
-  contents:
-  - split_stratum_by_biting.SIS
 - subtitle: The Garki model
   contents:
   - F_X.garki

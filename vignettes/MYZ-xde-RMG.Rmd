@@ -2,9 +2,7 @@
 title: "The adult mosquito model RMG"
 subtitle: "A Behavioral State Model"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: 
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{The adult mosquito model RMG}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,11 +10,9 @@ vignette: >
 ---
   
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
-suppressMessages(library(knitr))
-suppressMessages(library(ramp.xde))
-suppressMessages(library(ramp.work))
-suppressMessages(library(ramp.library))
-#devtools::load_all()
+library(knitr)
+library(ramp.xde)
+library(ramp.library)
 library(deSolve) 
 ```
 
@@ -118,7 +114,7 @@ model <- xde_setup(MYZname="RMG_xde", Lname="trace", Xname = "trace", EIPopts = 
 ```
 
 ```{r}
-model <- xde_solve(model)
+model <- xde_solve(model, dt=5)
 ```
 
 ```{r, fig.height=7.5, fig.width=5.5}

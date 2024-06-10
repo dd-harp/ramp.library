@@ -1,21 +1,15 @@
 ---
 title: "Adding models" 
 subtitle: "General Procedures for Adding Models" 
-output:
-  html_document: 
-    theme: paper 
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Adding models to `ramp.xde`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-```{r}
 
-```
 
-*** 
-
-This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by [`ramp.xde`](https://github.com/dd-harp/ramp.xde) or [`ramp.dts`]((https://github.com/dd-harp/ramp.dts).  
+This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by [`ramp.xde`](https://github.com/dd-harp/ramp.xde). 
 
 ## Guidelines
 
