@@ -17,6 +17,16 @@ navbar:
     menu:
     - text: SIS Model
       href: articles/Xmod-SIS.html
+    - text: Workhorse
+      href: articles/Xmod-workhorse.html
+    - text: SIR Model
+      href: articles/Xmod-SIR.html
+    - text: SIRS Model
+      href: articles/Xmod-SIRS.html
+    - text: SEIR Model
+      href: articles/Xmod-SEIR.html
+    - text: SEIRV Model
+      href: articles/Xmod-SEIRV.html
   - text: MYZ
     menu:
     - text: The RMG-xde Model

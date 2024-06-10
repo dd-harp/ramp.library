@@ -73,6 +73,21 @@
 <li>
       <a href="../articles/Xmod-SIS.html">SIS Model</a>
     </li>
+    <li>
+      <a href="../articles/Xmod-workhorse.html">Workhorse</a>
+    </li>
+    <li>
+      <a href="../articles/Xmod-SIR.html">SIR Model</a>
+    </li>
+    <li>
+      <a href="../articles/Xmod-SIRS.html">SIRS Model</a>
+    </li>
+    <li>
+      <a href="../articles/Xmod-SEIR.html">SEIR Model</a>
+    </li>
+    <li>
+      <a href="../articles/Xmod-SEIRV.html">SEIRV Model</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -246,7 +261,7 @@ K.\)</span> During <code>xde_setup()</code>, <code>Omega_b</code> and
 <code class="sourceCode R"><span><span class="va">EIPo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>EIPname <span class="op">=</span> <span class="st">"static_xde"</span>, eip<span class="op">=</span><span class="fl">12</span><span class="op">)</span> </span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_setup</span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG_xde"</span>, Lname<span class="op">=</span><span class="st">"trace"</span>, Xname <span class="op">=</span> <span class="st">"trace"</span>, EIPopts <span class="op">=</span> <span class="va">EIPo</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_solve</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_solve</span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_M</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>

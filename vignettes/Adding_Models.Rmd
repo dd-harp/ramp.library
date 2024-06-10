@@ -1,9 +1,8 @@
 ---
-title: "Adding models" 
-subtitle: "General Procedures for Adding Models" 
+title: "Adding models to ramp.xde" 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Adding models to `ramp.xde`}
+  %\VignetteIndexEntry{Adding models to ramp.xde}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

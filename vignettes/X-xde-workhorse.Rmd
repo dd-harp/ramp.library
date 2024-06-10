@@ -1,9 +1,9 @@
 ---
-title: "A workhorse Model for Human Infection"
+title: "A Workhorse Model for Human Infection"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The SIS Model for Human Infection}
+  %\VignetteIndexEntry{A Workhorse Model for Human Infection}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
