@@ -19,8 +19,8 @@ navbar:
       href: articles/Xmod-SIS.html
   - text: MYZ
     menu:
-    - text: The RMG Model
-      href: articles/MYZmod-RMG.html
+    - text: The RMG-xde Model
+      href: articles/MYZmod-xde-RMG.html
   right:
   - icon: fa-github
     href: https://github.com/dd-harp/ramp.library/
@@ -37,23 +37,23 @@ reference:
 - title: Adult Mosquito Models
   desc: |
      The model library for adult mosquito infection dynamics
-- subtitle: The Adult Mosquito RMG Model
+- subtitle: The Adult Mosquito RMG_xde Model
   contents:
-  - F_eggs.RMG
-  - F_fqZ.RMG
-  - F_fqM.RMG
-  - MBionomics.RMG
-  - dMYZdt.RMG
-  - get_inits_MYZ.RMG
-  - make_MYZinits_RMG
-  - make_MYZpar_RMG
-  - make_indices_MYZ.RMG
-  - make_inits_MYZ_RMG
-  - make_parameters_MYZ_RMG
-  - parse_deout_MYZ.RMG
-  - setup_MYZpar.RMG
-  - setup_MYZinits.RMG
-  - update_inits_MYZ.RMG
+  - F_eggs.RMG_xde
+  - F_fqZ.RMG_xde
+  - F_fqM.RMG_xde
+  - MBionomics.RMG_xde
+  - dMYZdt.RMG_xde
+  - get_inits_MYZ.RMG_xde
+  - make_MYZinits_RMG_xde
+  - make_MYZpar_RMG_xde
+  - make_indices_MYZ.RMG_xde
+  - make_inits_MYZ_RMG_xde
+  - make_parameters_MYZ_RMG_xde
+  - parse_outputs_MYZ.RMG_xde
+  - setup_MYZpar.RMG_xde
+  - setup_MYZinits.RMG_xde
+  - update_inits_MYZ.RMG_xde
 - title: XH Component
   desc: |
     Models for parasites infecting human / vertebrate hosts
@@ -73,11 +73,11 @@ reference:
   - make_Xpar_garki
   - make_Xinits_garki
   - make_indices_X.garki
-  - parse_deout_X.garki
+  - parse_outputs_X.garki
   - get_inits_X.garki
   - update_inits_X.garki
   - HTC.garki
-  - xde_plot_X.garki
+  - xds_plot_X.garki
   - xde_lines_X_garki
 - subtitle: The workhorse model
   contents:
@@ -92,11 +92,11 @@ reference:
   - make_Xpar_workhorse
   - make_Xinits_workhorse
   - make_indices_X.workhorse
-  - parse_deout_X.workhorse
+  - parse_outputs_X.workhorse
   - get_inits_X.workhorse
   - update_inits_X.workhorse
   - HTC.workhorse
-  - xde_plot_X.workhorse
+  - xds_plot_X.workhorse
   - xde_lines_X_workhorse
 - subtitle: The SIR model
   contents:
@@ -111,11 +111,11 @@ reference:
   - make_Xpar_SIR
   - make_Xinits_SIR
   - make_indices_X.SIR
-  - parse_deout_X.SIR
+  - parse_outputs_X.SIR
   - get_inits_X.SIR
   - update_inits_X.SIR
   - HTC.SIR
-  - xde_plot_X.SIR
+  - xds_plot_X.SIR
   - xde_lines_X_SIR
 - subtitle: The SIRS Model
   contents:
@@ -130,11 +130,11 @@ reference:
   - make_Xpar_SIRS
   - make_Xinits_SIRS
   - make_indices_X.SIRS
-  - parse_deout_X.SIRS
+  - parse_outputs_X.SIRS
   - get_inits_X.SIRS
   - update_inits_X.SIRS
   - HTC.SIRS
-  - xde_plot_X.SIRS
+  - xds_plot_X.SIRS
   - xde_lines_X_SIRS
 - subtitle: The SEIR model
   contents:
@@ -149,11 +149,11 @@ reference:
   - make_Xpar_SEIR
   - make_Xinits_SEIR
   - make_indices_X.SEIR
-  - parse_deout_X.SEIR
+  - parse_outputs_X.SEIR
   - get_inits_X.SEIR
   - update_inits_X.SEIR
   - HTC.SEIR
-  - xde_plot_X.SEIR
+  - xds_plot_X.SEIR
   - xde_lines_X_SEIR
 - subtitle: The SEIRV model
   contents:
@@ -168,9 +168,9 @@ reference:
   - make_Xpar_SEIRV
   - make_Xinits_SEIRV
   - make_indices_X.SEIRV
-  - parse_deout_X.SEIRV
+  - parse_outputs_X.SEIRV
   - get_inits_X.SEIRV
   - update_inits_X.SEIRV
   - HTC.SEIRV
-  - xde_plot_X.SEIRV
+  - xds_plot_X.SEIRV
   - xde_lines_X_SEIRV

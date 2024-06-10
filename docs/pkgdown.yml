@@ -5,11 +5,15 @@ articles:
   Adding_Models: Adding_Models.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   MYZ-How_To_Add_Model: MYZ-How_To_Add_Model.html
-  MYZmod-RMG: MYZmod-RMG.html
+  MYZ-xde-RMG: MYZ-xde-RMG.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
-  Xmod-SIS: Xmod-SIS.html
-  Xmod-workhorse: Xmod-workhorse.html
-last_built: 2024-05-20T19:50Z
+  X-xde-SEIR: X-xde-SEIR.html
+  X-xde-SEIRV: X-xde-SEIRV.html
+  X-xde-SIR: X-xde-SIR.html
+  X-xde-SIRS: X-xde-SIRS.html
+  X-xde-SIS: X-xde-SIS.html
+  X-xde-workhorse: X-xde-workhorse.html
+last_built: 2024-06-10T17:43Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

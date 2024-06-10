@@ -19,10 +19,31 @@
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-How_To_Add_Model.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-xde-RMG.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZmod-RMG.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/X-How_To_Add_Model.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-SIRS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-SIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/X-xde-workhorse.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/Xmod-SIS.html</loc>
@@ -115,10 +136,19 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_pr.SEIR.html</loc>
@@ -172,7 +202,13 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.SEIR.html</loc>
@@ -200,6 +236,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_MYZ.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_MYZ.RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_X.SEIR.html</loc>
@@ -259,7 +298,13 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SEIR.html</loc>
@@ -313,6 +358,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_MYZ.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_MYZ.RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_X.SEIR.html</loc>
   </url>
   <url>
@@ -340,7 +388,13 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_inits_MYZ_RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_inits_MYZ_RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_parameters_MYZ_RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_parameters_MYZ_RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_deout_MYZ.RMG.html</loc>
@@ -370,10 +424,37 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_deout_X.workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_MYZ.RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.SIRS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.RMG_xde.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SEIR.html</loc>
@@ -428,6 +509,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_inits_MYZ.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/update_inits_MYZ.RMG_xde.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_inits_X.SEIR.html</loc>
@@ -500,5 +584,23 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_plot_X.workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SIRS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.workhorse.html</loc>
   </url>
 </urlset>
