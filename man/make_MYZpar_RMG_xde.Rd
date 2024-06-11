@@ -12,6 +12,7 @@ make_MYZpar_RMG_xde(
   g = 1/12,
   sigma_b = 1/8,
   sigma_q = 1/8,
+  mu = 0,
   f = 0.5,
   q = 0.95,
   nu = 1,
@@ -32,6 +33,8 @@ make_MYZpar_RMG_xde(
 \item{sigma_b}{emigration rate while blood feeding}
 
 \item{sigma_q}{emigration rate while egg laying}
+
+\item{mu}{emigration loss}
 
 \item{f}{feeding rate}
 

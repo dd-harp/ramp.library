@@ -14,7 +14,7 @@ MBionomics.RMG_xde <- function(t, y, pars, s) {
     pars$MYZpar[[s]]$sigma_b <- sigma_b0
     pars$MYZpar[[s]]$sigma_q <- sigma_q0
     pars$MYZpar[[s]]$nu <- nu0
-
+    pars$MYZpar[[s]]$Omega   <- make_Omega(t, pars, s)
   return(pars)
 })}
 
@@ -73,9 +73,6 @@ dMYZdt.RMG_xde <- function(t, y, pars, s){
 
     with(pars$MYZpar[[s]],{
 
-      Omega_b <- make_Omega(g, sigma_b, calKb, nPatches)
-      Omega_q <- make_Omega(g, sigma_q, calKq, nPatches)
-
       dU_bdt <- Lambda + nu*U_g - f*U_b - (Omega_b %*% U_b)
       dU_gdt <- f*(1-q*kappa)*U_b - nu*U_g - (Omega_q %*% U_g)
       dY_bdt <- nu*Y_g - f*Y_b - phi*Y_b - (Omega_b %*% Y_b)
@@ -106,6 +103,7 @@ setup_MYZpar.RMG_xde = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK)
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
 #' @param sigma_q emigration rate while egg laying
+#' @param mu emigration loss
 #' @param f feeding rate
 #' @param q human blood fraction
 #' @param nu oviposition rate, per mosquito
@@ -113,7 +111,7 @@ setup_MYZpar.RMG_xde = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK)
 #' @return a [list]
 #' @export
 make_MYZpar_RMG_xde = function(nPatches, MYZopts=list(), EIPopts, calK,
-                          g=1/12, sigma_b=1/8, sigma_q=1/8, f=0.5, q=0.95,
+                          g=1/12, sigma_b=1/8, sigma_q=1/8, mu=0, f=0.5, q=0.95,
                           nu=1, eggsPerBatch=60){
 
   stopifnot(is.matrix(calK))
@@ -130,6 +128,7 @@ make_MYZpar_RMG_xde = function(nPatches, MYZopts=list(), EIPopts, calK,
     MYZpar$g        <- checkIt(g, nPatches)
     MYZpar$sigma_b  <- checkIt(sigma_b, nPatches)
     MYZpar$sigma_q  <- checkIt(sigma_q, nPatches)
+    MYZpar$mu       <- checkIt(mu, nPatches)
     MYZpar$f        <- checkIt(f, nPatches)
     MYZpar$q        <- checkIt(q, nPatches)
     MYZpar$nu       <- checkIt(nu, nPatches)
@@ -152,8 +151,11 @@ make_MYZpar_RMG_xde = function(nPatches, MYZopts=list(), EIPopts, calK,
     MYZpar$calKb <- calK
     MYZpar$calKq <- calK
 
-    MYZpar$Omega_b <- make_Omega(g, sigma_b, calK, nPatches)
-    MYZpar$Omega_q <- make_Omega(g, sigma_q, calK, nPatches)
+    Omega_par <- list()
+    class(Omega_par) <- "static"
+    MYZpar$Omega_par <- Omega_par
+    MYZpar$Omega_b <- with(MYZpar, make_Omega_xde(g, sigma_b, mu, calK))
+    MYZpar$Omega_q <- with(MYZpar, make_Omega_xde(g, sigma_q, mu, calK))
 
     return(MYZpar)
 })}
