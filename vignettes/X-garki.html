@@ -11,9 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2024-06-10" />
+<meta name="date" content="2024-06-11" />
 
-<title>The SIR Model</title>
+<title>The Garki Model</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -236,74 +236,39 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">The SIR Model</h1>
-<h4 class="date">June 10, 2024</h4>
+<h1 class="title toc-ignore">The Garki Model</h1>
+<h4 class="date">June 11, 2024</h4>
 
 
 
 <div id="section" class="section level1">
 <h1></h1>
-<p>The SIR model, as it is now called, is a simple compartmental model,
-first introduced by Ross. It is included in `ramp.xde`` as a base
-model.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
-<ul>
-<li><p><span class="math inline">\(I\)</span> is the density of infected
-humans</p></li>
-<li><p><span class="math inline">\(H\)</span> is the density of
-humans</p></li>
-</ul>
-</div>
-<div id="parameters" class="section level3">
-<h3>Parameters</h3>
-<ul>
-<li><p><span class="math inline">\(r\)</span> is the rate infections
-clear</p></li>
-<li><p><span class="math inline">\(b\)</span> is the fraction of bites
-by infective mosquitoes that transmit parasites and cause an
-infection.</p></li>
-<li><p><span class="math inline">\(c\)</span> is the fraction of bites
-on an infectious human that would infect a mosquito.</p></li>
-</ul>
-</div>
-<div id="dynamics" class="section level3">
-<h3>Dynamics</h3>
-<p>The model defined herein is defined in two parts. To model exposure
-and infection (<em>i.e.</em> the conversion of eir into foi), we assume
-that the fraction of infective bites that cause an infection is <span class="math inline">\(b\)</span>. The dynamics are given by:</p>
-<p><span class="math display">\[
-\frac{dI}{dt} = h (H-I)-rI
-\]</span></p>
-</div>
-<div id="terms" class="section level3">
-<h3>Terms</h3>
-<p><strong>Net Infectiousness</strong></p>
-<p>True prevalence is:</p>
-<p><span class="math display">\[x = \frac{X}{H}.\]</span></p>
-<p>In our implementation, net infectiousness (NI) is linearly
-proportional to prevalence:</p>
-<p><span class="math display">\[c x.\]</span></p>
-<p><strong>Human Transmitting Capacity</strong></p>
-<p>After exposure, a human would remain infected for <span class="math inline">\(1/r\)</span> days, transmitting with probability
-<span class="math inline">\(c\)</span> so:</p>
-<p><span class="math display">\[c/r\]</span></p>
-<p><strong>Exposure and Infection</strong></p>
-<p>In this model family, there is no immunity. The model assumes that a
-constant fraction of all infectious bites, <span class="math inline">\(b\)</span>, cause an infection.</p>
-</div>
-<div id="references" class="section level2">
-<h2>References</h2>
+<p>In the early 1950s, George Macdonald’s updated Ross’s mathematical
+theory and published a quantitative synthesis of malaria epidemiology
+and control. In field trials in the late 1960s, Macdonald’s models were
+tested, exposing some of their weaknesses (Nájera, 1973; Nájera, 1974).
+Many of these weaknesses were addressed when Klaus Dietz and his
+colleagues published a new malaria model, in the 1970s, that was field
+tested in The Garki Project (Dietz, Molineaux, &amp; Thomas, 1974).</p>
+<p>In ramp.xds, we have coded the Garki model in two ways: 1. a
+discrete-time system, as it was originally written; and 2. as a
+continuous time system.</p>
+<hr />
+<p>References:</p>
 <ol style="list-style-type: decimal">
-<li>Ross R. Report on the Prevention of Malaria in Mauritius. London:
-Waterlow; 1908.</li>
-<li>Ross R. The Prevention of Malaria. 2nd ed. London: John Murray;
-1911.</li>
-<li>Smith DL, Battle KE, Hay SI, Barker CM, Scott TW, McKenzie FE. Ross,
-Macdonald, and a theory for the dynamics and control of
-mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. <a href="doi:10.1371/journal.ppat.1002588" class="uri">doi:10.1371/journal.ppat.1002588</a></li>
+<li><p>Nájera , J. A &amp; World Health Organization. (1973). A critical
+review of the field application of a mathematical model of malaria
+epidemiology. Available from the <a href="https://iris.who.int/bitstream/handle/10665/65662/WHO_MAL_73.796.pdf">World
+Health Organization</a></p></li>
+<li><p>Nájera JA. A critical review of the field application of a
+mathematical model of malaria eradication. Bull World Health Organ.
+1974;50: 449–457. Available from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2481134/pdf/bullwho00166-0077.pdf">Bull.
+WHO</a></p></li>
+<li><p>Dietz K, Molineaux L, Thomas A. A malaria model tested in the
+African savannah. Bull World Health Organ. 1974;50: 347–357. Available
+from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2481204/pdf/bullwho00165-0208.pdf">Bull.
+WHO</a>.</p></li>
 </ol>
-</div>
 </div>
 
 

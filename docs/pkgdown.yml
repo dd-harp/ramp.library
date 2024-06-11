@@ -3,17 +3,14 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   Adding_Models: Adding_Models.html
+  Compartmental-Models: Compartmental-Models.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   MYZ-How_To_Add_Model: MYZ-How_To_Add_Model.html
   MYZ-xde-RMG: MYZ-xde-RMG.html
+  X-garki: X-garki.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
-  X-xde-SEIR: X-xde-SEIR.html
-  X-xde-SEIRV: X-xde-SEIRV.html
-  X-xde-SIR: X-xde-SIR.html
-  X-xde-SIRS: X-xde-SIRS.html
-  X-xde-SIS: X-xde-SIS.html
   X-xde-workhorse: X-xde-workhorse.html
-last_built: 2024-06-10T18:55Z
+last_built: 2024-06-11T15:00Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

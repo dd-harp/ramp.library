@@ -1,0 +1,31 @@
+---
+title: "The Garki Model"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The Garki Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
+suppressMessages(library(knitr))
+suppressMessages(library(ramp.xde))
+suppressMessages(library(ramp.library))
+```
+
+# 
+
+In the early 1950s, George Macdonald's updated Ross's mathematical theory and published a quantitative synthesis of malaria epidemiology and control. In field trials in the late 1960s, Macdonald's models were tested, exposing some of their weaknesses (Nájera, 1973; Nájera, 1974). Many of these weaknesses were addressed when Klaus Dietz and his colleagues published a new malaria model, in the 1970s, that was field tested in The Garki Project (Dietz, Molineaux, & Thomas, 1974). 
+
+In ramp.xds, we have coded the Garki model in two ways: 1. a discrete-time system, as it was originally written; and 2. as a continuous time system. 
+
+***
+
+References: 
+
+1. Nájera , J. A & World Health Organization. (1973). A critical review of the field application of a mathematical model of malaria epidemiology. Available from the [World Health Organization](https://iris.who.int/bitstream/handle/10665/65662/WHO_MAL_73.796.pdf)
+
+2.  Nájera JA. A critical review of the field application of a mathematical model of malaria eradication. Bull World Health Organ. 1974;50: 449–457. Available from [Bull. WHO](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2481134/pdf/bullwho00166-0077.pdf)
+
+3. Dietz K, Molineaux L, Thomas A. A malaria model tested in the African savannah. Bull World Health Organ. 1974;50: 347–357. Available from [Bull. WHO](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2481204/pdf/bullwho00165-0208.pdf). 

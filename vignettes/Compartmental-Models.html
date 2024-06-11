@@ -11,9 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2024-06-10" />
+<meta name="date" content="2024-06-11" />
 
-<title>The SEIRV Model</title>
+<title>Compartmental Models</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -236,16 +236,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">The SEIRV Model</h1>
-<h4 class="date">June 10, 2024</h4>
+<h1 class="title toc-ignore">Compartmental Models</h1>
+<h4 class="date">June 11, 2024</h4>
 
 
 
 <div id="section" class="section level1">
 <h1></h1>
-<p>The SEIRV model, as it is now called, is a simple compartmental
-model, first introduced by Ross. It is included in `ramp.xde`` as a base
-model.</p>
+<p>In this vignette, we describe five basic compartmental models for
+mosquito-borne pathogens. The models are named by their states:
+susceptible (S) - exposed (I) - recovered and immune (R), chemoprotected
+(P), vaccinated (V). Not all models include all of the states. In
+ramp.xds, there are six compartmental models: SIS, SIPS, SIR, SIRS,
+SEIR, and SEIRV.</p>
 <div id="variables" class="section level3">
 <h3>Variables</h3>
 <ul>

@@ -15,22 +15,16 @@ navbar:
       href: articles/L-How_To_Add_Model.html
   - text: X
     menu:
-    - text: SIS Model
-      href: articles/Xmod-SIS.html
+    - text: Compartmental Models
+      href: articles/Compartmental-Models.html
+    - text: The Garki Model
+      href: articles/X-garki.html
     - text: Workhorse
-      href: articles/Xmod-workhorse.html
-    - text: SIR Model
-      href: articles/Xmod-SIR.html
-    - text: SIRS Model
-      href: articles/Xmod-SIRS.html
-    - text: SEIR Model
-      href: articles/Xmod-SEIR.html
-    - text: SEIRV Model
-      href: articles/Xmod-SEIRV.html
+      href: articles/X-xde-workhorse.html
   - text: MYZ
     menu:
-    - text: The RMG-xde Model
-      href: articles/MYZmod-xde-RMG.html
+    - text: A Behavioral State Model
+      href: articles/MYZ-xde-RMG.html
   right:
   - icon: fa-github
     href: https://github.com/dd-harp/ramp.library/
