@@ -66,6 +66,8 @@ Two terms are passed from another component of the model.
 
 + $\sigma_q$ - the patch emigration rate for egg-laying mosquitoes 
 
++ $\mu$ - the emigration loss rate: excess mortality associated with migration 
+
 **Dipsersal Matrices** - Each one of the following parameters can take on a unique value in each patch.  
 
 + ${\cal K}_b$ - the dispersal matrix for blood-feeding mosquitoes, which has the form:
@@ -85,7 +87,7 @@ The diagonal elements are all $0$, and other elements, $k_{i,j} \in {\cal K}$, a
 **The Demographic Matrices** 
 
 + $\Omega_b$ - the demographic matrix for blood feeding mosquitoes; letting $I$ denote the identity matrix, 
-$$\Omega_b = \mbox{diag}\left(g\right) - \mbox{diag}\left(\sigma_b\right) \left(I - \cal K_b \right)$$
+$$\Omega_b = \mbox{diag}\left(g\right) - \mbox{diag}\left(\sigma_b\right) \left(\mbox{diag}\left(1-\mu\right) - \cal K_b \right)$$
 
 + $\Omega_q$ - the demographic matrix for egg laying mosquitoes; which has the same form as $\Omega_b$. 
 
@@ -125,7 +127,7 @@ xds_plot_YZ(model, add_axes = F)
 xds_plot_YZ_fracs(model)
 ```
 
-```{r}
+```{r, fig.height=4, fig.width=5.5}
 xds_plot_YZ_fracs(model)
 ```
 
