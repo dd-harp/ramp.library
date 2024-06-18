@@ -16,10 +16,10 @@ library(ramp.library)
 library(deSolve) 
 ```
 
-# 
+#  
 
 In this vignette, we describe five basic compartmental models for mosquito-borne pathogens. The models are named by their states: susceptible (S) - exposed (I) - recovered and immune (R), chemoprotected (P), vaccinated (V). Not all models include all of the states. In ramp.xds, there are six compartmental models: SIS, SIPS, SIR, SIRS, SEIR, and SEIRV.
-
+  
 ### Variables
 
 + $I$ is the density of infected humans

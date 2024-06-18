@@ -118,7 +118,7 @@
             <h3 data-toc-skip class="subtitle">A Behavioral State
 Model</h3>
             
-            <h4 data-toc-skip class="date">June 11, 2024</h4>
+            <h4 data-toc-skip class="date">June 18, 2024</h4>
       
       
       <div class="hidden name"><code>MYZ-xde-RMG.Rmd</code></div>
@@ -190,6 +190,8 @@ infected mosquitoes become infective, the inverse of the EIP</p></li>
 emigration rate for blood-feeding mosquitoes</p></li>
 <li><p><span class="math inline">\(\sigma_q\)</span> - the patch
 emigration rate for egg-laying mosquitoes</p></li>
+<li><p><span class="math inline">\(\mu\)</span> - the emigration loss
+rate: excess mortality associated with migration</p></li>
 </ul>
 <p><strong>Dipsersal Matrices</strong> - Each one of the following
 parameters can take on a unique value in each patch.</p>
@@ -212,8 +214,8 @@ matrix for egg-laying mosquitoes, which has the same form as <span class="math i
 <ul>
 <li><p><span class="math inline">\(\Omega_b\)</span> - the demographic
 matrix for blood feeding mosquitoes; letting <span class="math inline">\(I\)</span> denote the identity matrix, <span class="math display">\[\Omega_b = \mbox{diag}\left(g\right) -
-\mbox{diag}\left(\sigma_b\right) \left(I - \cal K_b
-\right)\]</span></p></li>
+\mbox{diag}\left(\sigma_b\right) \left(\mbox{diag}\left(1-\mu\right) -
+\cal K_b \right)\]</span></p></li>
 <li><p><span class="math inline">\(\Omega_q\)</span> - the demographic
 matrix for egg laying mosquitoes; which has the same form as <span class="math inline">\(\Omega_b\)</span>.</p></li>
 </ul>
@@ -261,7 +263,7 @@ K.\)</span> During <code>xde_setup()</code>, <code>Omega_b</code> and
 <p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-4-1.png" width="528"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-5-1.png" width="528"></p>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>

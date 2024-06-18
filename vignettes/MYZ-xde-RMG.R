@@ -11,6 +11,6 @@ xds_plot_M(model)
 xds_plot_YZ(model, add_axes = F)
 xds_plot_YZ_fracs(model)
 
-## -----------------------------------------------------------------------------
+## ----fig.height=4, fig.width=5.5----------------------------------------------
 xds_plot_YZ_fracs(model)
 

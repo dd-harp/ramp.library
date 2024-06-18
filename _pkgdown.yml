@@ -38,7 +38,7 @@ home:
     - authors
     - dev
 reference:
-- title: Adult Mosquito Models
+- title: MYZ - Adult Mosquito
   desc: |
      The model library for adult mosquito infection dynamics
 - subtitle: The Adult Mosquito RMG_xde Model
@@ -58,28 +58,98 @@ reference:
   - setup_MYZpar.RMG_xde
   - setup_MYZinits.RMG_xde
   - update_inits_MYZ.RMG_xde
-- title: XH Component
+- subtitle: ENBRQ_dts
+  desc: |
+    Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.
+  contents:
+  - MBionomics.ENBRQ_dts
+  - F_fqZ.ENBRQ_dts
+  - F_fqM.ENBRQ_dts
+  - F_eggs.ENBRQ_dts
+  - dMYZdt.ENBRQ_dts
+  - setup_MYZpar.ENBRQ_dts
+  - setup_MYZinits.ENBRQ_dts
+  - make_MYZpar_ENBRQ_dts
+  - make_MYZinits_ENBRQ_dts
+  - list_MYZvars.ENBRQ_dts
+  - make_indices_MYZ.ENBRQ_dts
+  - parse_outputs_MYZ.ENBRQ_dts
+  - make_inits_MYZ_ENBRQ_dts
+  - get_inits_MYZ.ENBRQ_dts
+  - update_inits_MYZ.ENBRQ_dts
+  - make_parameters_MYZ_ENBRQ_dts
+- subtitle: bionomics
+  contents:
+  - F_sigma.dddn
+  - F_f.dddn
+  - F_q.dddn
+  - F_p.dddn
+  - F_nu.dddn
+- title: L-Aquatic Mosquito
+  desc: |
+    Models for parasites infecting human / vertebrate hosts
+- subtitle: stages_dts
+  desc: |
+    Specialized methods for a stages_dts competition model of aquatic mosquito dynamics.
+  contents:
+  - LBionomics.stages_dts
+  - F_alpha.stages_dts
+  - dLdt.stages_dts
+  - setup_Lpar.stages_dts
+  - setup_Linits.stages_dts
+  - make_Lpar_stages_dts
+  - make_Linits_stages_dts
+  - make_indices_L.stages_dts
+  - list_Lvars.stages_dts
+  - parse_outputs_L.stages_dts
+  - make_inits_L_stages_dts
+  - get_inits_L.stages_dts
+  - update_inits_L.stages_dts
+  - make_parameters_L_stages_dts
+- title: X-Vertebrate Hosts
   desc: |
     Models for parasites infecting human / vertebrate hosts
 - subtitle: The Garki model
   contents:
-  - F_X.garki
-  - F_H.garki
-  - F_pr.garki
-  - F_b.garki
-  - dXdt.garki
-  - setup_Xpar.garki
-  - setup_Xinits.garki
-  - list_Xvars.garki
-  - make_Xpar_garki
-  - make_Xinits_garki
-  - make_indices_X.garki
-  - parse_outputs_X.garki
-  - get_inits_X.garki
-  - update_inits_X.garki
-  - HTC.garki
-  - xds_plot_X.garki
-  - xde_lines_X_garki
+  - F_X.garki_xde
+  - F_H.garki_xde
+  - F_pr.garki_xde
+  - F_b.garki_xde
+  - dXdt.garki_xde
+  - setup_Xpar.garki_xde
+  - setup_Xinits.garki_xde
+  - list_Xvars.garki_xde
+  - make_Xpar_garki_xde
+  - make_Xinits_garki_xde
+  - make_indices_X.garki_xde
+  - parse_outputs_X.garki_xde
+  - get_inits_X.garki_xde
+  - update_inits_X.garki_xde
+  - HTC.garki_xde
+  - xds_plot_X.garki_xde
+  - xde_lines_X_garki_xde
+- title: XH Component
+  desc: |
+    Models for parasites infecting human / vertebrate hosts
+- subtitle: The SIPw model
+  contents:
+  - F_X.SIPw_dts
+  - F_H.SIPw_dts
+  - F_pr.SIPw_dts
+  - F_b.SIPw_dts
+  - dXdt.SIPw_dts
+  - setup_Xpar.SIPw_dts
+  - setup_Xinits.SIPw_dts
+  - list_Xvars.SIPw_dts
+  - make_Xpar_SIPw_dts
+  - make_Xinits_SIPw_dts
+  - make_indices_X.SIPw_dts
+  - parse_outputs_X.SIPw_dts
+  - get_inits_X.SIPw_dts
+  - update_inits_X.SIPw_dts
+  - HTC.SIPw_dts
+  - xds_plot_X.SIPw_dts
+  - add_lines_X_SIPw_dts
 - subtitle: The workhorse model
   contents:
   - F_X.workhorse
@@ -175,3 +245,15 @@ reference:
   - HTC.SEIRV
   - xds_plot_X.SEIRV
   - xde_lines_X_SEIRV
+- title: Travel & Exposure
+  desc: |
+     Functions to model travel and exposure
+- subtitle: Travel
+  contents:
+  - travel_malaria.weekly
+  - setup_travel_weekly
+- subtitle: Exposure
+  contents:
+  - Exposure.weekly
+  - travel_malaria.weekly
+  - setup_travel_weekly

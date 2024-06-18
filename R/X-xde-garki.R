@@ -1,11 +1,11 @@
-# specialized methods for the human Garki model
+# specialized methods for the human garki_xde model
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the Garki model.
+#' @description Implements [F_X] for the garki_xde model.
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.garki <- function(t, y, pars, i){
+F_X.garki_xde <- function(t, y, pars, i){
   y1 <- y[pars$Xpar[[i]]$y1_ix]
   X = with(pars$Xpar[[i]], y1)
   return(X)
@@ -16,7 +16,7 @@ F_X.garki <- function(t, y, pars, i){
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.garki <- function(t, y, pars, i){
+F_H.garki_xde <- function(t, y, pars, i){
   with(list_Xvars(y, pars,i),{
     H = x1+x2+x3+x4+y1+y2+y3
     return(H)
@@ -24,30 +24,30 @@ F_H.garki <- function(t, y, pars, i){
 }
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_b] for the Garki model.
+#' @description Implements [F_b] for the garki_xde model.
 #' @inheritParams ramp.xde::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_b.garki <- function(y, pars, i) {
+F_b.garki_xde <- function(y, pars, i) {
   with(pars$Xpar[[i]], b)
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the Garki model.
+#' @description Implements [F_pr] for the garki_xde model.
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.garki <- function(varslist, pars, i) {
+F_pr.garki_xde <- function(varslist, pars, i) {
 #  pr = with(pars$Xpar,with(varslist$XH, (q1*y1+q2*y2+q3*y3)/H))
   pr = with(pars$Xpar,with(varslist$XH[[i]], (y1+y2+y3)/H))
   return(pr)
 }
 #' @title Derivatives for human population
-#' @description Implements [dXdt] for the Garki model.
+#' @description Implements [dXdt] for the garki_xde model.
 #' @inheritParams ramp.xde::dXdt
 #' @return a [numeric] vector
 #' @export
-dXdt.garki = function(t, y, pars, i){
+dXdt.garki_xde = function(t, y, pars, i){
 
   foi <- pars$FoI[[i]]
 
@@ -77,7 +77,7 @@ dXdt.garki = function(t, y, pars, i){
 #' @inheritParams ramp.xde::list_Xvars
 #' @return a [list]
 #' @export
-list_Xvars.garki <- function(y, pars, i) {
+list_Xvars.garki_xde <- function(y, pars, i) {
   with(pars$ix$X[[i]],
        return(list(
          x1 <- y[x1_ix],
@@ -90,33 +90,33 @@ list_Xvars.garki <- function(y, pars, i) {
        )))
 }
 
-#' @title Setup Xpar.garki
-#' @description Implements [setup_Xpar] for the garki model
+#' @title Setup Xpar.garki_xde
+#' @description Implements [setup_Xpar] for the garki_xde model
 #' @inheritParams ramp.xde::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.garki = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_garki(pars$nStrata, Xopts)
+setup_Xpar.garki_xde = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_garki_xde(pars$nStrata, Xopts)
   return(pars)
 }
 
-#' @title Setup Xinits.garki
-#' @description Implements [setup_Xinits] for the garki model
+#' @title Setup Xinits.garki_xde
+#' @description Implements [setup_Xinits] for the garki_xde model
 #' @inheritParams ramp.xde::setup_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.garki = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,make_Xinits_garki(nStrata, Xopts, H0=Hpar[[i]]$H))
+setup_Xinits.garki_xde = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars,make_Xinits_garki_xde(nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the Garki model.
+#' @description Implements [make_indices_X] for the garki_xde model.
 #' @inheritParams ramp.xde::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.garki <- function(pars, i) {with(pars,{
+make_indices_X.garki_xde <- function(pars, i) {with(pars,{
 
   x1_ix <- seq(from = max_ix+1, length.out=nx1trata)
   max_ix <- tail(x1_ix, 1)
@@ -147,7 +147,7 @@ make_indices_X.garki <- function(pars, i) {with(pars,{
   return(pars)
 })}
 
-#' @title Make parameters for Garki human model
+#' @title Make parameters for garki_xde human model
 #' @param nStrata is the number of population strata
 #' @param Xopts an [list]
 #' @param b transmission probability (efficiency) from mosquito to human
@@ -162,7 +162,7 @@ make_indices_X.garki <- function(pars, i) {with(pars,{
 #' @param mu a [numeric] the death rate
 #' @return a [list]
 #' @export
-make_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
+make_Xpar_garki_xde = function(nStrata, Xopts=list(), b=0.55,
                            r1=.0023, r2=.023, nu=1/15,
                            alpha1=.002, alpha2=.00019,
                            q1=.7, q2=0.5, q3=0.3, mu=1/65/365){
@@ -170,24 +170,24 @@ make_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
     xde <- 'ode'
     class(xde) <- 'ode'
 
-    garki = list()
-    class(garki) <- "garki"
-    garki$xde <- xde
-    garki$b=checkIt(b, nStrata)
-    garki$r1=checkIt(r1, nStrata)
-    garki$r2=checkIt(r2, nStrata)
-    garki$nu=checkIt(nu, nStrata)
-    garki$alpha1=checkIt(alpha1, nStrata)
-    garki$alpha2=checkIt(alpha2, nStrata)
-    garki$mu=checkIt(mu, nStrata)
-    garki$q1=checkIt(q1, nStrata)
-    garki$q2=checkIt(q2, nStrata)
-    garki$q3=checkIt(q3, nStrata)
+    garki_xde = list()
+    class(garki_xde) <- "garki_xde"
+    garki_xde$xde <- xde
+    garki_xde$b=checkIt(b, nStrata)
+    garki_xde$r1=checkIt(r1, nStrata)
+    garki_xde$r2=checkIt(r2, nStrata)
+    garki_xde$nu=checkIt(nu, nStrata)
+    garki_xde$alpha1=checkIt(alpha1, nStrata)
+    garki_xde$alpha2=checkIt(alpha2, nStrata)
+    garki_xde$mu=checkIt(mu, nStrata)
+    garki_xde$q1=checkIt(q1, nStrata)
+    garki_xde$q2=checkIt(q2, nStrata)
+    garki_xde$q3=checkIt(q3, nStrata)
 
-    return(garki)
+    return(garki_xde)
   })}
 
-#' @title Make inits for Garki human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.
+#' @title Make inits for garki_xde human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] with values to override default values
 #' @param H0 a [numeric] initial value for total human population density
@@ -200,7 +200,7 @@ make_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
 #' @export
-make_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
+make_Xinits_garki_xde <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
   stopifnot(is.numeric(x2))
   stopifnot(is.numeric(y1))
   stopifnot(is.numeric(y2))
@@ -220,30 +220,30 @@ make_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y
   return(list(x1=x1,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
 }
 
-#' @title Return initial values as a vector for the Garki model
+#' @title Return initial values as a vector for the garki_xde model
 #' @description This method dispatches on the type of `pars$Xpar`.
 #' @inheritParams ramp.xde::get_inits_X
 #' @return a named [list]
 #' @export
-get_inits_X.garki <- function(pars, i){
+get_inits_X.garki_xde <- function(pars, i){
   with(pars$Xinits[[i]], c(x1, x2, y1, y2, y3, x3, x4))
 }
 
-#' @title Update Xinits for the Garki model
+#' @title Update Xinits for the garki_xde model
 #' @inheritParams ramp.xde::update_inits_X
 #' @return none
 #' @export
-update_inits_X.garki <- function(pars, y0, i){
+update_inits_X.garki_xde <- function(pars, y0, i){
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_garki(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
+    pars = make_Xinits_garki_xde(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
     return(pars)
 })}
 
-#' Plot the density of infected individuals for the Garki model
+#' Plot the density of infected individuals for the garki_xde model
 #'
 #' @inheritParams ramp.xde::xds_plot_X
 #' @export
-xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.garki_xde = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
 
   if(add_axes==TRUE)
@@ -251,10 +251,10 @@ xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
               ylab = "# Infected", xlab = "Time"))
 
-  xde_lines_X_garki(vars$XH, pars, clrs, llty)
+  xde_lines_X_garki_xde(vars$XH, pars, clrs, llty)
 }
 
-#' Add lines for the density of infected individuals for the Garki model
+#' Add lines for the density of infected individuals for the garki_xde model
 #'
 #' @param XH a list with the outputs of parse_outputs_X_SIS
 #' @param pars a list that defines an `ramp.xde` model (*e.g.*,  generated by `xde_setup()`)
@@ -262,7 +262,7 @@ xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
+xde_lines_X_garki_xde= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
   with(XH,{
     if(pars$nStrata==1){
       lines(time, x1, col=clrs[1], lty = llty[1])
@@ -288,12 +288,12 @@ xde_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
     }
   })}
 
-#' @title Parse the output of deSolve and return variables for the Garki model
-#' @description Implements [parse_outputs_X] for the Garki model
+#' @title Parse the output of deSolve and return variables for the garki_xde model
+#' @description Implements [parse_outputs_X] for the garki_xde model
 #' @inheritParams ramp.xde::parse_outputs_X
 #' @return none
 #' @export
-parse_outputs_X.garki <- function(outputs, pars, i) {
+parse_outputs_X.garki_xde <- function(outputs, pars, i) {
   time = outputs[,1]
   with(pars$ix$X[[i]],{
     x1 = outputs[,x1_ix+1]
@@ -306,12 +306,12 @@ parse_outputs_X.garki <- function(outputs, pars, i) {
     return(list(time=time, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
   })}
 
-#' @title Compute the HTC for the garki model
-#' @description Implements [HTC] for the garki model
+#' @title Compute the HTC for the garki_xde model
+#' @description Implements [HTC] for the garki_xde model
 #' @inheritParams ramp.xde::HTC
 #' @return a [numeric] vector
 #' @export
-HTC.garki <- function(pars, i) {
+HTC.garki_xde <- function(pars, i) {
   with(pars$Xpar[[i]],
        return(1/r1)
   )
