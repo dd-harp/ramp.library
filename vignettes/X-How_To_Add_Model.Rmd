@@ -1,9 +1,9 @@
 ---
-title: "Adding new XH models to `ramp.xde`" 
-subtitle: "Models for Human / Vertebrate Host Infection Dynamics" 
+title: "Adding new X models to `ramp.xds`" 
+subtitle: "Human/Vertebrate Host Infection Dynamics" 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Adding new XH models to `ramp.xde`}
+  %\VignetteIndexEntry{Adding new X models to `ramp.xds`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

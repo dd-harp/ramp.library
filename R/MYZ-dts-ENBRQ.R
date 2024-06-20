@@ -76,11 +76,11 @@ dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
 }
 
 #' @title Setup MYZpar for the ENBRQ_dts model
-#' @description Implements [setup_MYZpar] for the ENBRQ_dts model
-#' @inheritParams ramp.xde::setup_MYZpar
+#' @description Implements [dts_setup_MYZpar] for the ENBRQ_dts model
+#' @inheritParams ramp.xde::dts_setup_MYZpar
 #' @return a [list] vector
 #' @export
-setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
+dts_setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
   pars$MYZpar[[s]] = make_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts, calK)
   return(pars)
 }

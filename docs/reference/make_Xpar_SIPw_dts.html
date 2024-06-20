@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Adding_models.html">Adding Models</a>
+      <a href="../articles/Adding_Models.html">Adding Models</a>
     </li>
     <li>
       <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
@@ -97,13 +97,15 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_Xpar_SIPw_dts</span><span class="op">(</span></span>
 <span>  <span class="va">nStrata</span>,</span>
+<span>  D <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  Xopts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  b <span class="op">=</span> <span class="fl">0.55</span>,</span>
-<span>  r <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">180</span>,</span>
 <span>  c <span class="op">=</span> <span class="fl">0.15</span>,</span>
+<span>  r <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">180</span>,</span>
 <span>  rho <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  eta <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">25</span>,</span>
-<span>  xi <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">365</span></span>
+<span>  sigma <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">365</span>,</span>
+<span>  xi <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">730</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">25</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -113,32 +115,40 @@
 <dd><p>the number of population strata</p></dd>
 
 
+<dt>D</dt>
+<dd><p>the operating time step</p></dd>
+
+
 <dt>Xopts</dt>
-<dd><p>a [list] that could overwrite defaults</p></dd>
+<dd><p>options to overwrite defaults</p></dd>
 
 
 <dt>b</dt>
 <dd><p>transmission probability (efficiency) from mosquito to human</p></dd>
 
 
-<dt>r</dt>
-<dd><p>recovery rate</p></dd>
-
-
 <dt>c</dt>
 <dd><p>transmission probability (efficiency) from human to mosquito</p></dd>
+
+
+<dt>r</dt>
+<dd><p>recovery rate</p></dd>
 
 
 <dt>rho</dt>
 <dd><p>probability of successful treatment upon infection</p></dd>
 
 
-<dt>eta</dt>
-<dd><p>prophylaxis waning rate</p></dd>
+<dt>sigma</dt>
+<dd><p>probability of treatment for treated, above background</p></dd>
 
 
 <dt>xi</dt>
 <dd><p>background treatment rate</p></dd>
+
+
+<dt>eta</dt>
+<dd><p>rate of loss of chemo-protection</p></dd>
 
 </dl></div>
     <div id="value">

@@ -12,8 +12,8 @@ vignette: >
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
 library(knitr)
 library(ramp.xde)
-#devtools::load_all()
-library(ramp.library)
+devtools::load_all()
+#library(ramp.library)
 library(deSolve) 
 ```
 

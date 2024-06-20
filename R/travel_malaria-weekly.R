@@ -5,7 +5,7 @@
 #' @inheritParams ramp.xde::travel_malaria
 #' @return a [numeric]
 #' @export
-travel_malaria.weekly <- function(t, pars) {
+travel_malaria.multiday <- function(t, pars) {
   with(pars$TRAVEL,{
     return(delta_scale*delta_t(t, pars))
   })}
@@ -17,10 +17,10 @@ travel_malaria.weekly <- function(t, pars) {
 #' @param delta_t the temporal pattern for travel related malaria Attack-Rate
 #' @return none
 #' @export
-setup_travel_weekly <- function(pars, travel_Opts = list(), delta_scale=0, delta_t=NULL) {with(travel_Opts,{
+setup_travel_multiday <- function(pars, travel_Opts = list(), delta_scale=0, delta_t=NULL) {with(travel_Opts,{
 
   TRAVEL <- list()
-  class(TRAVEL) <- 'weekly'
+  class(TRAVEL) <- 'multiday'
   pars$TRAVEL <- TRAVEL
 
   pars$TRAVEL$delta_scale = delta_scale

@@ -86,11 +86,11 @@ dMYZdt.RMG_xde <- function(t, y, pars, s){
 }
 
 #' @title Setup MYZpar for the RMG_xde model
-#' @description Implements [setup_MYZpar] for the RM model
-#' @inheritParams ramp.xde::setup_MYZpar
+#' @description Implements [xde_setup_MYZpar] for the RM model
+#' @inheritParams ramp.xde::xde_setup_MYZpar
 #' @return a [list] vector
 #' @export
-setup_MYZpar.RMG_xde = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
+xde_setup_MYZpar.RMG_xde = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
   pars$MYZpar[[s]] = make_MYZpar_RMG_xde(pars$nPatches, MYZopts, EIPopts, calK)
   return(pars)
 }

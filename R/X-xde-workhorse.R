@@ -144,12 +144,12 @@ make_Xpar_workhorse = function(nStrata, Xopts=list(),
     return(Xpar)
   })}
 
-#' @title Setup Xpar.workhorse
-#' @description Implements [setup_Xpar] for the workhorse model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @title xde_setup Xpar.workhorse
+#' @description Implements [xde_setup_Xpar] for the workhorse model
+#' @inheritParams ramp.xde::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
+xde_setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_workhorse(pars$Hpar[[i]]$nStrata, Xopts)
   pars$xde = "dde"
   return(pars)

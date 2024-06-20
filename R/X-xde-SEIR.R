@@ -6,6 +6,7 @@
 dXdt.SEIR<- function(t, y, pars, i) {
   # do not change this
   foi <- pars$FoI[[i]]
+  Hpar <- pars$Hpar[[i]]
 
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
@@ -15,10 +16,10 @@ dXdt.SEIR<- function(t, y, pars, i) {
     # expose the parameters (see make_Xpar_SEIR)
     with(pars$Xpar[[i]], {
       # compute the derivatives
-      dS <- Births(t, H, pars,i) - foi*S + dHdt(t, S, pars,i)
-      dE <- foi*S - tau*E + dHdt(t, E, pars,i)
-      dI <- tau*E - r*I + dHdt(t, I, pars,i)
-      dR <- r*I + dHdt(t, R, pars,i)
+      dS <- Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)
+      dE <- foi*S - tau*E + dHdt(t, E, Hpar)
+      dI <- tau*E - r*I + dHdt(t, I, Hpar)
+      dR <- r*I + dHdt(t, R, Hpar)
 
        # concatenate the derivatives
       derivs = c(dS, dE, dI, dR)
@@ -175,11 +176,11 @@ make_Xpar_SEIR = function(nStrata, Xopts=list(),
 
 
 #' @title Setup Xpar.SEIR
-#' @description Implements [setup_Xpar] for the SEIR model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @description Implements [xde_setup_Xpar] for the SEIR model
+#' @inheritParams ramp.xde::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
+xde_setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_SEIR(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }

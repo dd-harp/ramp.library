@@ -50,6 +50,7 @@ F_pr.garki_xde <- function(varslist, pars, i) {
 dXdt.garki_xde = function(t, y, pars, i){
 
   foi <- pars$FoI[[i]]
+  Hpar <- pars$Hpar[[i]]
 
   with(list_Xvars(y, pars, i),{
 
@@ -58,13 +59,13 @@ dXdt.garki_xde = function(t, y, pars, i){
       R2 = foi/(exp(foi/r2) - 1)
 
       #dx1 = Births(t, x1, pars) - FoI*x1 + R1*y2 + dHdt(t, x1, pars)
-      dx1 = - foi*x1 + R1*y2 + dHdt(t, x1, pars)
-      dx2 = foi*x1 - nu*x2 + dHdt(t, x2, pars)
-      dy1 = nu*x2 - alpha1*y1  + dHdt(t, y1, pars)
-      dy2 = alpha1*y1 - R1*y2 - alpha2*y2 + dHdt(t, y2, pars)
-      dy3 = alpha2*y2 + nu*x4 - R2*y3 + dHdt(t, y3, pars)
-      dx3 = R2*y3 - foi*x3 + dHdt(t, x3, pars)
-      dx4 = foi*x3 - nu*x4 + dHdt(t, x4, pars)
+      dx1 = - foi*x1 + R1*y2 + dHdt(t, x1, Hpar)
+      dx2 = foi*x1 - nu*x2 + dHdt(t, x2, Hpar)
+      dy1 = nu*x2 - alpha1*y1  + dHdt(t, y1, Hpar)
+      dy2 = alpha1*y1 - R1*y2 - alpha2*y2 + dHdt(t, y2, Hpar)
+      dy3 = alpha2*y2 + nu*x4 - R2*y3 + dHdt(t, y3, Hpar)
+      dx3 = R2*y3 - foi*x3 + dHdt(t, x3, Hpar)
+      dx4 = foi*x3 - nu*x4 + dHdt(t, x4, Hpar)
       #dH =  dHdt(t, H, pars)
 
       return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4, dH))
@@ -90,12 +91,12 @@ list_Xvars.garki_xde <- function(y, pars, i) {
        )))
 }
 
-#' @title Setup Xpar.garki_xde
-#' @description Implements [setup_Xpar] for the garki_xde model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @title xde_setup Xpar.garki_xde
+#' @description Implements [xde_setup_Xpar] for the garki_xde model
+#' @inheritParams ramp.xde::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.garki_xde = function(Xname, pars, i, Xopts=list()){
+xde_setup_Xpar.garki_xde = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_garki_xde(pars$nStrata, Xopts)
   return(pars)
 }

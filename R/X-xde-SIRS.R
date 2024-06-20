@@ -6,6 +6,7 @@
 dXdt.SIRS <- function(t, y, pars, i) {
   # do not change this
   foi <- pars$FoI[[i]]
+  Hpar <- pars$Hpar[[i]]
 
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
@@ -15,9 +16,9 @@ dXdt.SIRS <- function(t, y, pars, i) {
     # expose the parameters (see make_Xpar_SIRS)
     with(pars$Xpar[[i]], {
       # compute the derivatives
-      dS <- Births(t, H, pars,i) + dHdt(t, S, pars,i) - foi*S + gam*R
-      dI <- foi*S- r*I + dHdt(t, I, pars,i)
-      dR <- r*I - gam*R + dHdt(t, R, pars,i)
+      dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S + gam*R
+      dI <- foi*S- r*I + dHdt(t, I, Hpar)
+      dR <- r*I - gam*R + dHdt(t, R, Hpar)
 
       # concatenate the derivatives
       derivs = c(dS, dI, dR)
@@ -166,11 +167,11 @@ make_Xpar_SIRS = function(nStrata, Xopts=list(),
 
 
 #' @title Setup Xpar.SIRS
-#' @description Implements [setup_Xpar] for the SIRS model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @description Implements [xde_setup_Xpar] for the SIRS model
+#' @inheritParams ramp.xde::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SIRS = function(Xname, pars, i, Xopts=list()){
+xde_setup_Xpar.SIRS = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_SIRS(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }

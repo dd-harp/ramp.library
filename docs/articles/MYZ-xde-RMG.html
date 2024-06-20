@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Adding_models.html">Adding Models</a>
+      <a href="../articles/Adding_Models.html">Adding Models</a>
     </li>
     <li>
       <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
@@ -118,7 +118,7 @@
             <h3 data-toc-skip class="subtitle">A Behavioral State
 Model</h3>
             
-            <h4 data-toc-skip class="date">June 18, 2024</h4>
+            <h4 data-toc-skip class="date">June 20, 2024</h4>
       
       
       <div class="hidden name"><code>MYZ-xde-RMG.Rmd</code></div>
@@ -127,6 +127,7 @@ Model</h3>
 
     
     
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Loading <span style="color: #0000BB;">ramp.library</span></span></span></code></pre>
 <p>Most of the models developed to model malaria parasite infections in
 mosquitoes look at the <em>infection states:</em> uninfected; infected;
 or infected and infectious. A few models have been developed that track
@@ -250,18 +251,18 @@ U_g \\
 single version of the dispersal matrix <span class="math inline">\(\cal
 K.\)</span> During <code>xde_setup()</code>, <code>Omega_b</code> and
 <code>Omega_q</code> are identical.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">EIPo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>EIPname <span class="op">=</span> <span class="st">"static_xde"</span>, eip<span class="op">=</span><span class="fl">12</span><span class="op">)</span> </span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_setup</span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG_xde"</span>, Lname<span class="op">=</span><span class="st">"trace"</span>, Xname <span class="op">=</span> <span class="st">"trace"</span>, EIPopts <span class="op">=</span> <span class="va">EIPo</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_solve</span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_solve</span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_M</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_YZ</span><span class="op">(</span><span class="va">model</span>, add_axes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-4-1.png" width="528"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-5-1.png" width="528"></p>
 </div>

@@ -72,11 +72,11 @@ list_Lvars.stages_dts <- function(y, pars, s){
 }
 
 #' @title Setup Lpar for the stages_dts model
-#' @description Implements [setup_Lpar] for the stages_dts model
-#' @inheritParams ramp.xde::setup_Lpar
+#' @description Implements [dts_setup_Lpar] for the stages_dts model
+#' @inheritParams ramp.xde::dts_setup_Lpar
 #' @return a [list] vector
 #' @export
-setup_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
+dts_setup_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
   pars$Lpar[[s]] = make_Lpar_stages_dts(pars$nHabitats, Lopts)
   return(pars)
 }

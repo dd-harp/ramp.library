@@ -6,6 +6,7 @@
 dXdt.SEIRV<- function(t, y, pars, i) {
   # do not change this
   foi <- pars$FoI[[i]]
+  Hpar <- pars$Hpar[[i]]
 
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
@@ -15,14 +16,14 @@ dXdt.SEIRV<- function(t, y, pars, i) {
     # expose the parameters (see make_Xpar_SEIRV)
     with(pars$Xpar[[i]], {
       # compute the derivatives
-      dS <- (1-alpha)*Births(t, H, pars,i) - foi*S + dHdt(t, S, pars,i)+ eps*R
-      dE <- foi*S - tau*E + dHdt(t, E, pars,i)
-      dI <- tau*E - r*I + dHdt(t, I, pars,i)
-      dR <- (1-delta)*r*I -sig*R -eps*R+ dHdt(t, R, pars,i)
-      dV <- alpha*Births(t, H, pars,i) + delta*r*I + sig*R + dHdt(t, V, pars,i)
+      dS <- (1-alpha)*Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)+ eps*R
+      dE <- foi*S - tau*E + dHdt(t, E, Hpar)
+      dI <- tau*E - r*I + dHdt(t, I, Hpar)
+      dR <- (1-delta)*r*I -sig*R -eps*R+ dHdt(t, R, Hpar)
+      dV <- alpha*Births(t, H, Hpar) + delta*r*I + sig*R + dHdt(t, V, Hpar)
 
        # concatenate the derivatives
-      derivs = c(dS, dE, dI, dR,dV)
+      derivs = c(dS, dE, dI, dR, dV)
 
       # return the derivatives
       return(derivs)
@@ -190,11 +191,11 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
 
 
 #' @title Setup Xpar.SEIRV
-#' @description Implements [setup_Xpar] for the SEIRV model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @description Implements [xde_setup_Xpar] for the SEIRV model
+#' @inheritParams ramp.xde::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
+xde_setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_SEIRV(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
