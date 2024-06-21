@@ -56,12 +56,12 @@ dXdt.SIPw <- function(t, y, pars, i){
     H <- F_H(t, y, pars, i)
     with(pars$Xpar[[i]], {
 
-      dS <- -foi*S + eta*P - xi*S + dHdt(t, S, Hpar) + Births(t, H, Hpar)
-      dI <- -r*I + foi*(1-rho)*S - xi*I + dHdt(t, I, Hpar)
-      dP <- xi*(S+I) + foi*rho*S -eta*P + dHdt(t, P, Hpar)
+      dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      dI <-  foi*(1-rho)*S - xi*I  - r*I          + dHdt(t, I, Hpar)
+      dP <-  foi*rho*S     + xi*(S+I)     - eta*P + dHdt(t, P, Hpar)
       dw <- foi + dHdt(t, w, Hpar)
 
-      return(c(S, I, P, w))
+      return(c(dS, dI, dP, dw))
     })
   })
 }
@@ -80,15 +80,15 @@ DT_Xt.SIPw <- function(t, y, pars, i){
     H <- F_H(t, y, pars, i)
     with(pars$Xpar[[i]], {
 
-      St <- (1-ar)*S     + (1-ar)*r*I           - xi*S                + eta*P
-      It <- ar*(1-rho)*S + ar*(1-rho)*r*I + (1-r)*I     - (xisig)*I
-      Pt <- ar*rho*S     + ar*rho*r*I           + xi*S  + (xisig)*I + (1-eta)*P
+      St <- (1-ar)*(1-xi)*S      + r*(1-ar)*(1-xisig)*I       + eta*P
+      It <- ar*(1-rho)*(1-xi)*S  + (1-r)*(1-xisig)*I    + r*ar*(1-rho)*(1-xisig)*I
+      Pt <- ar*rho*(1-xi)*S      + r*ar*rho*(1-xisig)*I     + xi*S     + xisig*I + (1-eta)*P
       wt <- w + ar
 
-      St <- dHdt(t, St, Hpar) + Births(t, H, Hpar)
-      It <- dHdt(t, It, Hpar)
-      Pt <- dHdt(t, Pt, Hpar)
-      wt <- dHdt(t, wt, Hpar)
+      St <- St+dHdt(t, St, Hpar) + Births(t, H, Hpar)
+      It <- It+dHdt(t, It, Hpar)
+      Pt <- Pt+dHdt(t, Pt, Hpar)
+      wt <- wt+dHdt(t, wt, Hpar)
 
       return(c(St, It, Pt, wt))
     })
@@ -145,7 +145,7 @@ xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
 #' @return a [list]
 #' @export
 make_Xpar_SIPw_xde = function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=.1, sigma=1/365, xi=1/365,  eta=1/25){
+                              rho=.1, sigma=1/730, xi=1/365,  eta=1/25){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SIPw")
@@ -168,7 +168,7 @@ make_Xpar_SIPw_xde = function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
 #' @return a [list] vector
 #' @export
 dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIPw_dts(pars$Hpar[[i]]$nStrata, pars$Xlump, Xopts)
+  pars$Xpar[[i]] = make_Xpar_SIPw_dts(pars$Hpar[[i]]$nStrata, pars$Xday, Xopts)
   return(pars)
 }
 
@@ -186,7 +186,7 @@ dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
 #' @return a [list]
 #' @export
 make_Xpar_SIPw_dts = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=0.1, sigma=1/365, xi=1/730, eta=1/25){
+                              rho=0.1, sigma=1/730, xi=1/365, eta=1/25){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SIPw")

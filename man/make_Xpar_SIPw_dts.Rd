@@ -12,8 +12,8 @@ make_Xpar_SIPw_dts(
   c = 0.15,
   r = 1/180,
   rho = 0.1,
-  sigma = 1/365,
-  xi = 1/730,
+  sigma = 1/730,
+  xi = 1/365,
   eta = 1/25
 )
 }

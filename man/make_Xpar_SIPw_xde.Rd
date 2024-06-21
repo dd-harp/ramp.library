@@ -11,7 +11,7 @@ make_Xpar_SIPw_xde(
   c = 0.15,
   r = 1/180,
   rho = 0.1,
-  sigma = 1/365,
+  sigma = 1/730,
   xi = 1/365,
   eta = 1/25
 )
