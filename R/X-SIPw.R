@@ -57,8 +57,8 @@ dXdt.SIPw <- function(t, y, pars, i){
     with(pars$Xpar[[i]], {
 
       dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
-      dI <-  foi*(1-rho)*S - xi*I  - r*I          + dHdt(t, I, Hpar)
-      dP <-  foi*rho*S     + xi*(S+I)     - eta*P + dHdt(t, P, Hpar)
+      dI <-  foi*(1-rho)*S - (xi+sigma)*I  - r*I          + dHdt(t, I, Hpar)
+      dP <-  foi*rho*S     + xi*(S+I) + sigma*I    - eta*P + dHdt(t, P, Hpar)
       dw <- foi + dHdt(t, w, Hpar)
 
       return(c(dS, dI, dP, dw))
@@ -72,27 +72,32 @@ dXdt.SIPw <- function(t, y, pars, i){
 #' @return a [numeric] vector
 #' @export
 DT_Xt.SIPw <- function(t, y, pars, i){
+  if(t %% pars$Xday == 0){
+    ar <- pars$AR[[i]]
+    Hpar <- pars$Hpar[[i]]
 
-  ar <- pars$AR[[i]]
-  Hpar <- pars$Hpar[[i]]
+    with(list_Xvars(y, pars, i),{
+      H <- F_H(t, y, pars, i)
+      with(pars$Xpar[[i]], {
 
-  with(list_Xvars(y, pars, i),{
-    H <- F_H(t, y, pars, i)
-    with(pars$Xpar[[i]], {
+        St <- (1-ar)*(1-xi)*S       + (1-ar)*r*(1-xisig)*I             + eta*P
+        It <- ar*(1-rho)*(1-xi)*S    + (1-r)*(1-xisig)*I + ar*(1-rho)*r*(1-xisig)*I
+        Pt <- ar*rho*(1-xi)*S+ xi*S  + xisig*I + ar*rho*r*(1-xisig)*I  + (1-eta)*P
+        wt <- w + ar
 
-      St <- (1-ar)*(1-xi)*S      + r*(1-ar)*(1-xisig)*I       + eta*P
-      It <- ar*(1-rho)*(1-xi)*S  + (1-r)*(1-xisig)*I    + r*ar*(1-rho)*(1-xisig)*I
-      Pt <- ar*rho*(1-xi)*S      + r*ar*rho*(1-xisig)*I     + xi*S     + xisig*I + (1-eta)*P
-      wt <- w + ar
+        St <- St+dHdt(t, St, Hpar) + Births(t, H, Hpar)
+        It <- It+dHdt(t, It, Hpar)
+        Pt <- Pt+dHdt(t, Pt, Hpar)
+        wt <- wt+dHdt(t, wt, Hpar)
 
-      St <- St+dHdt(t, St, Hpar) + Births(t, H, Hpar)
-      It <- It+dHdt(t, It, Hpar)
-      Pt <- Pt+dHdt(t, Pt, Hpar)
-      wt <- wt+dHdt(t, wt, Hpar)
-
-      return(c(St, It, Pt, wt))
+        return(c(St, It, Pt, wt))
+      })
     })
-  })
+  } else {
+    with(list_Xvars(y, pars, i),{
+      return(c(S, I, P, w))
+    })
+  }
 }
 
 #' @title Return the SIPw model variables as a list
