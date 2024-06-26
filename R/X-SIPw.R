@@ -1,5 +1,140 @@
 # specialized methods for the human SIPw model, formulated for differential and difference equations
 
+
+#' @title Derivatives for human population
+#' @description Implements [dXdt] for the SIPw-xde model.
+#' @inheritParams ramp.xde::dXdt
+#' @return a [numeric] vector
+#' @export
+dXdt.SIPw <- function(t, y, pars, i){
+
+  foi <- pars$FoI[[i]]
+  Hpar <- pars$Hpar[[i]]
+
+  with(list_Xvars(y, pars, i),{
+    H <- F_H(t, y, pars, i)
+    with(pars$Xpar[[i]], {
+
+      dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      dI <-  foi*(1-rho)*S - (xi+sigma)*I  - r*I          + dHdt(t, I, Hpar)
+      dP <-  foi*rho*S     + xi*(S+I) + sigma*I    - eta*P + dHdt(t, P, Hpar)
+      dw <- foi + dHdt(t, w, Hpar)
+
+      return(c(dS, dI, dP, dw))
+    })
+  })
+}
+
+#' @title Derivatives for human population
+#' @description Implements [DT_Xt] for the SIPw dts model
+#' @inheritParams ramp.xde::DT_Xt
+#' @return a [numeric] vector
+#' @export
+DT_Xt.SIPw <- function(t, y, pars, i){
+
+  ar <- pars$AR[[i]]
+  Hpar <- pars$Hpar[[i]]
+
+  with(list_Xvars(y, pars, i),{
+    H <- F_H(t, y, pars, i)
+    with(pars$Xpar[[i]], {
+
+      St <- (1-ar)*(1-xi)*S       + (1-ar)*r*(1-xisig)*I             + eta*P
+      It <- ar*(1-rho)*(1-xi)*S    + (1-r)*(1-xisig)*I + ar*(1-rho)*r*(1-xisig)*I
+      Pt <- ar*rho*(1-xi)*S+ xi*S  + xisig*I + ar*rho*r*(1-xisig)*I  + (1-eta)*P
+      wt <- w + ar
+
+      St <- St+dHdt(t, St, Hpar) + Births(t, H, Hpar)
+      It <- It+dHdt(t, It, Hpar)
+      Pt <- Pt+dHdt(t, Pt, Hpar)
+      wt <- wt+dHdt(t, wt, Hpar)
+
+      return(c(S=unname(St), I=unname(It), P=unname(Pt), w=unname(wt)))
+    })
+  })
+}
+
+#' @title Setup the Xpar for the SIPw_xde model
+#' @description implements [xde_setup_Xpar] for the SIPw model
+#' @inheritParams ramp.xde::xde_setup_Xpar
+#' @return a [list] vector
+#' @export
+xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = xde_make_Xpar_SIPw(pars$Hpar[[i]]$nStrata, Xopts)
+  return(pars)
+}
+
+#' @title Make parameters for SIPw_xde human model, with defaults
+#' @param nStrata the number of population strata
+#' @param Xopts a [list] that could overwrite defaults
+#' @param b transmission probability (efficiency) from mosquito to human
+#' @param c transmission probability (efficiency) from human to mosquito
+#' @param r recovery rate
+#' @param rho probability of successful treatment upon infection
+#' @param sigma probability of treatment for treated, above background
+#' @param xi background treatment rate
+#' @param eta rate of loss of chemo-protection
+#' @return a [list]
+#' @export
+xde_make_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
+                             rho=.1, sigma=1/730, xi=1/365,  eta=1/25){
+  with(Xopts,{
+    Xpar = list()
+    class(Xpar) <- c("SIPw")
+
+    Xpar$b = checkIt(b, nStrata)
+    Xpar$c = checkIt(c, nStrata)
+    Xpar$r = checkIt(r, nStrata)
+    Xpar$rho = checkIt(rho, nStrata)
+    Xpar$eta = checkIt(eta, nStrata)
+    Xpar$sigma = checkIt(sigma, nStrata)
+    Xpar$xi = checkIt(xi, nStrata)
+
+    return(Xpar)
+})}
+
+
+#' @title Setup the Xpar for the SIPw_dts model
+#' @description Implements [dts_setup_Xpar] for a SIPw dts model
+#' @inheritParams ramp.xde::dts_setup_Xpar
+#' @return a [list] vector
+#' @export
+dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = dts_make_Xpar_SIPw(pars$Hpar[[i]]$nStrata, pars$Xday, Xopts)
+  return(pars)
+}
+
+#' @title Make parameters for SIPw_dts human model, with defaults
+#' @param nStrata the number of population strata
+#' @param D the operating time step
+#' @param Xopts options to overwrite defaults
+#' @param b transmission probability (efficiency) from mosquito to human
+#' @param c transmission probability (efficiency) from human to mosquito
+#' @param r recovery rate
+#' @param rho probability of successful treatment upon infection
+#' @param sigma probability of treatment for treated, above background
+#' @param xi background treatment rate
+#' @param eta rate of loss of chemo-protection
+#' @return a [list]
+#' @export
+dts_make_Xpar_SIPw = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/180,
+                              rho=0.1, sigma=1/730, xi=1/365, eta=1/25){
+  with(Xopts,{
+    Xpar = list()
+    class(Xpar) <- c("SIPw")
+
+    Xpar$D     = checkIt(D, 1)
+    Xpar$b     = checkIt(b, nStrata)
+    Xpar$c     = checkIt(c, nStrata)
+    Xpar$r     = 1-exp(-checkIt(r, nStrata)*D)
+    Xpar$rho   = checkIt(rho, nStrata)
+    Xpar$xi    = 1-exp(-checkIt(xi, nStrata)*D)
+    Xpar$xisig = 1-exp(-checkIt(sigma+xi, nStrata)*D)
+    Xpar$eta   = 1-exp(-checkIt(eta, nStrata)*D)
+
+    return(Xpar)
+})}
+
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for SIPw models
 #' @inheritParams ramp.xde::F_X
@@ -42,63 +177,6 @@ F_b.SIPw <- function(y, pars,i) {
   with(pars$Xpar[[i]], b)
 }
 
-#' @title Derivatives for human population
-#' @description Implements [dXdt] for the SIPw-xde model.
-#' @inheritParams ramp.xde::dXdt
-#' @return a [numeric] vector
-#' @export
-dXdt.SIPw <- function(t, y, pars, i){
-
-  foi <- pars$FoI[[i]]
-  Hpar <- pars$Hpar[[i]]
-
-  with(list_Xvars(y, pars, i),{
-    H <- F_H(t, y, pars, i)
-    with(pars$Xpar[[i]], {
-
-      dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
-      dI <-  foi*(1-rho)*S - (xi+sigma)*I  - r*I          + dHdt(t, I, Hpar)
-      dP <-  foi*rho*S     + xi*(S+I) + sigma*I    - eta*P + dHdt(t, P, Hpar)
-      dw <- foi + dHdt(t, w, Hpar)
-
-      return(c(dS, dI, dP, dw))
-    })
-  })
-}
-
-#' @title Derivatives for human population
-#' @description Implements [DT_Xt] for the SIPw dts model
-#' @inheritParams ramp.xde::DT_Xt
-#' @return a [numeric] vector
-#' @export
-DT_Xt.SIPw <- function(t, y, pars, i){
-  if(t %% pars$Xday == 0){
-    ar <- pars$AR[[i]]
-    Hpar <- pars$Hpar[[i]]
-
-    with(list_Xvars(y, pars, i),{
-      H <- F_H(t, y, pars, i)
-      with(pars$Xpar[[i]], {
-
-        St <- (1-ar)*(1-xi)*S       + (1-ar)*r*(1-xisig)*I             + eta*P
-        It <- ar*(1-rho)*(1-xi)*S    + (1-r)*(1-xisig)*I + ar*(1-rho)*r*(1-xisig)*I
-        Pt <- ar*rho*(1-xi)*S+ xi*S  + xisig*I + ar*rho*r*(1-xisig)*I  + (1-eta)*P
-        wt <- w + ar
-
-        St <- St+dHdt(t, St, Hpar) + Births(t, H, Hpar)
-        It <- It+dHdt(t, It, Hpar)
-        Pt <- Pt+dHdt(t, Pt, Hpar)
-        wt <- wt+dHdt(t, wt, Hpar)
-
-        return(c(St, It, Pt, wt))
-      })
-    })
-  } else {
-    with(list_Xvars(y, pars, i),{
-      return(c(S, I, P, w))
-    })
-  }
-}
 
 #' @title Return the SIPw model variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
@@ -116,6 +194,21 @@ list_Xvars.SIPw <- function(y, pars, i) {
   ))
 }
 
+#' @title Return the SIPw model variables as a list, returned from DT_Xt.SIPw
+#' @description This method dispatches on the type of `pars$Xpar`
+#' @inheritParams ramp.xde::put_Xvars
+#' @return a [list]
+#' @export
+put_Xvars.SIPw <- function(Xvars, y, pars, i) {
+  with(pars$ix$X[[i]],
+    with(as.list(Xvars),{
+      y[S_ix] = S
+      y[I_ix] = I
+      y[P_ix] = P
+      y[w_ix] = w
+      return(y)
+}))}
+
 #' @title Compute the HTC for the SIPw_xde model
 #' @description Implements [HTC] for the SIPw_xde model with demography.
 #' @inheritParams ramp.xde::HTC
@@ -127,86 +220,9 @@ HTC.SIPw <- function(pars, i) {
   )
 }
 
-#' @title Setup the Xpar for the SIPw_xde model
-#' @description implements [xde_setup_Xpar] for the SIPw model
-#' @inheritParams ramp.xde::xde_setup_Xpar
-#' @return a [list] vector
-#' @export
-xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIPw_xde(pars$Hpar[[i]]$nStrata, Xopts)
-  return(pars)
-}
-
-#' @title Make parameters for SIPw_xde human model, with defaults
-#' @param nStrata the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
-#' @param b transmission probability (efficiency) from mosquito to human
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param sigma probability of treatment for treated, above background
-#' @param xi background treatment rate
-#' @param eta rate of loss of chemo-protection
-#' @return a [list]
-#' @export
-make_Xpar_SIPw_xde = function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=.1, sigma=1/730, xi=1/365,  eta=1/25){
-  with(Xopts,{
-    Xpar = list()
-    class(Xpar) <- c("SIPw")
-
-    Xpar$b = checkIt(b, nStrata)
-    Xpar$c = checkIt(c, nStrata)
-    Xpar$r = checkIt(r, nStrata)
-    Xpar$rho = checkIt(rho, nStrata)
-    Xpar$eta = checkIt(eta, nStrata)
-    Xpar$sigma = checkIt(sigma, nStrata)
-    Xpar$xi = checkIt(xi, nStrata)
-
-    return(Xpar)
-})}
 
 
-#' @title Setup the Xpar for the SIPw_dts model
-#' @description Implements [dts_setup_Xpar] for a SIPw dts model
-#' @inheritParams ramp.xde::dts_setup_Xpar
-#' @return a [list] vector
-#' @export
-dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIPw_dts(pars$Hpar[[i]]$nStrata, pars$Xday, Xopts)
-  return(pars)
-}
 
-#' @title Make parameters for SIPw_dts human model, with defaults
-#' @param nStrata the number of population strata
-#' @param D the operating time step
-#' @param Xopts options to overwrite defaults
-#' @param b transmission probability (efficiency) from mosquito to human
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param sigma probability of treatment for treated, above background
-#' @param xi background treatment rate
-#' @param eta rate of loss of chemo-protection
-#' @return a [list]
-#' @export
-make_Xpar_SIPw_dts = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=0.1, sigma=1/730, xi=1/365, eta=1/25){
-  with(Xopts,{
-    Xpar = list()
-    class(Xpar) <- c("SIPw")
-
-    Xpar$D     = checkIt(D, 1)
-    Xpar$b     = checkIt(b, nStrata)
-    Xpar$c     = checkIt(c, nStrata)
-    Xpar$r     = 1-exp(-checkIt(r, nStrata)*D)
-    Xpar$rho   = checkIt(rho, nStrata)
-    Xpar$xi    = 1-exp(-checkIt(xi, nStrata)*D)
-    Xpar$xisig = 1-exp(-checkIt(sigma+xi, nStrata)*D)
-    Xpar$eta   = 1-exp(-checkIt(eta, nStrata)*D)
-
-    return(Xpar)
-  })}
 
 #' @title Setup Xinits.SIPw
 #' @description Implements [setup_Xinits] for the SIPw models

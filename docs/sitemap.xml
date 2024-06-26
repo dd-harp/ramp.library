@@ -349,6 +349,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dts_make_Xpar_SIPw.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dts_setup_Lpar.stages_dts.html</loc>
   </url>
   <url>
@@ -670,6 +673,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_outputs_X.workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/put_Xvars.SIPw.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Linits.stages_dts.html</loc>
   </url>
   <url>
@@ -842,6 +848,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_lines_X_workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xde_make_Xpar_SIPw.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_plot_X.SEIR.html</loc>

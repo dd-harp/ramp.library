@@ -133,18 +133,19 @@ reference:
     Models for parasites infecting human / vertebrate hosts
 - subtitle: The SIPw model
   contents:
+  - dXdt.SIPw
+  - DT_Xt.SIPw
+  - xde_setup_Xpar.SIPw
+  - xde_make_Xpar_SIPw
+  - dts_setup_Xpar.SIPw
+  - dts_make_Xpar_SIPw
   - F_X.SIPw
   - F_H.SIPw
   - F_pr.SIPw
   - F_b.SIPw
-  - dXdt.SIPw
-  - DT_Xt.SIPw
-  - xde_setup_Xpar.SIPw
-  - dts_setup_Xpar.SIPw
   - setup_Xinits.SIPw
   - list_Xvars.SIPw
-  - make_Xpar_SIPw_xde
-  - make_Xpar_SIPw_dts
+  - put_Xvars.SIPw
   - make_Xinits_SIPw
   - make_indices_X.SIPw
   - parse_outputs_X.SIPw
@@ -174,15 +175,15 @@ reference:
   - xde_lines_X_workhorse
 - subtitle: The SIR model
   contents:
+  - dXdt.SIR
+  - xde_setup_Xpar.SIR
+  - make_Xpar_SIR
   - F_X.SIR
   - F_H.SIR
   - F_pr.SIR
   - F_b.SIR
-  - dXdt.SIR
   - setup_Xinits.SIR
   - list_Xvars.SIR
-  - xde_setup_Xpar.SIR
-  - make_Xpar_SIR
   - make_Xinits_SIR
   - make_indices_X.SIR
   - parse_outputs_X.SIR
@@ -248,13 +249,3 @@ reference:
   - HTC.SEIRV
   - xds_plot_X.SEIRV
   - xde_lines_X_SEIRV
-- title: Travel & Exposure
-  desc: |
-     Functions to model travel and exposure
-- subtitle: Travel
-  contents:
-  - travel_malaria.multiday
-  - setup_travel_multiday
-- subtitle: Exposure
-  contents:
-  - Exposure.multiday
