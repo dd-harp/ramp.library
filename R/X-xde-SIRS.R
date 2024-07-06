@@ -4,27 +4,18 @@
 #' @return a [numeric] vector
 #' @export
 dXdt.SIRS <- function(t, y, pars, i) {
-  # do not change this
+
   foi <- pars$FoI[[i]]
   Hpar <- pars$Hpar[[i]]
 
-  # attach the variables by name
   with(list_Xvars(y, pars, i),{
-    # compute H (if it isn't one of the variables)
-    H <- F_H(t, y, pars, i)
-
-    # expose the parameters (see make_Xpar_SIRS)
     with(pars$Xpar[[i]], {
-      # compute the derivatives
+
       dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S + gam*R
       dI <- foi*S- r*I + dHdt(t, I, Hpar)
       dR <- r*I - gam*R + dHdt(t, R, Hpar)
 
-      # concatenate the derivatives
-      derivs = c(dS, dI, dR)
-
-      # return the derivatives
-      return(derivs)
+      return(c(dS, dI, dR))
     })
   })
 }
@@ -101,13 +92,12 @@ make_indices_X.SIRS <- function(pars, i) {with(pars,{
 #' @return a [list]
 #' @export
 list_Xvars.SIRS <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-       return(list(
-         S = y[S_ix],
-         I = y[I_ix],
-         R = y[R_ix]
-       )
-       ))
+  with(pars$ix$X[[i]],{
+    S = y[S_ix]
+    I = y[I_ix]
+    R = y[R_ix]
+    H = S + I + R
+    return(list(S=S, I=I, R=R, H=H))})
 }
 
 
@@ -185,7 +175,7 @@ xde_setup_Xpar.SIRS = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIRS <- function(t, y, pars, i) {
+F_X.SIRS <- function(y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -200,11 +190,9 @@ F_X.SIRS <- function(t, y, pars, i) {
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SIRS <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i), {
-    H <- S + I+R
-    return(H)
-  })}
+F_H.SIRS <- function(y, pars, i){
+  with(list_Xvars(y, pars, i), return(H))
+}
 
 
 
@@ -216,20 +204,8 @@ F_H.SIRS <- function(t, y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SIRS <- function(y, pars, i) {
-  with(pars$Xpar[[i]],{
-    ########################
-    # retrieve or compute it
-    ########################
-    b = pars$Xpar[[i]]$b
-    ########################
-    # return it
-    ########################
-    return(b)
-  })
+  with(pars$Xpar[[i]],return(b))
 }
-
-
-
 
 
 #' @title Parse the output of deSolve and return variables for the SIRS model
@@ -257,8 +233,8 @@ parse_outputs_X.SIRS <- function(outputs, pars, i) {
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SIRS <- function(varslist, pars,i) {
-  pr = with(varslist$XH[[i]], I/H)
+F_pr.SIRS <- function(vars, Xpar) {
+  pr = with(vars, I/H)
   return(pr)
 }
 

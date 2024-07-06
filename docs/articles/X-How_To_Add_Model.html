@@ -933,13 +933,12 @@ bites on the strata that would infect a mosquito.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span><span class="co">#' @param t current simulation time</span></span>
 <span><span class="co">#' @param y state vector</span></span>
 <span><span class="co">#' @param pars a list</span></span>
 <span><span class="co">#' @param i the host species index</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_X</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_X</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"F_X"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -967,7 +966,7 @@ name.</li>
 <span><span class="co">#' @inheritParams F_X</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_X.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_X.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">I</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">I_ix</span><span class="op">]</span></span>
 <span>  <span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">c</span><span class="op">*</span><span class="va">I</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
@@ -994,7 +993,7 @@ called <strong>X.</strong></p>
 <span><span class="co">#' @inheritParams ramp.xde::F_X</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">I</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">I_ix</span><span class="op">]</span></span>
 <span>  <span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">c</span><span class="op">*</span><span class="va">I</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></span>
@@ -1011,13 +1010,12 @@ often important, so we write a function that computes it.</p>
 </h4>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span><span class="co">#' @param t current simulation time</span></span>
 <span><span class="co">#' @param y state vector</span></span>
 <span><span class="co">#' @param pars a list</span></span>
 <span><span class="co">#' @param i the host species index</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_H</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_H</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"F_H"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -1032,7 +1030,7 @@ S+I\)</span> for the <code>SIS</code> model.</p>
 <span><span class="co">#' @inheritParams F_H</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_H.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">F_H.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">S</span><span class="op">+</span><span class="va">I</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>

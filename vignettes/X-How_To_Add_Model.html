@@ -1072,15 +1072,14 @@ bites on the strata that would infect a mosquito.</p>
 <h4>Generic</h4>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
 <span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="co">#&#39; @param t current simulation time</span></span>
-<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
-<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
-<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
-<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
-<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>F_X <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
-<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
-<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>F_X <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="f_x.sis" class="section level4">
 <h4>F_X.SIS</h4>
@@ -1104,7 +1103,7 @@ name.</li>
 <span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_X</span></span>
 <span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>F_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>F_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
 <span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>  I <span class="ot">=</span> y[pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]]<span class="sc">$</span>I_ix]</span>
 <span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>  X <span class="ot">=</span> <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], c<span class="sc">*</span>I)</span>
 <span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>  <span class="fu">return</span>(X)</span>
@@ -1129,7 +1128,7 @@ called <strong>X.</strong></p>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xde::F_X</span></span>
 <span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>F_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>F_X.SEIRV <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
 <span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>  I <span class="ot">=</span> y[pars<span class="sc">$</span>ix<span class="sc">$</span>X[[i]]<span class="sc">$</span>I_ix]</span>
 <span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], c<span class="sc">*</span>I)</span>
 <span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>  <span class="fu">return</span>(Y)</span>
@@ -1143,15 +1142,14 @@ often important, so we write a function that computes it.</p>
 <div id="generic-7" class="section level4">
 <h4>Generic</h4>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co">#&#39; @param t current simulation time</span></span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
-<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
-<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
-<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
-<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>F_H <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i) {</span>
-<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_H&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
-<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co">#&#39; @param y state vector</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="co">#&#39; @param pars a list</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>F_H <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i) {</span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;F_H&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="f_h.sis" class="section level4">
 <h4>F_H.SIS</h4>
@@ -1162,7 +1160,7 @@ S+I\)</span> for the <code>SIS</code> model.</p>
 <span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_H</span></span>
 <span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a>F_H.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, pars, i){</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a>F_H.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(y, pars, i){</span>
 <span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y, pars, i), <span class="fu">return</span>(S<span class="sc">+</span>I))</span>
 <span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>}</span></code></pre></div>
 </div>

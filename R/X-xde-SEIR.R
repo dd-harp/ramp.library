@@ -11,7 +11,6 @@ dXdt.SEIR<- function(t, y, pars, i) {
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
     # compute H (if it isn't one of the variables)
-    H <- F_H(t, y, pars, i)
 
     # expose the parameters (see make_Xpar_SEIR)
     with(pars$Xpar[[i]], {
@@ -108,14 +107,13 @@ make_indices_X.SEIR <- function(pars, i) {with(pars,{
 #' @return a [list]
 #' @export
 list_Xvars.SEIR <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-       return(list(
-         S = y[S_ix],
-         E = y[E_ix],
-         I = y[I_ix],
-         R = y[R_ix]
-       )
-       ))
+  with(pars$ix$X[[i]],{
+       S = y[S_ix]
+       E = y[E_ix]
+       I = y[I_ix]
+       R = y[R_ix]
+       H =S+E+I+R
+       return(list(S=S,E=E,I=I,R=R,H=H))})
 }
 
 
@@ -194,14 +192,11 @@ xde_setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIR <- function(t, y, pars, i) {
+F_X.SEIR <- function(y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
 }
-
-
-
 
 
 #' @title Size of effective infectious human population
@@ -209,11 +204,9 @@ F_X.SEIR <- function(t, y, pars, i) {
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SEIR <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i), {
-    H <- S +E+ I+R
-    return(H)
-  })}
+F_H.SEIR <- function(y, pars, i){
+  with(list_Xvars(y, pars, i), return(H))
+}
 
 
 
@@ -225,20 +218,8 @@ F_H.SEIR <- function(t, y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SEIR <- function(y, pars, i) {
-  with(pars$Xpar[[i]],{
-    ########################
-    # retrieve or compute it
-    ########################
-    b = pars$Xpar[[i]]$b
-    ########################
-    # return it
-    ########################
-    return(b)
-  })
+  with(pars$Xpar[[i]],return(b))
 }
-
-
-
 
 
 #' @title Parse the output of deSolve and return variables for the SEIR model
@@ -267,8 +248,8 @@ parse_outputs_X.SEIR <- function(outputs, pars, i) {
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SEIR <- function(varslist, pars,i) {
-  pr = with(varslist$XH[[i]], I/H)
+F_pr.SEIR <- function(vars, Xpar) {
+  pr = with(vars, I/H)
   return(pr)
 }
 

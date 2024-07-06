@@ -4,11 +4,9 @@
 \alias{F_H.workhorse}
 \title{Size of effective infectious human population}
 \usage{
-\method{F_H}{workhorse}(t, y, pars, i)
+\method{F_H}{workhorse}(y, pars, i)
 }
 \arguments{
-\item{t}{current simulation time}
-
 \item{y}{state vector}
 
 \item{pars}{a list}

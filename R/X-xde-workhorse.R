@@ -7,7 +7,7 @@ dXdt.workhorse <- function(t, y, pars, i) {
 
   foi <- pars$FoI[[i]]
   with(list_Xvars(y, pars, i), {
-    H <- F_H(t, y, pars, i)
+
     with(pars$Xpar[[i]], {
       peak = function(w){return(1)}
       fever1 = function(w){return(1)}
@@ -60,22 +60,22 @@ dXdt.workhorse <- function(t, y, pars, i) {
 #' @return a [list]
 #' @export
 list_Xvars.workhorse <- function(y, pars, i) {
-  vars = with(pars$ix$X[[i]],
-    list(
-      U =  y[U_ix],
-      A0 = y[A0_ix],
-      P =  y[P_ix],
-      G =  y[G_ix],
-      I1 = y[I1_ix],
-      I2 = y[I2_ix],
-      I3 = y[I3_ix],
-      I4 = y[I4_ix],
-      A1 = y[A1_ix],
-      A2 = y[A2_ix],
-      A3 = y[A3_ix],
-      A4 = y[A4_ix],
-      w =  y[w_ix]))
-  return(vars)
+  vars = with(pars$ix$X[[i]],{
+    U =  y[U_ix]
+    A0 = y[A0_ix]
+    P =  y[P_ix]
+    G =  y[G_ix]
+    I1 = y[I1_ix]
+    I2 = y[I2_ix]
+    I3 = y[I3_ix]
+    I4 = y[I4_ix]
+    A1 = y[A1_ix]
+    A2 = y[A2_ix]
+    A3 = y[A3_ix]
+    A4 = y[A4_ix]
+    w =  y[w_ix]
+    H <- U + A0 + P + G + I1 + I2 + I3 + I4 + A1 + A2 + A3 + A4
+    return(list(U=U,A0=A0,P=P,G=G,I1=I1,I2=I2,I3=I3,I4=I4,A1=A1,A2=A2,A3=A3,A4=A4,w=w,H=H))})
 }
 
 
@@ -160,7 +160,7 @@ xde_setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.workhorse <- function(t, y, pars, i) {
+F_X.workhorse <- function(y, pars, i) {
   with(list_Xvars(y, pars,i),
   with(pars$Xpar[[i]],{
     X = c1*(A1+I1) + c2*(A2+I2) + c3*(A3+I3) + c4*(A4+I4) + cG*G
@@ -173,11 +173,9 @@ F_X.workhorse <- function(t, y, pars, i) {
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.workhorse <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i),{
-    H <- U + A0 + P + G + I1 + I2 + I3 + I4 + A1 + A2 + A3 + A4
-    return(H)
-})}
+F_H.workhorse <- function(y, pars, i){
+  with(list_Xvars(y, pars, i), return(H))
+}
 
 
 #' @title Infection blocking pre-erythrocytic immunity
@@ -375,8 +373,8 @@ parse_outputs_X.workhorse <- function(outputs, pars, i) {
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.workhorse<- function(varslist, pars, i) {
-  pr = with(varslist$XH[[i]], (A0+A1+A2+A3+A4+I1+I2+I3+I4)/H)
+F_pr.workhorse <- function(vars, Xpar) {
+  pr = with(vars, (A0+A1+A2+A3+A4+I1+I2+I3+I4)/H)
   return(pr)
 }
 

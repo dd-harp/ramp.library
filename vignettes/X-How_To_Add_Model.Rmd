@@ -711,13 +711,12 @@ The function `F_X` returns the effective density of infectious humans for each s
 ```{r, purl=F, eval=F}
 #' @title Size of effective infectious human population
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @param t current simulation time
 #' @param y state vector
 #' @param pars a list
 #' @param i the host species index
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X <- function(t, y, pars, i) {
+F_X <- function(y, pars, i) {
   UseMethod("F_X", pars$Xpar[[i]])
 }
 ```
@@ -729,14 +728,13 @@ As an example, we include the $SIS$ model from `ramp.xde.` In the `SIS` model, t
 + First, `ramp.xde` holds the indices by component under `pars$ix,` so `pars$ix$X` holds the indices for all the variables for all species, and `pars$ix$X[[i]]` holds the indices for the $i^{th}$ species. Putting them under `X` helps to avoid conflicts if, for example, another dynamical component happened to use the same variable name.  
 
 
-
 ```{r, purl=F, eval=F}
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
 #' @inheritParams F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIS <- function(t, y, pars, i) {
+F_X.SIS <- function(y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   X = with(pars$Xpar[[i]], c*I)
   return(X)
@@ -757,7 +755,7 @@ The steps are to extract the variables in
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIRV <- function(t, y, pars, i) {
+F_X.SEIRV <- function(y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -772,13 +770,12 @@ The total population size, $H$, is often important, so we write a function that 
 
 ```{r, purl=F, eval=F}
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @param t current simulation time
 #' @param y state vector
 #' @param pars a list
 #' @param i the host species index
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H <- function(t, y, pars, i) {
+F_H <- function(y, pars, i) {
   UseMethod("F_H", pars$Xpar[[i]])
 }
 ```
@@ -793,7 +790,7 @@ This is the function that computes $H = S+I$ for the `SIS` model.
 #' @inheritParams F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SIS <- function(t, y, pars, i){
+F_H.SIS <- function(y, pars, i){
   with(list_Xvars(y, pars, i), return(S+I))
 }
 ```

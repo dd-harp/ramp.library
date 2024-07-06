@@ -5,7 +5,7 @@
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.garki_xde <- function(t, y, pars, i){
+F_X.garki_xde <- function(y, pars, i){
   y1 <- y[pars$Xpar[[i]]$y1_ix]
   X = with(pars$Xpar[[i]], y1)
   return(X)
@@ -16,7 +16,7 @@ F_X.garki_xde <- function(t, y, pars, i){
 #' @inheritParams ramp.xde::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.garki_xde <- function(t, y, pars, i){
+F_H.garki_xde <- function(y, pars, i){
   with(list_Xvars(y, pars,i),{
     H = x1+x2+x3+x4+y1+y2+y3
     return(H)
@@ -37,11 +37,11 @@ F_b.garki_xde <- function(y, pars, i) {
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.garki_xde <- function(varslist, pars, i) {
-#  pr = with(pars$Xpar,with(varslist$XH, (q1*y1+q2*y2+q3*y3)/H))
-  pr = with(pars$Xpar,with(varslist$XH[[i]], (y1+y2+y3)/H))
+F_pr.garki_xde <- function(vars, Xpar) {
+  pr = with(Xpar, with(vars, (y1+y2+y3)/H))
   return(pr)
 }
+
 #' @title Derivatives for human population
 #' @description Implements [dXdt] for the garki_xde model.
 #' @inheritParams ramp.xde::dXdt
@@ -79,16 +79,16 @@ dXdt.garki_xde = function(t, y, pars, i){
 #' @return a [list]
 #' @export
 list_Xvars.garki_xde <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-       return(list(
-         x1 <- y[x1_ix],
-         x2 <- y[x2_ix],
-         x3 <- y[x3_ix],
-         x4 <- y[x4_ix],
-         y1 <- y[y1_ix],
-         y2 <- y[y2_ix],
-         y3 <- y[y3_ix]
-       )))
+  with(pars$ix$X[[i]],{
+    x1 <- y[x1_ix]
+    x2 <- y[x2_ix]
+    x3 <- y[x3_ix]
+    x4 <- y[x4_ix]
+    y1 <- y[y1_ix]
+    y2 <- y[y2_ix]
+    y3 <- y[y3_ix]
+    H = x1+x2+x3+x4+y1+y2+y3
+    return(list(x1=x1,x2=x2,x3=x3,x4=x4,y1=y1,y2=y2,y3=y3))})
 }
 
 #' @title xde_setup Xpar.garki_xde

@@ -4,14 +4,12 @@
 \alias{F_pr.workhorse}
 \title{Compute the "true" prevalence of infection / parasite rate}
 \usage{
-\method{F_pr}{workhorse}(varslist, pars, i)
+\method{F_pr}{workhorse}(vars, Xpar)
 }
 \arguments{
-\item{varslist}{a list with variables attached by name}
+\item{vars}{a list with the variables attached by name}
 
-\item{pars}{a list}
-
-\item{i}{the host species index}
+\item{Xpar}{a list defining a model for human}
 }
 \value{
 a [numeric] vector of length `nStrata`

@@ -208,7 +208,7 @@ setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIRV <- function(t, y, pars, i) {
+F_X.SEIRV <- function(y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)

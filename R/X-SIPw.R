@@ -12,7 +12,6 @@ dXdt.SIPw <- function(t, y, pars, i){
   Hpar <- pars$Hpar[[i]]
 
   with(list_Xvars(y, pars, i),{
-    H <- F_H(t, y, pars, i)
     with(pars$Xpar[[i]], {
 
       dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
@@ -36,7 +35,6 @@ DT_Xt.SIPw <- function(t, y, pars, i){
   Hpar <- pars$Hpar[[i]]
 
   with(list_Xvars(y, pars, i),{
-    H <- F_H(t, y, pars, i)
     with(pars$Xpar[[i]], {
 
       St <- (1-ar)*(1-xi)*S       + (1-ar)*r*(1-xisig)*I             + eta*P
@@ -140,7 +138,7 @@ dts_make_Xpar_SIPw = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/18
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIPw <- function(t, y, pars, i) {
+F_X.SIPw <- function(y, pars, i) {
   with(list_Xvars(y, pars, i),
        with(pars$Xpar[[i]],{
          X = c*I
@@ -154,8 +152,8 @@ F_X.SIPw <- function(t, y, pars, i) {
 #' @inheritParams ramp.xde::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SIPw <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i),return(S+I+P) )
+F_H.SIPw <- function(y, pars, i){
+  with(list_Xvars(y, pars, i),return(H))
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
@@ -163,8 +161,8 @@ F_H.SIPw <- function(t, y, pars, i){
 #' @inheritParams ramp.xde::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SIPw <- function(varslist, pars, i) {
-  pr = with(varslist$XH[[i]], I/H)
+F_pr.SIPw <- function(vars, Xpar) {
+  pr = with(vars, I/H)
   return(pr)
 }
 
@@ -184,14 +182,13 @@ F_b.SIPw <- function(y, pars,i) {
 #' @return a [list]
 #' @export
 list_Xvars.SIPw <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-       return(list(
-         S = y[S_ix],
-         I = y[I_ix],
-         P = y[P_ix],
-         w = y[w_ix]
-       )
-  ))
+  with(pars$ix$X[[i]],{
+       S = y[S_ix]
+       I = y[I_ix]
+       P = y[P_ix]
+       w = y[w_ix]
+       H = S+I+P
+       return(list(S=S,I=I,P=P,w=w,H=H))})
 }
 
 #' @title Return the SIPw model variables as a list, returned from DT_Xt.SIPw
