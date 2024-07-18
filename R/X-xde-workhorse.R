@@ -1,6 +1,6 @@
 #' @title Derivatives for human population
 #' @description Implements [dXdt] for the SIS model, no demography.
-#' @inheritParams ramp.xde::dXdt
+#' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export
 dXdt.workhorse <- function(t, y, pars, i) {
@@ -56,7 +56,7 @@ dXdt.workhorse <- function(t, y, pars, i) {
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xde::list_Xvars
+#' @inheritParams ramp.xds::list_Xvars
 #' @return a [list]
 #' @export
 list_Xvars.workhorse <- function(y, pars, i) {
@@ -146,7 +146,7 @@ make_Xpar_workhorse = function(nStrata, Xopts=list(),
 
 #' @title xde_setup Xpar.workhorse
 #' @description Implements [xde_setup_Xpar] for the workhorse model
-#' @inheritParams ramp.xde::xde_setup_Xpar
+#' @inheritParams ramp.xds::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
 xde_setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
@@ -157,7 +157,7 @@ xde_setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
-#' @inheritParams ramp.xde::F_X
+#' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_X.workhorse <- function(y, pars, i) {
@@ -170,7 +170,7 @@ F_X.workhorse <- function(y, pars, i) {
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_H] for the workhorse model.
-#' @inheritParams ramp.xde::F_H
+#' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.workhorse <- function(y, pars, i){
@@ -180,7 +180,7 @@ F_H.workhorse <- function(y, pars, i){
 
 #' @title Infection blocking pre-erythrocytic immunity
 #' @description Implements [F_b] for the workhorse model.
-#' @inheritParams ramp.xde::F_b
+#' @inheritParams ramp.xds::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.workhorse <- function(y, pars, i) {
@@ -191,7 +191,7 @@ F_b.workhorse <- function(y, pars, i) {
 
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for the workhorse model.
-#' @inheritParams ramp.xde::make_indices_X
+#' @inheritParams ramp.xds::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -302,7 +302,7 @@ make_Xinits_workhorse = function(nStrata, Xopts = list(), H0 = NULL,
 
 #' @title Setup Xinits.workhorse
 #' @description Implements [setup_Xinits] for the workhorse model
-#' @inheritParams ramp.xde::setup_Xinits
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
 setup_Xinits.workhorse = function(pars, i, Xopts=list()){
@@ -313,7 +313,7 @@ setup_Xinits.workhorse = function(pars, i, Xopts=list()){
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xde::get_inits_X
+#' @inheritParams ramp.xds::get_inits_X
 #' @return a [numeric] vector
 #' @export
 get_inits_X.workhorse <- function(pars, i){
@@ -322,7 +322,7 @@ get_inits_X.workhorse <- function(pars, i){
 
 
 #' @title Update inits for the workhorse human model from a vector of states
-#' @inheritParams ramp.xde::update_inits_X
+#' @inheritParams ramp.xds::update_inits_X
 #' @return none
 #' @export
 update_inits_X.workhorse <- function(pars, y0, i) {
@@ -338,7 +338,7 @@ update_inits_X.workhorse <- function(pars, y0, i) {
 
 #' @title Parse the output of deSolve and return variables for the workhorse model
 #' @description Implements [parse_outputs_X] for the workhorse model
-#' @inheritParams ramp.xde::parse_outputs_X
+#' @inheritParams ramp.xds::parse_outputs_X
 #' @return none
 #' @export
 parse_outputs_X.workhorse <- function(outputs, pars, i) {
@@ -370,7 +370,7 @@ parse_outputs_X.workhorse <- function(outputs, pars, i) {
 
 #' @title Compute the "true" prevalence of infection / parasite rate
 #' @description Implements [F_pr] for the workhorse model.
-#' @inheritParams ramp.xde::F_pr
+#' @inheritParams ramp.xds::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pr.workhorse <- function(vars, Xpar) {
@@ -380,7 +380,7 @@ F_pr.workhorse <- function(vars, Xpar) {
 
 #' @title Compute the HTC for the workhorse model
 #' @description Implements [HTC] for the workhorse model with demography.
-#' @inheritParams ramp.xde::HTC
+#' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
 HTC.workhorse <- function(pars, i) {
@@ -430,7 +430,7 @@ xde_lines_X_workhorse = function(XH, nStrata, clrs=c("darkblue","darkgreen", "da
 
 #' Plot the density of infected individuals for the workhorse model
 #'
-#' @inheritParams ramp.xde::xds_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
 xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})

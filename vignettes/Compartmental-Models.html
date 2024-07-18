@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2024-06-18" />
+<meta name="date" content="2024-07-18" />
 
 <title>Compartmental Models</title>
 
@@ -237,10 +237,110 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Compartmental Models</h1>
-<h4 class="date">June 18, 2024</h4>
+<h4 class="date">July 18, 2024</h4>
 
 
 
+<pre><code>## 
+## Attaching package: &#39;ramp.xds&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ramp.xde&#39;:
+## 
+##     Abiotic, AreaSpray, AreaSprayEffectSizes, AreaSprayEffects,
+##     AvailableBlood, AvailableHabitat, AvailableSugar,
+##     BedNetEffectSizes, BedNetEffects, Behavior, Bionomics, Births,
+##     CareSeeking, Civil, Clinic, Control, DTS_step, DTS_step_aquatic,
+##     DTS_step_cohort, DTS_step_human, DTS_step_mosy, DT_Lt, DT_MYZt,
+##     DT_Xt, Development, DistributeBedNets, EIP, EggLaying, Emergence,
+##     Exposure, F_EIR, F_H, F_X, F_alpha, F_ar, F_b, F_beta, F_eggs, F_f,
+##     F_foi, F_fqM, F_fqZ, F_g, F_kappa, F_nu, F_p, F_pr, F_pr_by_lm,
+##     F_pr_by_pcr, F_pr_by_rdt, F_q, F_sigma, F_tau, HTC,
+##     HabitatDynamics, Hydrology, IRS_EffectSizes, IRS_Effects,
+##     LBionomics, LSM_EffectSizes, LSM_Effects, LocalFrac, MBionomics,
+##     MassMedical, OtherBloodHosts, OviTraps, OwnBedNet, Rainfall,
+##     Relative_Humidity, Resources, Shock, SprayHouses,
+##     SugarBaitEffectSizes, SugarBaitEffects, SugarBaits, SugarDynamics,
+##     Temperature, Transmission, TreatHabitats, Update_Lt, Update_MYZt,
+##     Update_Xt, UseBedNet, VectorControl, VectorControlEffectSizes,
+##     VectorControlEffects, Visitors, Weather, add_lines_X_SEIS,
+##     add_lines_X_SEISd, add_lines_X_SIP, add_lines_X_SIS, approx_equal,
+##     ar2eir, checkIt, check_abiotic, check_civil,
+##     compute_AvailableHabitat, compute_AvailableHosts, compute_EIR,
+##     compute_EIR_full, compute_NI, compute_NI_ix, compute_beta,
+##     compute_kappa, compute_local_frac, compute_terms,
+##     compute_terms_steady, compute_vars_aqua, compute_vars_cohort,
+##     compute_vars_full, compute_vars_human, compute_vars_mosy, dEIPdt,
+##     dHdt, dLdt, dMYZdt, dXdt, dde2ode_MYZ, diag_inverse,
+##     dts_make_Lpar_basicL, dts_make_MYZpar_RM, dts_make_MYZpar_basicM,
+##     dts_make_MYZpar_si, dts_make_Xpar_SEIS, dts_make_Xpar_SEISd,
+##     dts_make_Xpar_SIP, dts_make_Xpar_SIS, dts_setup, dts_setup_Lpar,
+##     dts_setup_MYZpar, dts_setup_Xpar, dts_setup_aquatic,
+##     dts_setup_cohort, dts_setup_exposure_nb, dts_setup_exposure_pois,
+##     dts_setup_human, dts_setup_mosy, dts_solve, dts_stable_orbit,
+##     dts_steady, dts_steady_state_L, dts_steady_state_MYZ,
+##     dts_steady_state_X, eir2fqZ, foi2eir, fqZ2eir, get_inits,
+##     get_inits_L, get_inits_MYZ, get_inits_X, last_to_inits, list_Lvars,
+##     list_MYZvars, list_Xvars, list_vars, make_Linits_basicL,
+##     make_Lpar_trace, make_MYZinits_GeRM_dde, make_MYZinits_GeRM_ode,
+##     make_MYZinits_RM_dde, make_MYZinits_RM_dts, make_MYZinits_RM_ode,
+##     make_MYZinits_basicM, make_MYZinits_si, make_MYZpar_GeRM,
+##     make_MYZpar_trace, make_Omega, make_Omega_dts, make_Omega_xde,
+##     make_TaR, make_TimeSpent, make_TimeSpent_athome, make_TimeSpent_xy,
+##     make_Upsilon, make_Xinits_SEIS, make_Xinits_SEISd, make_Xinits_SIP,
+##     make_Xinits_SIS, make_Xinits_hMoI, make_Xpar_trace, make_calK,
+##     make_calK_xy, make_calN, make_calU, make_calU_s, make_indices,
+##     make_indices_L, make_indices_MYZ, make_indices_X,
+##     make_inits_L_basicL, make_inits_L_trace, make_inits_MYZ_GeRM_dde,
+##     make_inits_MYZ_GeRM_ode, make_inits_MYZ_RM_dde,
+##     make_inits_MYZ_RM_dts, make_inits_MYZ_RM_ode,
+##     make_inits_MYZ_basicM, make_inits_MYZ_si, make_inits_MYZ_trace,
+##     make_inits_X_SIP, make_inits_X_SIS, make_inits_X_hMoI,
+##     make_inits_X_trace, make_parameters_L_basicL,
+##     make_parameters_L_trace, make_parameters_MYZ_GeRM,
+##     make_parameters_MYZ_RM, make_parameters_MYZ_RM_dts,
+##     make_parameters_MYZ_basicM, make_parameters_MYZ_si,
+##     make_parameters_MYZ_trace, make_parameters_X_SIP,
+##     make_parameters_X_SIS, make_parameters_X_hMoI,
+##     make_parameters_X_trace, make_parameters_demography_null,
+##     make_parameters_dts, make_parameters_xde, metric_calD, metric_calR,
+##     metric_calV, metric_calZ, parse_outputs, parse_outputs_L,
+##     parse_outputs_MYZ, parse_outputs_X, parse_outputs_vec, put_Lvars,
+##     put_MYZvars, put_Xvars, runt, set_Dday, setup_BFpar_static,
+##     setup_BloodFeeding, setup_EGGpar_static, setup_EIP,
+##     setup_EggLaying_simple, setup_EggLaying_static, setup_Hpar_static,
+##     setup_Linits, setup_MYZinits, setup_Xinits, setup_abiotic_forced,
+##     setup_abiotic_null, setup_area_spray_null, setup_behavior,
+##     setup_behavior_forced, setup_behavior_null, setup_bionomics_static,
+##     setup_care_seeking_null, setup_civil_forced, setup_civil_null,
+##     setup_clinic_forced, setup_clinic_null, setup_control,
+##     setup_control_forced, setup_control_null, setup_development_null,
+##     setup_eip_fixedlag_dts, setup_eip_static_xde,
+##     setup_exposure_multiday, setup_habitat_dynamics_static,
+##     setup_hydrology_null, setup_irs_null, setup_itn_lemenach,
+##     setup_itn_null, setup_local_fraction_simple, setup_lsm_null,
+##     setup_mass_medical_forced, setup_mass_medical_null,
+##     setup_other_blood_hosts_static, setup_ovitraps_null,
+##     setup_rainfall_null, setup_relative_humidity_null,
+##     setup_resources_forced, setup_resources_null,
+##     setup_resources_static, setup_shock_null, setup_sugar_baits_null,
+##     setup_sugar_static, setup_temperature_null, setup_travel_ar,
+##     setup_travel_eir, setup_travel_foi, setup_travel_multiday,
+##     setup_travel_static, setup_vc_control, setup_vc_null,
+##     setup_visitors_basic, setup_visitors_static, setup_weather_forced,
+##     setup_weather_null, shapeIt, travel_malaria, update_inits,
+##     update_inits_L, update_inits_MYZ, update_inits_X, xDE_diffeqn,
+##     xDE_diffeqn_aquatic, xDE_diffeqn_cohort, xDE_diffeqn_human,
+##     xDE_diffeqn_mosy, xde_make_Lpar_basicL, xde_make_MYZpar_RM,
+##     xde_make_MYZpar_basicM, xde_make_MYZpar_si, xde_make_Xpar_SEIS,
+##     xde_make_Xpar_SEISd, xde_make_Xpar_SIP, xde_make_Xpar_SIS,
+##     xde_make_Xpar_hMoI, xde_setup, xde_setup_Lpar, xde_setup_MYZpar,
+##     xde_setup_Xpar, xde_setup_aquatic, xde_setup_cohort,
+##     xde_setup_exposure_nb, xde_setup_exposure_pois, xde_setup_human,
+##     xde_setup_mosy, xde_solve, xde_stable_orbit, xde_steady,
+##     xde_steady_state_L, xde_steady_state_M, xde_steady_state_MYZ,
+##     xde_steady_state_X, xds_lines_EIR, xds_lines_M, xds_lines_PR,
+##     xds_lines_YZ, xds_lines_YZ_fracs, xds_lines_Z_fracs,
+##     xds_lines_aEIR, xds_plot_EIR, xds_plot_M, xds_plot_PR, xds_plot_X,
+##     xds_plot_YZ, xds_plot_YZ_fracs, xds_plot_Z_fracs, xds_plot_aEIR</code></pre>
 <div id="section" class="section level1">
 <h1></h1>
 <p>In this vignette, we describe five basic compartmental models for

@@ -15,5 +15,5 @@
 a [numeric] vector of length `nStrata`
 }
 \description{
-Implements [F_pr] for the garki_xde model.
+Compute the true pr for the garki_xde model.
 }

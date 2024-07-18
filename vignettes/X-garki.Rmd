@@ -10,7 +10,7 @@ vignette: >
   
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
 suppressMessages(library(knitr))
-suppressMessages(library(ramp.xde))
+suppressMessages(library(ramp.xds))
 suppressMessages(library(ramp.library))
 ```
 

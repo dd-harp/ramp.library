@@ -10,15 +10,15 @@ vignette: >
 
 *** 
 
-This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by  [`ramp.xde`](https://github.com/dd-harp/ramp.xde). This vignette covers models of parasite infection dynamics and immunity in humans or other hosts -- the dynamical components we have denoted $\cal X$  and $\cal H.$
+This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by  [`ramp.xds`](https://github.com/dd-harp/ramp.xds). This vignette covers models of parasite infection dynamics and immunity in humans or other hosts -- the dynamical components we have denoted $\cal X$  and $\cal H.$
 
 *** 
 
-We have written this vignette to produce a new template file using `knitr::purl,` which can be modified to build a new model. Simply execute the following command, to create `Xmod-SEIRV.R.`  Then, rename `Xmod-SEIRV.R` by replacing `SEIRV` in the filename. Then open the file and do a global search for `SEIRV` and replace it with your new name. 
+We have written this vignette to produce a new template file using `knitr::purl,` which can be modified to build a new model. Simply execute the following command, to create `Xmod-newXname.R.`  Then, rename `Xmod-newXname.R` by replacing `newXname` in the filename. Then open the file and do a global search for `newXname` and replace it with your new name. 
 
-```{r, purl=F, eval=T}
+```{r, purl=F, eval=F}
 knitr::purl("X-How_To_Add_Model.Rmd", 
-            output = "Xmod-SEIRV.R", 
+            output = "Xmod-newXname.R", 
             documentation = 0, 
             quiet=TRUE)
 ```
@@ -29,16 +29,16 @@ For more details, read the text that follows.
 This basic introduction is lacking some information that typical users might find useful. In particular, we have defined best practices encoding the $\cal H$ component of models. A vignette is planned.  
 
 
-### Reusable Code 
+## Reusable Code 
 
 This package -- `ramp.library` -- contains reusable code that has been rigorously tested and that implements a large number of dynamical model families and other algorithms taken from the literature describing malaria and other mosquito-transmitted pathogens (see Reiner, *et al.* 2013)^[Reiner RC Jr, Perkins TA, Barker CM, Niu T, Chaves LF, Ellis AM, et al. A systematic review of mathematical models of mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface. 2013;10: 20120921.]. The supporting code was designed to be modular, and plug-and-play. The modular design makes it possible to break down published models to serve as the dynamical components in new models for malaria. The model families in `ramp.library` supports nimble model building that can be used by:
 
-+ [`ramp.xde`](https://github.com/dd-harp/ramp.xde) implements a modular, flexible, and extensible framework for building systems of ordinary and delay differential equations models for malaria and other mosquito-transmitted pathogens. The mathematic framework for `ramp.xde` was explained in [Spatial Dynamics of Malaria Transmission](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684){target="_blank"}
++ [`ramp.xds`](https://github.com/dd-harp/ramp.xds) implements a modular, flexible, and extensible framework for building systems of ordinary and delay differential equations models for malaria and other mosquito-transmitted pathogens. The mathematic framework for `ramp.xds` was explained in [Spatial Dynamics of Malaria Transmission](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684){target="_blank"}
 ^[Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D, Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of malaria transmission. PLoS Comput Biol 19(6): e1010684. https://doi.org/10.1371/journal.pcbi.1010684] 
 
 + [`ramp.dts`](https://github.com/dd-harp/ramp.dts) implements a modular, flexible, and extensible framework for building discrete time systems, including both deterministic and stochastic difference equations for malaria and other mosquito-transmitted pathogens. 
 
-This vignette was written to help add new models to `ramp.xde.` 
+This vignette was written to help add new models to `ramp.xds.` 
 
 In planned companion to this vignette, we show how to add models of $\cal XH$ to [`ramp.dts`](https://github.com/dd-harp/ramp.dts). 
 
@@ -48,61 +48,61 @@ In planned companion to this vignette, we show how to add models of $\cal XH$ to
 ### Functions 
 
 A new model family of class $\cal XH$ -- human infection dynamics, including immunity -- 
-has 17 required functions encoded using a standard template. Some of these required functions are `S3` class functions in [human-interface.R](https://github.com/dd-harp/ramp.xde/blob/main/R/human-interface.R){target="_blank"}, and several examples are posted in the `ramp.xde` github repository, including the `SIS` model [human-SIS.R](https://github.com/dd-harp/ramp.xde/blob/main/R/human-SIS.R){target="_blank"}. 
+has 17 required functions encoded using a standard template. Some of these required functions are `S3` class functions in [human-interface.R](https://github.com/dd-harp/ramp.xds/blob/main/R/human-interface.R){target="_blank"}, and several examples are posted in the `ramp.xds` github repository, including the `SIS` model [human-SIS.R](https://github.com/dd-harp/ramp.xds/blob/main/R/human-SIS.R){target="_blank"}. 
 
-To configure a new model, you must choose a string called `SEIRV`. The only rule for choosing `SEIRV` is that it must be unique. No other ${\cal XH}$ class model in `ramp.xde` or `ramp.library` can be using that string already. All the `S3` functions get dispatched by the string that replaces `SEIRV.` 
+To configure a new model, you must choose a string called `newXname`. The only rule for choosing `newXname` is that it must be unique. No other ${\cal XH}$ class model in `ramp.xds` or `ramp.library` can be using that string already. All the `S3` functions get dispatched by the string that replaces `newXname.` 
 
 The 17 required functions are:
 
 **Derivatives** 
 
-1. `dXdt.SEIRV` - differential equations are defined by a system of differential equations. in `ramp.xde` these are encoded in a function called `dXdt` that  computes and returns the **derivatives.**  The function is set up so that the system can be solved by `deSolve::ode` or `deSolve::dede.` 
+1. `dXdt.newXname` - differential equations are defined by a system of differential equations. in `ramp.xds` these are encoded in a function called `dXdt` that  computes and returns the **derivatives.**  The function is set up so that the system can be solved by `deSolve::ode` or `deSolve::dede.` 
 
 **Variables** - A set of functions is set up that document the variables by name and assign each one an index, to store, assign and update initial values. These functions streamline setup, and guarantee consistency. 
 
-2. `make_Xinits_SEIRV` - each model requires a function that documents the variables by name and assigns initial values 
+2. `make_Xinits_newXname` - each model requires a function that documents the variables by name and assigns initial values 
     
-3. `setup_Xinits.SEIRV` - is a wrapper, that gets called by `ramp.xde::xde_setup.` It gets called by `make_Xinits_SEIRV,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
+3. `setup_Xinits.newXname` - is a wrapper, that gets called by `ramp.xds::xde_setup.` It gets called by `make_Xinits_newXname,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
 
-4. `make_indices_X.SEIRV` - is the function that assigns an index to each variable in the model, and stores it as `pars$ix$X[[i]].` The indices are returned as a named list.  
+4. `make_indices_X.newXname` - is the function that assigns an index to each variable in the model, and stores it as `pars$ix$X[[i]].` The indices are returned as a named list.  
 
-5. `list_Xvars.SEIRV` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_inits_X` and it can be useful in other contexts. 
+5. `list_Xvars.newXname` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_inits_X` and it can be useful in other contexts. 
 
-6. `get_inits_X.SEIRV` - retrieves the stored initial values in the same order that they are returned by `dXdt.SEIRV`
+6. `get_inits_X.newXname` - retrieves the stored initial values in the same order that they are returned by `dXdt.newXname`
 
-7. `update_inits_X.SEIRV` - a utility that makes it possible to extract and store a new set of initial values for `SEIRV` from a vector $y$ holding all the variables in a model. 
+7. `update_inits_X.newXname` - a utility that makes it possible to extract and store a new set of initial values for `newXname` from a vector $y$ holding all the variables in a model. 
 
 **Parameters**
 
-8. `make_Xpar_SEIRV` returns a formatted list: 
+8. `make_Xpar_newXname` returns a formatted list: 
 
     + the parameter values are stored by name 
    
-    + `class(pars)` = `SEIRV` 
+    + `class(pars)` = `newXname` 
     
-9. `setup_Xpar.SEIRV` is a wrapper that calls `make_Xpar_SEIRV` 
+9. `setup_Xpar.newXname` is a wrapper that calls `make_Xpar_newXname` 
 
 **Dynamical Terms** are Computed using a Standard Set of Functions 
 
-10. `F_X.SEIRV` - compute the effective infective density of the vertebrate hosts 
+10. `F_X.newXname` - compute the effective infective density of the vertebrate hosts 
 
-11. `F_H.SEIRV` - compute the human population density for the host strata
+11. `F_H.newXname` - compute the human population density for the host strata
 
-12. `F_b.SEIRV` - compute the probability a most will become infected after receiving an infective bite, which combines elements of this $\cal X$ model with a model of environmental heterogeneity in `Exposure.` 
-
-**Outputs**
-
-13. `parse_deout_X.SEIRV` - this function parses the output of `deSolve` and returns a named list that is either a vector or a matrix holding the values of the variables at each point in time. It works like `list_Xvars,` which accepts a vector holding $y$, the values of the variables at a single point in time. 
-
-14. `F_pr.SEIRV` - this function takes 
-
-15. `HTC.SEIRV`
+12. `F_b.newXname` - compute the probability a most will become infected after receiving an infective bite, which combines elements of this $\cal X$ model with a model of environmental heterogeneity in `Exposure.` 
 
 **Outputs**
 
-16. `xde_lines_X.SEIRV` 
+13. `parse_deout_X.newXname` - this function parses the output of `deSolve` and returns a named list that is either a vector or a matrix holding the values of the variables at each point in time. It works like `list_Xvars,` which accepts a vector holding $y$, the values of the variables at a single point in time. 
 
-17. `xde_plot_X.SEIRV` is a wrapper that calls `xde_lines_X` 
+14. `F_pr.newXname` - this function takes 
+
+15. `HTC.newXname`
+
+**Outputs**
+
+16. `xds_lines_X.newXname` 
+
+17. `xds_plot_X.newXname` is a wrapper that calls `xds_lines_X` 
 
 ### Style 
 
@@ -121,7 +121,7 @@ We recommend that new models conform to a set of style guidelines:
 
 ## Derivatives  
 
-### dXdt 
+### 1. dXdt 
 
 The function `dXdt` is established as a generic function that dispatches on `Xpar.` Since there might be many host species, it actually dispatches on the $i^{th}$ element in a list, `pars$Xpar[[i]].`
 
@@ -141,7 +141,7 @@ dXdt <- function(t, y, pars, i) {
 
 ### dXdt.SIS
 
-This is a version of the `SIS` model in `ramp.xde` with demographics. If a model has any demographic processes (*e.g.* aging, migration, births and deaths), then each variable's derivative must be transformed by the same matrix as the human population density, `H`. Any disease induced mortality should be included in a matrix that computes changes in human population density, `dHdt`. 
+This is a version of the `SIS` model in `ramp.xds` with demographics. If a model has any demographic processes (*e.g.* aging, migration, births and deaths), then each variable's derivative must be transformed by the same matrix as the human population density, `H`. Any disease induced mortality should be included in a matrix that computes changes in human population density, `dHdt`. 
 
 In the following, we use the `with()` function to expose parameter names attached to lists to make the code easy to read. 
 
@@ -167,9 +167,9 @@ dXdt.SIS <- function(t, y, pars, i) {
 ```
 
 
-### dXdt.SEIRV 
+### dXdt.newXname
 
-This *should* be straightforward, but there's one very important wrinkle. If you want to be able to use the `ramp.xde` capabilities for cohort dynamics and vital dynamics, then the dynamics must be extended carefully to call the demographic matrix function `dHdt.` This can become tricky, so we handle it elsewhere. When writing the code:
+This *should* be straightforward, but there's one very important wrinkle. If you want to be able to use the `ramp.xds` capabilities for cohort dynamics and vital dynamics, then the dynamics must be extended carefully to call the demographic matrix function `dHdt.` This can become tricky, so we handle it elsewhere. When writing the code:
 
 + The foi gets computed in `Exposure` and stored as `pars$FoI[[i]]` for the $i^{th}$ host species. 
 
@@ -188,32 +188,31 @@ This *should* be straightforward, but there's one very important wrinkle. If you
 
 ```{r}
 #' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dXdt] for the SEIRV model
-#' @inheritParams ramp.xde::dXdt
+#' @description Implements [dXdt] for the newXname model
+#' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export
-dXdt.SEIRV<- function(t, y, pars, i) {
+dXdt.newXname <- function(t, y, pars, i) {
+
   # do not change this
   foi <- pars$FoI[[i]]
-  
-  # attach the variables by name
+
+  # attach the variables by name 
   with(list_Xvars(y, pars, i),{
-    # compute H (if it isn't one of the variables)
+    # compute H (if it isn't one of the variables) 
     H <- F_H(t, y, pars, i)
-    
-    # expose the parameters (see make_Xpar_SEIRV)
+
+    # expose the parameters (see make_Xpar_Xname) 
     with(pars$Xpar[[i]], {
-      # compute the derivatives
-      dS <- (1-alpha)*Births(t, H, pars,i) - foi*S + dHdt(t, S, pars,i)+ eps*R
-      dE <- foi*S - tau*E + dHdt(t, E, pars,i)
-      dI <- tau*E - r*I + dHdt(t, I, pars,i)
-      dR <- (1-delta)*r*I -sig*R -eps*R+ dHdt(t, R, pars,i)
-      dV <- alpha*Births(t, H, pars,i) + delta*r*I + sig*R + dHdt(t, V, pars,i)
+      # compute the derivatives 
+      dX1 <- ... 
+      dX2 <- ...
+      ... 
       
-       # concatenate the derivatives
-      derivs = c(dS, dE, dI, dR,dV)
+      # concatenate the derivatives 
+      derivs = c(dX1, dX2, ...) 
       
-      # return the derivatives
+      # return the derivatives 
       return(derivs)
     })
   })
@@ -244,36 +243,28 @@ make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with
 })}
 ```
 
-#### make_Xinits_SEIRV
+#### make_Xinits_newXname
 
 ```{r}
-#' @title Make initial values for the SEIRV human model, with defaults
+#' @title Make initial values for the Xname human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param E0 the initial value for E
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
-#' @param V0 the initial values for V
+#' @param X10 the initial value for X1 
+#' @param X20 the initial value for X1 
 #' @return a [list]
 #' @export
-make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0=0,R0 = 1,V0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(E0+I0+R0+V0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  E = checkIt(E0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
-  V = checkIt(V0, nStrata)
-  return(list(S=S, E=E, I=I, R =R,V=V))
+make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
+  stopifnot(is.numeric(X10))
+  stopifnot(is.numeric(X20))
+  X1 = checkIt(X10, nStrata)
+  X2 = checkIt(X20, nStrata)
+  return(list(X1=X1, X2=X2, ...))
 })}
-
 ```
 
 ### 3. setup_Xinits  
 
-In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `SEIRV` is set up by the function `setup_Xinits.` 
+In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xinits.` 
 
 #### Generic 
 
@@ -281,7 +272,7 @@ The `setup_Xinits` function dispatches on `pars$Xpar[[i]]`
 
 ```{r, eval=F, purl=F}
 #' @title A function to set up Xpar
-#' @description This method dispatches on `SEIRV`.
+#' @description This method dispatches on `newXname`.
 #' @param pars a [list]
 #' @param i the host species index
 #' @param Xopts a [list]
@@ -308,18 +299,18 @@ setup_Xinits.SIS = function(pars, i, Xopts=list()){
 }
 ```
 
-#### setup_Xinits.SEIRV
+#### setup_Xinits.newXname
 
-To modify, replace `SEIRV` 
+To modify, replace `newXname` 
 
 ```{r}
-#' @title Setup Xinits.SEIRV
-#' @description Implements [setup_Xinits] for the SEIRV model
-#' @inheritParams ramp.xde::setup_Xinits
+#' @title Setup Xinits.newXname
+#' @description Implements [setup_Xinits] for the newXname model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SEIRV(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+setup_Xinits.newXname = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 ```
@@ -345,7 +336,7 @@ make_indices_X <- function(pars, i) {
 ```{r, eval=F, purl=F}
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for the SIS model.
-#' @inheritParams ramp.xde::make_indices_X
+#' @inheritParams ramp.xds::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -363,36 +354,27 @@ make_indices_X.SIS <- function(pars, i) {with(pars,{
 })}
 ```
 
-#### make_indices_X.SEIRV
+#### make_indices_X.newXname
 
 ```{r}
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the SEIRV model.
-#' @inheritParams ramp.xde::make_indices_X
+#' @description Implements [make_indices_X] for the newXname model.
+#' @inheritParams make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SEIRV <- function(pars, i) {with(pars,{
-  
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
-  max_ix <- tail(S_ix, 1)
-  
-  E_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
-  max_ix <- tail(E_ix, 1)
-  
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
-  max_ix <- tail(I_ix, 1)
-  
-  R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
-  max_ix <- tail(R_ix, 1)
-  
-  V_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
-  max_ix <- tail(V_ix, 1)
-  
-  
+make_indices_X.newXname <- function(pars, i) {with(pars,{
+
+  X1_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  max_ix <- tail(X1_ix, 1)
+
+  X2_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  max_ix <- tail(X2_ix, 1)
+
+  ... 
   
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
+  pars$ix$X[[i]] = list(X1_ix=X1_ix, X2_ix=X2_ix, ...)
   return(pars)
 })}
 ```
@@ -424,33 +406,29 @@ list_Xvars <- function(y, pars, i) {
 #' @return a [list]
 #' @export
 list_Xvars.SIS <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-      return(list(
-        S = y[S_ix],
-        I = y[I_ix]
-      )
-  ))
+  with(pars$ix$X[[i]],{
+      S = y[S_ix]
+      I = y[I_ix]
+      H = S+I 
+      return(list(S=S,I=I,H=H))})
 }
 ``` 
 
-#### list_Xvars.SEIRV 
+#### list_Xvars.newXname 
 
 ```{r}
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xde::list_Xvars
+#' @inheritParams ramp.xds::list_Xvars
 #' @return a [list]
 #' @export
-list_Xvars.SEIRV <- function(y, pars, i) {
-  with(pars$ix$X[[i]],
-       return(list(
-         S = y[S_ix],
-         E = y[E_ix],
-         I = y[I_ix],
-         R = y[R_ix],
-         V = y[V_ix]
-       )
-       ))
+list_Xvars.newXname <- function(y, pars, i) {
+  with(pars$ix$X[[i]],{
+      X1 = y[X1_ix]
+      X2 = y[X2_ix]
+      ...
+      H = X1+X2+... 
+      return(list(X1=X1,X2=X2,...,H=H))})
 }
 ``` 
 
@@ -488,20 +466,19 @@ get_inits_X.SIS <- function(pars, i){
 }
 ```
 
-#### get_inits_X.SEIRV
+#### get_inits_X.newXname
 
 Write the function to return the initial values, in order, by name. 
 
 ```{r}
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xde::get_inits_X
+#' @inheritParams ramp.xds::get_inits_X
 #' @return a [numeric] vector
 #' @export
-get_inits_X.SEIRV <- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S,E,I,R,V)))
+get_inits_X.newXname <- function(pars, i){
+  with(pars$Xinits[[i]], return(c(X1,X2)))
 }
-
 ```
 
 ### 7. update_inits_X  
@@ -537,18 +514,18 @@ update_inits_X.SIS <- function(pars, y0, i) {
 })}
 ```
 
-#### update_inits_X.SEIRV
+#### update_inits_X.newXname
 
 ```{r}
-#' @title Update inits for the SEIRV human model from a vector of states
-#' @inheritParams ramp.xde::update_inits_X
+#' @title Update inits for the newXname human model from a vector of states
+#' @inheritParams ramp.xds::update_inits_X 
 #' @return none
 #' @export
-update_inits_X.SEIRV <- function(pars, y0, i) {
+update_inits_X.newXname <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SEIRV(pars, list(), S0=S,E0= E, I0=I, R0=R,V0 =V)
+    pars = make_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
     return(pars)
-  })}
+})}
 ```
 
 
@@ -595,39 +572,29 @@ make_Xpar_SIS = function(nStrata, Xopts=list(),
   })}
 ```
 
-#### make_Xpar_SEIRV
+#### make_Xpar_newXname
 
-To format this for a new function, do a search and replace on `SEIRV` and replace the parmeter names and values $p1$, $p2$, $\ldots$ 
+To format this for a new function, do a search and replace on `newXname` and replace the parmeter names and values $p1$, $p2$, $\ldots$ 
 
 ```{r}
-#' @title Make parameters for SEIRV human model, with defaults
+#' @title Make parameters for newXname human model, with defaults
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] that could overwrite defaults
-#' @param tau  incubation rate
-#' @param b the proportion of infective bites that cause an infection
-#' @param r the the duration of an infection
-#' @param c the proportion of bites on infected humans that infect a mosquito
-#' @param alpha  travallers with immunity from malaria
-#' @param eps   loss of immunity rate
-#' @param delta   proportion of protected after recovery
-#' @param sig  progression rate of recovered individual to protected class
+#' @param p1 the first parameter 
+#' @param p2 the second parameter 
+#' @param p3 the third parameter 
 #' @return a [list]
 #' @export
-make_Xpar_SEIRV = function(nStrata, Xopts=list(),
-                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps,sig=0.3,delta =0.5){
+make_Xpar_newXname = function(nStrata, Xopts=list(),
+                         p1=1, p2=2, p3=3){
   with(Xopts,{
     Xpar = list()
-    class(Xpar) <- c("SEIRV")
-    
-    Xpar$alpha = checkIt(alpha, nStrata)
-    Xpar$b = checkIt(b, nStrata)
-    Xpar$c = checkIt(c, nStrata)
-    Xpar$r = checkIt(r, nStrata)
-    Xpar$tau = checkIt(tau, nStrata)
-    Xpar$eps = checkIt(eps, nStrata)
-    Xpar$sig = checkIt(sig, nStrata)
-    Xpar$delta = checkIt(delta, nStrata)
-    
+    class(Xpar) <- c("newXname")
+
+    Xpar$p1 = checkIt(p1, nStrata)
+    Xpar$p2 = checkIt(p2, nStrata)
+    Xpar$p3 = checkIt(p3, nStrata)
+
     return(Xpar)
   })}
 ```
@@ -635,7 +602,7 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
 
 ### 9. setup_Xpar  
 
-In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `SEIRV` is set up by the function `setup_Xpar.` 
+In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xpar.` 
 
 #### Generic 
 
@@ -674,18 +641,18 @@ setup_Xpar.SIS = function(Xname, pars, i, Xopts=list()){
 }
 ```
 
-#### setup_Xpar.Xname
+#### setup_Xpar.newXname
 
-To use this, simply to a search and replace on `Xname.` 
+To use this, simply to a search and replace on `newXname.` 
 
 ```{r}
-#' @title Setup Xpar.SEIRV
-#' @description Implements [setup_Xpar] for the SEIRV model
-#' @inheritParams ramp.xde::setup_Xpar
+#' @title Setup Xpar.newXname
+#' @description Implements [setup_Xpar] for the newXname model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SEIRV(pars$Hpar[[i]]$nStrata, Xopts)
+setup_Xpar.newXname = function(newXname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_newXname(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
 ```
@@ -694,7 +661,7 @@ setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
 
 ## Terms   
 
-All models in `ramp.xde` the modular design dictates that we must define a few functions that compute a few key quantities: 
+All models in `ramp.xds` the modular design dictates that we must define a few functions that compute a few key quantities: 
 
 + `X` is defined to be the effective density of infectious humans, retrieved by `F_X`
 
@@ -723,9 +690,9 @@ F_X <- function(y, pars, i) {
 
 #### F_X.SIS 
 
-As an example, we include the $SIS$ model from `ramp.xde.` In the `SIS` model, the returned value is $cI$ where $I$ is the density of infected individuals; the prevalence of infection is $X/H$. The constant $c$ is the probability a mosquito would become infected after blood feeding on an infected human. Two things to note: 
+As an example, we include the $SIS$ model from `ramp.xds.` In the `SIS` model, the returned value is $cI$ where $I$ is the density of infected individuals; the prevalence of infection is $X/H$. The constant $c$ is the probability a mosquito would become infected after blood feeding on an infected human. Two things to note: 
 
-+ First, `ramp.xde` holds the indices by component under `pars$ix,` so `pars$ix$X` holds the indices for all the variables for all species, and `pars$ix$X[[i]]` holds the indices for the $i^{th}$ species. Putting them under `X` helps to avoid conflicts if, for example, another dynamical component happened to use the same variable name.  
++ First, `ramp.xds` holds the indices by component under `pars$ix,` so `pars$ix$X` holds the indices for all the variables for all species, and `pars$ix$X[[i]]` holds the indices for the $i^{th}$ species. Putting them under `X` helps to avoid conflicts if, for example, another dynamical component happened to use the same variable name.  
 
 
 ```{r, purl=F, eval=F}
@@ -743,22 +710,30 @@ F_X.SIS <- function(y, pars, i) {
 
 The commented code relevant code that must be changed is commented out. The preferred style is to *extract* the relevant variables by name, then *compute* the effective infectious density,or individuals in this stratum, then return the value. In the manuscript$^1$, this quantity was called **X.** 
 
-#### F_X.SEIRV
+#### F_X.newXname
 
-The following is a template for new model. The declaration of `inheritParams` from the `SIS` model in `ramp.xde` works naturally. The namespace from `ramp.xde` is needed, so our SEIRV function (above) has `ramp.xde::F_X.` 
+The following is a template for new model. The declaration of `inheritParams` from the `SIS` model in `ramp.xds` works naturally. The namespace from `ramp.xds` is needed, so our newXname function (above) has `ramp.xds::F_X.` 
 
 The steps are to extract the variables in 
 
 ```{r}
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
-#' @inheritParams ramp.xde::F_X
+#' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIRV <- function(y, pars, i) {
-  I = y[pars$ix$X[[i]]$I_ix]
-  Y = with(pars$Xpar[[i]], c*I)
-  return(Y)
+F_X.newXname <- function(y, pars, i) {
+  ########################
+  # extract: 
+  # VAR <- y[pars$ix$X$...] 
+  ########################
+  with(pars$Xpar[[i]], 
+       ########################
+       # compute: 
+       # X <- ... F(VAR) 
+       ########################
+  )
+  return(X)
 }
 ```
 
@@ -791,26 +766,24 @@ This is the function that computes $H = S+I$ for the `SIS` model.
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.SIS <- function(y, pars, i){
-  with(list_Xvars(y, pars, i), return(S+I))
+  with(list_Xvars(y, pars, i), return(H))
 }
 ```
 
-#### F_H.SEIRV
+#### F_H.newXname
 
 The function `F_X` returns the effective density of infectious humans for each stratum. 
-The following is a template for a model: 
+The following is a template for a model, assuming $H$ is computed in `list_Xvars`: 
 
 ```{r}
 #' @title Size of effective infectious human population
-#' @description Implements [F_H] for the SEIRV model.
-#' @inheritParams ramp.xde::F_H
+#' @description Implements [F_H] for the newXname model.
+#' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SEIRV <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i), {
-    H <- S +E+ I+R+V
-    return(H)
-  })}
+F_H.newXname <- function(y, pars, i){
+  with(list_Xvars(y, pars, i), return(H))
+}
 ```
 
 ### 12. F_b  
@@ -834,11 +807,11 @@ F_b <- function(y, pars, i) {
 
 #### `F_b.SIS`
 
-In `ramp.xde,` we recognize the problem of translating the local EIR into the FoI. The local EIR is computed as one of the core model terms for each one of the model strata. 
+In `ramp.xds,` we recognize the problem of translating the local EIR into the FoI. The local EIR is computed as one of the core model terms for each one of the model strata. 
 
 The function `F_b` returns the model-defined probability an infective bite by a mosquito would cause an infection. This could include the combined effects of inefficient transmission, pre-erytrocytic immunity, and perhaps some effects of blood stage immunity. In a model with no effect, the return value would be $1$.  
 
-Once again, we provide the `SIS` model from `ramp.xde` as our example: 
+Once again, we provide the `SIS` model from `ramp.xds` as our example: 
 
 ```{r, purl=F, eval=F}
 #' @title Infection blocking pre-erythrocytic immunity
@@ -851,17 +824,17 @@ F_b.SIS <- function(y, pars, i) {
 }
 ```
 
-#### F_b.SEIRV 
+#### F_b.newXname 
 
 Depending on the model, the value of `b` is either retrieved or it is computed from other variables in the model, and it is expected that `length(b) = nStrata` 
 
 ```{r}
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_b] for the SEIRV model.
-#' @inheritParams ramp.xde::F_b
+#' @description Implements [F_b] for the newXname model.
+#' @inheritParams ramp.xds::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_b.SEIRV <- function(y, pars, i) {
+F_b.newXname <- function(y, pars, i) {
   with(pars$Xpar[[i]],{ 
     ########################
     # retrieve or compute it 
@@ -880,7 +853,7 @@ F_b.SEIRV <- function(y, pars, i) {
 
 ## Outputs  
 
-To make `ramp.xde` easy to use, we provide some functions that parse the outputs and compute some standard metrics. 
+To make `ramp.xds` easy to use, we provide some functions that parse the outputs and compute some standard metrics. 
 
 ### 13. `parse_deout_X`  
 
@@ -920,25 +893,23 @@ parse_deout_X.SIS <- function(deout, pars, i) {
 ```
 
 
-#### parse_deout_X.SEIRV
+#### parse_deout_X.newXname
 
 ```{r}
-#' @title Parse the output of deSolve and return variables for the SEIRV model
-#' @description Implements [parse_deout_X] for the SEIRV model
-#' @inheritParams ramp.xde::parse_deout_X
+#' @title Parse the output of deSolve and return variables for the newXname model
+#' @description Implements [parse_deout_X] for the newXname model
+#' @inheritParams ramp.xds::parse_deout_X
 #' @return none
 #' @export
-parse_deout_X.SEIRV <- function(deout, pars, i) {
+parse_deout_X.newXname <- function(deout, pars, i) {
   time = deout[,1]
   with(pars$ix$X[[i]],{
-    S = deout[,S_ix+1]
-    E = deout[,E_ix+1]
-    I = deout[,I_ix+1]
-    R = deout[,R_ix+1]
-    V = deout[,V_ix+1]
-    H = S+E+I+R+V
-    return(list(time=time, S=S, E=E,I=I, R=R, V=V,H=H))
-  })}
+    X1 = deout[,X1_ix+1]
+    X2 = deout[,X2_ix+1]
+    ... 
+    H = X1 + X2 + ...
+    return(list(time=time, X1=X1, X2=X2, ..., H=H))
+})}
 ```
 
 ### 14. F_pr  
@@ -948,15 +919,14 @@ We require each model to compute the true PR.
 #### Generic 
 
 ```{r, eval=F, purl=F}
-#' @title Compute the "true" prevalence of infection / parasite rate
-#' @description This method dispatches on the type of `pars$Xpar`.
-#' @param varslist a list with variables attached by name
-#' @param pars a list
-#' @param i the host species index
+#' @title Compute the *true* prevalence of infection / parasite rate
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @param vars a list with the variables attached by name
+#' @param Xpar a list defining a model for human
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr <- function(varslist, pars, i) {
-  UseMethod("F_pr", pars$Xpar[[i]])
+F_pr <- function(vars, Xpar) {
+  UseMethod("F_pr", Xpar)
 }
 ```
 
@@ -964,28 +934,28 @@ F_pr <- function(varslist, pars, i) {
 
 ```{r, eval=F, purl=F}
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SIS model.
+#' @description Implements F_pr for the SIS model.
 #' @inheritParams F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SIS <- function(varslist, pars, i) {
-  pr = with(varslist$XH[[i]], I/H)
+F_pr.SIS <- function(vars, Xpar) {
+  pr = with(vars, I/H)
   return(pr)
 }
 ```
 
 The function `F_pr` computes the models *true* prevalence using the variable names. It is passed the `varslist` that is created by `parse_deout` (see above). 
 
-#### F_pr.SEIRV
+#### F_pr.newXname
 
 ```{r}
-#' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SEIRV model.
-#' @inheritParams ramp.xde::F_pr
+#' @title Compute the true prevalence of infection / parasite rate
+#' @description Implements F_pr for the newXname model.
+#' @inheritParams F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SEIRV <- function(varslist, pars,i) {
-  pr = with(varslist$XH[[i]], I/H)
+F_pr.newXname <- function(vars, Xpar) {
+  pr = with(vars, with(Xpar,(return(X1/H))))
   return(pr)
 }
 ```
@@ -1013,7 +983,7 @@ HTC <- function(pars, i) {
 ```{r, eval=F, purl=F}
 #' @title Compute the HTC for the SIS model
 #' @description Implements [HTC] for the SIS model with demography.
-#' @inheritParams ramp.xde::HTC
+#' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
 HTC.SIS <- function(pars, i) {
@@ -1023,28 +993,27 @@ HTC.SIS <- function(pars, i) {
 }
 ```
 
-#### HTC.SEIRV
+#### HTC.newXname
 
 ```{r}
-#' @title Compute the HTC for the SEIRV model
-#' @description Implements [HTC] for the SEIRV model with demography.
-#' @inheritParams ramp.xde::HTC
+#' @title Compute the HTC for the newXname model
+#' @description Implements [HTC] for the newXname model with demography.
+#' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
-HTC.SEIRV <- function(pars, i) {
+HTC.newXname <- function(pars, i) {
   with(pars$Xpar[[i]],
-       HTC <- c/r,
-       return(HTC)
+    #HTC <- 
+    return(HTC)
   )
 }
-
 ```
 
 ## Plotting   
 
-### 16. xde_lines_X   
+### 16. xds_lines_X   
 
-#### xde_lines_X_SIS
+#### xds_lines_X_SIS
 
 ```{r, eval=F, purl=F}
 #' Add lines for the density of infected individuals for the SIS model
@@ -1055,7 +1024,7 @@ HTC.SEIRV <- function(pars, i) {
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_SIS = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
+xds_lines_X_SIS = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
@@ -1073,54 +1042,45 @@ xde_lines_X_SIS = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   })}
 ```
 
-#### xde_lines_X_SEIRV
+#### xds_lines_X_newXname
 
 ```{r}
-
-#' Add lines for the density of infected individuals for the SEIRV model
+#' Add lines for the density of infected individuals for the newXname model
 #'
-#' @param XH a list with the outputs of parse_deout_X_SEIRV
+#' @param XH a list with the outputs of parse_deout_X_newXname
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_SEIRV = function(XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen", "purple"), llty=1){
+xds_lines_X_newXname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, E, col=clrs[2], lty = llty[1])
-      lines(time, I, col=clrs[3], lty = llty[1])
-      lines(time, R, col=clrs[4], lty = llty[1])
-      lines(time, V, col=clrs[5], lty = llty[1])
+      lines(time, I, col=clrs[2], lty = llty[1])
     }
     if(nStrata>1){
-      if (length(clrs)==5) clrs=matrix(clrs, 5, nStrata)
+      if (length(clrs)==2) clrs=matrix(clrs, 2, nStrata)
       if (length(llty)==1) llty=rep(llty, nStrata)
-      
+
       for(i in 1:nStrata){
         lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, E[,i], col=clrs[2,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[3,i], lty = llty[i])
-        lines(time, R[,i], col=clrs[4,i], lty = llty[i])
-        lines(time, V[,i], col=clrs[5,i], lty = llty[i])
+        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
       }
     }
   })}
-
 ```
 
-### 17. xde_plot_X   
+### 17. xds_plot_X   
 
-We provide a basic plotting function. The function `xde_lines_X_*` does not have an `S3` version. Instead, it is called by the `S3` function `xde_plot_X`
-
+We provide a basic plotting function. The function `xds_lines_X_*` does not have an `S3` version. Instead, it is called by the `S3` function `xds_plot_X`
 
 #### Generic
 
 ```{r, eval=F, purl=F}
 #' Basic plotting for epidemiological models
 #'
-#' @param pars a list that defines an `ramp.xde` model (*e.g.*,  generated by `xde_setup()`)
+#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)
 #' @param i the host species index
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
@@ -1128,19 +1088,19 @@ We provide a basic plotting function. The function `xde_lines_X_*` does not have
 #' @param add_axes a logical: plot axes only if TRUE
 #'
 #' @export
-xde_plot_X = function(pars, i=1, clrs="black", llty=1, stable=FALSE, add_axes=TRUE){
-  UseMethod("xde_plot_X", pars$Xpar[[i]])
+xds_plot_X = function(pars, i=1, clrs="black", llty=1, stable=FALSE, add_axes=TRUE){
+  UseMethod("xds_plot_X", pars$Xpar[[i]])
 }
 ```
 
-#### xde_plot_X.SIS
+#### xds_plot_X.SIS
 
 ```{r, eval=F, purl=F}
-#' Plot the density of infected individuals for the SEIRV model
+#' Plot the density of infected individuals for the newXname model
 #'
-#' @inheritParams ramp.xde::xde_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xde_plot_X.SIS = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.SIS = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
 
   if(add_axes==TRUE)
@@ -1149,27 +1109,26 @@ xde_plot_X.SIS = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stabl
               ylab = "# Infected", xlab = "Time"))
 
 
-  xde_lines_X_SIS(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xds_lines_X_SIS(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }
 ```
 
-#### xde_plot_X.SEIRV
+#### xds_plot_X.newXname
 
 ```{r}
-#' Plot the density of infected individuals for the SEIRV model
+#' Plot the density of infected individuals for the newXname model
 #'
-#' @inheritParams ramp.xde::xde_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xde_plot_X.SEIRV = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.newXname = function(pars, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
-  
+
   if(add_axes==TRUE)
     with(vars$XH[[i]],
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "No of. Infected", xlab = "Time"))
-  
-  
-  xde_lines_X_SEIRV(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+              ylab = "# Infected", xlab = "Time"))
+
+  xds_lines_X_newXname(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }
 ```
 

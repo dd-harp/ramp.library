@@ -2,7 +2,7 @@
 
 #' @title Reset aquatic parameters to baseline
 #' @description Implements [LBionomics] for the stages_dts model
-#' @inheritParams ramp.xde::LBionomics
+#' @inheritParams ramp.xds::LBionomics
 #' @return a named [list]
 #' @export
 LBionomics.stages_dts <- function(t, y, pars, s){
@@ -23,7 +23,7 @@ LBionomics.stages_dts <- function(t, y, pars, s){
 
 #' @title Number of newly emerging adults from each larval habitat
 #' @description Implements [F_alpha] for the stages_dts competition model.
-#' @inheritParams ramp.xde::F_alpha
+#' @inheritParams ramp.xds::F_alpha
 #' @return a [numeric] vector of length `nHabitats`
 #' @export
 F_alpha.stages_dts <- function(t, y, pars, s){
@@ -32,7 +32,7 @@ F_alpha.stages_dts <- function(t, y, pars, s){
 
 #' @title Derivatives for aquatic stage mosquitoes
 #' @description Implements [dLdt] for the stages_dts competition model.
-#' @inheritParams ramp.xde::dLdt
+#' @inheritParams ramp.xds::dLdt
 #' @return a [numeric] vector
 #' @export
 dLdt.stages_dts <- function(t, y, pars, s) {
@@ -57,7 +57,7 @@ dLdt.stages_dts <- function(t, y, pars, s) {
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$Lpar[[s]]`
-#' @inheritParams ramp.xde::list_Lvars
+#' @inheritParams ramp.xds::list_Lvars
 #' @return a [list]
 #' @export
 list_Lvars.stages_dts <- function(y, pars, s){
@@ -73,7 +73,7 @@ list_Lvars.stages_dts <- function(y, pars, s){
 
 #' @title Setup Lpar for the stages_dts model
 #' @description Implements [dts_setup_Lpar] for the stages_dts model
-#' @inheritParams ramp.xde::dts_setup_Lpar
+#' @inheritParams ramp.xds::dts_setup_Lpar
 #' @return a [list] vector
 #' @export
 dts_setup_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
@@ -83,7 +83,7 @@ dts_setup_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
 
 #' @title Setup the stages_dts model
 #' @description Implements [setup_Linits] for the stages_dts model
-#' @inheritParams ramp.xde::setup_Linits
+#' @inheritParams ramp.xds::setup_Linits
 #' @return a [list]
 #' @export
 setup_Linits.stages_dts = function(pars, s, Lopts=list()){
@@ -179,7 +179,7 @@ make_Linits_stages_dts = function(nHabitats, Lopts=list(), L10=1, L20=0, L30=0, 
 
 #' @title Add indices for aquatic stage mosquitoes to parameter list
 #' @description Implements [make_indices_L] for stages_dts competition model.
-#' @inheritParams ramp.xde::make_indices_L
+#' @inheritParams ramp.xds::make_indices_L
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -207,7 +207,7 @@ make_indices_L.stages_dts <- function(pars, s) {with(pars,{
 
 #' @title Parse the variable names for the stages_dts model
 #' @description Implements [parse_outputs_L] for stages_dts competition model.
-#' @inheritParams ramp.xde::parse_outputs_L
+#' @inheritParams ramp.xds::parse_outputs_L
 #' @return [list]
 #' @export
 parse_outputs_L.stages_dts <- function(outputs, pars, s) {
@@ -306,7 +306,7 @@ make_inits_L_stages_dts <- function(pars, L10, L20, L30, L40, P0){
 }
 
 #' @title Update inits for the stages_dts aquatic mosquito competition model
-#' @inheritParams ramp.xde::update_inits_L
+#' @inheritParams ramp.xds::update_inits_L
 #' @return none
 #' @export
 update_inits_L.stages_dts <- function(pars, y0, s) {
@@ -317,7 +317,7 @@ update_inits_L.stages_dts <- function(pars, y0, s) {
 
 #' @title Return initial values as a vector
 #' @description Implements [get_inits_L] for the GeRM model.
-#' @inheritParams ramp.xde::get_inits_L
+#' @inheritParams ramp.xds::get_inits_L
 #' @return none
 #' @export
 get_inits_L.stages_dts <- function(pars, s){

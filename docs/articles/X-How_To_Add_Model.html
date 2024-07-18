@@ -130,7 +130,7 @@ Infection Dynamics</h3>
     
 <hr>
 <p>This vignette discusses how to add a new model family to <a href="https://github.com/dd-harp/ramp.library" class="external-link"><code>ramp.library</code></a>
-that can be used by <a href="https://github.com/dd-harp/ramp.xde" class="external-link"><code>ramp.xde</code></a>.
+that can be used by <a href="https://github.com/dd-harp/ramp.xds" class="external-link"><code>ramp.xds</code></a>.
 This vignette covers models of parasite infection dynamics and immunity
 in humans or other hosts – the dynamical components we have denoted
 <span class="math inline">\(\cal X\)</span> and <span class="math inline">\(\cal H.\)</span></p>
@@ -138,25 +138,24 @@ in humans or other hosts – the dynamical components we have denoted
 <p>We have written this vignette to produce a new template file using
 <code>knitr::purl,</code> which can be modified to build a new model.
 Simply execute the following command, to create
-<code>Xmod-SEIRV.R.</code> Then, rename <code>Xmod-SEIRV.R</code> by
-replacing <code>SEIRV</code> in the filename. Then open the file and do
-a global search for <code>SEIRV</code> and replace it with your new
-name.</p>
+<code>Xmod-newXname.R.</code> Then, rename <code>Xmod-newXname.R</code>
+by replacing <code>newXname</code> in the filename. Then open the file
+and do a global search for <code>newXname</code> and replace it with
+your new name.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">purl</a></span><span class="op">(</span><span class="st">"X-How_To_Add_Model.Rmd"</span>, </span>
-<span>            output <span class="op">=</span> <span class="st">"Xmod-SEIRV.R"</span>, </span>
+<span>            output <span class="op">=</span> <span class="st">"Xmod-newXname.R"</span>, </span>
 <span>            documentation <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>            quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "Xmod-SEIRV.R"</span></span></code></pre>
 <p>This is a good start, but there’s more work to do. For more details,
 read the text that follows.</p>
 <p>This basic introduction is lacking some information that typical
 users might find useful. In particular, we have defined best practices
 encoding the <span class="math inline">\(\cal H\)</span> component of
 models. A vignette is planned.</p>
-<div class="section level3">
-<h3 id="reusable-code">Reusable Code<a class="anchor" aria-label="anchor" href="#reusable-code"></a>
-</h3>
+<div class="section level2">
+<h2 id="reusable-code">Reusable Code<a class="anchor" aria-label="anchor" href="#reusable-code"></a>
+</h2>
 <p>This package – <code>ramp.library</code> – contains reusable code
 that has been rigorously tested and that implements a large number of
 dynamical model families and other algorithms taken from the literature
@@ -167,11 +166,11 @@ break down published models to serve as the dynamical components in new
 models for malaria. The model families in <code>ramp.library</code>
 supports nimble model building that can be used by:</p>
 <ul>
-<li><p><a href="https://github.com/dd-harp/ramp.xde" class="external-link"><code>ramp.xde</code></a>
+<li><p><a href="https://github.com/dd-harp/ramp.xds" class="external-link"><code>ramp.xds</code></a>
 implements a modular, flexible, and extensible framework for building
 systems of ordinary and delay differential equations models for malaria
 and other mosquito-transmitted pathogens. The mathematic framework for
-<code>ramp.xde</code> was explained in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" target="_blank" class="external-link">Spatial Dynamics of Malaria Transmission</a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
+<code>ramp.xds</code> was explained in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" target="_blank" class="external-link">Spatial Dynamics of Malaria Transmission</a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
 <li><p><a href="https://github.com/dd-harp/ramp.dts" class="external-link"><code>ramp.dts</code></a>
 implements a modular, flexible, and extensible framework for building
 discrete time systems, including both deterministic and stochastic
@@ -179,33 +178,32 @@ difference equations for malaria and other mosquito-transmitted
 pathogens.</p></li>
 </ul>
 <p>This vignette was written to help add new models to
-<code>ramp.xde.</code></p>
+<code>ramp.xds.</code></p>
 <p>In planned companion to this vignette, we show how to add models of
 <span class="math inline">\(\cal XH\)</span> to <a href="https://github.com/dd-harp/ramp.dts" class="external-link"><code>ramp.dts</code></a>.</p>
 <hr>
-</div>
 <div class="section level3">
 <h3 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h3>
 <p>A new model family of class <span class="math inline">\(\cal
 XH\)</span> – human infection dynamics, including immunity – has 17
 required functions encoded using a standard template. Some of these
-required functions are <code>S3</code> class functions in <a href="https://github.com/dd-harp/ramp.xde/blob/main/R/human-interface.R" target="_blank" class="external-link">human-interface.R</a>, and several examples are posted
-in the <code>ramp.xde</code> github repository, including the
-<code>SIS</code> model <a href="https://github.com/dd-harp/ramp.xde/blob/main/R/human-SIS.R" target="_blank" class="external-link">human-SIS.R</a>.</p>
+required functions are <code>S3</code> class functions in <a href="https://github.com/dd-harp/ramp.xds/blob/main/R/human-interface.R" target="_blank" class="external-link">human-interface.R</a>, and several examples are posted
+in the <code>ramp.xds</code> github repository, including the
+<code>SIS</code> model <a href="https://github.com/dd-harp/ramp.xds/blob/main/R/human-SIS.R" target="_blank" class="external-link">human-SIS.R</a>.</p>
 <p>To configure a new model, you must choose a string called
-<code>SEIRV</code>. The only rule for choosing <code>SEIRV</code> is
-that it must be unique. No other <span class="math inline">\({\cal
-XH}\)</span> class model in <code>ramp.xde</code> or
+<code>newXname</code>. The only rule for choosing <code>newXname</code>
+is that it must be unique. No other <span class="math inline">\({\cal
+XH}\)</span> class model in <code>ramp.xds</code> or
 <code>ramp.library</code> can be using that string already. All the
 <code>S3</code> functions get dispatched by the string that replaces
-<code>SEIRV.</code></p>
+<code>newXname.</code></p>
 <p>The 17 required functions are:</p>
 <p><strong>Derivatives</strong></p>
 <ol style="list-style-type: decimal">
 <li>
-<code>dXdt.SEIRV</code> - differential equations are defined by a
-system of differential equations. in <code>ramp.xde</code> these are
+<code>dXdt.newXname</code> - differential equations are defined by a
+system of differential equations. in <code>ramp.xds</code> these are
 encoded in a function called <code>dXdt</code> that computes and returns
 the <strong>derivatives.</strong> The function is set up so that the
 system can be solved by <code><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">deSolve::ode</a></code> or
@@ -217,49 +215,50 @@ document the variables by name and assign each one an index, to store,
 assign and update initial values. These functions streamline setup, and
 guarantee consistency.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p><code>make_Xinits_SEIRV</code> - each model requires a function
-that documents the variables by name and assigns initial values</p></li>
-<li><p><code>setup_Xinits.SEIRV</code> - is a wrapper, that gets called
-by <code>ramp.xde::xde_setup.</code> It gets called by
-<code>make_Xinits_SEIRV,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
+<li><p><code>make_Xinits_newXname</code> - each model requires a
+function that documents the variables by name and assigns initial
+values</p></li>
+<li><p><code>setup_Xinits.newXname</code> - is a wrapper, that gets
+called by <code>ramp.xds::xde_setup.</code> It gets called by
+<code>make_Xinits_newXname,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
 stored as <code>pars$Xinits[[i]].</code></p></li>
-<li><p><code>make_indices_X.SEIRV</code> - is the function that assigns
-an index to each variable in the model, and stores it as
+<li><p><code>make_indices_X.newXname</code> - is the function that
+assigns an index to each variable in the model, and stores it as
 <code>pars$ix$X[[i]].</code> The indices are returned as a named
 list.</p></li>
-<li><p><code>list_Xvars.SEIRV</code> - retrieves the value of variables
-at a point in time and returns the values by name in a list; the
-function gets called by <code>dXdt</code> and by
+<li><p><code>list_Xvars.newXname</code> - retrieves the value of
+variables at a point in time and returns the values by name in a list;
+the function gets called by <code>dXdt</code> and by
 <code>update_inits_X</code> and it can be useful in other
 contexts.</p></li>
-<li><p><code>get_inits_X.SEIRV</code> - retrieves the stored initial
+<li><p><code>get_inits_X.newXname</code> - retrieves the stored initial
 values in the same order that they are returned by
-<code>dXdt.SEIRV</code></p></li>
-<li><p><code>update_inits_X.SEIRV</code> - a utility that makes it
+<code>dXdt.newXname</code></p></li>
+<li><p><code>update_inits_X.newXname</code> - a utility that makes it
 possible to extract and store a new set of initial values for
-<code>SEIRV</code> from a vector <span class="math inline">\(y\)</span>
-holding all the variables in a model.</p></li>
+<code>newXname</code> from a vector <span class="math inline">\(y\)</span> holding all the variables in a
+model.</p></li>
 </ol>
 <p><strong>Parameters</strong></p>
 <ol start="8" style="list-style-type: decimal">
 <li>
-<p><code>make_Xpar_SEIRV</code> returns a formatted list:</p>
+<p><code>make_Xpar_newXname</code> returns a formatted list:</p>
 <ul>
 <li><p>the parameter values are stored by name</p></li>
-<li><p><code>class(pars)</code> = <code>SEIRV</code></p></li>
+<li><p><code>class(pars)</code> = <code>newXname</code></p></li>
 </ul>
 </li>
-<li><p><code>setup_Xpar.SEIRV</code> is a wrapper that calls
-<code>make_Xpar_SEIRV</code></p></li>
+<li><p><code>setup_Xpar.newXname</code> is a wrapper that calls
+<code>make_Xpar_newXname</code></p></li>
 </ol>
 <p><strong>Dynamical Terms</strong> are Computed using a Standard Set of
 Functions</p>
 <ol start="10" style="list-style-type: decimal">
-<li><p><code>F_X.SEIRV</code> - compute the effective infective density
-of the vertebrate hosts</p></li>
-<li><p><code>F_H.SEIRV</code> - compute the human population density for
-the host strata</p></li>
-<li><p><code>F_b.SEIRV</code> - compute the probability a most will
+<li><p><code>F_X.newXname</code> - compute the effective infective
+density of the vertebrate hosts</p></li>
+<li><p><code>F_H.newXname</code> - compute the human population density
+for the host strata</p></li>
+<li><p><code>F_b.newXname</code> - compute the probability a most will
 become infected after receiving an infective bite, which combines
 elements of this <span class="math inline">\(\cal X\)</span> model with
 a model of environmental heterogeneity in
@@ -267,20 +266,20 @@ a model of environmental heterogeneity in
 </ol>
 <p><strong>Outputs</strong></p>
 <ol start="13" style="list-style-type: decimal">
-<li><p><code>parse_deout_X.SEIRV</code> - this function parses the
+<li><p><code>parse_deout_X.newXname</code> - this function parses the
 output of <code>deSolve</code> and returns a named list that is either a
 vector or a matrix holding the values of the variables at each point in
 time. It works like <code>list_Xvars,</code> which accepts a vector
 holding <span class="math inline">\(y\)</span>, the values of the
 variables at a single point in time.</p></li>
-<li><p><code>F_pr.SEIRV</code> - this function takes</p></li>
-<li><p><code>HTC.SEIRV</code></p></li>
+<li><p><code>F_pr.newXname</code> - this function takes</p></li>
+<li><p><code>HTC.newXname</code></p></li>
 </ol>
 <p><strong>Outputs</strong></p>
 <ol start="16" style="list-style-type: decimal">
-<li><p><code>xde_lines_X.SEIRV</code></p></li>
-<li><p><code>xde_plot_X.SEIRV</code> is a wrapper that calls
-<code>xde_lines_X</code></p></li>
+<li><p><code>xds_lines_X.newXname</code></p></li>
+<li><p><code>xds_plot_X.newXname</code> is a wrapper that calls
+<code>xds_lines_X</code></p></li>
 </ol>
 </div>
 <div class="section level3">
@@ -300,17 +299,18 @@ the relevant publications, and proposed tests of the code.</p></li>
 model, following notation defined in an accompanying vignette.</p></li>
 </ul>
 </div>
+</div>
 <div class="section level2">
 <h2 id="derivatives">Derivatives<a class="anchor" aria-label="anchor" href="#derivatives"></a>
 </h2>
 <div class="section level3">
-<h3 id="dxdt">dXdt<a class="anchor" aria-label="anchor" href="#dxdt"></a>
+<h3 id="dxdt">1. dXdt<a class="anchor" aria-label="anchor" href="#dxdt"></a>
 </h3>
 <p>The function <code>dXdt</code> is established as a generic function
 that dispatches on <code>Xpar.</code> Since there might be many host
 species, it actually dispatches on the <span class="math inline">\(i^{th}\)</span> element in a list,
 <code>pars$Xpar[[i]].</code></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Derivatives for human population</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param t current simulation time</span></span>
@@ -327,7 +327,7 @@ species, it actually dispatches on the <span class="math inline">\(i^{th}\)</spa
 <h3 id="dxdt-sis">dXdt.SIS<a class="anchor" aria-label="anchor" href="#dxdt-sis"></a>
 </h3>
 <p>This is a version of the <code>SIS</code> model in
-<code>ramp.xde</code> with demographics. If a model has any demographic
+<code>ramp.xds</code> with demographics. If a model has any demographic
 processes (<em>e.g.</em> aging, migration, births and deaths), then each
 variable’s derivative must be transformed by the same matrix as the
 human population density, <code>H</code>. Any disease induced mortality
@@ -335,7 +335,7 @@ should be included in a matrix that computes changes in human population
 density, <code>dHdt</code>.</p>
 <p>In the following, we use the <code><a href="https://rdrr.io/r/base/with.html" class="external-link">with()</a></code> function to expose
 parameter names attached to lists to make the code easy to read.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Derivatives for human population</span></span>
 <span><span class="co">#' @description Implements [dXdt] for the SIS model, no demography.</span></span>
 <span><span class="co">#' @inheritParams dXdt</span></span>
@@ -356,11 +356,11 @@ parameter names attached to lists to make the code easy to read.</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="dxdt-seirv">dXdt.SEIRV<a class="anchor" aria-label="anchor" href="#dxdt-seirv"></a>
+<h3 id="dxdt-newxname">dXdt.newXname<a class="anchor" aria-label="anchor" href="#dxdt-newxname"></a>
 </h3>
 <p>This <em>should</em> be straightforward, but there’s one very
 important wrinkle. If you want to be able to use the
-<code>ramp.xde</code> capabilities for cohort dynamics and vital
+<code>ramp.xds</code> capabilities for cohort dynamics and vital
 dynamics, then the dynamics must be extended carefully to call the
 demographic matrix function <code>dHdt.</code> This can become tricky,
 so we handle it elsewhere. When writing the code:</p>
@@ -383,34 +383,33 @@ maintain that order in every function. In particular:</p>
 <li><p>Be careful about how you nest the <code>with(*, ...)</code>
 calls.</p></li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span><span class="co">#' @description Implements [dXdt] for the SEIRV model</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::dXdt</span></span>
+<span><span class="co">#' @description Implements [dXdt] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::dXdt</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">dXdt.SEIRV</span><span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">dXdt.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
 <span>  <span class="co"># do not change this</span></span>
 <span>  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">pars</span><span class="op">$</span><span class="va">FoI</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
-<span>  </span>
-<span>  <span class="co"># attach the variables by name</span></span>
+<span></span>
+<span>  <span class="co"># attach the variables by name </span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
-<span>    <span class="co"># compute H (if it isn't one of the variables)</span></span>
+<span>    <span class="co"># compute H (if it isn't one of the variables) </span></span>
 <span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu">F_H</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="co"># expose the parameters (see make_Xpar_SEIRV)</span></span>
+<span></span>
+<span>    <span class="co"># expose the parameters (see make_Xpar_Xname) </span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
-<span>      <span class="co"># compute the derivatives</span></span>
-<span>      <span class="va">dS</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">alpha</span><span class="op">)</span><span class="op">*</span><span class="fu">Births</span><span class="op">(</span><span class="va">t</span>, <span class="va">H</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span> <span class="op">-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">S</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span><span class="op">+</span> <span class="va">eps</span><span class="op">*</span><span class="va">R</span></span>
-<span>      <span class="va">dE</span> <span class="op">&lt;-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">tau</span><span class="op">*</span><span class="va">E</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">E</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span></span>
-<span>      <span class="va">dI</span> <span class="op">&lt;-</span> <span class="va">tau</span><span class="op">*</span><span class="va">E</span> <span class="op">-</span> <span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">I</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span></span>
-<span>      <span class="va">dR</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">delta</span><span class="op">)</span><span class="op">*</span><span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">-</span><span class="va">sig</span><span class="op">*</span><span class="va">R</span> <span class="op">-</span><span class="va">eps</span><span class="op">*</span><span class="va">R</span><span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">R</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span></span>
-<span>      <span class="va">dV</span> <span class="op">&lt;-</span> <span class="va">alpha</span><span class="op">*</span><span class="fu">Births</span><span class="op">(</span><span class="va">t</span>, <span class="va">H</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span> <span class="op">+</span> <span class="va">delta</span><span class="op">*</span><span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="va">sig</span><span class="op">*</span><span class="va">R</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">V</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span></span>
+<span>      <span class="co"># compute the derivatives </span></span>
+<span>      <span class="va">dX1</span> <span class="op">&lt;-</span> <span class="va">...</span> </span>
+<span>      <span class="va">dX2</span> <span class="op">&lt;-</span> <span class="va">...</span></span>
+<span>      <span class="va">...</span> </span>
 <span>      </span>
-<span>       <span class="co"># concatenate the derivatives</span></span>
-<span>      <span class="va">derivs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dE</span>, <span class="va">dI</span>, <span class="va">dR</span>,<span class="va">dV</span><span class="op">)</span></span>
+<span>      <span class="co"># concatenate the derivatives </span></span>
+<span>      <span class="va">derivs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dX1</span>, <span class="va">dX2</span>, <span class="va">...</span><span class="op">)</span> </span>
 <span>      </span>
-<span>      <span class="co"># return the derivatives</span></span>
+<span>      <span class="co"># return the derivatives </span></span>
 <span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">derivs</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
@@ -426,7 +425,7 @@ calls.</p></li>
 <div class="section level4">
 <h4 id="make_xinits_sis">make_Xinits_SIS<a class="anchor" aria-label="anchor" href="#make_xinits_sis"></a>
 </h4>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make initial values for the SIS human model, with defaults</span></span>
 <span><span class="co">#' @param nStrata the number of strata in the model</span></span>
 <span><span class="co">#' @param Xopts a [list] to overwrite defaults</span></span>
@@ -444,29 +443,22 @@ calls.</p></li>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="make_xinits_seirv">make_Xinits_SEIRV<a class="anchor" aria-label="anchor" href="#make_xinits_seirv"></a>
+<h4 id="make_xinits_newxname">make_Xinits_newXname<a class="anchor" aria-label="anchor" href="#make_xinits_newxname"></a>
 </h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make initial values for the SEIRV human model, with defaults</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make initial values for the Xname human model, with defaults</span></span>
 <span><span class="co">#' @param nStrata the number of strata in the model</span></span>
 <span><span class="co">#' @param Xopts a [list] to overwrite defaults</span></span>
-<span><span class="co">#' @param H0 the initial value for H</span></span>
-<span><span class="co">#' @param S0 the initial value for S</span></span>
-<span><span class="co">#' @param E0 the initial value for E</span></span>
-<span><span class="co">#' @param I0 the initial value for I</span></span>
-<span><span class="co">#' @param R0 the initial values for R</span></span>
-<span><span class="co">#' @param V0 the initial values for V</span></span>
+<span><span class="co">#' @param X10 the initial value for X1 </span></span>
+<span><span class="co">#' @param X20 the initial value for X1 </span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xinits_SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">H0</span><span class="op">=</span> <span class="cn">NULL</span>, <span class="va">S0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">I0</span><span class="op">=</span><span class="fl">1</span>, <span class="va">E0</span><span class="op">=</span><span class="fl">0</span>,<span class="va">R0</span> <span class="op">=</span> <span class="fl">1</span>,<span class="va">V0</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
-<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span> <span class="va">S0</span> <span class="op">=</span> <span class="va">H0</span><span class="op">-</span><span class="op">(</span><span class="va">E0</span><span class="op">+</span><span class="va">I0</span><span class="op">+</span><span class="va">R0</span><span class="op">+</span><span class="va">V0</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">S</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">S0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">E</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">E0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">I</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">I0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">R</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">R0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">V</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">V0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S<span class="op">=</span><span class="va">S</span>, E<span class="op">=</span><span class="va">E</span>, I<span class="op">=</span><span class="va">I</span>, R <span class="op">=</span><span class="va">R</span>,V<span class="op">=</span><span class="va">V</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">make_Xinits_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">X10</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">X20</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">X10</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">X20</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">X1</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">X10</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">X2</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">X20</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -474,16 +466,16 @@ calls.</p></li>
 <h3 id="setup_xinits">3. setup_Xinits<a class="anchor" aria-label="anchor" href="#setup_xinits"></a>
 </h3>
 <p>In the <code>xde_setup</code> family of setup functions, initial
-values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRV</code> is set
-up by the function <code>setup_Xinits.</code></p>
+values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
+set up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="generic">Generic<a class="anchor" aria-label="anchor" href="#generic"></a>
 </h4>
 <p>The <code>setup_Xinits</code> function dispatches on
 <code>pars$Xpar[[i]]</code></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title A function to set up Xpar</span></span>
-<span><span class="co">#' @description This method dispatches on `SEIRV`.</span></span>
+<span><span class="co">#' @description This method dispatches on `newXname`.</span></span>
 <span><span class="co">#' @param pars a [list]</span></span>
 <span><span class="co">#' @param i the host species index</span></span>
 <span><span class="co">#' @param Xopts a [list]</span></span>
@@ -498,7 +490,7 @@ up by the function <code>setup_Xinits.</code></p>
 </h4>
 <p>The <code>setup_Xinits.SIS</code> calls
 <code>make_Xinits_SIS</code></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xinits.SIS</span></span>
 <span><span class="co">#' @description Implements [setup_Xinits] for the SIS model</span></span>
 <span><span class="co">#' @inheritParams setup_Xinits</span></span>
@@ -510,17 +502,17 @@ up by the function <code>setup_Xinits.</code></p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xinits-seirv">setup_Xinits.SEIRV<a class="anchor" aria-label="anchor" href="#setup_xinits-seirv"></a>
+<h4 id="setup_xinits-newxname">setup_Xinits.newXname<a class="anchor" aria-label="anchor" href="#setup_xinits-newxname"></a>
 </h4>
-<p>To modify, replace <code>SEIRV</code></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Setup Xinits.SEIRV</span></span>
-<span><span class="co">#' @description Implements [setup_Xinits] for the SEIRV model</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::setup_Xinits</span></span>
+<p>To modify, replace <code>newXname</code></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Setup Xinits.newXname</span></span>
+<span><span class="co">#' @description Implements [setup_Xinits] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_Xinits</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xinits.SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="../reference/make_Xinits_SEIRV.html">make_Xinits_SEIRV</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">setup_Xinits.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu">make_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -531,7 +523,7 @@ up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="generic-1">Generic<a class="anchor" aria-label="anchor" href="#generic-1"></a>
 </h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Add indices for human population to parameter list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param pars a [list]</span></span>
@@ -545,10 +537,10 @@ up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="make_indices_x-sis">make_indices_X.SIS<a class="anchor" aria-label="anchor" href="#make_indices_x-sis"></a>
 </h4>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Add indices for human population to parameter list</span></span>
 <span><span class="co">#' @description Implements [make_indices_X] for the SIS model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::make_indices_X</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::make_indices_X</span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @importFrom utils tail</span></span>
 <span><span class="co">#' @export</span></span>
@@ -566,36 +558,27 @@ up by the function <code>setup_Xinits.</code></p>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="make_indices_x-seirv">make_indices_X.SEIRV<a class="anchor" aria-label="anchor" href="#make_indices_x-seirv"></a>
+<h4 id="make_indices_x-newxname">make_indices_X.newXname<a class="anchor" aria-label="anchor" href="#make_indices_x-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Add indices for human population to parameter list</span></span>
-<span><span class="co">#' @description Implements [make_indices_X] for the SEIRV model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::make_indices_X</span></span>
+<span><span class="co">#' @description Implements [make_indices_X] for the newXname model.</span></span>
+<span><span class="co">#' @inheritParams make_indices_X</span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @importFrom utils tail</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_indices_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>,<span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="va">S_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">S_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">E_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">E_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">I_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">I_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">R_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">R_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">V_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">V_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  </span>
+<span><span class="va">make_indices_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>,<span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">X1_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X1_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">X2_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X2_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">...</span> </span>
 <span>  </span>
 <span>  <span class="va">pars</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">=</span> <span class="va">max_ix</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S_ix<span class="op">=</span><span class="va">S_ix</span>,  E_ix<span class="op">=</span><span class="va">E_ix</span>, I_ix<span class="op">=</span><span class="va">I_ix</span>, R_ix<span class="op">=</span><span class="va">R_ix</span>, V_ix<span class="op">=</span><span class="va">V_ix</span><span class="op">)</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>X1_ix<span class="op">=</span><span class="va">X1_ix</span>, X2_ix<span class="op">=</span><span class="va">X2_ix</span>, <span class="va">...</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -606,7 +589,7 @@ up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="generic-2">Generic<a class="anchor" aria-label="anchor" href="#generic-2"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return the variables as a list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param y the variables</span></span>
@@ -621,40 +604,36 @@ up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="list_xvars-sis">list_Xvars.SIS<a class="anchor" aria-label="anchor" href="#list_xvars-sis"></a>
 </h4>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return the variables as a list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`</span></span>
 <span><span class="co">#' @inheritParams list_Xvars</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">list_Xvars.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        S <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">S_ix</span><span class="op">]</span>,</span>
-<span>        I <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">I_ix</span><span class="op">]</span></span>
-<span>      <span class="op">)</span></span>
-<span>  <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,<span class="op">{</span></span>
+<span>      <span class="va">S</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">S_ix</span><span class="op">]</span></span>
+<span>      <span class="va">I</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">I_ix</span><span class="op">]</span></span>
+<span>      <span class="va">H</span> <span class="op">=</span> <span class="va">S</span><span class="op">+</span><span class="va">I</span> </span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S<span class="op">=</span><span class="va">S</span>,I<span class="op">=</span><span class="va">I</span>,H<span class="op">=</span><span class="va">H</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="list_xvars-seirv">list_Xvars.SEIRV<a class="anchor" aria-label="anchor" href="#list_xvars-seirv"></a>
+<h4 id="list_xvars-newxname">list_Xvars.newXname<a class="anchor" aria-label="anchor" href="#list_xvars-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return the variables as a list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::list_Xvars</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::list_Xvars</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">list_Xvars.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>       <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>         S <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">S_ix</span><span class="op">]</span>,</span>
-<span>         E <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">E_ix</span><span class="op">]</span>,</span>
-<span>         I <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">I_ix</span><span class="op">]</span>,</span>
-<span>         R <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">R_ix</span><span class="op">]</span>,</span>
-<span>         V <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">V_ix</span><span class="op">]</span></span>
-<span>       <span class="op">)</span></span>
-<span>       <span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">list_Xvars.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,<span class="op">{</span></span>
+<span>      <span class="va">X1</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">X1_ix</span><span class="op">]</span></span>
+<span>      <span class="va">X2</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">X2_ix</span><span class="op">]</span></span>
+<span>      <span class="va">...</span></span>
+<span>      <span class="va">H</span> <span class="op">=</span> <span class="va">X1</span><span class="op">+</span><span class="va">X2</span><span class="op">+</span><span class="va">...</span> </span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>X1<span class="op">=</span><span class="va">X1</span>,X2<span class="op">=</span><span class="va">X2</span>,<span class="va">...</span>,H<span class="op">=</span><span class="va">H</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -665,7 +644,7 @@ up by the function <code>setup_Xinits.</code></p>
 <div class="section level4">
 <h4 id="generic-3">Generic<a class="anchor" aria-label="anchor" href="#generic-3"></a>
 </h4>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return initial values as a vector</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param pars a [list]</span></span>
@@ -680,7 +659,7 @@ up by the function <code>setup_Xinits.</code></p>
 <h4 id="get_inits_x-sis">get_inits_X.SIS<a class="anchor" aria-label="anchor" href="#get_inits_x-sis"></a>
 </h4>
 <p>Returns the initial values, in order, by name.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return initial values as a vector</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @inheritParams get_inits_X</span></span>
@@ -691,18 +670,18 @@ up by the function <code>setup_Xinits.</code></p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="get_inits_x-seirv">get_inits_X.SEIRV<a class="anchor" aria-label="anchor" href="#get_inits_x-seirv"></a>
+<h4 id="get_inits_x-newxname">get_inits_X.newXname<a class="anchor" aria-label="anchor" href="#get_inits_x-newxname"></a>
 </h4>
 <p>Write the function to return the initial values, in order, by
 name.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return initial values as a vector</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::get_inits_X</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_inits_X</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">get_inits_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">S</span>,<span class="va">E</span>,<span class="va">I</span>,<span class="va">R</span>,<span class="va">V</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">get_inits_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">X1</span>,<span class="va">X2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -714,7 +693,7 @@ and modify the initial values.</p>
 <div class="section level4">
 <h4 id="generic-4">Generic<a class="anchor" aria-label="anchor" href="#generic-4"></a>
 </h4>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Set the initial values from a vector of states</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param pars a [list]</span></span>
@@ -729,7 +708,7 @@ and modify the initial values.</p>
 <div class="section level4">
 <h4 id="update_inits_x-sis">update_inits_X.SIS<a class="anchor" aria-label="anchor" href="#update_inits_x-sis"></a>
 </h4>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Update inits for the SIS human model from a vector of states</span></span>
 <span><span class="co">#' @inheritParams update_inits_X</span></span>
 <span><span class="co">#' @return none</span></span>
@@ -741,18 +720,18 @@ and modify the initial values.</p>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="update_inits_x-seirv">update_inits_X.SEIRV<a class="anchor" aria-label="anchor" href="#update_inits_x-seirv"></a>
+<h4 id="update_inits_x-newxname">update_inits_X.newXname<a class="anchor" aria-label="anchor" href="#update_inits_x-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Update inits for the SEIRV human model from a vector of states</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::update_inits_X</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Update inits for the newXname human model from a vector of states</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::update_inits_X </span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">update_inits_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">update_inits_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y0</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
-<span>    <span class="va">pars</span> <span class="op">=</span> <span class="fu"><a href="../reference/make_Xinits_SEIRV.html">make_Xinits_SEIRV</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, S0<span class="op">=</span><span class="va">S</span>,E0<span class="op">=</span> <span class="va">E</span>, I0<span class="op">=</span><span class="va">I</span>, R0<span class="op">=</span><span class="va">R</span>,V0 <span class="op">=</span><span class="va">V</span><span class="op">)</span></span>
+<span>    <span class="va">pars</span> <span class="op">=</span> <span class="fu">make_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, X10<span class="op">=</span><span class="va">X1</span>, X20<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -786,7 +765,7 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <div class="section level4">
 <h4 id="make_xpar_sis-1">make_Xpar_SIS<a class="anchor" aria-label="anchor" href="#make_xpar_sis-1"></a>
 </h4>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make parameters for SIS human model, with defaults</span></span>
 <span><span class="co">#' @param nStrata is the number of population strata</span></span>
 <span><span class="co">#' @param Xopts a [list] that could overwrite defaults</span></span>
@@ -809,39 +788,29 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="make_xpar_seirv">make_Xpar_SEIRV<a class="anchor" aria-label="anchor" href="#make_xpar_seirv"></a>
+<h4 id="make_xpar_newxname">make_Xpar_newXname<a class="anchor" aria-label="anchor" href="#make_xpar_newxname"></a>
 </h4>
 <p>To format this for a new function, do a search and replace on
-<code>SEIRV</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make parameters for SEIRV human model, with defaults</span></span>
+<code>newXname</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make parameters for newXname human model, with defaults</span></span>
 <span><span class="co">#' @param nStrata is the number of population strata</span></span>
 <span><span class="co">#' @param Xopts a [list] that could overwrite defaults</span></span>
-<span><span class="co">#' @param tau  incubation rate</span></span>
-<span><span class="co">#' @param b the proportion of infective bites that cause an infection</span></span>
-<span><span class="co">#' @param r the the duration of an infection</span></span>
-<span><span class="co">#' @param c the proportion of bites on infected humans that infect a mosquito</span></span>
-<span><span class="co">#' @param alpha  travallers with immunity from malaria</span></span>
-<span><span class="co">#' @param eps   loss of immunity rate</span></span>
-<span><span class="co">#' @param delta   proportion of protected after recovery</span></span>
-<span><span class="co">#' @param sig  progression rate of recovered individual to protected class</span></span>
+<span><span class="co">#' @param p1 the first parameter </span></span>
+<span><span class="co">#' @param p2 the second parameter </span></span>
+<span><span class="co">#' @param p3 the third parameter </span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xpar_SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                          <span class="va">alpha</span> <span class="op">=</span><span class="fl">0.1</span>,<span class="va">b</span><span class="op">=</span><span class="fl">0.55</span>, <span class="va">r</span><span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">180</span>, <span class="va">c</span><span class="op">=</span><span class="fl">0.15</span>,<span class="va">tau</span><span class="op">=</span> <span class="fl">0.5</span>,<span class="va">eps</span>,<span class="va">sig</span><span class="op">=</span><span class="fl">0.3</span>,<span class="va">delta</span> <span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">make_Xpar_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                         <span class="va">p1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">p2</span><span class="op">=</span><span class="fl">2</span>, <span class="va">p3</span><span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
 <span>    <span class="va">Xpar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEIRV"</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">alpha</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">b</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">b</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">c</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">c</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">r</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">r</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">tau</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">tau</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">eps</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">eps</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">sig</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">sig</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">delta</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">delta</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"newXname"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p1</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p1</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p2</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p3</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p3</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -850,8 +819,8 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <h3 id="setup_xpar">9. setup_Xpar<a class="anchor" aria-label="anchor" href="#setup_xpar"></a>
 </h3>
 <p>In the <code>xde_setup</code> family of setup functions, setup for a
-model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>SEIRV</code> is set
-up by the function <code>setup_Xpar.</code></p>
+model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
+set up by the function <code>setup_Xpar.</code></p>
 <div class="section level4">
 <h4 id="generic-5">Generic<a class="anchor" aria-label="anchor" href="#generic-5"></a>
 </h4>
@@ -860,7 +829,7 @@ the initial values. By convention, the functions that get called are not
 <code>S3</code> class functions.</p>
 <p>The <code>setup_Xpar</code> functions assigns to <code>Xname</code>
 the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title A function to set up Xpar</span></span>
 <span><span class="co">#' @description This method dispatches on `Xname`.</span></span>
 <span><span class="co">#' @param Xname a [character] string</span></span>
@@ -879,7 +848,7 @@ the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
 </h4>
 <p>The dispatched function <code>SIS</code> ignores xname, but it calls
 a function <code>make_Xpar_SIS</code></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xpar.SIS</span></span>
 <span><span class="co">#' @description Implements [setup_Xpar] for the SIS model</span></span>
 <span><span class="co">#' @inheritParams setup_Xpar</span></span>
@@ -891,18 +860,18 @@ a function <code>make_Xpar_SIS</code></p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xpar-xname">setup_Xpar.Xname<a class="anchor" aria-label="anchor" href="#setup_xpar-xname"></a>
+<h4 id="setup_xpar-newxname">setup_Xpar.newXname<a class="anchor" aria-label="anchor" href="#setup_xpar-newxname"></a>
 </h4>
 <p>To use this, simply to a search and replace on
-<code>Xname.</code></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Setup Xpar.SEIRV</span></span>
-<span><span class="co">#' @description Implements [setup_Xpar] for the SEIRV model</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::setup_Xpar</span></span>
+<code>newXname.</code></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Setup Xpar.newXname</span></span>
+<span><span class="co">#' @description Implements [setup_Xpar] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_Xpar</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xpar.SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">Xname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/make_Xpar_SEIRV.html">make_Xpar_SEIRV</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
+<span><span class="va">setup_Xpar.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">newXname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_Xpar_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -911,7 +880,7 @@ a function <code>make_Xpar_SIS</code></p>
 <div class="section level2">
 <h2 id="terms">Terms<a class="anchor" aria-label="anchor" href="#terms"></a>
 </h2>
-<p>All models in <code>ramp.xde</code> the modular design dictates that
+<p>All models in <code>ramp.xds</code> the modular design dictates that
 we must define a few functions that compute a few key quantities:</p>
 <ul>
 <li><p><code>X</code> is defined to be the effective density of
@@ -930,7 +899,7 @@ bites on the strata that would infect a mosquito.</p>
 <div class="section level4">
 <h4 id="generic-6">Generic<a class="anchor" aria-label="anchor" href="#generic-6"></a>
 </h4>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param y state vector</span></span>
@@ -945,14 +914,14 @@ bites on the strata that would infect a mosquito.</p>
 <div class="section level4">
 <h4 id="f_x-sis">F_X.SIS<a class="anchor" aria-label="anchor" href="#f_x-sis"></a>
 </h4>
-<p>As an example, we include the <span class="math inline">\(SIS\)</span> model from <code>ramp.xde.</code> In
+<p>As an example, we include the <span class="math inline">\(SIS\)</span> model from <code>ramp.xds.</code> In
 the <code>SIS</code> model, the returned value is <span class="math inline">\(cI\)</span> where <span class="math inline">\(I\)</span> is the density of infected individuals;
 the prevalence of infection is <span class="math inline">\(X/H\)</span>.
 The constant <span class="math inline">\(c\)</span> is the probability a
 mosquito would become infected after blood feeding on an infected human.
 Two things to note:</p>
 <ul>
-<li>First, <code>ramp.xde</code> holds the indices by component under
+<li>First, <code>ramp.xds</code> holds the indices by component under
 <code>pars$ix,</code> so <code>pars$ix$X</code> holds the indices for
 all the variables for all species, and <code>pars$ix$X[[i]]</code> holds
 the indices for the <span class="math inline">\(i^{th}\)</span> species.
@@ -960,7 +929,7 @@ Putting them under <code>X</code> helps to avoid conflicts if, for
 example, another dynamical component happened to use the same variable
 name.</li>
 </ul>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_X] for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams F_X</span></span>
@@ -979,24 +948,32 @@ manuscript<span class="math inline">\(^1\)</span>, this quantity was
 called <strong>X.</strong></p>
 </div>
 <div class="section level4">
-<h4 id="f_x-seirv">F_X.SEIRV<a class="anchor" aria-label="anchor" href="#f_x-seirv"></a>
+<h4 id="f_x-newxname">F_X.newXname<a class="anchor" aria-label="anchor" href="#f_x-newxname"></a>
 </h4>
 <p>The following is a template for new model. The declaration of
 <code>inheritParams</code> from the <code>SIS</code> model in
-<code>ramp.xde</code> works naturally. The namespace from
-<code>ramp.xde</code> is needed, so our SEIRV function (above) has
-<code>ramp.xde::F_X.</code></p>
+<code>ramp.xds</code> works naturally. The namespace from
+<code>ramp.xds</code> is needed, so our newXname function (above) has
+<code>ramp.xds::F_X.</code></p>
 <p>The steps are to extract the variables in</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_X] for the SIS model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::F_X</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_X</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">I</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">I_ix</span><span class="op">]</span></span>
-<span>  <span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">c</span><span class="op">*</span><span class="va">I</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></span>
+<span><span class="va">F_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">########################</span></span>
+<span>  <span class="co"># extract: </span></span>
+<span>  <span class="co"># VAR &lt;- y[pars$ix$X$...] </span></span>
+<span>  <span class="co">########################</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>       <span class="co">########################</span></span>
+<span>       <span class="co"># compute: </span></span>
+<span>       <span class="co"># X &lt;- ... F(VAR) </span></span>
+<span>       <span class="co">########################</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -1008,7 +985,7 @@ often important, so we write a function that computes it.</p>
 <div class="section level4">
 <h4 id="generic-7">Generic<a class="anchor" aria-label="anchor" href="#generic-7"></a>
 </h4>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param y state vector</span></span>
 <span><span class="co">#' @param pars a list</span></span>
@@ -1024,33 +1001,32 @@ often important, so we write a function that computes it.</p>
 </h4>
 <p>This is the function that computes <span class="math inline">\(H =
 S+I\)</span> for the <code>SIS</code> model.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_H] for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams F_H</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_H.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">S</span><span class="op">+</span><span class="va">I</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="f_h-seirv">F_H.SEIRV<a class="anchor" aria-label="anchor" href="#f_h-seirv"></a>
+<h4 id="f_h-newxname">F_H.newXname<a class="anchor" aria-label="anchor" href="#f_h-newxname"></a>
 </h4>
 <p>The function <code>F_X</code> returns the effective density of
 infectious humans for each stratum. The following is a template for a
-model:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+model, assuming <span class="math inline">\(H\)</span> is computed in
+<code>list_Xvars</code>:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
-<span><span class="co">#' @description Implements [F_H] for the SEIRV model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::F_H</span></span>
+<span><span class="co">#' @description Implements [F_H] for the newXname model.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_H</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_H.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="op">{</span></span>
-<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="va">S</span> <span class="op">+</span><span class="va">E</span><span class="op">+</span> <span class="va">I</span><span class="op">+</span><span class="va">R</span><span class="op">+</span><span class="va">V</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+<span><span class="va">F_H.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -1065,7 +1041,7 @@ model.</p>
 <div class="section level4">
 <h4 id="generic-8">Generic<a class="anchor" aria-label="anchor" href="#generic-8"></a>
 </h4>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Infection blocking pre-erythrocytic immunity</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param y state vector</span></span>
@@ -1081,7 +1057,7 @@ model.</p>
 <h4 id="f_b-sis">
 <code>F_b.SIS</code><a class="anchor" aria-label="anchor" href="#f_b-sis"></a>
 </h4>
-<p>In <code>ramp.xde,</code> we recognize the problem of translating the
+<p>In <code>ramp.xds,</code> we recognize the problem of translating the
 local EIR into the FoI. The local EIR is computed as one of the core
 model terms for each one of the model strata.</p>
 <p>The function <code>F_b</code> returns the model-defined probability
@@ -1090,8 +1066,8 @@ include the combined effects of inefficient transmission,
 pre-erytrocytic immunity, and perhaps some effects of blood stage
 immunity. In a model with no effect, the return value would be <span class="math inline">\(1\)</span>.</p>
 <p>Once again, we provide the <code>SIS</code> model from
-<code>ramp.xde</code> as our example:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code>ramp.xds</code> as our example:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Infection blocking pre-erythrocytic immunity</span></span>
 <span><span class="co">#' @description Implements [F_b] for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams F_b</span></span>
@@ -1102,18 +1078,18 @@ immunity. In a model with no effect, the return value would be <span class="math
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="f_b-seirv">F_b.SEIRV<a class="anchor" aria-label="anchor" href="#f_b-seirv"></a>
+<h4 id="f_b-newxname">F_b.newXname<a class="anchor" aria-label="anchor" href="#f_b-newxname"></a>
 </h4>
 <p>Depending on the model, the value of <code>b</code> is either
 retrieved or it is computed from other variables in the model, and it is
 expected that <code>length(b) = nStrata</code></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Infection blocking pre-erythrocytic immunity</span></span>
-<span><span class="co">#' @description Implements [F_b] for the SEIRV model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::F_b</span></span>
+<span><span class="co">#' @description Implements [F_b] for the newXname model.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_b</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_b.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_b.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,<span class="op">{</span> </span>
 <span>    <span class="co">########################</span></span>
 <span>    <span class="co"># retrieve or compute it </span></span>
@@ -1131,7 +1107,7 @@ expected that <code>length(b) = nStrata</code></p>
 <div class="section level2">
 <h2 id="outputs">Outputs<a class="anchor" aria-label="anchor" href="#outputs"></a>
 </h2>
-<p>To make <code>ramp.xde</code> easy to use, we provide some functions
+<p>To make <code>ramp.xds</code> easy to use, we provide some functions
 that parse the outputs and compute some standard metrics.</p>
 <div class="section level3">
 <h3 id="parse_deout_x">13. <code>parse_deout_X</code><a class="anchor" aria-label="anchor" href="#parse_deout_x"></a>
@@ -1142,7 +1118,7 @@ by name as a list.</p>
 <div class="section level4">
 <h4 id="generic-9">Generic<a class="anchor" aria-label="anchor" href="#generic-9"></a>
 </h4>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Parse the output of deSolve and return the variables by name in a list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`. Adds the variables</span></span>
 <span><span class="co">#' from the X model to a list and returns it</span></span>
@@ -1157,7 +1133,7 @@ by name as a list.</p>
 <div class="section level4">
 <h4 id="parse_deout_x-sis">parse_deout_X.SIS<a class="anchor" aria-label="anchor" href="#parse_deout_x-sis"></a>
 </h4>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Parse the output of deSolve and return variables for the SIS model</span></span>
 <span><span class="co">#' @description Implements [parse_deout_X] for the SIS model</span></span>
 <span><span class="co">#' @inheritParams parse_deout_X</span></span>
@@ -1173,25 +1149,23 @@ by name as a list.</p>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="parse_deout_x-seirv">parse_deout_X.SEIRV<a class="anchor" aria-label="anchor" href="#parse_deout_x-seirv"></a>
+<h4 id="parse_deout_x-newxname">parse_deout_X.newXname<a class="anchor" aria-label="anchor" href="#parse_deout_x-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Parse the output of deSolve and return variables for the SEIRV model</span></span>
-<span><span class="co">#' @description Implements [parse_deout_X] for the SEIRV model</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::parse_deout_X</span></span>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Parse the output of deSolve and return variables for the newXname model</span></span>
+<span><span class="co">#' @description Implements [parse_deout_X] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::parse_deout_X</span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">parse_deout_X.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">deout</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">parse_deout_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">deout</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">time</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,<span class="op">{</span></span>
-<span>    <span class="va">S</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">S_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">E</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">E_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">I</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">I_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">R</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">R_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">V</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">V_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">H</span> <span class="op">=</span> <span class="va">S</span><span class="op">+</span><span class="va">E</span><span class="op">+</span><span class="va">I</span><span class="op">+</span><span class="va">R</span><span class="op">+</span><span class="va">V</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>time<span class="op">=</span><span class="va">time</span>, S<span class="op">=</span><span class="va">S</span>, E<span class="op">=</span><span class="va">E</span>,I<span class="op">=</span><span class="va">I</span>, R<span class="op">=</span><span class="va">R</span>, V<span class="op">=</span><span class="va">V</span>,H<span class="op">=</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+<span>    <span class="va">X1</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">X1_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
+<span>    <span class="va">X2</span> <span class="op">=</span> <span class="va">deout</span><span class="op">[</span>,<span class="va">X2_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span>
+<span>    <span class="va">...</span> </span>
+<span>    <span class="va">H</span> <span class="op">=</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span> <span class="op">+</span> <span class="va">...</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>time<span class="op">=</span><span class="va">time</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span>, H<span class="op">=</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -1201,29 +1175,28 @@ by name as a list.</p>
 <div class="section level4">
 <h4 id="generic-10">Generic<a class="anchor" aria-label="anchor" href="#generic-10"></a>
 </h4>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute the "true" prevalence of infection / parasite rate</span></span>
-<span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
-<span><span class="co">#' @param varslist a list with variables attached by name</span></span>
-<span><span class="co">#' @param pars a list</span></span>
-<span><span class="co">#' @param i the host species index</span></span>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the *true* prevalence of infection / parasite rate</span></span>
+<span><span class="co">#' @description This method dispatches on the type of `pars$Xpar[[i]]`.</span></span>
+<span><span class="co">#' @param vars a list with the variables attached by name</span></span>
+<span><span class="co">#' @param Xpar a list defining a model for human</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_pr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">varslist</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"F_pr"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">F_pr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">Xpar</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"F_pr"</span>, <span class="va">Xpar</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="f_pr-sis">F_pr.SIS<a class="anchor" aria-label="anchor" href="#f_pr-sis"></a>
 </h4>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute the "true" prevalence of infection / parasite rate</span></span>
-<span><span class="co">#' @description Implements [F_pr] for the SIS model.</span></span>
+<span><span class="co">#' @description Implements F_pr for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams F_pr</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_pr.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">varslist</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">varslist</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">I</span><span class="op">/</span><span class="va">H</span><span class="op">)</span></span>
+<span><span class="va">F_pr.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">Xpar</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span>, <span class="va">I</span><span class="op">/</span><span class="va">H</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The function <code>F_pr</code> computes the models <em>true</em>
@@ -1232,16 +1205,16 @@ prevalence using the variable names. It is passed the
 above).</p>
 </div>
 <div class="section level4">
-<h4 id="f_pr-seirv">F_pr.SEIRV<a class="anchor" aria-label="anchor" href="#f_pr-seirv"></a>
+<h4 id="f_pr-newxname">F_pr.newXname<a class="anchor" aria-label="anchor" href="#f_pr-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute the "true" prevalence of infection / parasite rate</span></span>
-<span><span class="co">#' @description Implements [F_pr] for the SEIRV model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::F_pr</span></span>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the true prevalence of infection / parasite rate</span></span>
+<span><span class="co">#' @description Implements F_pr for the newXname model.</span></span>
+<span><span class="co">#' @inheritParams F_pr</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_pr.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">varslist</span>, <span class="va">pars</span>,<span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">varslist</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">I</span><span class="op">/</span><span class="va">H</span><span class="op">)</span></span>
+<span><span class="va">F_pr.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">Xpar</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xpar</span>,<span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">X1</span><span class="op">/</span><span class="va">H</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -1254,7 +1227,7 @@ capacity, or <code>HTC</code></p>
 <div class="section level4">
 <h4 id="generic-11">Generic<a class="anchor" aria-label="anchor" href="#generic-11"></a>
 </h4>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute the human transmitting capacity</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `pars$Xpar`.</span></span>
 <span><span class="co">#' @param pars a [list]</span></span>
@@ -1268,10 +1241,10 @@ capacity, or <code>HTC</code></p>
 <div class="section level4">
 <h4 id="htc-sis">HTC.SIS<a class="anchor" aria-label="anchor" href="#htc-sis"></a>
 </h4>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute the HTC for the SIS model</span></span>
 <span><span class="co">#' @description Implements [HTC] for the SIS model with demography.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::HTC</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::HTC</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">HTC.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1281,18 +1254,18 @@ capacity, or <code>HTC</code></p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="htc-seirv">HTC.SEIRV<a class="anchor" aria-label="anchor" href="#htc-seirv"></a>
+<h4 id="htc-newxname">HTC.newXname<a class="anchor" aria-label="anchor" href="#htc-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute the HTC for the SEIRV model</span></span>
-<span><span class="co">#' @description Implements [HTC] for the SEIRV model with demography.</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::HTC</span></span>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the HTC for the newXname model</span></span>
+<span><span class="co">#' @description Implements [HTC] for the newXname model with demography.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::HTC</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">HTC.SEIRV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">HTC.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>       <span class="va">HTC</span> <span class="op">&lt;-</span> <span class="va">c</span><span class="op">/</span><span class="va">r</span>,</span>
-<span>       <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">HTC</span><span class="op">)</span></span>
+<span>    <span class="co">#HTC &lt;- </span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">HTC</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -1302,12 +1275,12 @@ capacity, or <code>HTC</code></p>
 <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h2>
 <div class="section level3">
-<h3 id="xde_lines_x">16. xde_lines_X<a class="anchor" aria-label="anchor" href="#xde_lines_x"></a>
+<h3 id="xds_lines_x">16. xds_lines_X<a class="anchor" aria-label="anchor" href="#xds_lines_x"></a>
 </h3>
 <div class="section level4">
-<h4 id="xde_lines_x_sis">xde_lines_X_SIS<a class="anchor" aria-label="anchor" href="#xde_lines_x_sis"></a>
+<h4 id="xds_lines_x_sis">xds_lines_X_SIS<a class="anchor" aria-label="anchor" href="#xds_lines_x_sis"></a>
 </h4>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add lines for the density of infected individuals for the SIS model</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @param XH a list with the outputs of parse_deout_X_SIS</span></span>
@@ -1316,7 +1289,7 @@ capacity, or <code>HTC</code></p>
 <span><span class="co">#' @param llty an integer (or integers) to set the `lty` for plotting</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">xde_lines_X_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">xds_lines_X_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH</span>,<span class="op">{</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">S</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
@@ -1334,55 +1307,49 @@ capacity, or <code>HTC</code></p>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="xde_lines_x_seirv">xde_lines_X_SEIRV<a class="anchor" aria-label="anchor" href="#xde_lines_x_seirv"></a>
+<h4 id="xds_lines_x_newxname">xds_lines_X_newXname<a class="anchor" aria-label="anchor" href="#xds_lines_x_newxname"></a>
 </h4>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Add lines for the density of infected individuals for the SEIRV model</span></span>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Add lines for the density of infected individuals for the newXname model</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @param XH a list with the outputs of parse_deout_X_SEIRV</span></span>
+<span><span class="co">#' @param XH a list with the outputs of parse_deout_X_newXname</span></span>
 <span><span class="co">#' @param nStrata the number of population strata</span></span>
 <span><span class="co">#' @param clrs a vector of colors</span></span>
 <span><span class="co">#' @param llty an integer (or integers) to set the `lty` for plotting</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">xde_lines_X_SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>,<span class="st">"darkblue"</span>,<span class="st">"darkred"</span>,<span class="st">"darkgreen"</span>, <span class="st">"purple"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">xds_lines_X_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH</span>,<span class="op">{</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">S</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">E</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">I</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">R</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">V</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">I</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">&gt;</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
-<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">clrs</span><span class="op">)</span><span class="op">==</span><span class="fl">5</span><span class="op">)</span> <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">clrs</span>, <span class="fl">5</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">clrs</span><span class="op">)</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span> <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">clrs</span>, <span class="fl">2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
 <span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">llty</span><span class="op">)</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="va">llty</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">llty</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>      </span>
+<span></span>
 <span>      <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nStrata</span><span class="op">)</span><span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">S</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">E</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">I</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">3</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">R</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">4</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">V</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">5</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">I</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>      <span class="op">}</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="xde_plot_x">17. xde_plot_X<a class="anchor" aria-label="anchor" href="#xde_plot_x"></a>
+<h3 id="xds_plot_x">17. xds_plot_X<a class="anchor" aria-label="anchor" href="#xds_plot_x"></a>
 </h3>
 <p>We provide a basic plotting function. The function
-<code>xde_lines_X_*</code> does not have an <code>S3</code> version.
+<code>xds_lines_X_*</code> does not have an <code>S3</code> version.
 Instead, it is called by the <code>S3</code> function
-<code>xde_plot_X</code></p>
+<code>xds_plot_X</code></p>
 <div class="section level4">
 <h4 id="generic-12">Generic<a class="anchor" aria-label="anchor" href="#generic-12"></a>
 </h4>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Basic plotting for epidemiological models</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @param pars a list that defines an `ramp.xde` model (*e.g.*,  generated by `xde_setup()`)</span></span>
+<span><span class="co">#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)</span></span>
 <span><span class="co">#' @param i the host species index</span></span>
 <span><span class="co">#' @param clrs a vector of colors</span></span>
 <span><span class="co">#' @param llty an integer (or integers) to set the `lty` for plotting</span></span>
@@ -1390,19 +1357,19 @@ Instead, it is called by the <code>S3</code> function
 <span><span class="co">#' @param add_axes a logical: plot axes only if TRUE</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">xde_plot_X</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="st">"black"</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"xde_plot_X"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">xds_plot_X</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="st">"black"</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"xds_plot_X"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="xde_plot_x-sis">xde_plot_X.SIS<a class="anchor" aria-label="anchor" href="#xde_plot_x-sis"></a>
+<h4 id="xds_plot_x-sis">xds_plot_X.SIS<a class="anchor" aria-label="anchor" href="#xds_plot_x-sis"></a>
 </h4>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the SEIRV model</span></span>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the newXname model</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::xde_plot_X</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::xds_plot_X</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">xde_plot_X.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">xds_plot_X.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">vars</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">outputs</span>,<span class="kw">if</span><span class="op">(</span><span class="va">stable</span><span class="op">==</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span><span class="va">stable_orbits</span><span class="op">}</span><span class="kw">else</span><span class="op">{</span><span class="va">orbits</span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">add_axes</span><span class="op">==</span><span class="cn">TRUE</span><span class="op">)</span></span>
@@ -1411,27 +1378,26 @@ Instead, it is called by the <code>S3</code> function
 <span>              ylab <span class="op">=</span> <span class="st">"# Infected"</span>, xlab <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span>  <span class="fu">xde_lines_X_SIS</span><span class="op">(</span><span class="va">vars</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">clrs</span>, <span class="va">llty</span><span class="op">)</span></span>
+<span>  <span class="fu">xds_lines_X_SIS</span><span class="op">(</span><span class="va">vars</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">clrs</span>, <span class="va">llty</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="xde_plot_x-seirv">xde_plot_X.SEIRV<a class="anchor" aria-label="anchor" href="#xde_plot_x-seirv"></a>
+<h4 id="xds_plot_x-newxname">xds_plot_X.newXname<a class="anchor" aria-label="anchor" href="#xds_plot_x-newxname"></a>
 </h4>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the SEIRV model</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the newXname model</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @inheritParams ramp.xde::xde_plot_X</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::xds_plot_X</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">xde_plot_X.SEIRV</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>,<span class="st">"darkblue"</span>,<span class="st">"darkred"</span>,<span class="st">"darkgreen"</span>,<span class="st">"purple"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">xds_plot_X.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span>, <span class="va">stable</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">add_axes</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">vars</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">outputs</span>,<span class="kw">if</span><span class="op">(</span><span class="va">stable</span><span class="op">==</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span><span class="va">stable_orbits</span><span class="op">}</span><span class="kw">else</span><span class="op">{</span><span class="va">orbits</span><span class="op">}</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">add_axes</span><span class="op">==</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">time</span>, <span class="fl">0</span><span class="op">*</span><span class="va">time</span>, type <span class="op">=</span> <span class="st">"n"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>              ylab <span class="op">=</span> <span class="st">"No of. Infected"</span>, xlab <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  </span>
-<span>  <span class="fu"><a href="../reference/xde_lines_X_SEIRV.html">xde_lines_X_SEIRV</a></span><span class="op">(</span><span class="va">vars</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">clrs</span>, <span class="va">llty</span><span class="op">)</span></span>
+<span>              ylab <span class="op">=</span> <span class="st">"# Infected"</span>, xlab <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu">xds_lines_X_newXname</span><span class="op">(</span><span class="va">vars</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">clrs</span>, <span class="va">llty</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>

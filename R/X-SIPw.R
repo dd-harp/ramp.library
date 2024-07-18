@@ -3,7 +3,7 @@
 
 #' @title Derivatives for human population
 #' @description Implements [dXdt] for the SIPw-xde model.
-#' @inheritParams ramp.xde::dXdt
+#' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export
 dXdt.SIPw <- function(t, y, pars, i){
@@ -26,7 +26,7 @@ dXdt.SIPw <- function(t, y, pars, i){
 
 #' @title Derivatives for human population
 #' @description Implements [DT_Xt] for the SIPw dts model
-#' @inheritParams ramp.xde::DT_Xt
+#' @inheritParams ramp.xds::DT_Xt
 #' @return a [numeric] vector
 #' @export
 DT_Xt.SIPw <- function(t, y, pars, i){
@@ -54,7 +54,7 @@ DT_Xt.SIPw <- function(t, y, pars, i){
 
 #' @title Setup the Xpar for the SIPw_xde model
 #' @description implements [xde_setup_Xpar] for the SIPw model
-#' @inheritParams ramp.xde::xde_setup_Xpar
+#' @inheritParams ramp.xds::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
 xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
@@ -94,7 +94,7 @@ xde_make_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
 
 #' @title Setup the Xpar for the SIPw_dts model
 #' @description Implements [dts_setup_Xpar] for a SIPw dts model
-#' @inheritParams ramp.xde::dts_setup_Xpar
+#' @inheritParams ramp.xds::dts_setup_Xpar
 #' @return a [list] vector
 #' @export
 dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
@@ -135,7 +135,7 @@ dts_make_Xpar_SIPw = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/18
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for SIPw models
-#' @inheritParams ramp.xde::F_X
+#' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_X.SIPw <- function(y, pars, i) {
@@ -149,7 +149,7 @@ F_X.SIPw <- function(y, pars, i) {
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for SIPw models
-#' @inheritParams ramp.xde::F_X
+#' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.SIPw <- function(y, pars, i){
@@ -158,7 +158,7 @@ F_H.SIPw <- function(y, pars, i){
 
 #' @title Compute the "true" prevalence of infection / parasite rate
 #' @description Implements [F_pr] for SIPw models
-#' @inheritParams ramp.xde::F_pr
+#' @inheritParams ramp.xds::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pr.SIPw <- function(vars, Xpar) {
@@ -168,7 +168,7 @@ F_pr.SIPw <- function(vars, Xpar) {
 
 #' @title Infection blocking pre-erythrocytic immunity
 #' @description Implements [F_b] for SIPw models
-#' @inheritParams ramp.xde::F_b
+#' @inheritParams ramp.xds::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SIPw <- function(y, pars,i) {
@@ -178,7 +178,7 @@ F_b.SIPw <- function(y, pars,i) {
 
 #' @title Return the SIPw model variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xde::list_Xvars
+#' @inheritParams ramp.xds::list_Xvars
 #' @return a [list]
 #' @export
 list_Xvars.SIPw <- function(y, pars, i) {
@@ -193,7 +193,7 @@ list_Xvars.SIPw <- function(y, pars, i) {
 
 #' @title Return the SIPw model variables as a list, returned from DT_Xt.SIPw
 #' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xde::put_Xvars
+#' @inheritParams ramp.xds::put_Xvars
 #' @return a [list]
 #' @export
 put_Xvars.SIPw <- function(Xvars, y, pars, i) {
@@ -208,7 +208,7 @@ put_Xvars.SIPw <- function(Xvars, y, pars, i) {
 
 #' @title Compute the HTC for the SIPw_xde model
 #' @description Implements [HTC] for the SIPw_xde model with demography.
-#' @inheritParams ramp.xde::HTC
+#' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
 HTC.SIPw <- function(pars, i) {
@@ -223,7 +223,7 @@ HTC.SIPw <- function(pars, i) {
 
 #' @title Setup Xinits.SIPw
 #' @description Implements [setup_Xinits] for the SIPw models
-#' @inheritParams ramp.xde::setup_Xinits
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
 setup_Xinits.SIPw = function(pars, i, Xopts=list()){
@@ -254,7 +254,7 @@ make_Xinits_SIPw = function(nStrata, Xopts = list(),
 
 #' @title Parse the output of deSolve and return variables for SIPw models
 #' @description Implements [parse_outputs_X] for SIPw models
-#' @inheritParams ramp.xde::parse_outputs_X
+#' @inheritParams ramp.xds::parse_outputs_X
 #' @return none
 #' @export
 parse_outputs_X.SIPw <- function(outputs, pars, i) {
@@ -270,7 +270,7 @@ parse_outputs_X.SIPw <- function(outputs, pars, i) {
 
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for SIPw models
-#' @inheritParams ramp.xde::make_indices_X
+#' @inheritParams ramp.xds::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -294,7 +294,7 @@ make_indices_X.SIPw <- function(pars, i) {with(pars,{
 })}
 
 #' @title Update inits for SIPw models from a vector of states
-#' @inheritParams ramp.xde::update_inits_X
+#' @inheritParams ramp.xds::update_inits_X
 #' @return none
 #' @export
 update_inits_X.SIPw <- function(pars, y0, i) {
@@ -306,7 +306,7 @@ update_inits_X.SIPw <- function(pars, y0, i) {
 
 #' @title Return initial values as a vector from a SIPw model
 #' @description This method dispatches on the type of `pars$Xpar[[i]]`
-#' @inheritParams ramp.xde::get_inits_X
+#' @inheritParams ramp.xds::get_inits_X
 #' @return none
 #' @export
 get_inits_X.SIPw <- function(pars, i){with(pars$Xinits[[i]],{
@@ -316,7 +316,7 @@ get_inits_X.SIPw <- function(pars, i){with(pars$Xinits[[i]],{
 
 #' Plot the density of infected individuals for the SIPw model
 #'
-#' @inheritParams ramp.xde::xds_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
 xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
@@ -333,7 +333,7 @@ xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen")
 #' Add lines for the density of infected individuals for a SIPw model
 #'
 #' @param XH a list with the outputs of parse_outputs_X.SIPw
-#' @param pars a list that defines an `ramp.xde` model (*e.g.*,  generated by `xde_setup()`)
+#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'

@@ -1,16 +1,16 @@
 ---
-title: "Adding new L models to `ramp.xde`" 
+title: "Adding new L models to `ramp.xds`" 
 subtitle: "Models for Aquatic Mosquito Ecology" 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Adding new L models to `ramp.xde`}
+  %\VignetteIndexEntry{Adding new L models to `ramp.xds`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 *** 
 
-This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by  [`ramp.xde`](https://github.com/dd-harp/ramp.xde). This vignette covers models of parasite infection dynamics and immunity in humans or other hosts -- the dynamical components we have denoted $\cal L.$ 
+This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by  [`ramp.xds`](https://github.com/dd-harp/ramp.xds). This vignette covers models of parasite infection dynamics and immunity in humans or other hosts -- the dynamical components we have denoted $\cal L.$ 
 
 *** 
 

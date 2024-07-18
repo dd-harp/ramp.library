@@ -2,7 +2,7 @@
 
 #' @title Reset bloodfeeding and mortality rates to baseline
 #' @description Implements [MBionomics] for the ENBRQ_dts model
-#' @inheritParams ramp.xde::MBionomics
+#' @inheritParams ramp.xds::MBionomics
 #' @return the model as a [list]
 #' @export
 MBionomics.ENBRQ_dts <- function(t, y, pars, s) {
@@ -16,7 +16,7 @@ MBionomics.ENBRQ_dts <- function(t, y, pars, s) {
 
 #' @title The net blood feeding rate of the infective mosquito population in a patch
 #' @description Implements [F_fqZ] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::F_fqZ
+#' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqZ.ENBRQ_dts <- function(t, y, pars, s) {
@@ -25,7 +25,7 @@ F_fqZ.ENBRQ_dts <- function(t, y, pars, s) {
 
 #' @title The net blood feeding rate of the infective mosquito population in a patch
 #' @description Implements [F_fqM] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::F_fqM
+#' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqM.ENBRQ_dts <- function(t, y, pars, s) {
@@ -34,7 +34,7 @@ F_fqM.ENBRQ_dts <- function(t, y, pars, s) {
 
 #' @title Number of eggs laid by adult mosquitoes
 #' @description Implements [F_eggs] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::F_eggs
+#' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_eggs.ENBRQ_dts <- function(t, y, pars, s) {
@@ -43,7 +43,7 @@ F_eggs.ENBRQ_dts <- function(t, y, pars, s) {
 
 #' @title Derivatives for adult mosquitoes
 #' @description Implements [dMYZdt] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::dMYZdt
+#' @inheritParams ramp.xds::dMYZdt
 #' @return a [numeric] vector
 #' @export
 dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
@@ -77,7 +77,7 @@ dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
 
 #' @title Setup MYZpar for the ENBRQ_dts model
 #' @description Implements [dts_setup_MYZpar] for the ENBRQ_dts model
-#' @inheritParams ramp.xde::dts_setup_MYZpar
+#' @inheritParams ramp.xds::dts_setup_MYZpar
 #' @return a [list] vector
 #' @export
 dts_setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
@@ -180,7 +180,7 @@ make_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
 
 #' @title Setup initial values for the ENBRQ_dts model
 #' @description Implements [setup_MYZinits] for the ENBRQ_dts model
-#' @inheritParams ramp.xde::setup_MYZinits
+#' @inheritParams ramp.xds::setup_MYZinits
 #' @return a [list]
 #' @export
 setup_MYZinits.ENBRQ_dts = function(pars, s, MYZopts=list()){
@@ -216,7 +216,7 @@ make_MYZinits_ENBRQ_dts = function(nPatches, nR1, MYZopts = list(),
 
 #' @title Add indices for adult mosquitoes to parameter list
 #' @description Implements [make_indices_MYZ] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::make_indices_MYZ
+#' @inheritParams ramp.xds::make_indices_MYZ
 #' @return a [list]
 #' @importFrom utils tail
 #' @export
@@ -254,7 +254,7 @@ make_indices_MYZ.ENBRQ_dts <- function(pars, s) {with(pars,{
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$MYZpar[[s]]`
-#' @inheritParams ramp.xde::list_MYZvars
+#' @inheritParams ramp.xds::list_MYZvars
 #' @return a [list]
 #' @export
 list_MYZvars.ENBRQ_dts <- function(y, pars, s){
@@ -364,7 +364,7 @@ make_inits_MYZ_ENBRQ_dts <- function(pars, E0, N0, B0, Q0, R10, R20) {
 
 #' @title Parse the output of deSolve and return variables for the ENBRQ_dts model
 #' @description Implements [parse_outputs_MYZ] for the ENBRQ_dts model
-#' @inheritParams ramp.xde::parse_outputs_MYZ
+#' @inheritParams ramp.xds::parse_outputs_MYZ
 #' @return a [list]
 #' @export
 parse_outputs_MYZ.ENBRQ_dts <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
@@ -382,7 +382,7 @@ parse_outputs_MYZ.ENBRQ_dts <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]]
 
 #' @title Return initial values as a vector
 #' @description Implements [get_inits_MYZ] for the ENBRQ_dts model.
-#' @inheritParams ramp.xde::get_inits_MYZ
+#' @inheritParams ramp.xds::get_inits_MYZ
 #' @return [numeric]
 #' @export
 get_inits_MYZ.ENBRQ_dts <- function(pars, s) {with(pars$MYZinits[[s]],{
@@ -390,7 +390,7 @@ get_inits_MYZ.ENBRQ_dts <- function(pars, s) {with(pars$MYZinits[[s]],{
 })}
 
 #' @title Make inits for ENBRQ_dts adult mosquito model
-#' @inheritParams ramp.xde::update_inits_MYZ
+#' @inheritParams ramp.xds::update_inits_MYZ
 #' @return a [list]
 #' @export
 update_inits_MYZ.ENBRQ_dts <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{

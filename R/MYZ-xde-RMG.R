@@ -2,7 +2,7 @@
 
 #' @title Reset bloodfeeding and mortality rates to baseline
 #' @description Implements [MBionomics] for the RMG_xde model
-#' @inheritParams ramp.xde::MBionomics
+#' @inheritParams ramp.xds::MBionomics
 #' @return a named [list]
 #' @export
 MBionomics.RMG_xde <- function(t, y, pars, s) {
@@ -20,7 +20,7 @@ MBionomics.RMG_xde <- function(t, y, pars, s) {
 
 #' @title Blood feeding rate of the infective mosquito population
 #' @description Implements [F_fqZ] for the RMG_xde model.
-#' @inheritParams ramp.xde::F_fqZ
+#' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqZ.RMG_xde <- function(t, y, pars, s) {
@@ -30,7 +30,7 @@ F_fqZ.RMG_xde <- function(t, y, pars, s) {
 
 #' @title Blood feeding rate of the infective mosquito population
 #' @description Implements [F_fqM] for the RMG_xde model.
-#' @inheritParams ramp.xde::F_fqM
+#' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqM.RMG_xde <- function(t, y, pars, s) {
@@ -41,7 +41,7 @@ F_fqM.RMG_xde <- function(t, y, pars, s) {
 
 #' @title Number of eggs laid by adult mosquitoes
 #' @description Implements [F_eggs] for the RMG_xde model.
-#' @inheritParams ramp.xde::F_eggs
+#' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_eggs.RMG_xde <- function(t, y, pars, s) {
@@ -55,7 +55,7 @@ F_eggs.RMG_xde <- function(t, y, pars, s) {
 
 #' @title Derivatives for adult mosquitoes
 #' @description Implements [dMYZdt] for the RMG_xde ODE model.
-#' @inheritParams ramp.xde::dMYZdt
+#' @inheritParams ramp.xds::dMYZdt
 #' @return a [numeric] vector
 #' @export
 dMYZdt.RMG_xde <- function(t, y, pars, s){
@@ -87,7 +87,7 @@ dMYZdt.RMG_xde <- function(t, y, pars, s){
 
 #' @title Setup MYZpar for the RMG_xde model
 #' @description Implements [xde_setup_MYZpar] for the RM model
-#' @inheritParams ramp.xde::xde_setup_MYZpar
+#' @inheritParams ramp.xds::xde_setup_MYZpar
 #' @return a [list] vector
 #' @export
 xde_setup_MYZpar.RMG_xde = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
@@ -162,7 +162,7 @@ make_MYZpar_RMG_xde = function(nPatches, MYZopts=list(), EIPopts, calK,
 
 #' @title Setup initial values for the RMG_xde model
 #' @description Implements [setup_MYZinits] for the RM model
-#' @inheritParams ramp.xde::setup_MYZinits
+#' @inheritParams ramp.xds::setup_MYZinits
 #' @return a [list]
 #' @export
 setup_MYZinits.RMG_xde = function(pars, s, MYZopts=list()){
@@ -196,7 +196,7 @@ make_MYZinits_RMG_xde = function(nPatches, MYZopts = list(),
 
 #' @title Add indices for adult mosquitoes to parameter list
 #' @description Implements [make_indices_MYZ] for the RMG_xde model.
-#' @inheritParams ramp.xde::make_indices_MYZ
+#' @inheritParams ramp.xds::make_indices_MYZ
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -273,7 +273,7 @@ make_parameters_MYZ_RMG_xde <- function(pars, g, sigma_b, sigma_q, f, q, nu, egg
 
 #' @title Parse the output of deSolve and return variables for the RMG_xde model
 #' @description Implements [parse_outputs_MYZ] for the RMG_xde model
-#' @inheritParams ramp.xde::parse_outputs_MYZ
+#' @inheritParams ramp.xds::parse_outputs_MYZ
 #' @return none
 #' @export
 parse_outputs_MYZ.RMG_xde <- function(outputs, pars, s) {
@@ -294,7 +294,7 @@ parse_outputs_MYZ.RMG_xde <- function(outputs, pars, s) {
 })}
 
 #' @title Make inits for RMG_xde adult mosquito model
-#' @inheritParams ramp.xde::update_inits_MYZ
+#' @inheritParams ramp.xds::update_inits_MYZ
 #' @return none
 #' @export
 update_inits_MYZ.RMG_xde <- function(pars, y0, s) {
@@ -326,7 +326,7 @@ make_inits_MYZ_RMG_xde <- function(pars, U_b0, U_g0, Y_b0, Y_g0, Z_b0, Z_g0) {
 
 #' @title Return initial values as a vector
 #' @description Implements [get_inits_MYZ] for the RMG_xde model.
-#' @inheritParams ramp.xde::get_inits_MYZ
+#' @inheritParams ramp.xds::get_inits_MYZ
 #' @return none
 #' @export
 get_inits_MYZ.RMG_xde <- function(pars, s) {with(pars$MYZinits[[s]],{

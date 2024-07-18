@@ -1,6 +1,6 @@
 #' @title Compute the derivatives for parasite infection dynamics in human population strata
 #' @description Implements [dXdt] for the SEIRV model
-#' @inheritParams ramp.xde::dXdt
+#' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export
 dXdt.SEIRV<- function(t, y, pars, i) {
@@ -54,7 +54,7 @@ make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E
 
 #' @title Setup Xinits.SEIRV
 #' @description Implements [setup_Xinits] for the SEIRV model
-#' @inheritParams ramp.xde::setup_Xinits
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
 setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
@@ -68,7 +68,7 @@ setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
 
 #' @title Add indices for human population to parameter list
 #' @description Implements [make_indices_X] for the SEIRV model.
-#' @inheritParams ramp.xde::make_indices_X
+#' @inheritParams ramp.xds::make_indices_X
 #' @return none
 #' @importFrom utils tail
 #' @export
@@ -102,7 +102,7 @@ make_indices_X.SEIRV <- function(pars, i) {with(pars,{
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xde::list_Xvars
+#' @inheritParams ramp.xds::list_Xvars
 #' @return a [list]
 #' @export
 list_Xvars.SEIRV <- function(y, pars, i) {
@@ -121,7 +121,7 @@ list_Xvars.SEIRV <- function(y, pars, i) {
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xde::get_inits_X
+#' @inheritParams ramp.xds::get_inits_X
 #' @return a [numeric] vector
 #' @export
 get_inits_X.SEIRV <- function(pars, i){
@@ -134,7 +134,7 @@ get_inits_X.SEIRV <- function(pars, i){
 
 
 #' @title Update inits for the SEIRV human model from a vector of states
-#' @inheritParams ramp.xde::update_inits_X
+#' @inheritParams ramp.xds::update_inits_X
 #' @return none
 #' @export
 update_inits_X.SEIRV <- function(pars, y0, i) {
@@ -182,7 +182,7 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
 
 #' @title Setup Xpar.SEIRV
 #' @description Implements [xde_setup_Xpar] for the SEIRV model
-#' @inheritParams ramp.xde::xde_setup_Xpar
+#' @inheritParams ramp.xds::xde_setup_Xpar
 #' @return a [list] vector
 #' @export
 xde_setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
@@ -196,7 +196,7 @@ xde_setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
-#' @inheritParams ramp.xde::F_X
+#' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_X.SEIRV <- function(y, pars, i) {
@@ -211,7 +211,7 @@ F_X.SEIRV <- function(y, pars, i) {
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_H] for the SEIRV model.
-#' @inheritParams ramp.xde::F_H
+#' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.SEIRV <- function(y, pars, i){
@@ -226,7 +226,7 @@ F_H.SEIRV <- function(y, pars, i){
 
 #' @title Infection blocking pre-erythrocytic immunity
 #' @description Implements [F_b] for the SEIRV model.
-#' @inheritParams ramp.xde::F_b
+#' @inheritParams ramp.xds::F_b
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SEIRV <- function(y, pars, i) {
@@ -236,7 +236,7 @@ F_b.SEIRV <- function(y, pars, i) {
 
 #' @title Parse the output of deSolve and return variables for the SEIRV model
 #' @description Implements [parse_outputs_X] for the SEIRV model
-#' @inheritParams ramp.xde::parse_outputs_X
+#' @inheritParams ramp.xds::parse_outputs_X
 #' @return none
 #' @export
 parse_outputs_X.SEIRV <- function(outputs, pars, i) {
@@ -257,7 +257,7 @@ parse_outputs_X.SEIRV <- function(outputs, pars, i) {
 
 #' @title Compute the "true" prevalence of infection / parasite rate
 #' @description Implements [F_pr] for the SEIRV model.
-#' @inheritParams ramp.xde::F_pr
+#' @inheritParams ramp.xds::F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pr.SEIRV <- function(vars, Xpar) {
@@ -271,7 +271,7 @@ F_pr.SEIRV <- function(vars, Xpar) {
 
 #' @title Compute the HTC for the SEIRV model
 #' @description Implements [HTC] for the SEIRV model with demography.
-#' @inheritParams ramp.xde::HTC
+#' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
 HTC.SEIRV <- function(pars, i) {
@@ -323,7 +323,7 @@ xde_lines_X_SEIRV = function(XH, nStrata, clrs=c("black","darkblue","darkred","d
 
 #' Plot the density of infected individuals for the SEIRV model
 #'
-#' @inheritParams ramp.xde::xds_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
 xds_plot_X.SEIRV = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
