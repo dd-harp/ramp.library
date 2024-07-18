@@ -1,4 +1,4 @@
-# ramp.library <br><br> A Model Library for RAMP
+# **`ramp.library`** <br><br> A Model Library for RAMP
 
 This package -- `ramp.library` -- contains reusable code that has been rigorously tested and that implements a large number of dynamical model families and other algorithms taken from the literature describing malaria and other mosquito-transmitted pathogens (see Reiner, *et al.* 2013)^[Reiner RC Jr, Perkins TA, Barker CM, Niu T, Chaves LF, Ellis AM, et al. A systematic review of mathematical models of mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface. 2013;10: 20120921.]. The supporting code was designed to be modular, and plug-and-play. The modular design makes it possible to break down published models to serve as the dynamical components in new models for malaria. The model families in `ramp.library` supports nimble model building that can be used by:
 
