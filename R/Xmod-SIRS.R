@@ -325,3 +325,19 @@ xde_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), 
 
   xde_lines_X_SIRS(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }
+
+
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIRS model as a function of the daily eir.
+#' @inheritParams ramp.xde::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIRS = function(foi, H, Xpar){
+  b = Xpar$b
+  r = Xpar$r
+  gam  = Xpar$gam
+  Ieq = (foi*H*gam)/(foi*(r+gam)+(r*gam))
+  Req = (foi*H*r)/(foi*(r+gam)+(r*gam))
+  Seq  = H - Ieq - Req
+  return(c(S=Seq, I=Ieq,R = Req))
+}
