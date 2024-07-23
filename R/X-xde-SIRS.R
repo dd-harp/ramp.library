@@ -21,6 +21,17 @@ dXdt.SIRS <- function(t, y, pars, i) {
 }
 
 
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIRS model as a function of the daily eir.
+#' @inheritParams  ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
+  Ieq = (foi*H*gam)/((r*gam) +foi*(gam+r))
+  Req =(foi*r*H)/((r*gam) +foi*(gam+r))
+  Seq = H - Ieq-Req
+  return(c(S=Seq, I=Ieq, R = Req))
+})}
 
 #' @title Make initial values for the SIRS human model, with defaults
 #' @param nStrata the number of strata in the model
