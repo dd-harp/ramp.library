@@ -54,6 +54,17 @@ make_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0
   return(list(S=S, I=I, R =R))
 })}
 
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIS model as a function of the daily eir.
+#' @inheritParams ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
+  Ieq = (foi*H*gam)/(foi*(r+gam)+(r*gam))
+  Req = (foi*r*H)/(foi*(r+gam)+(r*gam))
+  Seq = H-Ieq- Req
+  return(c(S=Seq, I=Ieq, R=Req))
+})}
 
 
 #' @title Setup Xinits.SIRS

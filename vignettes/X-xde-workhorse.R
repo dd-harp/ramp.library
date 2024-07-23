@@ -1,14 +1,18 @@
 ## -----------------------------------------------------------------------------
-library(ramp.xds)
+suppressMessages(library(knitr))
+suppressMessages(library(ramp.xds))
+suppressMessages(library(ramp.library))
 library(deSolve)
-library(ramp.library)
+#library(ramp.library)
 #devtools::load_all()
 
 ## -----------------------------------------------------------------------------
 wh <- xde_setup(Xname = "workhorse", HPop=1000, Lopts = list(Lambda = 3000, Lt = function(t){1+sin(2*pi*t/365)}))
-class(wh$xde) <- "dde"
+
 
 ## -----------------------------------------------------------------------------
+wh$dlay = "dde"
+class(wh$dlay) = "dde"
 wh <- xde_solve(wh, Tmax = 5*365, dt=10)
 
 ## -----------------------------------------------------------------------------

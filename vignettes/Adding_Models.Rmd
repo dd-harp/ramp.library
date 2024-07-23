@@ -7,6 +7,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+  
+```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
+suppressMessages(library(knitr))
+suppressMessages(library(ramp.xds))
+suppressMessages(library(ramp.library))
+```
 
 This vignette discusses how to add a new model family to [`ramp.library`](https://github.com/dd-harp/ramp.library) that can be used by [`ramp.xds`](https://github.com/dd-harp/ramp.xds). 
 

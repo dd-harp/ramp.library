@@ -1,4 +1,4 @@
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
+#' @title Compute the derivatives for parasite infection dynamics in human population strata
 #' @description Implements [dXdt] for the SEIRV model
 #' @inheritParams ramp.xde::dXdt
 #' @return a [numeric] vector
@@ -6,12 +6,12 @@
 dXdt.SEIRV<- function(t, y, pars, i) {
   # do not change this
   foi <- pars$FoI[[i]]
-  
+
   # attach the variables by name
   with(list_Xvars(y, pars, i),{
     # compute H (if it isn't one of the variables)
     H <- F_H(t, y, pars, i)
-    
+
     # expose the parameters (see make_Xpar_SEIRV)
     with(pars$Xpar[[i]], {
       # compute the derivatives
@@ -20,16 +20,29 @@ dXdt.SEIRV<- function(t, y, pars, i) {
       dI <- tau*E - r*I + dHdt(t, I, pars,i)
       dR <- (1-delta)*r*I -sig*R -eps*R+ dHdt(t, R, pars,i)
       dV <- alpha*Births(t, H, pars,i) + delta*r*I + sig*R + dHdt(t, V, pars,i)
-      
+
        # concatenate the derivatives
       derivs = c(dS, dE, dI, dR,dV)
-      
+
       # return the derivatives
       return(derivs)
     })
   })
 }
 
+#' @title Compute the steady states for the SEIRV model as a function of the daily EIR
+#' @description Compute the steady state of the SIS model as a function of the daily eir.
+#' @inheritParams ramp.xde::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SEIRV = function(foi, H, Xpar){with(Xpar,{
+  Ieq = 0
+  Seq = 0
+  Eeq = 0
+  Req = H
+  Veq = 0
+  return(c(S=Seq, E =Eeq,I=Ieq, R =Req, V=Veq))
+})}
 
 
 #' @title Make initial values for the SEIRV human model, with defaults
@@ -80,24 +93,24 @@ setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
 #' @importFrom utils tail
 #' @export
 make_indices_X.SEIRV <- function(pars, i) {with(pars,{
-  
+
   S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(S_ix, 1)
-  
+
   E_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(E_ix, 1)
-  
+
   I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(I_ix, 1)
-  
+
   R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(R_ix, 1)
-  
+
   V_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
   max_ix <- tail(V_ix, 1)
-  
-  
-  
+
+
+
   pars$max_ix = max_ix
   pars$ix$X[[i]] = list(S_ix=S_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
   return(pars)
@@ -168,11 +181,11 @@ update_inits_X.SEIRV <- function(pars, y0, i) {
 #' @return a [list]
 #' @export
 make_Xpar_SEIRV = function(nStrata, Xopts=list(),
-                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps,sig=0.3,delta =0.5){
+                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps=0.5,sig=0.3,delta =0.5){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SEIRV")
-    
+
     Xpar$alpha = checkIt(alpha, nStrata)
     Xpar$b = checkIt(b, nStrata)
     Xpar$c = checkIt(c, nStrata)
@@ -181,7 +194,7 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
     Xpar$eps = checkIt(eps, nStrata)
     Xpar$sig = checkIt(sig, nStrata)
     Xpar$delta = checkIt(delta, nStrata)
-    
+
     return(Xpar)
   })}
 
@@ -239,13 +252,13 @@ F_H.SEIRV <- function(t, y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SEIRV <- function(y, pars, i) {
-  with(pars$Xpar[[i]],{ 
+  with(pars$Xpar[[i]],{
     ########################
-    # retrieve or compute it 
+    # retrieve or compute it
     ########################
     b = pars$Xpar[[i]]$b
     ########################
-    # return it 
+    # return it
     ########################
     return(b)
   })
@@ -326,7 +339,7 @@ xde_lines_X_SEIRV = function(XH, nStrata, clrs=c("black","darkblue","darkred","d
     if(nStrata>1){
       if (length(clrs)==5) clrs=matrix(clrs, 5, nStrata)
       if (length(llty)==1) llty=rep(llty, nStrata)
-      
+
       for(i in 1:nStrata){
         lines(time, S[,i], col=clrs[1,i], lty = llty[i])
         lines(time, E[,i], col=clrs[2,i], lty = llty[i])
@@ -348,12 +361,12 @@ xde_lines_X_SEIRV = function(XH, nStrata, clrs=c("black","darkblue","darkred","d
 #' @export
 xde_plot_X.SEIRV = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
-  
+
   if(add_axes==TRUE)
     with(vars$XH[[i]],
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
               ylab = "No of. Infected", xlab = "Time"))
-  
-  
+
+
   xde_lines_X_SEIRV(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
 }

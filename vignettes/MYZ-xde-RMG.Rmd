@@ -10,11 +10,12 @@ vignette: >
 ---
   
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
-library(knitr)
-library(ramp.xds)
-devtools::load_all()
+suppressMessages(library(knitr))
+suppressMessages(library(ramp.xds))
+suppressMessages(library(ramp.library))
+library(deSolve)
 #library(ramp.library)
-library(deSolve) 
+#devtools::load_all()
 ```
 
 
