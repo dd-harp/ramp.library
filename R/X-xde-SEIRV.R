@@ -159,7 +159,7 @@ update_inits_X.SEIRV <- function(pars, y0, i) {
 #' @return a [list]
 #' @export
 make_Xpar_SEIRV = function(nStrata, Xopts=list(),
-                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps,sig=0.3,delta =0.5){
+                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps=0.5,sig=0.3,delta =0.5){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SEIRV")
@@ -175,6 +175,20 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
 
     return(Xpar)
   })}
+
+#' @title Compute the steady states for the SEIRV model as a function of the daily EIR
+#' @description Compute the steady state of the SIS model as a function of the daily eir.
+#' @inheritParams ramp.xde::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SEIRV = function(foi, H, Xpar){with(Xpar,{
+  Ieq = 0
+  Seq = 0
+  Eeq = 0
+  Req = H
+  Veq = 0
+  return(c(S=Seq, E =Eeq,I=Ieq, R =Req, V=Veq))
+})}
 
 
 

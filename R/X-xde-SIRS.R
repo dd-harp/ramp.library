@@ -20,8 +20,22 @@ dXdt.SIRS <- function(t, y, pars, i) {
   })
 }
 
+<<<<<<< Updated upstream
 
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIRS model as a function of the daily eir.
+#' @inheritParams  ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
+  Ieq = (foi*H*gam)/((r*gam) +foi*(gam+r))
+  Req =(foi*r*H)/((r*gam) +foi*(gam+r))
+  Seq = H-Ieq-Req
+  return(c(S=Seq, I=Ieq, R = Req))
+})}
 
+=======
+>>>>>>> Stashed changes
 #' @title Make initial values for the SIRS human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
@@ -40,8 +54,17 @@ make_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0
   return(list(S=S, I=I, R =R))
 })}
 
-
-
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIS model as a function of the daily eir.
+#' @inheritParams ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
+  Ieq = (foi*H*gam)/(foi*(r+gam)+(r*gam))
+  Req = (foi*r*H)/(foi*(r+gam)+(r*gam))
+  Seq = H-Ieq- Req
+  return(c(S=Seq, I=Ieq, R=Req))
+})}
 
 
 #' @title Setup Xinits.SIRS
@@ -53,9 +76,6 @@ setup_Xinits.SIRS = function(pars, i, Xopts=list()){
   pars$Xinits[[i]] = with(pars, make_Xinits_SIRS(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
-
-
-
 
 
 #' @title Add indices for human population to parameter list
@@ -81,9 +101,6 @@ make_indices_X.SIRS <- function(pars, i) {with(pars,{
   pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
 })}
-
-
-
 
 
 #' @title Return the variables as a list

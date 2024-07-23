@@ -12,7 +12,7 @@ make_Xpar_SEIRV(
   r = 1/180,
   c = 0.15,
   tau = 0.5,
-  eps,
+  eps = 0.5,
   sig = 0.3,
   delta = 0.5
 )
