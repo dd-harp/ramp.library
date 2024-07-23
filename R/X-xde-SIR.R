@@ -20,7 +20,17 @@ dXdt.SIR<- function(t, y, pars, i) {
   })
 }
 
-
+#' @title Compute the steady states for the SIR model as a function of the daily EIR
+#' @description Compute the steady state of the SIR model as a function of the daily eir.
+#' @inheritParams ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIR = function(foi, H, Xpar){with(Xpar,{
+  Ieq = 0
+  Req = H
+  Seq = 0
+  return(c(S=Seq, I=Ieq, R=Req))
+})}
 
 #' @title Make initial values for the SIR human model, with defaults
 #' @param nStrata the number of strata in the model
@@ -54,9 +64,6 @@ setup_Xinits.SIR = function(pars, i, Xopts=list()){
   pars$Xinits[[i]] = with(pars, make_Xinits_SIR(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
-
-
-
 
 
 #' @title Add indices for human population to parameter list
