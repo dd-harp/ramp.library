@@ -132,11 +132,9 @@ S3method(xde_setup_Xpar,SIR)
 S3method(xde_setup_Xpar,SIRS)
 S3method(xde_setup_Xpar,garki_xde)
 S3method(xde_setup_Xpar,workhorse)
-<<<<<<< Updated upstream
-S3method(xde_steady_state_X,SIRS)
-=======
+S3method(xde_steady_state_X,SEIRV)
 S3method(xde_steady_state_X,SIR)
->>>>>>> Stashed changes
+S3method(xde_steady_state_X,SIRS)
 S3method(xds_plot_X,SEIR)
 S3method(xds_plot_X,SEIRV)
 S3method(xds_plot_X,SIPw)

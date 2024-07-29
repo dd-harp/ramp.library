@@ -20,7 +20,6 @@ dXdt.SIRS <- function(t, y, pars, i) {
   })
 }
 
-<<<<<<< Updated upstream
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIRS model as a function of the daily eir.
@@ -34,8 +33,6 @@ xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
   return(c(S=Seq, I=Ieq, R = Req))
 })}
 
-=======
->>>>>>> Stashed changes
 #' @title Make initial values for the SIRS human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
@@ -53,6 +50,7 @@ make_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0
   R = checkIt(R0, nStrata)
   return(list(S=S, I=I, R =R))
 })}
+
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIS model as a function of the daily eir.
@@ -279,7 +277,6 @@ HTC.SIRS <- function(pars, i) {
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
-#'
 #' @export
 xde_lines_X_SIRS = function(XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   with(XH,{
