@@ -24,6 +24,8 @@ In this vignette, we describe five basic compartmental models for mosquito-borne
   
 ### Variables
 
++ $S$ is the density of susceptible humans
+
 + $I$ is the density of infected humans
 
 + $H$ is the density of humans

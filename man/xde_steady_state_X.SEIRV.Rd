@@ -6,13 +6,6 @@
 \usage{
 \method{xde_steady_state_X}{SEIRV}(foi, H, Xpar)
 }
-\arguments{
-\item{foi}{the daily FoI}
-
-\item{H}{host density}
-
-\item{Xpar}{a list that defines a X-class model}
-}
 \value{
 the steady states as a named vector
 }
