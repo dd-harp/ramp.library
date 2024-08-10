@@ -11,10 +11,10 @@ vignette: >
 ```{r}
 suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
-suppressMessages(library(ramp.library))
+#suppressMessages(library(ramp.library))
 library(deSolve)
 #library(ramp.library)
-#devtools::load_all()
+devtools::load_all()
 ```
 
 #   
@@ -96,16 +96,17 @@ $$
 \frac{d w_i}{da} &=  h_\tau - \delta_I w_i \\
 \end{array}
 $$ 
+```{r}
+devtools::load_all()
+```
 
 
 ```{r}
-wh <- xde_setup(Xname = "workhorse", HPop=1000, Lopts = list(Lambda = 3000, Lt = function(t){1+sin(2*pi*t/365)}))
+wh <- xds_setup(dlay = 'dde', Xname = "workhorse", HPop=1000, Lopts = list(Lambda = 3000, Lt = function(t){1+sin(2*pi*t/365)}))
 
 ```
 
 ```{r}
-wh$dlay = "dde"
-class(wh$dlay) = "dde"
 wh <- xde_solve(wh, Tmax = 5*365, dt=10)
 ```
 
@@ -115,12 +116,12 @@ wh1$Xpar[[1]]$zeta_1 = 0.02
 wh1 <- xde_solve(wh1, Tmax = 5*365, dt=10)
 ```
 
-```{r}
+```{r, eval=F}
 xds_plot_X(wh)
 xds_plot_X(wh1, llty=2, add_axes=FALSE)
 ```
 
-```{r}
+```{r, eval=F}
 with(wh$outputs$orbits$XH[[1]],{
   A = A0+A1+A2+A3+A4
   I = I1+I2+I3+I4

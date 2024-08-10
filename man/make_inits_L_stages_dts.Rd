@@ -4,20 +4,20 @@
 \alias{make_inits_L_stages_dts}
 \title{Make inits for stages_dts competition aquatic mosquito model}
 \usage{
-make_inits_L_stages_dts(pars, L10, L20, L30, L40, P0)
+make_inits_L_stages_dts(pars, L1, L2, L3, L4, P)
 }
 \arguments{
 \item{pars}{a [list]}
 
-\item{L10}{initial conditions}
+\item{L1}{initial conditions}
 
-\item{L20}{initial conditions}
+\item{L2}{initial conditions}
 
-\item{L30}{initial conditions}
+\item{L3}{initial conditions}
 
-\item{L40}{initial conditions}
+\item{L4}{initial conditions}
 
-\item{P0}{initial conditions}
+\item{P}{initial conditions}
 }
 \value{
 a [list] with Linits added

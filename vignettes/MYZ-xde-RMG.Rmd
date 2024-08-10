@@ -12,10 +12,10 @@ vignette: >
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
 suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
-suppressMessages(library(ramp.library))
+#suppressMessages(library(ramp.library))
 library(deSolve)
 #library(ramp.library)
-#devtools::load_all()
+devtools::load_all()
 ```
 
 
@@ -109,26 +109,30 @@ $$
 
 ## Implementation
 
-The `xde_setup()` utilities allow the user to pass a single version of the dispersal matrix $\cal K.$ During `xde_setup()`, `Omega_b` and `Omega_q` are identical.  
-
+The `xds_setup()` utilities allow the user to pass a single version of the dispersal matrix $\cal K.$ During `xds_setup()`, `Omega_b` and `Omega_q` are identical.  
 
 ```{r}
-EIPo = list(EIPname = "static_xde", eip=12) 
-model <- xde_setup(MYZname="RMG_xde", Lname="trace", Xname = "trace", EIPopts = EIPo, nPatches=3)
+devtools::load_all()
+```
+
+```{r}
+HPop = rep(1000, 3)
+residence = c(1:3) 
+model <- xds_setup(MYZname="RMG", Lname="trace", Xname = "trace",  residence=residence, HPop =HPop, nPatches=3)
 ```
 
 ```{r}
 model <- xde_solve(model, dt=5)
 ```
 
-```{r, fig.height=7.5, fig.width=5.5}
+```{r, fig.height=7.5, fig.width=5.5, eval=F}
 par(mfrow = c(2,1))
 xds_plot_M(model)
 xds_plot_YZ(model, add_axes = F)
 xds_plot_YZ_fracs(model)
 ```
 
-```{r, fig.height=4, fig.width=5.5}
+```{r, fig.height=4, fig.width=5.5, eval=F}
 xds_plot_YZ_fracs(model)
 ```
 

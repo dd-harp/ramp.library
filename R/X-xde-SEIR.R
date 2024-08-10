@@ -12,7 +12,7 @@ dXdt.SEIR<- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     # compute H (if it isn't one of the variables)
 
-    # expose the parameters (see make_Xpar_SEIR)
+    # expose the parameters (see create_Xpar_SEIR)
     with(pars$Xpar[[i]], {
       # compute the derivatives
       dS <- Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)
@@ -35,19 +35,19 @@ dXdt.SEIR<- function(t, y, pars, i) {
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
 #' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param E0 the initial value for E
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
+#' @param S the initial value for S
+#' @param E the initial value for E
+#' @param I the initial value for I
+#' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SEIR = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0=0,R0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(E0+I0+R0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  E = checkIt(E0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
+create_Xinits_SEIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, E=0,R = 1){with(Xopts,{
+  if(is.null(S)) S = H0-(E+I+R)
+  stopifnot(is.numeric(S))
+  S = checkIt(S, nStrata)
+  E = checkIt(E, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
   return(list(S=S, E=E, I=I, R =R))
 })}
 
@@ -57,12 +57,12 @@ make_Xinits_SEIR = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0
 
 
 #' @title Setup Xinits.SEIR
-#' @description Implements [setup_Xinits] for the SEIR model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the SEIR model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SEIR = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SEIR(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SEIR = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_SEIR(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
@@ -71,23 +71,23 @@ setup_Xinits.SEIR = function(pars, i, Xopts=list()){
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the SEIR model.
-#' @inheritParams ramp.xds::make_indices_X
+#' @description Implements [make_X_indices] for the SEIR model.
+#' @inheritParams ramp.xds::make_X_indices
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SEIR <- function(pars, i) {with(pars,{
+make_X_indices.SEIR <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
 
-  E_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
 
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
 
@@ -122,11 +122,11 @@ list_Xvars.SEIR <- function(y, pars, i) {
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xds::get_inits_X
+#' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_inits_X.SEIR <- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S,E,I,R)))
+get_Xinits.SEIR <- function(pars, i){
+  pars$Xinits[[i]]
 }
 
 
@@ -135,12 +135,12 @@ get_inits_X.SEIR <- function(pars, i){
 
 
 #' @title Update inits for the SEIR human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X
+#' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_inits_X.SEIR <- function(pars, y0, i) {
+update_Xinits.SEIR <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SEIR(pars, list(), S0=S,E0= E, I0=I, R0=R)
+    pars = create_Xinits_SEIR(pars, list(), S=S,E= E, I=I, R=R)
     return(pars)
   })}
 
@@ -155,7 +155,7 @@ update_inits_X.SEIR <- function(pars, y0, i) {
 #' @param c the proportion of bites on infected humans that infect a mosquito
 #' @return a [list]
 #' @export
-make_Xpar_SEIR = function(nStrata, Xopts=list(),
+create_Xpar_SEIR = function(nStrata, Xopts=list(),
                           b=0.55, r=1/180, c=0.15,tau= 0.5){
   with(Xopts,{
     Xpar = list()
@@ -174,12 +174,12 @@ make_Xpar_SEIR = function(nStrata, Xopts=list(),
 
 
 #' @title Setup Xpar.SEIR
-#' @description Implements [xde_setup_Xpar] for the SEIR model
-#' @inheritParams ramp.xds::xde_setup_Xpar
+#' @description Implements [make_Xpar] for the SEIR model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-xde_setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SEIR(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SEIR(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -320,5 +320,5 @@ xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkg
               ylab = "No of. Infected", xlab = "Time"))
 
 
-  xde_lines_X_SEIR(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_SEIR(vars$XH[[i]], pars$nStrata[i], clrs, llty)
 }

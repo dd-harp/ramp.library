@@ -22,11 +22,11 @@ LBionomics.stages_dts <- function(t, y, pars, s){
 
 
 #' @title Number of newly emerging adults from each larval habitat
-#' @description Implements [F_alpha] for the stages_dts competition model.
-#' @inheritParams ramp.xds::F_alpha
+#' @description Implements [F_emerge] for the stages_dts competition model.
+#' @inheritParams ramp.xds::F_emerge
 #' @return a [numeric] vector of length `nHabitats`
 #' @export
-F_alpha.stages_dts <- function(t, y, pars, s){
+F_emerge.stages_dts <- function(t, y, pars, s){
   y[pars$ix$L[[s]]$P_ix]
 }
 
@@ -72,22 +72,22 @@ list_Lvars.stages_dts <- function(y, pars, s){
 }
 
 #' @title Setup Lpar for the stages_dts model
-#' @description Implements [dts_setup_Lpar] for the stages_dts model
-#' @inheritParams ramp.xds::dts_setup_Lpar
+#' @description Implements [make_Lpar] for the stages_dts model
+#' @inheritParams ramp.xds::make_Lpar
 #' @return a [list] vector
 #' @export
-dts_setup_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
-  pars$Lpar[[s]] = make_Lpar_stages_dts(pars$nHabitats, Lopts)
+make_Lpar.stages_dts = function(Lname, pars, s, Lopts=list()){
+  pars$Lpar[[s]] = create_Lpar_stages_dts(pars$nHabitats, Lopts)
   return(pars)
 }
 
 #' @title Setup the stages_dts model
-#' @description Implements [setup_Linits] for the stages_dts model
-#' @inheritParams ramp.xds::setup_Linits
+#' @description Implements [make_Linits] for the stages_dts model
+#' @inheritParams ramp.xds::make_Linits
 #' @return a [list]
 #' @export
-setup_Linits.stages_dts = function(pars, s, Lopts=list()){
-  pars$Linits[[s]] = make_Linits_stages_dts(pars$nHabitats, Lopts)
+make_Linits.stages_dts = function(pars, s, Lopts=list()){
+  pars$Linits[[s]] = create_Linits_stages_dts(pars$nHabitats, Lopts)
   return(pars)
 }
 
@@ -112,7 +112,7 @@ setup_Linits.stages_dts = function(pars, s, Lopts=list()){
 #' @param theta4 density-dependent mortality terms for L4 for each aquatic habitat
 #' @return a [list] with Lpar added
 #' @export
-make_Lpar_stages_dts = function(nHabitats, Lopts=list(),
+create_Lpar_stages_dts = function(nHabitats, Lopts=list(),
                                 psi1=1/8,  psi2=1/8,  psi3=1/8,  psi4=1/8,
                                 xi1=0,  xi2=0,  xi3=0,  xi4=0,
                                 phi1=1/8,  phi2=1/8,  phi3=1/8,  phi4=1/8,
@@ -161,20 +161,20 @@ make_Lpar_stages_dts = function(nHabitats, Lopts=list(),
 #' @title Make inits for stages_dts competition aquatic mosquito model
 #' @param nHabitats the number of habitats in the model
 #' @param Lopts a [list] that overwrites default values
-#' @param L10 initial conditions
-#' @param L20 initial conditions
-#' @param L30 initial conditions
-#' @param L40 initial conditions
-#' @param P0 initial conditions
+#' @param L1 initial conditions
+#' @param L2 initial conditions
+#' @param L3 initial conditions
+#' @param L4 initial conditions
+#' @param P initial conditions
 #' @return a [list] with Linits added
 #' @export
-make_Linits_stages_dts = function(nHabitats, Lopts=list(), L10=1, L20=0, L30=0, L40=0, P0=0){with(Lopts,{
-  L10 = checkIt(L10, nHabitats)
-  L20 = checkIt(L20, nHabitats)
-  L30 = checkIt(L30, nHabitats)
-  L40 = checkIt(L40, nHabitats)
-  P0 = checkIt(P0, nHabitats)
-  return(list(L1=L10, L2=L20, L3=L30, L4=L40, P=P0))
+create_Linits_stages_dts = function(nHabitats, Lopts=list(), L1=1, L2=0, L3=0, L4=0, P=0){with(Lopts,{
+  L1 = checkIt(L1, nHabitats)
+  L2 = checkIt(L2, nHabitats)
+  L3 = checkIt(L3, nHabitats)
+  L4 = checkIt(L4, nHabitats)
+  P = checkIt(P, nHabitats)
+  return(list(L1=L1, L2=L2, L3=L3, L4=L4, P=P))
 })}
 
 #' @title Add indices for aquatic stage mosquitoes to parameter list
@@ -288,39 +288,39 @@ make_parameters_L_stages_dts <- function(pars, psi1, psi2, psi3, psi4,
 
 #' @title Make inits for stages_dts competition aquatic mosquito model
 #' @param pars a [list]
-#' @param L10 initial conditions
-#' @param L20 initial conditions
-#' @param L30 initial conditions
-#' @param L40 initial conditions
-#' @param P0 initial conditions
+#' @param L1 initial conditions
+#' @param L2 initial conditions
+#' @param L3 initial conditions
+#' @param L4 initial conditions
+#' @param P initial conditions
 #' @return a [list] with Linits added
 #' @export
-make_inits_L_stages_dts <- function(pars, L10, L20, L30, L40, P0){
-  stopifnot(is.numeric(L10))
-  stopifnot(is.numeric(L20))
-  stopifnot(is.numeric(L30))
-  stopifnot(is.numeric(L40))
-  stopifnot(is.numeric(P0))
-  pars$Linits[[1]] <- list(L1=L10, L2=L20, L3=L30, L4=L40, P=P0)
+make_inits_L_stages_dts <- function(pars, L1, L2, L3, L4, P){
+  stopifnot(is.numeric(L1))
+  stopifnot(is.numeric(L2))
+  stopifnot(is.numeric(L3))
+  stopifnot(is.numeric(L4))
+  stopifnot(is.numeric(P))
+  pars$Linits[[1]] <- list(L1=L1, L2=L2, L3=L3, L4=L4, P=P)
   return(pars)
 }
 
 #' @title Update inits for the stages_dts aquatic mosquito competition model
-#' @inheritParams ramp.xds::update_inits_L
+#' @inheritParams ramp.xds::update_Linits
 #' @return none
 #' @export
-update_inits_L.stages_dts <- function(pars, y0, s) {
+update_Linits.stages_dts <- function(pars, y0, s) {
   with(list_Lvars(y0, pars, s),{
-    pars = make_Linits_stages_dts(pars$nHabitats, L10=L1, L20=L2, L30=L3, L40=L4, P0=P)
+    pars = create_Linits_stages_dts(pars$nHabitats, L1=L1, L2=L2, L3=L3, L4=L4, P=P)
     return(pars)
   })}
 
 #' @title Return initial values as a vector
-#' @description Implements [get_inits_L] for the GeRM model.
-#' @inheritParams ramp.xds::get_inits_L
+#' @description Implements [get_Linits] for the GeRM model.
+#' @inheritParams ramp.xds::get_Linits
 #' @return none
 #' @export
-get_inits_L.stages_dts <- function(pars, s){
+get_Linits.stages_dts <- function(pars, s){
   pars$Linits[[s]]$L
 }
 
