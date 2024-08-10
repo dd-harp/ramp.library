@@ -25,11 +25,11 @@ dXdt.SIPw <- function(t, y, pars, i){
 }
 
 #' @title Derivatives for human population
-#' @description Implements [DT_Xt] for the SIPw dts model
-#' @inheritParams ramp.xds::DT_Xt
+#' @description Implements [Update_Xt] for the SIPw dts model
+#' @inheritParams ramp.xds::Update_Xt
 #' @return a [numeric] vector
 #' @export
-DT_Xt.SIPw <- function(t, y, pars, i){
+Update_Xt.SIPw <- function(t, y, pars, i){
 
   ar <- pars$AR[[i]]
   Hpar <- pars$Hpar[[i]]
@@ -53,12 +53,12 @@ DT_Xt.SIPw <- function(t, y, pars, i){
 }
 
 #' @title Setup the Xpar for the SIPw_xde model
-#' @description implements [xde_setup_Xpar] for the SIPw model
-#' @inheritParams ramp.xds::xde_setup_Xpar
+#' @description implements [make_Xpar] for the SIPw model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = xde_make_Xpar_SIPw(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SIPw(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -74,7 +74,7 @@ xde_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
 #' @param eta rate of loss of chemo-protection
 #' @return a [list]
 #' @export
-xde_make_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
+create_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
                              rho=.1, sigma=1/730, xi=1/365,  eta=1/25){
   with(Xopts,{
     Xpar = list()
@@ -90,17 +90,6 @@ xde_make_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
 
     return(Xpar)
 })}
-
-
-#' @title Setup the Xpar for the SIPw_dts model
-#' @description Implements [dts_setup_Xpar] for a SIPw dts model
-#' @inheritParams ramp.xds::dts_setup_Xpar
-#' @return a [list] vector
-#' @export
-dts_setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = dts_make_Xpar_SIPw(pars$Hpar[[i]]$nStrata, pars$Xday, Xopts)
-  return(pars)
-}
 
 #' @title Make parameters for SIPw_dts human model, with defaults
 #' @param nStrata the number of population strata
@@ -191,7 +180,7 @@ list_Xvars.SIPw <- function(y, pars, i) {
        return(list(S=S,I=I,P=P,w=w,H=H))})
 }
 
-#' @title Return the SIPw model variables as a list, returned from DT_Xt.SIPw
+#' @title Return the SIPw model variables as a list, returned from Update_Xt.SIPw
 #' @description This method dispatches on the type of `pars$Xpar`
 #' @inheritParams ramp.xds::put_Xvars
 #' @return a [list]
@@ -222,12 +211,12 @@ HTC.SIPw <- function(pars, i) {
 
 
 #' @title Setup Xinits.SIPw
-#' @description Implements [setup_Xinits] for the SIPw models
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the SIPw models
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SIPw = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = make_Xinits_SIPw(pars$Hpar[[i]]$nStrata, Xopts, H0=pars$Hpar[[i]]$H)
+make_Xinits.SIPw = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], Xopts, H0=pars$Hpar[[i]]$H)
   return(pars)
 }
 
@@ -241,7 +230,7 @@ setup_Xinits.SIPw = function(pars, i, Xopts=list()){
 #' @param w0 the initial values of the tracking variable w
 #' @return a [list]
 #' @export
-make_Xinits_SIPw = function(nStrata, Xopts = list(),
+create_Xinits_SIPw = function(nStrata, Xopts = list(),
                             H0=NULL, S0=NULL, I0=1, P0=0, w0=0){
   with(Xopts,{
     if(is.null(S0)) S0=H0-I0-P0
@@ -269,23 +258,23 @@ parse_outputs_X.SIPw <- function(outputs, pars, i) {
   })}
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for SIPw models
-#' @inheritParams ramp.xds::make_indices_X
+#' @description Implements [make_X_indices] for SIPw models
+#' @inheritParams ramp.xds::make_X_indices
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SIPw <- function(pars, i) {with(pars,{
+make_X_indices.SIPw <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
 
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  P_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  P_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(P_ix, 1)
 
-  w_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  w_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(w_ix, 1)
 
   pars$max_ix = max_ix
@@ -294,24 +283,22 @@ make_indices_X.SIPw <- function(pars, i) {with(pars,{
 })}
 
 #' @title Update inits for SIPw models from a vector of states
-#' @inheritParams ramp.xds::update_inits_X
+#' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_inits_X.SIPw <- function(pars, y0, i) {
+update_Xinits.SIPw <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SIPw(pars$Hpar[[i]]$nStrata, list(), S0=S, I0=I, P0=P, w0=w)
+    pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], list(), S0=S, I0=I, P0=P, w0=w)
     return(pars)
   })}
 
 
 #' @title Return initial values as a vector from a SIPw model
 #' @description This method dispatches on the type of `pars$Xpar[[i]]`
-#' @inheritParams ramp.xds::get_inits_X
+#' @inheritParams ramp.xds::get_Xinits
 #' @return none
 #' @export
-get_inits_X.SIPw <- function(pars, i){with(pars$Xinits[[i]],{
-  c(S, I, P, w)
-})}
+get_Xinits.SIPw <- function(pars, i){pars$Xinits[[i]]}
 
 
 #' Plot the density of infected individuals for the SIPw model
@@ -333,7 +320,7 @@ xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen")
 #' Add lines for the density of infected individuals for a SIPw model
 #'
 #' @param XH a list with the outputs of parse_outputs_X.SIPw
-#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)
+#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `make()`)
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
@@ -346,8 +333,8 @@ add_lines_X_SIPw = function(XH, pars, clrs=c("darkblue", "darkred", "darkgreen")
       lines(time, P, col=clrs[3], lty = llty[1])
     }
     if(pars$Hpar[[1]]$nStrata>1){
-      if (length(clrs)==1) clrs=matrix(clrs, 3, pars$Hpar[[i]]$nStrata)
-      if (length(llty)==1) llty=rep(llty, pars$Hpar[[i]]$nStrata)
+      if (length(clrs)==1) clrs=matrix(clrs, 3, pars$nStrata[i])
+      if (length(llty)==1) llty=rep(llty, pars$nStrata[i])
       for(i in 1:pars$Hpar[[1]]$nStrata){
         lines(time, S[,i], col=clrs[1,i], lty = llty[i])
         lines(time, I[,i], col=clrs[2,i], lty = llty[i])

@@ -4,12 +4,14 @@
 \alias{F_f.dddn}
 \title{Dawn, day, dusk, night model for the blood feeding rate}
 \usage{
-\method{F_f}{dddn}(t, MYZpar)
+\method{F_f}{dddn}(t, vars, f_par)
 }
 \arguments{
 \item{t}{current simulation time}
 
-\item{MYZpar}{a \link{list}}
+\item{vars}{exogenous variables}
+
+\item{f_par}{a \link{list}}
 }
 \value{
 a [numeric] vector of length `nPatches`

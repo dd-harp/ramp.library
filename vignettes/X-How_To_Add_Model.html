@@ -424,12 +424,12 @@ document the variables by name and assign each one an index, to store,
 assign and update initial values. These functions streamline setup, and
 guarantee consistency.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p><code>make_Xinits_newXname</code> - each model requires a
+<li><p><code>create_Xinits_newXname</code> - each model requires a
 function that documents the variables by name and assigns initial
 values</p></li>
-<li><p><code>setup_Xinits.newXname</code> - is a wrapper, that gets
+<li><p><code>make_Xinits.newXname</code> - is a wrapper, that gets
 called by <code>ramp.xds::xde_setup.</code> It gets called by
-<code>make_Xinits_newXname,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
+<code>create_Xinits_newXname,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
 stored as <code>pars$Xinits[[i]].</code></p></li>
 <li><p><code>make_indices_X.newXname</code> - is the function that
 assigns an index to each variable in the model, and stores it as
@@ -438,25 +438,25 @@ list.</p></li>
 <li><p><code>list_Xvars.newXname</code> - retrieves the value of
 variables at a point in time and returns the values by name in a list;
 the function gets called by <code>dXdt</code> and by
-<code>update_inits_X</code> and it can be useful in other
+<code>update_Xinits</code> and it can be useful in other
 contexts.</p></li>
 <li><p><code>get_inits_X.newXname</code> - retrieves the stored initial
 values in the same order that they are returned by
 <code>dXdt.newXname</code></p></li>
-<li><p><code>update_inits_X.newXname</code> - a utility that makes it
+<li><p><code>update_Xinits.newXname</code> - a utility that makes it
 possible to extract and store a new set of initial values for
 <code>newXname</code> from a vector <span class="math inline">\(y\)</span> holding all the variables in a
 model.</p></li>
 </ol>
 <p><strong>Parameters</strong></p>
 <ol start="8" style="list-style-type: decimal">
-<li><p><code>make_Xpar_newXname</code> returns a formatted list:</p>
+<li><p><code>create_Xpar_newXname</code> returns a formatted list:</p>
 <ul>
 <li><p>the parameter values are stored by name</p></li>
 <li><p><code>class(pars)</code> = <code>newXname</code></p></li>
 </ul></li>
-<li><p><code>setup_Xpar.newXname</code> is a wrapper that calls
-<code>make_Xpar_newXname</code></p></li>
+<li><p><code>make_Xpar.newXname</code> is a wrapper that calls
+<code>create_Xpar_newXname</code></p></li>
 </ol>
 <p><strong>Dynamical Terms</strong> are Computed using a Standard Set of
 Functions</p>
@@ -596,7 +596,7 @@ calls.</p></li>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="co"># compute H (if it isn&#39;t one of the variables) </span></span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    H <span class="ot">&lt;-</span> <span class="fu">F_H</span>(t, y, pars, i)</span>
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="co"># expose the parameters (see make_Xpar_Xname) </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="co"># expose the parameters (see create_Xpar_Xname) </span></span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="fu">with</span>(pars<span class="sc">$</span>Xpar[[i]], {</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>      <span class="co"># compute the derivatives </span></span>
 <span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>      dX1 <span class="ot">&lt;-</span> ... </span>
@@ -615,10 +615,10 @@ calls.</p></li>
 </div>
 <div id="variables" class="section level2">
 <h2>Variables</h2>
-<div id="make_xinits" class="section level3">
-<h3>2. make_Xinits</h3>
-<div id="make_xinits_sis" class="section level4">
-<h4>make_Xinits_SIS</h4>
+<div id="create_xinits" class="section level3">
+<h3>2. create_Xinits</h3>
+<div id="create_xinits_sis" class="section level4">
+<h4>create_Xinits_SIS</h4>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the SIS human model, with defaults</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] to overwrite defaults</span></span>
@@ -627,7 +627,7 @@ calls.</p></li>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&#39; @param I0 the initial values of the parameter I</span></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>make_Xinits_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">H0=</span><span class="cn">NULL</span>, <span class="at">S0=</span><span class="cn">NULL</span>, <span class="at">I0=</span><span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>create_Xinits_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">H0=</span><span class="cn">NULL</span>, <span class="at">S0=</span><span class="cn">NULL</span>, <span class="at">I0=</span><span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(S0)) S0 <span class="ot">=</span> H0 <span class="sc">-</span> I0</span>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(S0))</span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  S <span class="ot">=</span> <span class="fu">checkIt</span>(S0, nStrata)</span>
@@ -635,8 +635,8 @@ calls.</p></li>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">S=</span>S, <span class="at">I=</span>I))</span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>})}</span></code></pre></div>
 </div>
-<div id="make_xinits_newxname" class="section level4">
-<h4>make_Xinits_newXname</h4>
+<div id="create_xinits_newxname" class="section level4">
+<h4>create_Xinits_newXname</h4>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the Xname human model, with defaults</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] to overwrite defaults</span></span>
@@ -644,7 +644,7 @@ calls.</p></li>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @param X20 the initial value for X1 </span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>make_Xinits_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">X10=</span><span class="cn">NULL</span>, <span class="at">X20=</span><span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>create_Xinits_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts =</span> <span class="fu">list</span>(), <span class="at">X10=</span><span class="cn">NULL</span>, <span class="at">X20=</span><span class="dv">1</span>){<span class="fu">with</span>(Xopts,{</span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X10))</span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X20))</span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  X1 <span class="ot">=</span> <span class="fu">checkIt</span>(X10, nStrata)</span>
@@ -653,14 +653,14 @@ calls.</p></li>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>})}</span></code></pre></div>
 </div>
 </div>
-<div id="setup_xinits" class="section level3">
-<h3>3. setup_Xinits</h3>
+<div id="make_xinits" class="section level3">
+<h3>3. make_Xinits</h3>
 <p>In the <code>xde_setup</code> family of setup functions, initial
 values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
-set up by the function <code>setup_Xinits.</code></p>
+set up by the function <code>make_Xinits.</code></p>
 <div id="generic" class="section level4">
 <h4>Generic</h4>
-<p>The <code>setup_Xinits</code> function dispatches on
+<p>The <code>make_Xinits</code> function dispatches on
 <code>pars$Xpar[[i]]</code></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title A function to set up Xpar</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on `newXname`.</span></span>
@@ -669,34 +669,34 @@ set up by the function <code>setup_Xinits.</code></p>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list]</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>setup_Xinits <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;setup_Xinits&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>make_Xinits <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;make_Xinits&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="setup_xinits.sis" class="section level4">
-<h4>setup_Xinits.SIS</h4>
-<p>The <code>setup_Xinits.SIS</code> calls
-<code>make_Xinits_SIS</code></p>
+<div id="make_xinits.sis" class="section level4">
+<h4>make_Xinits.SIS</h4>
+<p>The <code>make_Xinits.SIS</code> calls
+<code>create_Xinits_SIS</code></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xinits.SIS</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xinits] for the SIS model</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams setup_Xinits</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_Xinits] for the SIS model</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams make_Xinits</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>setup_Xinits.SIS <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">make_Xinits_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>make_Xinits.SIS <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">create_Xinits_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="setup_xinits.newxname" class="section level4">
-<h4>setup_Xinits.newXname</h4>
+<div id="make_xinits.newxname" class="section level4">
+<h4>make_Xinits.newXname</h4>
 <p>To modify, replace <code>newXname</code></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xinits.newXname</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xinits] for the newXname model</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_Xinits</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_Xinits] for the newXname model</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::make_Xinits</span></span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>setup_Xinits.newXname <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">make_Xinits_newXname</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>make_Xinits.newXname <span class="ot">=</span> <span class="cf">function</span>(pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">with</span>(pars, <span class="fu">create_Xinits_newXname</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts, <span class="at">H0=</span>Hpar[[i]]<span class="sc">$</span>H))</span>
 <span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
 <span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
@@ -848,8 +848,8 @@ name.</p>
 <span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
-<div id="update_inits_x" class="section level3">
-<h3>7. update_inits_X</h3>
+<div id="update_xinits" class="section level3">
+<h3>7. update_Xinits</h3>
 <p>Pass a vector <code>y</code>, extract the values of the variables,
 and modify the initial values.</p>
 <div id="generic-4" class="section level4">
@@ -861,31 +861,31 @@ and modify the initial values.</p>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
 <span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
 <span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>update_inits_X <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
-<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;update_inits_X&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>update_Xinits <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;update_Xinits&quot;</span>, pars<span class="sc">$</span>Xpar[[i]])</span>
 <span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="update_inits_x.sis" class="section level4">
-<h4>update_inits_X.SIS</h4>
+<div id="update_xinits.sis" class="section level4">
+<h4>update_Xinits.SIS</h4>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&#39; @title Update inits for the SIS human model from a vector of states</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams update_inits_X</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams update_Xinits</span></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>update_inits_X.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>update_Xinits.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y0, pars, i),{</span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">make_Xinits_SIS</span>(pars, <span class="fu">list</span>(), <span class="at">S0=</span>S, <span class="at">I0=</span>I)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    pars<span class="sc">$</span>Xinits[[i]] <span class="ot">=</span> <span class="fu">create_Xinits_SIS</span>(pars, <span class="fu">list</span>(), <span class="at">S0=</span>S, <span class="at">I0=</span>I)</span>
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>    <span class="fu">return</span>(pars)</span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>})}</span></code></pre></div>
 </div>
-<div id="update_inits_x.newxname" class="section level4">
-<h4>update_inits_X.newXname</h4>
+<div id="update_xinits.newxname" class="section level4">
+<h4>update_Xinits.newXname</h4>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#&#39; @title Update inits for the newXname human model from a vector of states</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::update_inits_X </span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::update_Xinits </span></span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>update_inits_X.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>update_Xinits.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, y0, i) {</span>
 <span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">list_Xvars</span>(y0, pars, i),{</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    pars <span class="ot">=</span> <span class="fu">make_Xinits_newXname</span>(pars, <span class="fu">list</span>(), <span class="at">X10=</span>X1, <span class="at">X20=</span>X2, ...)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    pars <span class="ot">=</span> <span class="fu">create_Xinits_newXname</span>(pars, <span class="fu">list</span>(), <span class="at">X10=</span>X1, <span class="at">X20=</span>X2, ...)</span>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>    <span class="fu">return</span>(pars)</span>
 <span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>})}</span></code></pre></div>
 </div>
@@ -895,13 +895,13 @@ and modify the initial values.</p>
 <h2>Parameters</h2>
 <p>The second function sets up a list <code>Xpar</code> that dispatches
 <code>dXdt</code> and that has the parameter values.</p>
-<div id="make_xpar_sis" class="section level3">
-<h3>8. make_Xpar_SIS</h3>
+<div id="create_xpar_sis" class="section level3">
+<h3>8. create_Xpar_SIS</h3>
 <p>There is no <code>S3</code> definition for the
-<code>make_Xpar_*</code> class of functions. Instead, we write a generic
-<code>S3</code> function called <code>setup_Xpar</code> that calls a
-function <code>make_Xpar_*</code> There is, nevertheless, a reasonably
-standard formula for <code>make_Xpar_*</code></p>
+<code>create_Xpar_*</code> class of functions. Instead, we write a
+generic <code>S3</code> function called <code>make_Xpar</code> that
+calls a function <code>make_Xpar_*</code> There is, nevertheless, a
+reasonably standard formula for <code>make_Xpar_*</code></p>
 <ul>
 <li><p>The first argument is <code>nStrata</code> the number of
 population strata for the species.</p></li>
@@ -913,11 +913,11 @@ be the same ones used in <code>dXdt</code></p></li>
 <li><p>By default, they should have
 <code>length(*)= nStrata</code></p></li>
 <li><p>The last part of the function name is the string that dispatches
-the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
+the <code>S3</code> functions. In <code>create_Xpar_SIS,</code> we write
 <code>class(Xpar) &lt;- &quot;SIS&quot;</code></p></li>
 </ul>
-<div id="make_xpar_sis-1" class="section level4">
-<h4>make_Xpar_SIS</h4>
+<div id="create_xpar_sis-1" class="section level4">
+<h4>create_Xpar_SIS</h4>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for SIS human model, with defaults</span></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list] that could overwrite defaults</span></span>
@@ -926,7 +926,7 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&#39; @param r recovery rate</span></span>
 <span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>make_Xpar_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>create_Xpar_SIS <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
 <span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>                         <span class="at">b=</span><span class="fl">0.55</span>, <span class="at">r=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">180</span>, <span class="at">c=</span><span class="fl">0.15</span>){</span>
 <span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>  <span class="fu">with</span>(Xopts,{</span>
 <span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>    Xpar <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -939,8 +939,8 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>    <span class="fu">return</span>(Xpar)</span>
 <span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  })}</span></code></pre></div>
 </div>
-<div id="make_xpar_newxname" class="section level4">
-<h4>make_Xpar_newXname</h4>
+<div id="create_xpar_newxname" class="section level4">
+<h4>create_Xpar_newXname</h4>
 <p>To format this for a new function, do a search and replace on
 <code>newXname</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for newXname human model, with defaults</span></span>
@@ -951,7 +951,7 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>make_Xpar_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>create_Xpar_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">Xopts=</span><span class="fu">list</span>(),</span>
 <span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>                         <span class="at">p1=</span><span class="dv">1</span>, <span class="at">p2=</span><span class="dv">2</span>, <span class="at">p3=</span><span class="dv">3</span>){</span>
 <span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>  <span class="fu">with</span>(Xopts,{</span>
 <span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    Xpar <span class="ot">=</span> <span class="fu">list</span>()</span>
@@ -965,17 +965,17 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a>  })}</span></code></pre></div>
 </div>
 </div>
-<div id="setup_xpar" class="section level3">
-<h3>9. setup_Xpar</h3>
+<div id="make_xpar" class="section level3">
+<h3>9. make_Xpar</h3>
 <p>In the <code>xde_setup</code> family of setup functions, setup for a
 model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
-set up by the function <code>setup_Xpar.</code></p>
+set up by the function <code>make_Xpar.</code></p>
 <div id="generic-5" class="section level4">
 <h4>Generic</h4>
 <p>This function must set up <code>Xpar</code> and it must also set up
 the initial values. By convention, the functions that get called are not
 <code>S3</code> class functions.</p>
-<p>The <code>setup_Xpar</code> functions assigns to <code>Xname</code>
+<p>The <code>make_Xpar</code> functions assigns to <code>Xname</code>
 the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co">#&#39; @title A function to set up Xpar</span></span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on `Xname`.</span></span>
@@ -985,36 +985,36 @@ the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
 <span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&#39; @param Xopts a [list]</span></span>
 <span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>setup_Xpar <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>make_Xpar <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
 <span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="fu">class</span>(Xname) <span class="ot">&lt;-</span> Xname</span>
-<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;setup_Xpar&quot;</span>, Xname)</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;make_Xpar&quot;</span>, Xname)</span>
 <span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="setup_xpar.sis" class="section level4">
-<h4>setup_Xpar.SIS</h4>
+<div id="make_xpar.sis" class="section level4">
+<h4>make_Xpar.SIS</h4>
 <p>The dispatched function <code>SIS</code> ignores xname, but it calls
-a function <code>make_Xpar_SIS</code></p>
+a function <code>create_Xpar_SIS</code></p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xpar.SIS</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xpar] for the SIS model</span></span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams setup_Xpar</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_Xpar] for the SIS model</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams make_Xpar</span></span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
 <span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>setup_Xpar.SIS <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
-<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">make_Xpar_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>make_Xpar.SIS <span class="ot">=</span> <span class="cf">function</span>(Xname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">create_Xpar_SIS</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
 <span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
 <span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="setup_xpar.newxname" class="section level4">
-<h4>setup_Xpar.newXname</h4>
+<div id="make_xpar.newxname" class="section level4">
+<h4>make_Xpar.newXname</h4>
 <p>To use this, simply to a search and replace on
 <code>newXname.</code></p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co">#&#39; @title Setup Xpar.newXname</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_Xpar] for the newXname model</span></span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_Xpar</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [make_Xpar] for the newXname model</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::make_Xpar</span></span>
 <span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
 <span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>setup_Xpar.newXname <span class="ot">=</span> <span class="cf">function</span>(newXname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">make_Xpar_newXname</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>make_Xpar.newXname <span class="ot">=</span> <span class="cf">function</span>(newXname, pars, i, <span class="at">Xopts=</span><span class="fu">list</span>()){</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  pars<span class="sc">$</span>Xpar[[i]] <span class="ot">=</span> <span class="fu">create_Xpar_newXname</span>(pars<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, Xopts)</span>
 <span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>  <span class="fu">return</span>(pars)</span>
 <span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>

@@ -14,7 +14,7 @@ dXdt.newXname <- function(t, y, pars, i) {
     # compute H (if it isn't one of the variables) 
     H <- F_H(t, y, pars, i)
 
-    # expose the parameters (see make_Xpar_Xname) 
+    # expose the parameters (see create_Xpar_Xname) 
     with(pars$Xpar[[i]], {
       # compute the derivatives 
       dX1 <- ... 
@@ -38,7 +38,7 @@ dXdt.newXname <- function(t, y, pars, i) {
 #' @param X20 the initial value for X1 
 #' @return a [list]
 #' @export
-make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
+create_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
   stopifnot(is.numeric(X10))
   stopifnot(is.numeric(X20))
   X1 = checkIt(X10, nStrata)
@@ -48,12 +48,12 @@ make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(X
 
 ## -----------------------------------------------------------------------------
 #' @title Setup Xinits.newXname
-#' @description Implements [setup_Xinits] for the newXname model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the newXname model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.newXname = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.newXname = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
@@ -106,12 +106,12 @@ get_inits_X.newXname <- function(pars, i){
 
 ## -----------------------------------------------------------------------------
 #' @title Update inits for the newXname human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X 
+#' @inheritParams ramp.xds::update_Xinits 
 #' @return none
 #' @export
-update_inits_X.newXname <- function(pars, y0, i) {
+update_Xinits.newXname <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
+    pars = create_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
     return(pars)
 })}
 
@@ -124,7 +124,7 @@ update_inits_X.newXname <- function(pars, y0, i) {
 #' @param p3 the third parameter 
 #' @return a [list]
 #' @export
-make_Xpar_newXname = function(nStrata, Xopts=list(),
+create_Xpar_newXname = function(nStrata, Xopts=list(),
                          p1=1, p2=2, p3=3){
   with(Xopts,{
     Xpar = list()
@@ -139,12 +139,12 @@ make_Xpar_newXname = function(nStrata, Xopts=list(),
 
 ## -----------------------------------------------------------------------------
 #' @title Setup Xpar.newXname
-#' @description Implements [setup_Xpar] for the newXname model
-#' @inheritParams ramp.xds::setup_Xpar
+#' @description Implements [make_Xpar] for the newXname model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.newXname = function(newXname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_newXname(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.newXname = function(newXname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_newXname(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
 

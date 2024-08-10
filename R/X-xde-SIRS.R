@@ -20,7 +20,6 @@ dXdt.SIRS <- function(t, y, pars, i) {
   })
 }
 
-<<<<<<< Updated upstream
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIRS model as a function of the daily eir.
@@ -34,25 +33,24 @@ xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
   return(c(S=Seq, I=Ieq, R = Req))
 })}
 
-=======
->>>>>>> Stashed changes
 #' @title Make initial values for the SIRS human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
 #' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
+#' @param S the initial value for S
+#' @param I the initial value for I
+#' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(I0+R0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
+create_Xinits_SIRS = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, R = 1){with(Xopts,{
+  if(is.null(S)) S = H0-(I+R)
+  stopifnot(is.numeric(S))
+  S = checkIt(S, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
   return(list(S=S, I=I, R =R))
 })}
+
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIS model as a function of the daily eir.
@@ -68,31 +66,31 @@ xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
 
 
 #' @title Setup Xinits.SIRS
-#' @description Implements [setup_Xinits] for the SIRS model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the SIRS model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SIRS = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SIRS(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SIRS = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_SIRS(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the SIRS model.
-#' @inheritParams ramp.xds::make_indices_X
+#' @description Implements [make_X_indices] for the SIRS model.
+#' @inheritParams ramp.xds::make_X_indices
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SIRS <- function(pars, i) {with(pars,{
+make_X_indices.SIRS <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
 
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
 
@@ -123,11 +121,11 @@ list_Xvars.SIRS <- function(y, pars, i) {
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xds::get_inits_X
+#' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_inits_X.SIRS <- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S,I,R)))
+get_Xinits.SIRS <- function(pars, i){
+  pars$Xinits[[i]]
 }
 
 
@@ -135,12 +133,12 @@ get_inits_X.SIRS <- function(pars, i){
 
 
 #' @title Update inits for the SIRS human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X
+#' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_inits_X.SIRS <- function(pars, y0, i) {
+update_Xinits.SIRS <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SIRS(pars, list(), S0=S, I0=I, R0=R)
+    pars = create_Xinits_SIRS(pars, list(), S=S, I=I, R=R)
     return(pars)
   })}
 
@@ -155,7 +153,7 @@ update_inits_X.SIRS <- function(pars, y0, i) {
 #' @param gam the rate of loss of immunity
 #' @return a [list]
 #' @export
-make_Xpar_SIRS = function(nStrata, Xopts=list(),
+create_Xpar_SIRS = function(nStrata, Xopts=list(),
                           b=0.55, r=1/180, c=0.15,gam=0.5){
   with(Xopts,{
     Xpar = list()
@@ -174,12 +172,12 @@ make_Xpar_SIRS = function(nStrata, Xopts=list(),
 
 
 #' @title Setup Xpar.SIRS
-#' @description Implements [xde_setup_Xpar] for the SIRS model
-#' @inheritParams ramp.xds::xde_setup_Xpar
+#' @description Implements [make_Xpar] for the SIRS model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-xde_setup_Xpar.SIRS = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIRS(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SIRS = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SIRS(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -279,7 +277,6 @@ HTC.SIRS <- function(pars, i) {
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
-#'
 #' @export
 xde_lines_X_SIRS = function(XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   with(XH,{
@@ -317,5 +314,5 @@ xds_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), 
               ylab = "No of. Infected", xlab = "Time"))
 
 
-  xde_lines_X_SIRS(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_SIRS(vars$XH[[i]], pars$nStrata[i], clrs, llty)
 }

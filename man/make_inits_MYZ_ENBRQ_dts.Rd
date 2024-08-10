@@ -4,22 +4,22 @@
 \alias{make_inits_MYZ_ENBRQ_dts}
 \title{Make inits for ENBRQ_dts adult mosquito model}
 \usage{
-make_inits_MYZ_ENBRQ_dts(pars, E0, N0, B0, Q0, R10, R20)
+make_inits_MYZ_ENBRQ_dts(pars, E, N, B, Q, R1, R2)
 }
 \arguments{
 \item{pars}{a [list]}
 
-\item{E0}{total mosquito density at each patch}
+\item{E}{total mosquito density at each patch}
 
-\item{N0}{total mosquito density at each patch}
+\item{N}{total mosquito density at each patch}
 
-\item{B0}{blood feeding mosquito density at each patch}
+\item{B}{blood feeding mosquito density at each patch}
 
-\item{Q0}{egg laying mosquito density at each patch}
+\item{Q}{egg laying mosquito density at each patch}
 
-\item{R10}{total stage 1 resting mosquitoes in each patch}
+\item{R1}{total stage 1 resting mosquitoes in each patch}
 
-\item{R20}{total stage 2 resting mosquitoes in each patch}
+\item{R2}{total stage 2 resting mosquitoes in each patch}
 }
 \value{
 a [list]

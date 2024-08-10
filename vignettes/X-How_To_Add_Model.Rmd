@@ -60,27 +60,27 @@ The 17 required functions are:
 
 **Variables** - A set of functions is set up that document the variables by name and assign each one an index, to store, assign and update initial values. These functions streamline setup, and guarantee consistency. 
 
-2. `make_Xinits_newXname` - each model requires a function that documents the variables by name and assigns initial values 
+2. `create_Xinits_newXname` - each model requires a function that documents the variables by name and assigns initial values 
     
-3. `setup_Xinits.newXname` - is a wrapper, that gets called by `ramp.xds::xde_setup.` It gets called by `make_Xinits_newXname,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
+3. `make_Xinits.newXname` - is a wrapper, that gets called by `ramp.xds::xde_setup.` It gets called by `create_Xinits_newXname,` and for the $i^{th}$ host, the initial values are stored as `pars$Xinits[[i]].` 
 
 4. `make_indices_X.newXname` - is the function that assigns an index to each variable in the model, and stores it as `pars$ix$X[[i]].` The indices are returned as a named list.  
 
-5. `list_Xvars.newXname` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_inits_X` and it can be useful in other contexts. 
+5. `list_Xvars.newXname` - retrieves the value of variables at a point in time and returns the values by name in a list; the function gets called by `dXdt` and by `update_Xinits` and it can be useful in other contexts. 
 
 6. `get_inits_X.newXname` - retrieves the stored initial values in the same order that they are returned by `dXdt.newXname`
 
-7. `update_inits_X.newXname` - a utility that makes it possible to extract and store a new set of initial values for `newXname` from a vector $y$ holding all the variables in a model. 
+7. `update_Xinits.newXname` - a utility that makes it possible to extract and store a new set of initial values for `newXname` from a vector $y$ holding all the variables in a model. 
 
 **Parameters**
 
-8. `make_Xpar_newXname` returns a formatted list: 
+8. `create_Xpar_newXname` returns a formatted list: 
 
     + the parameter values are stored by name 
    
     + `class(pars)` = `newXname` 
     
-9. `setup_Xpar.newXname` is a wrapper that calls `make_Xpar_newXname` 
+9. `make_Xpar.newXname` is a wrapper that calls `create_Xpar_newXname` 
 
 **Dynamical Terms** are Computed using a Standard Set of Functions 
 
@@ -202,7 +202,7 @@ dXdt.newXname <- function(t, y, pars, i) {
     # compute H (if it isn't one of the variables) 
     H <- F_H(t, y, pars, i)
 
-    # expose the parameters (see make_Xpar_Xname) 
+    # expose the parameters (see create_Xpar_Xname) 
     with(pars$Xpar[[i]], {
       # compute the derivatives 
       dX1 <- ... 
@@ -221,9 +221,9 @@ dXdt.newXname <- function(t, y, pars, i) {
 
 ## Variables  
 
-### 2. make_Xinits  
+### 2. create_Xinits  
 
-#### make_Xinits_SIS
+#### create_Xinits_SIS
 
 ```{r, eval=F, purl=F}
 #' @title Make initial values for the SIS human model, with defaults
@@ -234,7 +234,7 @@ dXdt.newXname <- function(t, y, pars, i) {
 #' @param I0 the initial values of the parameter I
 #' @return a [list]
 #' @export
-make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with(Xopts,{
+create_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with(Xopts,{
   if(is.null(S0)) S0 = H0 - I0
   stopifnot(is.numeric(S0))
   S = checkIt(S0, nStrata)
@@ -243,7 +243,7 @@ make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with
 })}
 ```
 
-#### make_Xinits_newXname
+#### create_Xinits_newXname
 
 ```{r}
 #' @title Make initial values for the Xname human model, with defaults
@@ -253,7 +253,7 @@ make_Xinits_SIS = function(nStrata, Xopts = list(), H0=NULL, S0=NULL, I0=1){with
 #' @param X20 the initial value for X1 
 #' @return a [list]
 #' @export
-make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
+create_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
   stopifnot(is.numeric(X10))
   stopifnot(is.numeric(X20))
   X1 = checkIt(X10, nStrata)
@@ -262,13 +262,13 @@ make_Xinits_newXname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(X
 })}
 ```
 
-### 3. setup_Xinits  
+### 3. make_Xinits  
 
-In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xinits.` 
+In the `xde_setup` family of setup functions, initial values for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `make_Xinits.` 
 
 #### Generic 
 
-The `setup_Xinits` function dispatches on `pars$Xpar[[i]]`
+The `make_Xinits` function dispatches on `pars$Xpar[[i]]`
 
 ```{r, eval=F, purl=F}
 #' @title A function to set up Xpar
@@ -278,39 +278,39 @@ The `setup_Xinits` function dispatches on `pars$Xpar[[i]]`
 #' @param Xopts a [list]
 #' @return a [list]
 #' @export
-setup_Xinits = function(pars, i, Xopts=list()){
-  UseMethod("setup_Xinits", pars$Xpar[[i]])
+make_Xinits = function(pars, i, Xopts=list()){
+  UseMethod("make_Xinits", pars$Xpar[[i]])
 }
 ```
 
-#### setup_Xinits.SIS
+#### make_Xinits.SIS
 
-The `setup_Xinits.SIS` calls `make_Xinits_SIS` 
+The `make_Xinits.SIS` calls `create_Xinits_SIS` 
 
 ```{r, eval=F, purl=F}
 #' @title Setup Xinits.SIS
-#' @description Implements [setup_Xinits] for the SIS model
-#' @inheritParams setup_Xinits
+#' @description Implements [make_Xinits] for the SIS model
+#' @inheritParams make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SIS = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SIS(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SIS = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_SIS(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 ```
 
-#### setup_Xinits.newXname
+#### make_Xinits.newXname
 
 To modify, replace `newXname` 
 
 ```{r}
 #' @title Setup Xinits.newXname
-#' @description Implements [setup_Xinits] for the newXname model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the newXname model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.newXname = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.newXname = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_newXname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 ```
@@ -481,7 +481,7 @@ get_inits_X.newXname <- function(pars, i){
 }
 ```
 
-### 7. update_inits_X  
+### 7. update_Xinits  
 
 Pass a vector `y`, extract the values of the variables, and modify the initial values.
 
@@ -495,35 +495,35 @@ Pass a vector `y`, extract the values of the variables, and modify the initial v
 #' @param i the host species index
 #' @return none
 #' @export
-update_inits_X <- function(pars, y0, i) {
-  UseMethod("update_inits_X", pars$Xpar[[i]])
+update_Xinits <- function(pars, y0, i) {
+  UseMethod("update_Xinits", pars$Xpar[[i]])
 }
 ```
 
-#### update_inits_X.SIS
+#### update_Xinits.SIS
 
 ```{r, purl=F, eval=F}
 #' @title Update inits for the SIS human model from a vector of states
-#' @inheritParams update_inits_X
+#' @inheritParams update_Xinits
 #' @return none
 #' @export
-update_inits_X.SIS <- function(pars, y0, i) {
+update_Xinits.SIS <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SIS(pars, list(), S0=S, I0=I)
+    pars$Xinits[[i]] = create_Xinits_SIS(pars, list(), S0=S, I0=I)
     return(pars)
 })}
 ```
 
-#### update_inits_X.newXname
+#### update_Xinits.newXname
 
 ```{r}
 #' @title Update inits for the newXname human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X 
+#' @inheritParams ramp.xds::update_Xinits 
 #' @return none
 #' @export
-update_inits_X.newXname <- function(pars, y0, i) {
+update_Xinits.newXname <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
+    pars = create_Xinits_newXname(pars, list(), X10=X1, X20=X2, ...)
     return(pars)
 })}
 ```
@@ -533,9 +533,9 @@ update_inits_X.newXname <- function(pars, y0, i) {
 
 The second function sets up a list `Xpar` that dispatches `dXdt` and that has the parameter values. 
 
-### 8. make_Xpar_SIS  
+### 8. create_Xpar_SIS  
 
-There is no `S3` definition for the `make_Xpar_*` class of functions. Instead, we write a generic `S3` function called `setup_Xpar` that calls a function `make_Xpar_*` There is, nevertheless, a reasonably standard formula for `make_Xpar_*`  
+There is no `S3` definition for the `create_Xpar_*` class of functions. Instead, we write a generic `S3` function called `make_Xpar` that calls a function `make_Xpar_*` There is, nevertheless, a reasonably standard formula for `make_Xpar_*`  
 
 + The first argument is `nStrata` the number of population strata for the species. 
 
@@ -545,9 +545,9 @@ There is no `S3` definition for the `make_Xpar_*` class of functions. Instead, w
 
 + By default, they should have `length(*)= nStrata`
 
-+ The last part of the function name is the string that dispatches the `S3` functions. In `make_Xpar_SIS,` we write `class(Xpar) <- "SIS"` 
++ The last part of the function name is the string that dispatches the `S3` functions. In `create_Xpar_SIS,` we write `class(Xpar) <- "SIS"` 
 
-#### make_Xpar_SIS
+#### create_Xpar_SIS
 
 ```{r, eval=F, purl=F}
 #' @title Make parameters for SIS human model, with defaults
@@ -558,7 +558,7 @@ There is no `S3` definition for the `make_Xpar_*` class of functions. Instead, w
 #' @param r recovery rate
 #' @return a [list]
 #' @export
-make_Xpar_SIS = function(nStrata, Xopts=list(),
+create_Xpar_SIS = function(nStrata, Xopts=list(),
                          b=0.55, r=1/180, c=0.15){
   with(Xopts,{
     Xpar = list()
@@ -572,7 +572,7 @@ make_Xpar_SIS = function(nStrata, Xopts=list(),
   })}
 ```
 
-#### make_Xpar_newXname
+#### create_Xpar_newXname
 
 To format this for a new function, do a search and replace on `newXname` and replace the parmeter names and values $p1$, $p2$, $\ldots$ 
 
@@ -585,7 +585,7 @@ To format this for a new function, do a search and replace on `newXname` and rep
 #' @param p3 the third parameter 
 #' @return a [list]
 #' @export
-make_Xpar_newXname = function(nStrata, Xopts=list(),
+create_Xpar_newXname = function(nStrata, Xopts=list(),
                          p1=1, p2=2, p3=3){
   with(Xopts,{
     Xpar = list()
@@ -600,15 +600,15 @@ make_Xpar_newXname = function(nStrata, Xopts=list(),
 ```
 
 
-### 9. setup_Xpar  
+### 9. make_Xpar  
 
-In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `setup_Xpar.` 
+In the `xde_setup` family of setup functions, setup for a model fulfilling the dynamical component $\cal X,$ called `newXname` is set up by the function `make_Xpar.` 
 
 #### Generic 
 
 This function must set up `Xpar` and it must also set up the initial values. By convention, the functions that get called are not `S3` class functions.   
 
-The `setup_Xpar` functions assigns to `Xname` the `class(Xname)` and dispatches on `Xname`
+The `make_Xpar` functions assigns to `Xname` the `class(Xname)` and dispatches on `Xname`
 
 ```{r, eval=F, purl=F}
 #' @title A function to set up Xpar
@@ -619,40 +619,40 @@ The `setup_Xpar` functions assigns to `Xname` the `class(Xname)` and dispatches 
 #' @param Xopts a [list]
 #' @return a [list]
 #' @export
-setup_Xpar = function(Xname, pars, i, Xopts=list()){
+make_Xpar = function(Xname, pars, i, Xopts=list()){
   class(Xname) <- Xname
-  UseMethod("setup_Xpar", Xname)
+  UseMethod("make_Xpar", Xname)
 }
 ```
 
-#### setup_Xpar.SIS
+#### make_Xpar.SIS
 
-The dispatched function `SIS` ignores xname, but it calls a function `make_Xpar_SIS` 
+The dispatched function `SIS` ignores xname, but it calls a function `create_Xpar_SIS` 
 
 ```{r, eval=F, purl=F}
 #' @title Setup Xpar.SIS
-#' @description Implements [setup_Xpar] for the SIS model
-#' @inheritParams setup_Xpar
+#' @description Implements [make_Xpar] for the SIS model
+#' @inheritParams make_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SIS = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIS(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SIS = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SIS(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
 ```
 
-#### setup_Xpar.newXname
+#### make_Xpar.newXname
 
 To use this, simply to a search and replace on `newXname.` 
 
 ```{r}
 #' @title Setup Xpar.newXname
-#' @description Implements [setup_Xpar] for the newXname model
-#' @inheritParams ramp.xds::setup_Xpar
+#' @description Implements [make_Xpar] for the newXname model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.newXname = function(newXname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_newXname(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.newXname = function(newXname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_newXname(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }
 ```

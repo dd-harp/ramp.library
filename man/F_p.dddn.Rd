@@ -4,12 +4,14 @@
 \alias{F_p.dddn}
 \title{Dawn, day, dusk, night model for the human fraction}
 \usage{
-\method{F_p}{dddn}(t, MYZpar)
+\method{F_p}{dddn}(t, vars, p_par)
 }
 \arguments{
 \item{t}{current simulation time}
 
-\item{MYZpar}{a \link{list}}
+\item{vars}{exogenous variables}
+
+\item{p_par}{a \link{list}}
 }
 \value{
 a [numeric] vector of length `nPatches`

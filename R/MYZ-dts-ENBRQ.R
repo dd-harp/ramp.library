@@ -76,12 +76,12 @@ dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
 }
 
 #' @title Setup MYZpar for the ENBRQ_dts model
-#' @description Implements [dts_setup_MYZpar] for the ENBRQ_dts model
-#' @inheritParams ramp.xds::dts_setup_MYZpar
+#' @description Implements [make_MYZpar] for the ENBRQ_dts model
+#' @inheritParams ramp.xds::make_MYZpar
 #' @return a [list] vector
 #' @export
-dts_setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
-  pars$MYZpar[[s]] = make_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts, calK)
+make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
+  pars$MYZpar[[s]] = create_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts, calK)
   return(pars)
 }
 
@@ -106,7 +106,7 @@ dts_setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(),
 #' @param nu_mod a name to dispatch F_nu
 #' @return a [list]
 #' @export
-make_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
+create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
                                  p=11/12,
                                  sigma=1/8,
                                  f=0.3,
@@ -179,12 +179,12 @@ make_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
   })}
 
 #' @title Setup initial values for the ENBRQ_dts model
-#' @description Implements [setup_MYZinits] for the ENBRQ_dts model
-#' @inheritParams ramp.xds::setup_MYZinits
+#' @description Implements [make_MYZinits] for the ENBRQ_dts model
+#' @inheritParams ramp.xds::make_MYZinits
 #' @return a [list]
 #' @export
-setup_MYZinits.ENBRQ_dts = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_ENBRQ_dts(nPatches, nR1, MYZopts))
+make_MYZinits.ENBRQ_dts = function(pars, s, MYZopts=list()){
+  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], create_MYZinits_ENBRQ_dts(nPatches, nR1, MYZopts))
   return(pars)
 }
 
@@ -192,23 +192,23 @@ setup_MYZinits.ENBRQ_dts = function(pars, s, MYZopts=list()){
 #' @param nPatches the number of patches in the model
 #' @param nR1 number of time steps in R1
 #' @param MYZopts a [list] of values that overwrites the defaults
-#' @param E0 total null-parous, blood feeding mosquito density
-#' @param N0 total null-parous, blood feeding mosquito density
-#' @param B0 total parous, blood feeding mosquito density at each patch
-#' @param Q0 total egg laying mosquito density at each patch
-#' @param R10 resting, stage 1, mosquito density at each patch
-#' @param R20 resting, stage 2, mosquito density at each patch
+#' @param E total null-parous, blood feeding mosquito density
+#' @param N total null-parous, blood feeding mosquito density
+#' @param B total parous, blood feeding mosquito density at each patch
+#' @param Q total egg laying mosquito density at each patch
+#' @param R1 resting, stage 1, mosquito density at each patch
+#' @param R2 resting, stage 2, mosquito density at each patch
 #' @return a [list]
 #' @export
-make_MYZinits_ENBRQ_dts = function(nPatches, nR1, MYZopts = list(),
-                                   E0=5, N0=5, B0=5, Q0=1, R10=0, R20=0){
+create_MYZinits_ENBRQ_dts = function(nPatches, nR1, MYZopts = list(),
+                                   E=5, N=5, B=5, Q=1, R1=0, R2=0){
   with(MYZopts,{
-    E = checkIt(E0, nPatches)
-    N = checkIt(N0, nPatches)
-    B = checkIt(B0, nPatches)
-    Q = checkIt(Q0, nPatches)
-    R1 = checkIt(R10, nPatches*nR1)
-    R2 = checkIt(R20, nPatches)
+    E = checkIt(E, nPatches)
+    N = checkIt(N, nPatches)
+    B = checkIt(B, nPatches)
+    Q = checkIt(Q, nPatches)
+    R1 = checkIt(R1, nPatches*nR1)
+    R2 = checkIt(R2, nPatches)
     return(list(E=E, N=N, B=B, Q=Q, R1=R1, R2=R2))
   })
 }
@@ -348,17 +348,17 @@ make_parameters_MYZ_ENBRQ_dts <- function(pars, D, nR1, p, sigma, f, q, r2q, nu,
 
 #' @title Make inits for ENBRQ_dts adult mosquito model
 #' @param pars a [list]
-#' @param E0 total mosquito density at each patch
-#' @param N0 total mosquito density at each patch
-#' @param B0 blood feeding mosquito density at each patch
-#' @param Q0 egg laying mosquito density at each patch
-#' @param R10 total stage 1 resting mosquitoes in each patch
-#' @param R20 total stage 2 resting mosquitoes in each patch
+#' @param E total mosquito density at each patch
+#' @param N total mosquito density at each patch
+#' @param B blood feeding mosquito density at each patch
+#' @param Q egg laying mosquito density at each patch
+#' @param R1 total stage 1 resting mosquitoes in each patch
+#' @param R2 total stage 2 resting mosquitoes in each patch
 #' @return a [list]
 #' @export
-make_inits_MYZ_ENBRQ_dts <- function(pars, E0, N0, B0, Q0, R10, R20) {
+make_inits_MYZ_ENBRQ_dts <- function(pars, E, N, B, Q, R1, R2) {
   pars$MYZinits = list()
-  pars$MYZinits[[1]] = list(E=E0, N=N0, B=B0, Q=Q0, R1=R10, R2=R20)
+  pars$MYZinits[[1]] = list(E=E, N=N, B=B, Q=Q, R1=R1, R2=R2)
   return(pars)
 }
 
@@ -381,26 +381,26 @@ parse_outputs_MYZ.ENBRQ_dts <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]]
 })}
 
 #' @title Return initial values as a vector
-#' @description Implements [get_inits_MYZ] for the ENBRQ_dts model.
-#' @inheritParams ramp.xds::get_inits_MYZ
+#' @description Implements [get_MYZinits] for the ENBRQ_dts model.
+#' @inheritParams ramp.xds::get_MYZinits
 #' @return [numeric]
 #' @export
-get_inits_MYZ.ENBRQ_dts <- function(pars, s) {with(pars$MYZinits[[s]],{
+get_MYZinits.ENBRQ_dts <- function(pars, s) {with(pars$MYZinits[[s]],{
   c(E, N, B, Q, R1, R2)
 })}
 
 #' @title Make inits for ENBRQ_dts adult mosquito model
-#' @inheritParams ramp.xds::update_inits_MYZ
+#' @inheritParams ramp.xds::update_MYZinits
 #' @return a [list]
 #' @export
-update_inits_MYZ.ENBRQ_dts <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{
+update_MYZinits.ENBRQ_dts <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{
   E = y0[E_ix]
   N = y0[N_ix]
   B = y0[B_ix]
   Q = y0[Q_ix]
   R1 = y0[R1_ix]
   R2 = y0[R2_ix]
-  pars$MYZinits[[s]] = make_MYZinits_ENBRQ_dts(pars$nPatches, pars$MYZpars[[s]]$nR1, list(), E0=E, N0=N, B0=B, Q0=Q, R10=R1, R20=R2)
+  pars$MYZinits[[s]] = create_MYZinits_ENBRQ_dts(pars$nPatches, pars$MYZpars[[s]]$nR1, list(), E=E, N=N, B=B, Q=Q, R1=R1, R2=R2)
   return(pars)
 })}
 

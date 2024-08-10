@@ -29,21 +29,21 @@ dXdt.SEIRV<- function(t, y, pars, i) {
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
 #' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param E0 the initial value for E
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
-#' @param V0 the initial values for V
+#' @param S the initial value for S
+#' @param E the initial value for E
+#' @param I the initial value for I
+#' @param R the initial values for R
+#' @param V the initial values for V
 #' @return a [list]
 #' @export
-make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0=0,R0 = 1,V0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(E0+I0+R0+V0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  E = checkIt(E0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
-  V = checkIt(V0, nStrata)
+create_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, E=0,R = 1,V = 1){with(Xopts,{
+  if(is.null(S)) S = H0-(E+I+R+V)
+  stopifnot(is.numeric(S))
+  S = checkIt(S, nStrata)
+  E = checkIt(E, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
+  V = checkIt(V, nStrata)
   return(list(S=S, E=E, I=I, R =R,V=V))
 })}
 
@@ -53,12 +53,12 @@ make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E
 
 
 #' @title Setup Xinits.SEIRV
-#' @description Implements [setup_Xinits] for the SEIRV model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the SEIRV model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SEIRV(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SEIRV = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_SEIRV(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
@@ -67,26 +67,26 @@ setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the SEIRV model.
-#' @inheritParams ramp.xds::make_indices_X
+#' @description Implements [make_X_indices] for the SEIRV model.
+#' @inheritParams ramp.xds::make_X_indices
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SEIRV <- function(pars, i) {with(pars,{
+make_X_indices.SEIRV <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
 
-  E_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
 
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
-  V_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  V_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(V_ix, 1)
 
 
@@ -121,25 +121,22 @@ list_Xvars.SEIRV <- function(y, pars, i) {
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xds::get_inits_X
+#' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_inits_X.SEIRV <- function(pars, i){
+get_Xinits.SEIRV <- function(pars, i){
   with(pars$Xinits[[i]], return(c(S,E,I,R,V)))
 }
 
 
 
-
-
-
 #' @title Update inits for the SEIRV human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X
+#' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_inits_X.SEIRV <- function(pars, y0, i) {
+update_Xinits.SEIRV <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SEIRV(pars, list(), S0=S,E0= E, I0=I, R0=R,V0 =V)
+    pars = create_Xinits_SEIRV(pars, list(), S=S,E= E, I=I, R=R,V =V)
     return(pars)
   })}
 
@@ -158,7 +155,7 @@ update_inits_X.SEIRV <- function(pars, y0, i) {
 #' @param sig  progression rate of recovered individual to protected class
 #' @return a [list]
 #' @export
-make_Xpar_SEIRV = function(nStrata, Xopts=list(),
+create_Xpar_SEIRV = function(nStrata, Xopts=list(),
                           alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps=0.5,sig=0.3,delta =0.5){
   with(Xopts,{
     Xpar = list()
@@ -195,12 +192,12 @@ xde_steady_state_X.SEIRV = function(foi, H, Xpar){with(Xpar,{
 
 
 #' @title Setup Xpar.SEIRV
-#' @description Implements [xde_setup_Xpar] for the SEIRV model
-#' @inheritParams ramp.xds::xde_setup_Xpar
+#' @description Implements [make_Xpar] for the SEIRV model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-xde_setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SEIRV(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SEIRV(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -348,5 +345,5 @@ xds_plot_X.SEIRV = function(pars, i=1, clrs=c("black","darkblue","darkred","dark
               ylab = "No of. Infected", xlab = "Time"))
 
 
-  xde_lines_X_SEIRV(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_SEIRV(vars$XH[[i]], pars$nStrata[i], clrs, llty)
 }

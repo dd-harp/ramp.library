@@ -36,17 +36,17 @@ xde_steady_state_X.SIR = function(foi, H, Xpar){with(Xpar,{
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
 #' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
+#' @param S the initial value for S
+#' @param I the initial value for I
+#' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SIR = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(I0+R0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
+create_Xinits_SIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, R = 1){with(Xopts,{
+  if(is.null(S)) S = H0-(I+R)
+  stopifnot(is.numeric(S))
+  S = checkIt(S, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
   return(list(S=S, I=I, R =R))
 })}
 
@@ -56,31 +56,31 @@ make_Xinits_SIR = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, R0 
 
 
 #' @title Setup Xinits.SIR
-#' @description Implements [setup_Xinits] for the SIR model
-#' @inheritParams ramp.xds::setup_Xinits
+#' @description Implements [make_Xinits] for the SIR model
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-setup_Xinits.SIR = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SIR(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SIR = function(pars, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, create_Xinits_SIR(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
   return(pars)
 }
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_indices_X] for the SIR model.
-#' @inheritParams ramp.xds::make_indices_X
+#' @description Implements [make_X_indices] for the SIR model.
+#' @inheritParams ramp.xds::make_X_indices
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_X.SIR <- function(pars, i) {with(pars,{
+make_X_indices.SIR <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
 
-  I_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  R_ix <- seq(from = max_ix+1, length.out=Hpar[[i]]$nStrata)
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
 
@@ -112,11 +112,11 @@ list_Xvars.SIR <- function(y, pars, i) {
 
 #' @title Return initial values as a vector
 #' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xds::get_inits_X
+#' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_inits_X.SIR <- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S,I,R)))
+get_Xinits.SIR <- function(pars, i){
+  pars$Xinits[[i]]
 }
 
 
@@ -125,12 +125,12 @@ get_inits_X.SIR <- function(pars, i){
 
 
 #' @title Update inits for the SIR human model from a vector of states
-#' @inheritParams ramp.xds::update_inits_X
+#' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_inits_X.SIR <- function(pars, y0, i) {
+update_Xinits.SIR <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SIR(pars, list(), S0=S, I0=I, R0=R)
+    pars = create_Xinits_SIR(pars, list(), S=S, I=I, R=R)
     return(pars)
   })}
 
@@ -144,7 +144,7 @@ update_inits_X.SIR <- function(pars, y0, i) {
 #' @param c the proportion of bites on infected humans that infect a mosquito
 #' @return a [list]
 #' @export
-make_Xpar_SIR = function(nStrata, Xopts=list(),
+create_Xpar_SIR = function(nStrata, Xopts=list(),
                           b=0.55, r=1/180, c=0.15){
   with(Xopts,{
     Xpar = list()
@@ -155,19 +155,16 @@ make_Xpar_SIR = function(nStrata, Xopts=list(),
     Xpar$r = checkIt(r, nStrata)
 
     return(Xpar)
-  })}
-
-
-
+})}
 
 
 #' @title Setup Xpar.SIR
-#' @description Implements [xde_setup_Xpar] for the SIR model
-#' @inheritParams ramp.xds::xde_setup_Xpar
+#' @description Implements [make_Xpar] for the SIR model
+#' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
-xde_setup_Xpar.SIR = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SIR(pars$Hpar[[i]]$nStrata, Xopts)
+make_Xpar.SIR = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = create_Xpar_SIR(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -308,5 +305,5 @@ xds_plot_X.SIR = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), l
               ylab = "No of. Infected", xlab = "Time"))
 
 
-  xde_lines_X_SIR(vars$XH[[i]], pars$Hpar[[i]]$nStrata, clrs, llty)
+  xde_lines_X_SIR(vars$XH[[i]], pars$nStrata[i], clrs, llty)
 }

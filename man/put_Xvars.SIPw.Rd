@@ -2,7 +2,7 @@
 % Please edit documentation in R/X-SIPw.R
 \name{put_Xvars.SIPw}
 \alias{put_Xvars.SIPw}
-\title{Return the SIPw model variables as a list, returned from DT_Xt.SIPw}
+\title{Return the SIPw model variables as a list, returned from Update_Xt.SIPw}
 \usage{
 \method{put_Xvars}{SIPw}(Xvars, y, pars, i)
 }
