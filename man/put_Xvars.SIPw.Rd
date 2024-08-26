@@ -11,7 +11,7 @@
 
 \item{y}{the variables}
 
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }

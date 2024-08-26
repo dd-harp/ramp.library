@@ -337,28 +337,26 @@ update_Xinits.workhorse <- function(pars, y0, i) {
 
 
 #' @title Parse the output of deSolve and return variables for the workhorse model
-#' @description Implements [parse_outputs_X] for the workhorse model
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for the workhorse model
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.workhorse <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    U = outputs[,U_ix+1]
-    A0 = outputs[,A0_ix+1]
-    P = outputs[,P_ix+1]
-    G = outputs[,G_ix+1]
-    I1 = outputs[,I1_ix+1]
-    I2 = outputs[,I2_ix+1]
-    I3 = outputs[,I3_ix+1]
-    I4 = outputs[,I4_ix+1]
-    A1 = outputs[,A1_ix+1]
-    A2 = outputs[,A2_ix+1]
-    A3 = outputs[,A3_ix+1]
-    A4 = outputs[,A4_ix+1]
-    w = outputs[,w_ix+1]
+parse_Xorbits.workhorse <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+    U = outputs[,U_ix]
+    A0 = outputs[,A0_ix]
+    P = outputs[,P_ix]
+    G = outputs[,G_ix]
+    I1 = outputs[,I1_ix]
+    I2 = outputs[,I2_ix]
+    I3 = outputs[,I3_ix]
+    I4 = outputs[,I4_ix]
+    A1 = outputs[,A1_ix]
+    A2 = outputs[,A2_ix]
+    A3 = outputs[,A3_ix]
+    A4 = outputs[,A4_ix]
+    w = outputs[,w_ix]
     H = U+A0+P+G+I1+I2+I3+I4+A1+A2+A3+A4
-    return(list(time=time, U=U, A0=A0, P=P, G=G,
+    return(list( U=U, A0=A0, P=P, G=G,
                 I1=I1, I2=I2, I3=I3, I4=I4,
                 A1=A1, A2=A2, A3=A3, A4=A4,
                 w=w, H=H))

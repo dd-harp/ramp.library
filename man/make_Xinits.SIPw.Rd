@@ -4,10 +4,12 @@
 \alias{make_Xinits.SIPw}
 \title{Setup Xinits.SIPw}
 \usage{
-\method{make_Xinits}{SIPw}(pars, i, Xopts = list())
+\method{make_Xinits}{SIPw}(pars, H, i, Xopts = list())
 }
 \arguments{
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
+
+\item{H}{initial host population density}
 
 \item{i}{the host species index}
 

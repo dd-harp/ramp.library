@@ -290,21 +290,19 @@ xde_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
   })}
 
 #' @title Parse the output of deSolve and return variables for the garki model
-#' @description Implements [parse_outputs_X] for the garki model
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for the garki model
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.garki <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    x1 = outputs[,x1_ix+1]
-    x2 = outputs[,x2_ix+1]
-    y1 = outputs[,y1_ix+1]
-    y2 = outputs[,y2_ix+1]
-    y3 = outputs[,y3_ix+1]
-    x3 = outputs[,x3_ix+1]
-    x4 = outputs[,x4_ix+1]
-    return(list(time=time, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
+parse_Xorbits.garki <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+    x1 = outputs[,x1_ix]
+    x2 = outputs[,x2_ix]
+    y1 = outputs[,y1_ix]
+    y2 = outputs[,y2_ix]
+    y3 = outputs[,y3_ix]
+    x3 = outputs[,x3_ix]
+    x4 = outputs[,x4_ix]
+    return(list(x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
   })}
 
 #' @title Compute the HTC for the garki model

@@ -7,7 +7,7 @@
 \method{make_Linits}{stages_dts}(pars, s, Lopts = list())
 }
 \arguments{
-\item{pars}{an \code{xds} object}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the species index}
 

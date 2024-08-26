@@ -1,0 +1,76 @@
+---
+title: "SIR-xde (Susceptible-Infected-Recovered) Human Model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SIR-xde (Susceptible-Infected-Recovered) Human Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The SIR (Susceptible-Infected-Recovered) human xde model model fulfills the generic interface of the human population component. It is the simplest model of endemic diseases in humans with recovery.
+
+# 
+
+We subdivide a population into susceptible ($S$)  infected and infectious ($I$) and recovered ($R$) individuals, where the total population is $H = S+I+R.$ We assume the force of infection ($h$, FoI) is linearly proportional to the EIR: $h = b \times EIR.$ In its general form, with births ($B(H)$) and deaths (at the per-capita rate $\mu$), the generalized SIR_xde dynamics are:
+
+$$
+\begin{array}{rl}
+\dot{S} &= -h S + B(H) -\mu S\\
+\dot{I} &= h S  - rI - \mu I\\
+\dot{R} &= rI-\mu R
+\end{array}
+$$
+We are assuming that a population could be stratified, such that the variables and parameter are all vectors with length `nStrata.`
+
+# Equilibrium Solutions
+
+This model would have no interesting dynamics at equilibrium as the total population $H$ would tend to the recovered population $R$.
+
+# Example
+
+```{r, message=FALSE, warning=FALSE}
+library(ramp.xds)
+library(ramp.library)
+library(deSolve)
+library(data.table)
+library(ggplot2)
+```
+
+
+```{r, echo=FALSE} 
+#devtools::load_all()
+```
+## Using Setup
+Here we use `ramp.xds::xds_setup` to set up the model object. We solve the model to equilibrium and check with the analytic steady state using the  `ramp.xds::xde_steady_state` and compare the results.
+
+
+
+```{r}
+test_SIR <- xds_setup(
+  "test_SIR",dlay = "ode", "RM","SIR")
+```
+
+```{r}
+xde_solve(test_SIR, 365*10)-> test_SIR
+unlist(list_Xvars(test_SIR$outputs$last_y, test_SIR, 1)) -> out1
+```
+
+## Using the   `ramp.xds::xde_steady_state`
+
+```{r}
+foi_eq = test_SIR$Xpar[[1]]$b*tail(test_SIR$outputs$terms$EIR,1)
+xde_steady_state_X(1/365, 1000, test_SIR$Xpar[[1]]) -> out2
+```
+Then we compare the analytic and numerical solution
+```{r}
+out2
+out1
+```
+
