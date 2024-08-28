@@ -4,14 +4,7 @@
 \alias{parse_outputs_MYZ.ENBRQ_dts}
 \title{Parse the output of deSolve and return variables for the ENBRQ_dts model}
 \usage{
-\method{parse_outputs_MYZ}{ENBRQ_dts}(outputs, pars, s)
-}
-\arguments{
-\item{outputs}{a \link{matrix} of outputs from deSolve}
-
-\item{pars}{a \link{list} that defines a model}
-
-\item{s}{the species index}
+parse_outputs_MYZ.ENBRQ_dts(outputs, pars, s)
 }
 \value{
 a [list]

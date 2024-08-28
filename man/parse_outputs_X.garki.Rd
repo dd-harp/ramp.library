@@ -4,14 +4,7 @@
 \alias{parse_outputs_X.garki}
 \title{Parse the output of deSolve and return variables for the garki model}
 \usage{
-\method{parse_outputs_X}{garki}(outputs, pars, i)
-}
-\arguments{
-\item{outputs}{a \link{matrix} of outputs from deSolve}
-
-\item{pars}{a \link{list} that defines a model}
-
-\item{i}{the host species index}
+parse_outputs_X.garki(outputs, pars, i)
 }
 \value{
 none

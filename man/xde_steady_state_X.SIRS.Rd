@@ -11,9 +11,9 @@
 \arguments{
 \item{foi}{the daily FoI}
 
-\item{H}{host density}
+\item{H}{human / host population density}
 
-\item{Xpar}{a list that defines a X-class model}
+\item{Xpar}{a list that defines an \eqn{\cal X} model}
 }
 \value{
 the steady states as a named vector

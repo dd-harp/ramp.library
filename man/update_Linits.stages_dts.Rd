@@ -7,7 +7,7 @@
 \method{update_Linits}{stages_dts}(pars, y0, s)
 }
 \arguments{
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{y0}{a vector of variable values from a simulation}
 

@@ -4,14 +4,7 @@
 \alias{parse_outputs_L.stages_dts}
 \title{Parse the variable names for the stages_dts model}
 \usage{
-\method{parse_outputs_L}{stages_dts}(outputs, pars, s)
-}
-\arguments{
-\item{outputs}{a \link{matrix} with the solutions to a dynamical system}
-
-\item{pars}{a \link{list} that defines the model}
-
-\item{s}{the species index}
+parse_outputs_L.stages_dts(outputs, pars, s)
 }
 \value{
 [list]

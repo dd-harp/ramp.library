@@ -4,10 +4,10 @@
 \alias{get_Linits.stages_dts}
 \title{Return initial values as a vector}
 \usage{
-\method{get_Linits}{stages_dts}(pars, s)
+get_Linits.stages_dts(pars, s)
 }
 \arguments{
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the species index}
 }
