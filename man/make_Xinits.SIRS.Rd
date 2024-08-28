@@ -4,10 +4,15 @@
 \alias{make_Xinits.SIRS}
 \title{Setup Xinits.SIRS}
 \usage{
-\method{make_Xinits}{SIRS}(pars, i, Xopts = list())
+\method{make_Xinits}{SIRS}(pars, H, i, Xopts = list())
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
+<<<<<<< HEAD
+=======
+
+\item{H}{initial host population density}
+>>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7
 
 \item{i}{the host species index}
 

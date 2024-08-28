@@ -205,20 +205,21 @@ make_indices_L.stages_dts <- function(pars, s) {with(pars,{
   return(pars)
 })}
 
+
 #' @title Parse the variable names for the stages_dts model
-#' @description Implements [parse_outputs_L] for stages_dts competition model.
-#' @inheritParams ramp.xds::parse_outputs_L
+#' @description Implements [parse_Lorbits] for stages_dts competition model.
+#' @inheritParams ramp.xds::parse_Lorbits
 #' @return [list]
 #' @export
-parse_outputs_L.stages_dts <- function(outputs, pars, s) {
-  time = outputs[,1]
-  L1 = outputs[,pars$ix$L[[s]]$L1_ix+1]
-  L2 = outputs[,pars$ix$L[[s]]$L2_ix+1]
-  L3 = outputs[,pars$ix$L[[s]]$L3_ix+1]
-  L4 = outputs[,pars$ix$L[[s]]$L4_ix+1]
-  P = outputs[,pars$ix$L[[s]]$P_ix+1]
-  return(list(time=time, L1=L1, L2=L2, L3=L3, L4=L4, P=P))
-}
+parse_Lorbits.stages_dts <- function(outputs, pars, s) {with(pars$ix$L[[s]],{
+  L1 <- outputs[,L1_ix]
+  L2 <- outputs[,L2_ix]
+  L3 <- outputs[,L3_ix]
+  L4 <- outputs[,L4_ix]
+  P <- outputs[,P_ix]
+  vars <- list(time=time, L1=L1, L2=L2, L3=L3, L4=L4, P=P)
+  return(vars)
+})}
 
 
 #' @title Make parameters for stages_dts competition aquatic mosquito model

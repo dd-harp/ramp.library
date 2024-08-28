@@ -254,25 +254,23 @@ make_parameters_MYZ_RMG <- function(pars, g, sigma_b, sigma_q, f, q, nu, eggsPer
 }
 
 #' @title Parse the output of deSolve and return variables for the RMG model
-#' @description Implements [parse_outputs_MYZ] for the RMG model
-#' @inheritParams ramp.xds::parse_outputs_MYZ
+#' @description Implements [parse_MYZorbits] for the RMG model
+#' @inheritParams ramp.xds::parse_MYZorbits
 #' @return none
 #' @export
-parse_outputs_MYZ.RMG <- function(outputs, pars, s) {
-  time = outputs[,1]
-  with(pars$ix$MYZ[[s]],{
-    U_b = outputs[,U_b_ix+1]
-    U_g = outputs[,U_g_ix+1]
-    Y_b = outputs[,Y_b_ix+1]
-    Y_g = outputs[,Y_g_ix+1]
-    Z_b = outputs[,Z_b_ix+1]
-    Z_g = outputs[,Z_g_ix+1]
+parse_MYZorbits.RMG <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
+    U_b = outputs[,U_b_ix]
+    U_g = outputs[,U_g_ix]
+    Y_b = outputs[,Y_b_ix]
+    Y_g = outputs[,Y_g_ix]
+    Z_b = outputs[,Z_b_ix]
+    Z_g = outputs[,Z_g_ix]
     M =  U_b+Y_b+Z_b+U_g+Y_g+Z_g
     Y =  Y_b+Y_g
     Z =  Z_b+Z_g
     y = Y/M
     z = Z/M
-  return(list(time=time, U_b=U_b, U_g=U_g, Y_b=Y_b, Y_g=Y_g, Z_b=Z_b, Z_g=Z_g, M=M, Y=Y, Z=Z, y=y, z=z))
+  return(list(U_b=U_b, U_g=U_g, Y_b=Y_b, Y_g=Y_g, Z_b=Z_b, Z_g=Z_g, M=M, Y=Y, Z=Z, y=y, z=z))
 })}
 
 #' @title Make inits for RMG adult mosquito model

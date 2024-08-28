@@ -4,9 +4,11 @@
 \alias{F_X.SIPw}
 \title{Size of effective infectious human population}
 \usage{
-\method{F_X}{SIPw}(y, pars, i)
+\method{F_X}{SIPw}(t, y, pars, i)
 }
 \arguments{
+\item{t}{current simulation time}
+
 \item{y}{state vector}
 
 \item{pars}{an \strong{\code{xds}} object}
