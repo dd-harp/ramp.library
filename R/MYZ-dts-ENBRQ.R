@@ -89,7 +89,6 @@ make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, MYZopts=list()){
 #' @title Make parameters for ENBRQ_dts adult mosquito model
 #' @param nPatches is the number of patches, an integer
 #' @param MYZopts a [list] of values that overwrites the defaults
-#' @param calK a mosquito dispersal matrix of dimensions `nPatches` by `nPatches`
 #' @param D number of time steps per day
 #' @param nR1 number of time steps in R1
 #' @param p daily mosquito survival
@@ -121,8 +120,6 @@ create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  D=4, nR1=3,
                                  nu_mod = "dddn"
 ){
 
-  stopifnot(is.matrix(calK))
-  stopifnot(dim(calK) == c(nPatches, nPatches))
 
   with(MYZopts,{
     MYZpar <- list()

@@ -55,8 +55,6 @@ create_MYZpar_ENBRQ_dts(
 \item{q_mod}{a name to dispatch F_q}
 
 \item{nu_mod}{a name to dispatch F_nu}
-
-\item{calK}{a mosquito dispersal matrix of dimensions `nPatches` by `nPatches`}
 }
 \value{
 a [list]

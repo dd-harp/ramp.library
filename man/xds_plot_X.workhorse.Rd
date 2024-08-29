@@ -9,7 +9,6 @@
   i = 1,
   clrs = c("darkblue", "darkgreen", "darkred", "purple"),
   llty = 1,
-  stable = FALSE,
   add_axes = TRUE
 )
 }

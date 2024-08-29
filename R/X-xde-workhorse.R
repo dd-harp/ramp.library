@@ -431,7 +431,7 @@ xds_lines_X_workhorse = function(time, XH, nStrata, clrs=c("darkblue","darkgreen
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, add_axes=TRUE){
   XH = pars$outputs$orbits$XH[[i]]
   time = pars$outputs$time
 

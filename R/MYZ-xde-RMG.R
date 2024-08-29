@@ -204,28 +204,28 @@ create_MYZinits_RMG = function(nPatches, MYZopts = list(),
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_MYZ.RMG <- function(pars, i) {with(pars,{
+make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
 
-  U_b_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  U_b_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(U_b_ix, 1)
 
-  U_g_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  U_g_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(U_g_ix, 1)
 
-  Y_b_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  Y_b_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Y_b_ix, 1)
 
-  Y_g_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  Y_g_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Y_g_ix, 1)
 
-  Z_b_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  Z_b_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Z_b_ix, 1)
 
-  Z_g_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  Z_g_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Z_g_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$MYZ[[i]] = list(U_b_ix=U_b_ix, U_g_ix=U_g_ix,
+  pars$ix$MYZ[[s]] = list(U_b_ix=U_b_ix, U_g_ix=U_g_ix,
                           Y_b_ix=Y_b_ix, Y_g_ix=Y_g_ix,
                           Z_b_ix=Z_b_ix, Z_g_ix=Z_g_ix)
   return(pars)

@@ -16,6 +16,8 @@ Imports:
   viridisLite
 Suggests:
     knitr,
+    ggplot2,
+    data.table,
     deSolve,
     viridis,
     rmarkdown 

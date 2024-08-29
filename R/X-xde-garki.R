@@ -88,7 +88,7 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.garki <- function(y, pars, i){
+F_X.garki <- function(t, y, pars, i){
   y1 <- y[pars$Xpar[[i]]$y1_ix]
   X = with(pars$Xpar[[i]], y1)
   return(X)
@@ -271,7 +271,7 @@ parse_Xorbits.garki <- function(outputs, pars, i) {
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
 
   if(add_axes==TRUE)
