@@ -10,11 +10,11 @@ dXdt.SEIRV<- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      dS <- (1-alpha)*Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)+ eps*R
+      dS <- (1-alpha)*Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)+ gamma*R
       dE <- foi*S - tau*E + dHdt(t, E, Hpar)
       dI <- tau*E - r*I + dHdt(t, I, Hpar)
-      dR <- (1-delta)*r*I -sig*R -eps*R+ dHdt(t, R, Hpar)
-      dV <- alpha*Births(t, H, Hpar) + delta*r*I + sig*R + dHdt(t, V, Hpar)
+      dR <- (1-varepsilon)*r*I  -gamma*R+ dHdt(t, R, Hpar)
+      dV <- alpha*Births(t, H, Hpar) + varepsilon*r*I  + dHdt(t, V, Hpar)
 
       derivs = c(dS, dE, dI, dR, dV)
 
@@ -144,16 +144,15 @@ update_Xinits.SEIRV <- function(pars, y0, i) {
 #' @param Xopts a [list] that could overwrite defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
-#' @param r the the duration of an infection
+#' @param r the rate infections clear
 #' @param c the proportion of bites on infected humans that infect a mosquito
-#' @param alpha  travallers with immunity from malaria
-#' @param eps   loss of immunity rate
-#' @param delta   proportion of protected after recovery
-#' @param sig  progression rate of recovered individual to protected class
+#' @param alpha  proportion of vaccinated humans
+#' @param gamma   loss of immunity rate
+#' @param varepsilon proportion of recovered humans that are protected from the pathogen
 #' @return a [list]
 #' @export
 create_Xpar_SEIRV = function(nStrata, Xopts=list(),
-                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,eps=0.5,sig=0.3,delta =0.5){
+                          alpha =0.1,b=0.55, r=1/180, c=0.15,tau= 0.5,varepsilon=0.5,gamma=0.5){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SEIRV")
@@ -163,9 +162,8 @@ create_Xpar_SEIRV = function(nStrata, Xopts=list(),
     Xpar$c = checkIt(c, nStrata)
     Xpar$r = checkIt(r, nStrata)
     Xpar$tau = checkIt(tau, nStrata)
-    Xpar$eps = checkIt(eps, nStrata)
-    Xpar$sig = checkIt(sig, nStrata)
-    Xpar$delta = checkIt(delta, nStrata)
+    Xpar$gamma = checkIt(gamma, nStrata)
+    Xpar$varepsilon = checkIt(varepsilon, nStrata)
 
     return(Xpar)
   })}
