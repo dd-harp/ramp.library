@@ -4,9 +4,6 @@
 \alias{parse_Xorbits.SIPw}
 \title{Parse the output of deSolve and return variables for SIPw models}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_X.SIPw.Rd
-parse_outputs_X.SIPw(outputs, pars, i)
-=======
 \method{parse_Xorbits}{SIPw}(outputs, pars, i)
 }
 \arguments{
@@ -15,7 +12,6 @@ parse_outputs_X.SIPw(outputs, pars, i)
 \item{pars}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_Xorbits.SIPw.Rd
 }
 \value{
 none

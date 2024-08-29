@@ -99,7 +99,7 @@ F_X.garki <- function(y, pars, i){
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.garki <- function(y, pars, i){
+F_H.garki <- function(t, y, pars, i){
   with(list_Xvars(y, pars,i),{
     H = x1+x2+x3+x4+y1+y2+y3
     return(H)
@@ -181,7 +181,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
 
 #' @title Setup Xinits.garki
 #' @description Implements [make_Xinits] for the garki model
-#' @inheritParams make_Xinits
+#' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
 make_Xinits.garki = function(pars, H, i, Xopts=list()){
@@ -206,25 +206,25 @@ get_Xinits.garki <- function(pars, i){
 #' @export
 make_X_indices.garki <- function(pars, i) {with(pars,{
 
-  x1_ix <- seq(from = max_ix+1, length.out=nx1trata)
+  x1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x1_ix, 1)
 
-  x2_ix <- seq(from = max_ix+1, length.out=nx2trata)
+  x2_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x2_ix, 1)
 
-  y1_ix <- seq(from = max_ix+1, length.out=ny1trata)
+  y1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y1_ix, 1)
 
-  y2_ix <- seq(from = max_ix+1, length.out=ny2trata)
+  y2_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y2_ix, 1)
 
-  y3_ix <- seq(from = max_ix+1, length.out=ny3trata)
+  y3_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y3_ix, 1)
 
-  x3_ix <- seq(from = max_ix+1, length.out=nx3trata)
+  x3_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x3_ix, 1)
 
-  x4_ix <- seq(from = max_ix+1, length.out=nx4trata)
+  x4_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x4_ix, 1)
 
   pars$max_ix <- max_ix
@@ -236,7 +236,7 @@ make_X_indices.garki <- function(pars, i) {with(pars,{
 })}
 
 #' @title Update inits for the garki model
-#' @inheritParams update_Xinits
+#' @inheritParams ramp.xds::update_Xinits
 #' @return an 'xds' object
 #' @export
 update_Xinits.garki <- function(pars, y0, i){
@@ -248,10 +248,10 @@ update_Xinits.garki <- function(pars, y0, i){
 
 #' @title Parse the output of deSolve and return variables for the garki model
 #' @description Implements [parse_Xorbits] for the garki model
-#' @inheritParams [parse_Xorbits]
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.garki <- function(outputs, pars, i) {
+parse_Xorbits.garki <- function(outputs, pars, i) {
   time = outputs[,1]
   with(pars$ix$X[[i]],{
     x1 = outputs[,x1_ix+1]
@@ -269,7 +269,7 @@ parse_outputs_X.garki <- function(outputs, pars, i) {
 
 #' Plot the density of infected individuals for the garki model
 #'
-#' @inheritParams xds_plot_X
+#' @inheritParams ramp.xds::xds_plot_X
 #' @export
 xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
@@ -279,7 +279,7 @@ xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
               ylab = "# Infected", xlab = "Time"))
 
-  add_lines_X_garki(vars$XH, pars, clrs, llty)
+  xds_lines_X_garki(vars$XH, pars, clrs, llty)
 }
 
 #' Add lines for the density of infected individuals for the garki model
@@ -290,7 +290,7 @@ xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, stable=
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-add_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
+xds_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
   with(XH,{
     if(pars$nStrata==1){
       lines(time, x1, col=clrs[1], lty = llty[1])

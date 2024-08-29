@@ -28,7 +28,7 @@ create_Xpar_garki(
 
 \item{r1}{a [numeric] recovery rate for non-immunes}
 
-\item{r2}{a [numeric]recovery rate for partially immmunes}
+\item{r2}{a [numeric]recovery rate for partially immunes}
 
 \item{nu}{a [numeric]incubation period}
 

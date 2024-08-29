@@ -4,7 +4,7 @@ devtools::load_all()
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 
-model <- xds_setup(MYZname="RMG", Lname="trace", Xname = "trace",  residence=residence, HPop =HPop, nPatches=3)
+model <- xds_setup(MYZname="RMG", Lname="trivial", Xname = "trivial",  residence=residence, HPop =HPop, nPatches=3)
 
 ## -----------------------------------------------------------------------------
 model <- xde_solve(model, dt=5)

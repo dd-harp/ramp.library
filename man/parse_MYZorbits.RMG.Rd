@@ -4,9 +4,6 @@
 \alias{parse_MYZorbits.RMG}
 \title{Parse the output of deSolve and return variables for the RMG model}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_MYZ.RMG.Rd
-parse_outputs_MYZ.RMG(outputs, pars, s)
-=======
 \method{parse_MYZorbits}{RMG}(outputs, pars, s)
 }
 \arguments{
@@ -15,7 +12,6 @@ parse_outputs_MYZ.RMG(outputs, pars, s)
 \item{pars}{a \link{list} that defines a model}
 
 \item{s}{the species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_MYZorbits.RMG.Rd
 }
 \value{
 none

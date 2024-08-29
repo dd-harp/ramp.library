@@ -4,9 +4,8 @@
 \alias{parse_Xorbits.garki}
 \title{Parse the output of deSolve and return variables for the garki model}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_X.garki.Rd
-parse_outputs_X.garki(outputs, pars, i)
-=======
+\method{parse_Xorbits}{garki}(outputs, pars, i)
+
 \method{parse_Xorbits}{garki}(outputs, pars, i)
 }
 \arguments{
@@ -15,11 +14,14 @@ parse_outputs_X.garki(outputs, pars, i)
 \item{pars}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_Xorbits.garki.Rd
 }
 \value{
 none
+
+none
 }
 \description{
+Implements [parse_Xorbits] for the garki model
+
 Implements [parse_Xorbits] for the garki model
 }

@@ -4,12 +4,10 @@
 \alias{make_indices_MYZ.RMG}
 \title{Add indices for adult mosquitoes to parameter list}
 \usage{
-\method{make_indices_MYZ}{RMG}(pars, s)
+\method{make_indices_MYZ}{RMG}(pars, i)
 }
 \arguments{
 \item{pars}{a \link{list}}
-
-\item{s}{the species index}
 }
 \value{
 none

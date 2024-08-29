@@ -9,6 +9,8 @@ create_Xinits_SEIR(nStrata, H, Xopts = list(), I = 1, E = 0, R = 1)
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
+\item{H}{the initial value for H}
+
 \item{Xopts}{a [list] to overwrite defaults}
 
 \item{I}{the initial value for I}
@@ -16,8 +18,6 @@ create_Xinits_SEIR(nStrata, H, Xopts = list(), I = 1, E = 0, R = 1)
 \item{E}{the initial value for E}
 
 \item{R}{the initial values for R}
-
-\item{H0}{the initial value for H}
 }
 \value{
 a [list]

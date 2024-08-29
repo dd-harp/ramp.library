@@ -4,9 +4,6 @@
 \alias{parse_Xorbits.SIRS}
 \title{Parse the output of deSolve and return variables for the SIRS model}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_X.SIRS.Rd
-parse_outputs_X.SIRS(outputs, pars, i)
-=======
 \method{parse_Xorbits}{SIRS}(outputs, pars, i)
 }
 \arguments{
@@ -15,7 +12,6 @@ parse_outputs_X.SIRS(outputs, pars, i)
 \item{pars}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_Xorbits.SIRS.Rd
 }
 \value{
 none

@@ -3,15 +3,22 @@ suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
 #suppressMessages(library(ramp.library))
 library(deSolve)
-#library(ramp.library)
-devtools::load_all()
+library(ramp.library)
+#devtools::load_all()
 
 ## -----------------------------------------------------------------------------
-devtools::load_all()
+#devtools::load_all()
 
 ## -----------------------------------------------------------------------------
-wh <- xds_setup(dlay = 'dde', Xname = "workhorse", HPop=1000, Lopts = list(Lambda = 3000, Lt = function(t){1+sin(2*pi*t/365)}))
-
+wh <- xds_setup(dlay = 'dde', 
+                Xname = "workhorse", 
+                HPop=1000,
+                Lname = "trivial", 
+                Lopts = list(
+                  Lambda = 3000, 
+                  season = function(t){1+sin(2*pi*t/365)}
+                  )
+                )
 
 ## -----------------------------------------------------------------------------
 wh <- xde_solve(wh, Tmax = 5*365, dt=10)

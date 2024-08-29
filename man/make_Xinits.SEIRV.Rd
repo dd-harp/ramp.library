@@ -8,11 +8,8 @@
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
-<<<<<<< HEAD
-=======
 
 \item{H}{initial host population density}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7
 
 \item{i}{the host species index}
 

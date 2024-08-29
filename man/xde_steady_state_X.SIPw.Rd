@@ -6,6 +6,13 @@
 \usage{
 \method{xde_steady_state_X}{SIPw}(foi, H, Xpar)
 }
+\arguments{
+\item{foi}{the daily FoI}
+
+\item{H}{human / host population density}
+
+\item{Xpar}{a list that defines an \eqn{\cal X} model}
+}
 \value{
 the steady states as a named vector
 }

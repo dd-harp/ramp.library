@@ -13,7 +13,7 @@ suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
 suppressMessages(library(ramp.library))
 library(deSolve)
-#library(ramp.library)
+library(ramp.library)
 #devtools::load_all()
 ```
 

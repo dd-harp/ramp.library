@@ -4,9 +4,6 @@
 \alias{parse_Lorbits.stages_dts}
 \title{Parse the variable names for the stages_dts model}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_L.stages_dts.Rd
-parse_outputs_L.stages_dts(outputs, pars, s)
-=======
 \method{parse_Lorbits}{stages_dts}(outputs, pars, s)
 }
 \arguments{
@@ -15,7 +12,6 @@ parse_outputs_L.stages_dts(outputs, pars, s)
 \item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_Lorbits.stages_dts.Rd
 }
 \value{
 [list]

@@ -118,7 +118,7 @@
             <h3 data-toc-skip class="subtitle">A Behavioral State
 Model</h3>
             
-            <h4 data-toc-skip class="date">July 18, 2024</h4>
+            <h4 data-toc-skip class="date">August 29, 2024</h4>
       
       
       <div class="hidden name"><code>MYZ-xde-RMG.Rmd</code></div>
@@ -127,7 +127,6 @@ Model</h3>
 
     
     
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Loading <span style="color: #0000BB;">ramp.library</span></span></span></code></pre>
 <p>Most of the models developed to model malaria parasite infections in
 mosquitoes look at the <em>infection states:</em> uninfected; infected;
 or infected and infectious. A few models have been developed that track
@@ -247,24 +246,26 @@ U_g \\
 <div class="section level2">
 <h2 id="implementation">Implementation<a class="anchor" aria-label="anchor" href="#implementation"></a>
 </h2>
-<p>The <code>xde_setup()</code> utilities allow the user to pass a
+<p>The <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code> utilities allow the user to pass a
 single version of the dispersal matrix <span class="math inline">\(\cal
-K.\)</span> During <code>xde_setup()</code>, <code>Omega_b</code> and
+K.\)</span> During <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code>, <code>Omega_b</code> and
 <code>Omega_q</code> are identical.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">EIPo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>EIPname <span class="op">=</span> <span class="st">"static_xde"</span>, eip<span class="op">=</span><span class="fl">12</span><span class="op">)</span> </span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_setup</span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG_xde"</span>, Lname<span class="op">=</span><span class="st">"trace"</span>, Xname <span class="op">=</span> <span class="st">"trace"</span>, EIPopts <span class="op">=</span> <span class="va">EIPo</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Loading <span style="color: #0000BB;">ramp.library</span></span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xde_solve</span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">HPop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">residence</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>,  residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">xds_plot_M</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="fu">xds_plot_YZ</span><span class="op">(</span><span class="va">model</span>, add_axes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
-<span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-4-1.png" width="528"></p>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MYZ-xde-RMG_files/figure-html/unnamed-chunk-5-1.png" width="528"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_M.html" class="external-link">xds_plot_M</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_YZ.html" class="external-link">xds_plot_YZ</a></span><span class="op">(</span><span class="va">model</span>, add_axes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_YZ_fracs.html" class="external-link">xds_plot_YZ_fracs</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_YZ_fracs.html" class="external-link">xds_plot_YZ_fracs</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>

@@ -263,7 +263,7 @@ HTC.SIRS <- function(pars, i) {
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #' @export
-add_lines_X_SIRS = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
+xds_lines_X_SIRS = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
@@ -285,13 +285,13 @@ add_lines_X_SIRS = function(time, XH, nStrata, clrs=c("darkblue","darkred","dark
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, add_axes=TRUE){
   XH = pars$outputs$orbits$XH[[i]]
   time = pars$outputs$time
 
   if(add_axes==TRUE)
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "No of. Infected", xlab = "Time")
-  add_lines_X_SIRS(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIRS(time, XH, pars$nStrata[i], clrs, llty)
 }
 

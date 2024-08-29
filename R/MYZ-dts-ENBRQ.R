@@ -80,8 +80,8 @@ dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
 #' @inheritParams ramp.xds::make_MYZpar
 #' @return a [list] vector
 #' @export
-make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
-  pars$MYZpar[[s]] = create_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts, calK)
+make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, MYZopts=list()){
+  pars$MYZpar[[s]] = create_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts)
   return(pars)
 }
 
@@ -106,7 +106,7 @@ make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK
 #' @param nu_mod a name to dispatch F_nu
 #' @return a [list]
 #' @export
-create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
+create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  D=4, nR1=3,
                                  p=11/12,
                                  sigma=1/8,
                                  f=0.3,
@@ -161,6 +161,7 @@ create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
     MYZpar$nu_par   <- list()
     class(MYZpar$nu_par) <- "dddn"
 
+    calK <- diag(1, nPatches)
     MYZpar$K_bb <- calK
     MYZpar$K_bq <- calK
     MYZpar$K_qb <- calK

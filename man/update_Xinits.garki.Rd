@@ -2,7 +2,7 @@
 % Please edit documentation in R/X-xde-garki.R
 \name{update_Xinits.garki}
 \alias{update_Xinits.garki}
-\title{Update Xinits for the garki model}
+\title{Update inits for the garki model}
 \usage{
 \method{update_Xinits}{garki}(pars, y0, i)
 }
@@ -14,8 +14,8 @@
 \item{i}{the host species index}
 }
 \value{
-none
+an 'xds' object
 }
 \description{
-Update Xinits for the garki model
+Update inits for the garki model
 }

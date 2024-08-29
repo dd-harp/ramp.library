@@ -4,10 +4,12 @@
 \alias{make_Xinits.garki}
 \title{Setup Xinits.garki}
 \usage{
-\method{make_Xinits}{garki}(pars, i, Xopts = list())
+\method{make_Xinits}{garki}(pars, H, i, Xopts = list())
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
+
+\item{H}{initial host population density}
 
 \item{i}{the host species index}
 

@@ -45,14 +45,14 @@ xde_steady_state_X.SEIR = function(foi, H, Xpar){with(Xpar,{
 
 #' @title Make initial values for the SEIR human model, with defaults
 #' @param nStrata the number of strata in the model
+#' @param H the initial value for H
 #' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial value for H
 #' @param E the initial value for E
 #' @param I the initial value for I
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-create_Xinits_SEIR = function(nStrata, H, Xopts = list(), I=1, E=0,R = 1){with(Xopts,{
+create_Xinits_SEIR = function(nStrata, H, Xopts = list(), I=1, E=0, R = 1){with(Xopts,{
   S = checkIt(H-I-E-R, nStrata)
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
@@ -70,7 +70,7 @@ create_Xinits_SEIR = function(nStrata, H, Xopts = list(), I=1, E=0,R = 1){with(X
 #' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SEIR = function(pars,H, i, Xopts=list()){
+make_Xinits.SEIR = function(pars, H, i, Xopts=list()){
   pars$Xinits[[i]] = create_Xinits_SEIR(pars$nStrata[i], H, Xopts)
   return(pars)
 }
@@ -289,7 +289,7 @@ HTC.SEIR <- function(pars, i) {
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-add_lines_X_SEIR = function(time,XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen"), llty=1){
+xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
@@ -322,6 +322,6 @@ xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkg
   if(add_axes==TRUE)
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "No of. Infected", xlab = "Time")
-  add_lines_X_SEIR(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SEIR(time, XH, pars$nStrata[i], clrs, llty)
 }
 

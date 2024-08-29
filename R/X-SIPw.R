@@ -91,36 +91,6 @@ create_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
     return(Xpar)
 })}
 
-#' @title Make parameters for SIPw_dts human model, with defaults
-#' @param nStrata the number of population strata
-#' @param D the operating time step
-#' @param Xopts options to overwrite defaults
-#' @param b transmission probability (efficiency) from mosquito to human
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param sigma probability of treatment for treated, above background
-#' @param xi background treatment rate
-#' @param eta rate of loss of chemo-protection
-#' @return a [list]
-#' @export
-dts_make_Xpar_SIPw = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=0.1, sigma=1/730, xi=1/365, eta=1/25){
-  with(Xopts,{
-    Xpar = list()
-    class(Xpar) <- c("SIPw")
-
-    Xpar$D     = checkIt(D, 1)
-    Xpar$b     = checkIt(b, nStrata)
-    Xpar$c     = checkIt(c, nStrata)
-    Xpar$r     = 1-exp(-checkIt(r, nStrata)*D)
-    Xpar$rho   = checkIt(rho, nStrata)
-    Xpar$xi    = 1-exp(-checkIt(xi, nStrata)*D)
-    Xpar$xisig = 1-exp(-checkIt(sigma+xi, nStrata)*D)
-    Xpar$eta   = 1-exp(-checkIt(eta, nStrata)*D)
-
-    return(Xpar)
-})}
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for SIPw models
@@ -307,7 +277,7 @@ xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen")
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "# Infected", xlab = "Time")
 
-  add_lines_X_SIPw(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIPw(time, XH, pars$nStrata[i], clrs, llty)
 }
 
 
@@ -320,7 +290,7 @@ xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen")
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-add_lines_X_SIPw = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
+xds_lines_X_SIPw = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata == 1){
@@ -338,7 +308,7 @@ add_lines_X_SIPw = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "da
 
 #' @title Compute the steady states for the SIP model as a function of the daily foi
 #' @description Compute the steady state of the SIP model as a function of the daily eir.
-#' @inheritParams ramp_xds::xde_steady_state_X
+#' @inheritParams ramp.xds::xde_steady_state_X
 #' @return the steady states as a named vector
 #' @export
 xde_steady_state_X.SIPw = function(foi, H, Xpar){with(Xpar,{

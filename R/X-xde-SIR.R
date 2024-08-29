@@ -175,7 +175,7 @@ make_Xpar.SIR = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIR <- function(t,y, pars, i) {
+F_X.SIR <- function(t, y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -267,7 +267,7 @@ HTC.SIR <- function(pars, i) {
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #' @export
 
-add_lines_X_SIR = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
+xds_lines_X_SIR = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
@@ -298,6 +298,6 @@ xds_plot_X.SIR = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), l
          plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
               ylab = "No of. Infected", xlab = "Time")
 
-  add_lines_X_SIR(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIR(time, XH, pars$nStrata[i], clrs, llty)
 }
 

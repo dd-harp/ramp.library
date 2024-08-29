@@ -14,8 +14,8 @@ suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
 #suppressMessages(library(ramp.library))
 library(deSolve)
-#library(ramp.library)
-devtools::load_all()
+library(ramp.library)
+#devtools::load_all()
 ```
 
 
@@ -118,7 +118,7 @@ devtools::load_all()
 ```{r}
 HPop = rep(1000, 3)
 residence = c(1:3) 
-model <- xds_setup(MYZname="RMG", Lname="trace", Xname = "trace",  residence=residence, HPop =HPop, nPatches=3)
+model <- xds_setup(MYZname="RMG", Lname="trivial", Xname = "trivial",  residence=residence, HPop =HPop, nPatches=3)
 ```
 
 ```{r}

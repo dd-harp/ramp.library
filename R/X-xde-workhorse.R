@@ -160,7 +160,7 @@ make_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.workhorse <- function(y, pars, i) {
+F_X.workhorse <- function(t, y, pars, i) {
   with(list_Xvars(y, pars,i),
   with(pars$Xpar[[i]],{
     X = c1*(A1+I1) + c2*(A2+I2) + c3*(A3+I3) + c4*(A4+I4) + cG*G
@@ -173,7 +173,7 @@ F_X.workhorse <- function(y, pars, i) {
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.workhorse <- function(y, pars, i){
+F_H.workhorse <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), return(H))
 }
 
@@ -392,13 +392,14 @@ HTC.workhorse <- function(pars, i) {
 
 #' Add lines for the density of infected individuals for the workhorse model
 #'
+#' @param time a list with the outputs of parse_outputs_X_workhorse
 #' @param XH a list with the outputs of parse_outputs_X_workhorse
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_workhorse = function(XH, nStrata, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1){
+xds_lines_X_workhorse = function(time, XH, nStrata, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1){
   with(XH,{
     PG = P+G
     I = A0+A1+A2+A3+A4+I1+I2+I3+I4
@@ -431,13 +432,12 @@ xde_lines_X_workhorse = function(XH, nStrata, clrs=c("darkblue","darkgreen", "da
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
 xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+  XH = pars$outputs$orbits$XH[[i]]
+  time = pars$outputs$time
 
   if(add_axes==TRUE)
-    with(vars$XH[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
+    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "No of. Infected", xlab = "Time")
 
-
-  xde_lines_X_workhorse(vars$XH[[i]], pars$nStrata[i], clrs, llty)
+  xds_lines_X_workhorse(time, XH, pars$nStrata[i], clrs, llty)
 }

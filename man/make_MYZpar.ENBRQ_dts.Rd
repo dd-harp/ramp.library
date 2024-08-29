@@ -4,7 +4,7 @@
 \alias{make_MYZpar.ENBRQ_dts}
 \title{Setup MYZpar for the ENBRQ_dts model}
 \usage{
-\method{make_MYZpar}{ENBRQ_dts}(MYZname, pars, s, EIPopts, MYZopts = list(), calK)
+\method{make_MYZpar}{ENBRQ_dts}(MYZname, pars, s, MYZopts = list())
 }
 \arguments{
 \item{MYZname}{the name of the model}

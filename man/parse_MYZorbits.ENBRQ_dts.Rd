@@ -4,9 +4,6 @@
 \alias{parse_MYZorbits.ENBRQ_dts}
 \title{Parse the output of deSolve and return variables for the ENBRQ_dts model}
 \usage{
-<<<<<<< HEAD:man/parse_outputs_MYZ.ENBRQ_dts.Rd
-parse_outputs_MYZ.ENBRQ_dts(outputs, pars, s)
-=======
 \method{parse_MYZorbits}{ENBRQ_dts}(outputs, pars, s)
 }
 \arguments{
@@ -15,7 +12,6 @@ parse_outputs_MYZ.ENBRQ_dts(outputs, pars, s)
 \item{pars}{a \link{list} that defines a model}
 
 \item{s}{the species index}
->>>>>>> 6424052ff1354a233a6cea897d2fe92a200a89e7:man/parse_MYZorbits.ENBRQ_dts.Rd
 }
 \value{
 a [list]
