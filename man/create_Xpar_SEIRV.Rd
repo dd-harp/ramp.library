@@ -12,9 +12,8 @@ create_Xpar_SEIRV(
   r = 1/180,
   c = 0.15,
   tau = 0.5,
-  eps = 0.5,
-  sig = 0.3,
-  delta = 0.5
+  varepsilon = 0.5,
+  gamma = 0.5
 )
 }
 \arguments{
@@ -22,21 +21,19 @@ create_Xpar_SEIRV(
 
 \item{Xopts}{a [list] that could overwrite defaults}
 
-\item{alpha}{travallers with immunity from malaria}
+\item{alpha}{proportion of vaccinated humans}
 
 \item{b}{the proportion of infective bites that cause an infection}
 
-\item{r}{the the duration of an infection}
+\item{r}{the rate infections clear}
 
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
 
 \item{tau}{incubation rate}
 
-\item{eps}{loss of immunity rate}
+\item{varepsilon}{proportion of recovered humans that are protected from the pathogen}
 
-\item{sig}{progression rate of recovered individual to protected class}
-
-\item{delta}{proportion of protected after recovery}
+\item{gamma}{loss of immunity rate}
 }
 \value{
 a [list]

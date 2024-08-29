@@ -5,9 +5,14 @@
 #' @inheritParams ramp.xds::MBionomics
 #' @return a named [list]
 #' @export
-MBionomics.RMG <- function(t, y, pars, s) {
+MBionomics.RMG <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
+  pars$MYZpar[[s]]$es_g       <- rep(1, nPatches)
+  pars$MYZpar[[s]]$es_sigma_b <- rep(1, nPatches)
+  pars$MYZpar[[s]]$es_sigma_q <- rep(1, nPatches)
+  pars$MYZpar[[s]]$es_f       <- rep(1, nPatches)
+  pars$MYZpar[[s]]$es_q       <- rep(1, nPatches)
   return(pars)
-}
+})}
 
 #' @title Blood feeding rate of the infective mosquito population
 #' @description Implements [F_fqZ] for the RMG model.
@@ -15,7 +20,9 @@ MBionomics.RMG <- function(t, y, pars, s) {
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqZ.RMG <- function(t, y, pars, s) {
-  fqZ = with(pars$MYZpar[[s]], f*q)*y[pars$ix$MYZ[[s]]$Z_b_ix]
+  f = get_f(pars, s)
+  q = get_f(pars, s)
+  fqZ = f*q*y[pars$ix$MYZ[[s]]$Z_b_ix]
   return(fqZ)
 }
 
@@ -25,8 +32,10 @@ F_fqZ.RMG <- function(t, y, pars, s) {
 #' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqM.RMG <- function(t, y, pars, s) {
+  f = get_f(pars, s)
+  q = get_f(pars, s)
   M = with(pars$ix$MYZ[[s]], y[U_b_ix] + y[Y_b_ix] + y[Z_b_ix])
-  fqM = with(pars$MYZpar[[s]], f*q)*M
+  fqM = f*q*M
   return(fqM)
 }
 
@@ -63,6 +72,14 @@ dMYZdt.RMG <- function(t, y, pars, s){
     Z_g <- y[Z_g_ix]
 
     with(pars$MYZpar[[s]],{
+      f = f_t*es_f
+      q = q_t*es_q
+      g = g_t*es_g
+      sigma_b = sigma_b_t*es_sigma_b
+      sigma_q = sigma_q_t*es_sigma_q
+      Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
+      Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
+
       #browser()
       dU_bdt <- Lambda + nu*U_g - f*U_b - (Omega_b %*% U_b)
       dU_gdt <- f*(1-q*kappa)*U_b - nu*U_g - (Omega_q %*% U_g)
@@ -115,13 +132,18 @@ create_MYZpar_RMG = function(nPatches, MYZopts=list(), eip=12,
     MYZpar$eip_par <- eip_par
     MYZpar$eip     <- eip
 
-    MYZpar$g        <- checkIt(g, nPatches)
-    MYZpar$sigma_b  <- checkIt(sigma_b, nPatches)
-    MYZpar$sigma_q  <- checkIt(sigma_q, nPatches)
-    MYZpar$mu       <- checkIt(mu, nPatches)
-    MYZpar$f        <- checkIt(f, nPatches)
-    MYZpar$q        <- checkIt(q, nPatches)
-    MYZpar$nu       <- checkIt(nu, nPatches)
+    MYZpar$g_t          <- checkIt(g, nPatches)
+    MYZpar$es_g         <- rep(1, nPatches)
+    MYZpar$sigma_b_t    <- checkIt(sigma_b, nPatches)
+    MYZpar$es_sigma_b   <- rep(1, nPatches)
+    MYZpar$sigma_q_t    <- checkIt(sigma_q, nPatches)
+    MYZpar$es_sigma_q   <- rep(1, nPatches)
+    MYZpar$mu           <- checkIt(mu, nPatches)
+    MYZpar$f_t          <- checkIt(f, nPatches)
+    MYZpar$es_f         <- rep(1, nPatches)
+    MYZpar$q_t          <- checkIt(q, nPatches)
+    MYZpar$es_q         <- rep(1, nPatches)
+    MYZpar$nu           <- checkIt(nu, nPatches)
     MYZpar$eggsPerBatch <- eggsPerBatch
     MYZpar$phi <- 1/MYZpar$eip
 
@@ -209,70 +231,25 @@ make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
   return(pars)
 })}
 
-#' @title Make parameters for RMG ODE adult mosquito model
-#' @param pars a [list]
-#' @param g mosquito mortality rate
-#' @param sigma_b emigration rate
-#' @param sigma_q emigration rate
-#' @param calK mosquito dispersal matrix of dimensions `nPatches` by `nPatches`
-#' @param f feeding rate
-#' @param q human blood fraction
-#' @param nu oviposition rate, per mosquito
-#' @param eggsPerBatch eggs laid per oviposition
-#' @param eip length of extrinsic incubation period
-#' @return none
-#' @export
-make_parameters_MYZ_RMG <- function(pars, g, sigma_b, sigma_q, f, q, nu, eggsPerBatch, eip, calK) {
-  stopifnot(is.numeric(g), is.numeric(sigma_b), is.numeric(sigma_q), is.numeric(f), is.numeric(q), is.numeric(nu), is.numeric(eggsPerBatch))
-
-   nPatches = pars$nPatches
-
-  MYZpar <- list()
-  MYZpar$xde = 'ode'
-  class(MYZpar$xde) <- 'ode'
-  class(MYZpar) <- "RMG"
-
-  MYZpar$g      <- checkIt(g, nPatches)
-  MYZpar$sigma_b  <- checkIt(sigma_b, nPatches)
-  MYZpar$sigma_q  <- checkIt(sigma_q, nPatches)
-  MYZpar$f      <- checkIt(f, nPatches)
-  MYZpar$q      <- checkIt(q, nPatches)
-  MYZpar$nu     <- checkIt(nu, nPatches)
-  MYZpar$eggsPerBatch <- eggsPerBatch
-
-  # Store as baseline values
-  MYZpar$g0        <- MYZpar$g
-  MYZpar$sigma_b0  <- MYZpar$sigma_b
-  MYZpar$sigma_q0  <- MYZpar$sigma_q
-  MYZpar$f0        <- MYZpar$f
-  MYZpar$q0        <- MYZpar$q
-  MYZpar$nu0       <- MYZpar$nu
-
-  pars$MYZpar[[1]] <- MYZpar
-
-  return(pars)
-}
 
 #' @title Parse the output of deSolve and return variables for the RMG model
-#' @description Implements [parse_outputs_MYZ] for the RMG model
-#' @inheritParams ramp.xds::parse_outputs_MYZ
+#' @description Implements [parse_MYZorbits] for the RMG model
+#' @inheritParams ramp.xds::parse_MYZorbits
 #' @return none
 #' @export
-parse_outputs_MYZ.RMG <- function(outputs, pars, s) {
-  time = outputs[,1]
-  with(pars$ix$MYZ[[s]],{
-    U_b = outputs[,U_b_ix+1]
-    U_g = outputs[,U_g_ix+1]
-    Y_b = outputs[,Y_b_ix+1]
-    Y_g = outputs[,Y_g_ix+1]
-    Z_b = outputs[,Z_b_ix+1]
-    Z_g = outputs[,Z_g_ix+1]
+parse_MYZorbits.RMG <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
+    U_b = outputs[,U_b_ix]
+    U_g = outputs[,U_g_ix]
+    Y_b = outputs[,Y_b_ix]
+    Y_g = outputs[,Y_g_ix]
+    Z_b = outputs[,Z_b_ix]
+    Z_g = outputs[,Z_g_ix]
     M =  U_b+Y_b+Z_b+U_g+Y_g+Z_g
     Y =  Y_b+Y_g
     Z =  Z_b+Z_g
     y = Y/M
     z = Z/M
-  return(list(time=time, U_b=U_b, U_g=U_g, Y_b=Y_b, Y_g=Y_g, Z_b=Z_b, Z_g=Z_g, M=M, Y=Y, Z=Z, y=y, z=z))
+  return(list(U_b=U_b, U_g=U_g, Y_b=Y_b, Y_g=Y_g, Z_b=Z_b, Z_g=Z_g, M=M, Y=Y, Z=Z, y=y, z=z))
 })}
 
 #' @title Make inits for RMG adult mosquito model
@@ -291,20 +268,6 @@ update_MYZinits.RMG <- function(pars, y0, s) {
     return(pars)
 })}
 
-#' @title Make inits for RMG adult mosquito model
-#' @param pars a [list]
-#' @param U_b0 total mosquito density at each patch
-#' @param U_g0 total gravid uninfected mosquito density at each patch
-#' @param Y_b0 infected mosquito density at each patch
-#' @param Y_g0 total gravid infected mosquito density at each patch
-#' @param Z_b0 infectious mosquito density at each patch
-#' @param Z_g0 total gravid infectious mosquito density at each patch
-#' @return none
-#' @export
-make_inits_MYZ_RMG <- function(pars, U_b0, U_g0, Y_b0, Y_g0, Z_b0, Z_g0) {
-  pars$MYZinits[[1]] = list(U_b=U_b0, U_g=U_g0, Y_b=Y_b0, Y_g=Y_g0, Z_b=Z_b0, Z_g=Z_g0)
-  return(pars)
-}
 
 #' @title Return initial values as a vector
 #' @description Implements [get_MYZinits] for the RMG model.
@@ -313,3 +276,38 @@ make_inits_MYZ_RMG <- function(pars, U_b0, U_g0, Y_b0, Y_g0, Z_b0, Z_g0) {
 #' @export
 get_MYZinits.RMG <- function(pars, s) {pars$MYZinits[[s]]}
 
+#' @title Get the feeding rate
+#' @param pars an **`xds`** object
+#' @param s the vector species index
+#' @return a [numeric] vector
+#' @export
+get_f.RMG = function(pars, s=1){
+  with(pars$MYZpar[[s]], f_t*es_f)
+}
+
+#' @title Get the feeding rate
+#' @param pars an **`xds`** object
+#' @param s the vector species index
+#' @return y a [numeric] vector assigned the class "dynamic"
+#' @export
+get_q.RMG = function(pars, s=1){
+  with(pars$MYZpar[[s]], q_t*es_q)
+}
+
+#' @title Get the feeding rate
+#' @param pars an **`xds`** object
+#' @param s the vector species index
+#' @return y a [numeric] vector assigned the class "dynamic"
+#' @export
+get_g.RMG = function(pars, s=1){
+  with(pars$MYZpar[[s]], g_t*es_g)
+}
+
+#' @title Get the feeding rate
+#' @param pars an **`xds`** object
+#' @param s the vector species index
+#' @return y a [numeric] vector assigned the class "dynamic"
+#' @export
+get_sigma.RMG = function(pars, s=1){
+  with(pars$MYZpar[[s]], sigma_b_t*es_sigma_b)
+}

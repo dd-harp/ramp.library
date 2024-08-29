@@ -7,7 +7,7 @@
 \method{make_Xinits}{workhorse}(pars, H, i, Xopts = list())
 }
 \arguments{
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{H}{initial host population density}
 

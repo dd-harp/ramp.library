@@ -80,8 +80,8 @@ dMYZdt.ENBRQ_dts <- function(t, y, pars, s) {
 #' @inheritParams ramp.xds::make_MYZpar
 #' @return a [list] vector
 #' @export
-make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK){
-  pars$MYZpar[[s]] = create_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts, calK)
+make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, MYZopts=list()){
+  pars$MYZpar[[s]] = create_MYZpar_ENBRQ_dts(pars$nPatches, MYZopts)
   return(pars)
 }
 
@@ -89,7 +89,6 @@ make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK
 #' @title Make parameters for ENBRQ_dts adult mosquito model
 #' @param nPatches is the number of patches, an integer
 #' @param MYZopts a [list] of values that overwrites the defaults
-#' @param calK a mosquito dispersal matrix of dimensions `nPatches` by `nPatches`
 #' @param D number of time steps per day
 #' @param nR1 number of time steps in R1
 #' @param p daily mosquito survival
@@ -106,7 +105,7 @@ make_MYZpar.ENBRQ_dts = function(MYZname, pars, s, EIPopts, MYZopts=list(), calK
 #' @param nu_mod a name to dispatch F_nu
 #' @return a [list]
 #' @export
-create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
+create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  D=4, nR1=3,
                                  p=11/12,
                                  sigma=1/8,
                                  f=0.3,
@@ -121,8 +120,6 @@ create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
                                  nu_mod = "dddn"
 ){
 
-  stopifnot(is.matrix(calK))
-  stopifnot(dim(calK) == c(nPatches, nPatches))
 
   with(MYZopts,{
     MYZpar <- list()
@@ -161,6 +158,7 @@ create_MYZpar_ENBRQ_dts = function(nPatches, MYZopts=list(),  calK, D=4, nR1=3,
     MYZpar$nu_par   <- list()
     class(MYZpar$nu_par) <- "dddn"
 
+    calK <- diag(1, nPatches)
     MYZpar$K_bb <- calK
     MYZpar$K_bq <- calK
     MYZpar$K_qb <- calK
@@ -363,21 +361,21 @@ make_inits_MYZ_ENBRQ_dts <- function(pars, E, N, B, Q, R1, R2) {
 }
 
 #' @title Parse the output of deSolve and return variables for the ENBRQ_dts model
-#' @description Implements [parse_outputs_MYZ] for the ENBRQ_dts model
-#' @inheritParams ramp.xds::parse_outputs_MYZ
+#' @description Implements [parse_MYZorbits] for the ENBRQ_dts model
+#' @inheritParams ramp.xds::parse_MYZorbits
 #' @return a [list]
 #' @export
-parse_outputs_MYZ.ENBRQ_dts <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
-  time = outputs[,1]
-  E = outputs[,E_ix+1]
-  N = outputs[,N_ix+1]
-  B = outputs[,B_ix+1]
-  Q = outputs[,Q_ix+1]
-  R1 = colSums(with(pars$MYZpar[[s]], matrix(outputs[,R1_ix+1], nR1, nPatches)))
-  R2 = outputs[,R2_ix+1]
-  fqM = outputs[,fqM_ix+1]
-  eggs = outputs[,eggs_ix+1]
-  return(list(time=time, N=N, B=B, Q=Q, R1=R1, R2=R2, fqM=fqM, eggs=eggs))
+parse_MYZorbits.ENBRQ_dts <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
+  E = outputs[,E_ix]
+  N = outputs[,N_ix]
+  B = outputs[,B_ix]
+  Q = outputs[,Q_ix]
+  R1 = colSums(with(pars$MYZpar[[s]], matrix(outputs[,R1_ix], nR1, nPatches)))
+  R2 = outputs[,R2_ix]
+  fqM = outputs[,fqM_ix]
+  eggs = outputs[,eggs_ix]
+
+  return(list(E=E, N=N, B=B, Q=Q, R1=R1, R2=R2, fqM=fqM, eggs=eggs))
 })}
 
 #' @title Return initial values as a vector

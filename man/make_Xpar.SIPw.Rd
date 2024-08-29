@@ -9,7 +9,7 @@
 \arguments{
 \item{Xname}{a \link{character} string}
 
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 

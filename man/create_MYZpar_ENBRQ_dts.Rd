@@ -7,7 +7,6 @@
 create_MYZpar_ENBRQ_dts(
   nPatches,
   MYZopts = list(),
-  calK,
   D = 4,
   nR1 = 3,
   p = 11/12,
@@ -28,8 +27,6 @@ create_MYZpar_ENBRQ_dts(
 \item{nPatches}{is the number of patches, an integer}
 
 \item{MYZopts}{a [list] of values that overwrites the defaults}
-
-\item{calK}{a mosquito dispersal matrix of dimensions `nPatches` by `nPatches`}
 
 \item{D}{number of time steps per day}
 

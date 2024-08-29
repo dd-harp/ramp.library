@@ -47,7 +47,7 @@ Update_Xt.SIPw <- function(t, y, pars, i){
       Pt <- Pt+dHdt(t, Pt, Hpar)
       wt <- wt+dHdt(t, wt, Hpar)
 
-      return(c(S=unname(St), I=unname(It), P=unname(Pt), w=unname(wt)))
+      return(c(St, It, Pt, wt))
     })
   })
 }
@@ -91,49 +91,16 @@ create_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
     return(Xpar)
 })}
 
-#' @title Make parameters for SIPw_dts human model, with defaults
-#' @param nStrata the number of population strata
-#' @param D the operating time step
-#' @param Xopts options to overwrite defaults
-#' @param b transmission probability (efficiency) from mosquito to human
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param sigma probability of treatment for treated, above background
-#' @param xi background treatment rate
-#' @param eta rate of loss of chemo-protection
-#' @return a [list]
-#' @export
-dts_make_Xpar_SIPw = function(nStrata, D=1, Xopts=list(), b=0.55, c=0.15, r=1/180,
-                              rho=0.1, sigma=1/730, xi=1/365, eta=1/25){
-  with(Xopts,{
-    Xpar = list()
-    class(Xpar) <- c("SIPw")
-
-    Xpar$D     = checkIt(D, 1)
-    Xpar$b     = checkIt(b, nStrata)
-    Xpar$c     = checkIt(c, nStrata)
-    Xpar$r     = 1-exp(-checkIt(r, nStrata)*D)
-    Xpar$rho   = checkIt(rho, nStrata)
-    Xpar$xi    = 1-exp(-checkIt(xi, nStrata)*D)
-    Xpar$xisig = 1-exp(-checkIt(sigma+xi, nStrata)*D)
-    Xpar$eta   = 1-exp(-checkIt(eta, nStrata)*D)
-
-    return(Xpar)
-})}
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for SIPw models
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIPw <- function(y, pars, i) {
-  with(list_Xvars(y, pars, i),
-       with(pars$Xpar[[i]],{
-         X = c*I
-         return(X)
-       })
-  )
+F_X.SIPw <- function(t, y, pars, i) {
+  I = y[pars$ix$X[[i]]$I_ix]
+  X = with(pars$Xpar[[i]], c*I)
+  return(X)
 }
 
 #' @title Size of effective infectious human population
@@ -141,7 +108,7 @@ F_X.SIPw <- function(y, pars, i) {
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SIPw <- function(y, pars, i){
+F_H.SIPw <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i),return(H))
 }
 
@@ -215,46 +182,43 @@ HTC.SIPw <- function(pars, i) {
 #' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SIPw = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], Xopts, H0=pars$Hpar[[i]]$H)
+make_Xinits.SIPw = function(pars,H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars,create_Xinits_SIPw(pars$nStrata[i],H, Xopts))
   return(pars)
 }
 
 #' @title Make initial values for a SIPw human model, with defaults
 #' @param nStrata the number of population strata
 #' @param Xopts a [list] that could overwrite defaults
-#' @param H0 the initial human population density
-#' @param S0 the initial values of the variable S
-#' @param I0 the initial values of the variable I
-#' @param P0 the initial values of the variable P
-#' @param w0 the initial values of the tracking variable w
+#' @param H the initial human population density
+#' @param I the initial values of the variable I
+#' @param P the initial values of the variable P
+#' @param w the initial values of the tracking variable w
 #' @return a [list]
 #' @export
-create_Xinits_SIPw = function(nStrata, Xopts = list(),
-                            H0=NULL, S0=NULL, I0=1, P0=0, w0=0){
-  with(Xopts,{
-    if(is.null(S0)) S0=H0-I0-P0
-    S = checkIt(S0, nStrata)
-    I = checkIt(I0, nStrata)
-    P = checkIt(P0, nStrata)
-    w = checkIt(w0, nStrata)
+create_Xinits_SIPw = function(nStrata, H, Xopts = list(),
+                           I=1, P=0, w=0){with(Xopts, {
+    S = unname(as.vector(checkIt(H -I-P, nStrata)))
+    I = unname(as.vector(checkIt(I, nStrata)))
+    P = unname(as.vector(checkIt(P, nStrata)))
+    w = unname(as.vector(checkIt(w, nStrata)))
     return(list(S=S, I=I, P=P, w=w))
 })}
 
 #' @title Parse the output of deSolve and return variables for SIPw models
-#' @description Implements [parse_outputs_X] for SIPw models
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for SIPw models
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.SIPw <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    S = outputs[,S_ix+1]
-    I = outputs[,I_ix+1]
-    P = outputs[,P_ix+1]
-    w = outputs[,w_ix+1]
-    H = S+I+P
-    return(list(time=time,S=S,I=I,P=P,H=H,w=w))
+parse_Xorbits.SIPw <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+    S <-outputs[,S_ix]
+    I <- outputs[,I_ix]
+    P <-outputs[,P_ix]
+    w <- outputs[,w_ix]
+    H <- S+I+P
+    ni <- pars$Xpar[[i]]$c*I/H
+    true_pr <- I/H
+    return(list(time=time,S=S,I=I,P=P,H=H,w=w,ni=ni, true_pr= true_pr))
   })}
 
 #' @title Add indices for human population to parameter list
@@ -288,7 +252,7 @@ make_X_indices.SIPw <- function(pars, i) {with(pars,{
 #' @export
 update_Xinits.SIPw <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], list(), S0=S, I0=I, P0=P, w0=w)
+    pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], pars$H0,list(), I=I, P=P, w=w)
     return(pars)
   })}
 
@@ -305,41 +269,52 @@ get_Xinits.SIPw <- function(pars, i){pars$Xinits[[i]]}
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add_axes=TRUE){
+  XH = pars$outputs$orbits$XH[[i]]
+  time = pars$outputs$time
 
   if(add_axes==TRUE)
-    with(vars$XH[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
+    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "# Infected", xlab = "Time")
 
-  add_lines_X_SIPw(vars$XH[[i]], pars, clrs, llty)
+  xds_lines_X_SIPw(time, XH, pars$nStrata[i], clrs, llty)
 }
 
 
-#' Add lines for the density of infected individuals for a SIPw model
+#' Add lines for the density of infected individuals for the SIP model
 #'
-#' @param XH a list with the outputs of parse_outputs_X.SIPw
-#' @param pars a list that defines an `ramp.xds` model (*e.g.*,  generated by `make()`)
+#' @param time time points for the observations
+#' @param XH a list with the outputs of parse_Xorbits.SIP
+#' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-add_lines_X_SIPw = function(XH, pars, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
+xds_lines_X_SIPw = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
+  if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
-    if(pars$Hpar[[1]]$nStrata==1) {
-      lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-      lines(time, P, col=clrs[3], lty = llty[1])
-    }
-    if(pars$Hpar[[1]]$nStrata>1){
-      if (length(clrs)==1) clrs=matrix(clrs, 3, pars$nStrata[i])
-      if (length(llty)==1) llty=rep(llty, pars$nStrata[i])
-      for(i in 1:pars$Hpar[[1]]$nStrata){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-        lines(time, P[,i], col=clrs[3,i], lty = llty[i])
-      }
-    }
-  })}
+    if(nStrata == 1){
+      lines(time, S, col=clrs[1], lty = llty)
+      lines(time, I, col=clrs[2], lty = llty)
+      lines(time, P, col=clrs[3], lty = llty)
+    } else {
+      for(i in 1:nStrata)
+        lines(time, S[,i], col=clrs[1], lty = llty[i])
+      lines(time, I[,i], col=clrs[2], lty = llty[i])
+      lines(time, P[,i], col=clrs[3], lty = llty[i])
+    }})
+}
+
+
+#' @title Compute the steady states for the SIP model as a function of the daily foi
+#' @description Compute the steady state of the SIP model as a function of the daily eir.
+#' @inheritParams ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SIPw = function(foi, H, Xpar){with(Xpar,{
+  Ieq = (foi*H*eta*(1-rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
+  Peq  = (H*xi*(foi+r+xi) + (foi*H*r*rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
+  Seq = H -Ieq - Peq
+  return(list(S=as.vector(Seq), I=as.vector(Ieq), P = as.vector(Peq)))
+})}
 

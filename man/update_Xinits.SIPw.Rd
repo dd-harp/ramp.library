@@ -7,7 +7,7 @@
 \method{update_Xinits}{SIPw}(pars, y0, i)
 }
 \arguments{
-\item{pars}{a \link{list}}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{y0}{a vector of initial values}
 

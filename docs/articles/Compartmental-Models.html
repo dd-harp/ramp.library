@@ -116,7 +116,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Compartmental Models</h1>
             
-            <h4 data-toc-skip class="date">July 18, 2024</h4>
+            <h4 data-toc-skip class="date">August 29, 2024</h4>
       
       
       <div class="hidden name"><code>Compartmental-Models.Rmd</code></div>
@@ -125,129 +125,35 @@
 
     
     
-<pre><code><span><span class="co">## Loading required package: ramp.xde</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'ramp.xde'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:ramp.xds':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     Abiotic, add_lines_X_SEIS, add_lines_X_SEISd, add_lines_X_SIP,</span></span>
-<span><span class="co">##     add_lines_X_SIS, approx_equal, ar2eir, AreaSpray, AreaSprayEffects,</span></span>
-<span><span class="co">##     AreaSprayEffectSizes, AvailableBlood, AvailableHabitat,</span></span>
-<span><span class="co">##     AvailableSugar, BedNetEffects, BedNetEffectSizes, Behavior,</span></span>
-<span><span class="co">##     Bionomics, Births, CareSeeking, check_abiotic, check_civil,</span></span>
-<span><span class="co">##     checkIt, Civil, Clinic, compute_AvailableHabitat,</span></span>
-<span><span class="co">##     compute_AvailableHosts, compute_beta, compute_EIR,</span></span>
-<span><span class="co">##     compute_EIR_full, compute_kappa, compute_local_frac, compute_NI,</span></span>
-<span><span class="co">##     compute_NI_ix, compute_terms, compute_terms_steady,</span></span>
-<span><span class="co">##     compute_vars_aqua, compute_vars_cohort, compute_vars_full,</span></span>
-<span><span class="co">##     compute_vars_human, compute_vars_mosy, Control, dde2ode_MYZ,</span></span>
-<span><span class="co">##     dEIPdt, Development, dHdt, diag_inverse, DistributeBedNets, dLdt,</span></span>
-<span><span class="co">##     dMYZdt, DT_Lt, DT_MYZt, DT_Xt, dts_make_Lpar_basicL,</span></span>
-<span><span class="co">##     dts_make_MYZpar_basicM, dts_make_MYZpar_RM, dts_make_MYZpar_si,</span></span>
-<span><span class="co">##     dts_make_Xpar_SEIS, dts_make_Xpar_SEISd, dts_make_Xpar_SIP,</span></span>
-<span><span class="co">##     dts_make_Xpar_SIS, dts_setup, dts_setup_aquatic, dts_setup_cohort,</span></span>
-<span><span class="co">##     dts_setup_exposure_nb, dts_setup_exposure_pois, dts_setup_human,</span></span>
-<span><span class="co">##     dts_setup_Lpar, dts_setup_mosy, dts_setup_MYZpar, dts_setup_Xpar,</span></span>
-<span><span class="co">##     dts_solve, dts_stable_orbit, dts_steady, dts_steady_state_L,</span></span>
-<span><span class="co">##     dts_steady_state_MYZ, dts_steady_state_X, DTS_step,</span></span>
-<span><span class="co">##     DTS_step_aquatic, DTS_step_cohort, DTS_step_human, DTS_step_mosy,</span></span>
-<span><span class="co">##     dXdt, EggLaying, EIP, eir2fqZ, Emergence, Exposure, F_alpha, F_ar,</span></span>
-<span><span class="co">##     F_b, F_beta, F_eggs, F_EIR, F_f, F_foi, F_fqM, F_fqZ, F_g, F_H,</span></span>
-<span><span class="co">##     F_kappa, F_nu, F_p, F_pr, F_pr_by_lm, F_pr_by_pcr, F_pr_by_rdt,</span></span>
-<span><span class="co">##     F_q, F_sigma, F_tau, F_X, foi2eir, fqZ2eir, get_inits, get_inits_L,</span></span>
-<span><span class="co">##     get_inits_MYZ, get_inits_X, HabitatDynamics, HTC, Hydrology,</span></span>
-<span><span class="co">##     IRS_Effects, IRS_EffectSizes, last_to_inits, LBionomics,</span></span>
-<span><span class="co">##     list_Lvars, list_MYZvars, list_vars, list_Xvars, LocalFrac,</span></span>
-<span><span class="co">##     LSM_Effects, LSM_EffectSizes, make_calK, make_calK_xy, make_calN,</span></span>
-<span><span class="co">##     make_calU, make_calU_s, make_indices, make_indices_L,</span></span>
-<span><span class="co">##     make_indices_MYZ, make_indices_X, make_inits_L_basicL,</span></span>
-<span><span class="co">##     make_inits_L_trace, make_inits_MYZ_basicM, make_inits_MYZ_GeRM_dde,</span></span>
-<span><span class="co">##     make_inits_MYZ_GeRM_ode, make_inits_MYZ_RM_dde,</span></span>
-<span><span class="co">##     make_inits_MYZ_RM_dts, make_inits_MYZ_RM_ode, make_inits_MYZ_si,</span></span>
-<span><span class="co">##     make_inits_MYZ_trace, make_inits_X_hMoI, make_inits_X_SIP,</span></span>
-<span><span class="co">##     make_inits_X_SIS, make_inits_X_trace, make_Linits_basicL,</span></span>
-<span><span class="co">##     make_Lpar_trace, make_MYZinits_basicM, make_MYZinits_GeRM_dde,</span></span>
-<span><span class="co">##     make_MYZinits_GeRM_ode, make_MYZinits_RM_dde, make_MYZinits_RM_dts,</span></span>
-<span><span class="co">##     make_MYZinits_RM_ode, make_MYZinits_si, make_MYZpar_GeRM,</span></span>
-<span><span class="co">##     make_MYZpar_trace, make_Omega, make_Omega_dts, make_Omega_xde,</span></span>
-<span><span class="co">##     make_parameters_demography_null, make_parameters_dts,</span></span>
-<span><span class="co">##     make_parameters_L_basicL, make_parameters_L_trace,</span></span>
-<span><span class="co">##     make_parameters_MYZ_basicM, make_parameters_MYZ_GeRM,</span></span>
-<span><span class="co">##     make_parameters_MYZ_RM, make_parameters_MYZ_RM_dts,</span></span>
-<span><span class="co">##     make_parameters_MYZ_si, make_parameters_MYZ_trace,</span></span>
-<span><span class="co">##     make_parameters_X_hMoI, make_parameters_X_SIP,</span></span>
-<span><span class="co">##     make_parameters_X_SIS, make_parameters_X_trace,</span></span>
-<span><span class="co">##     make_parameters_xde, make_TaR, make_TimeSpent,</span></span>
-<span><span class="co">##     make_TimeSpent_athome, make_TimeSpent_xy, make_Upsilon,</span></span>
-<span><span class="co">##     make_Xinits_hMoI, make_Xinits_SEIS, make_Xinits_SEISd,</span></span>
-<span><span class="co">##     make_Xinits_SIP, make_Xinits_SIS, make_Xpar_trace, MassMedical,</span></span>
-<span><span class="co">##     MBionomics, metric_calD, metric_calR, metric_calV, metric_calZ,</span></span>
-<span><span class="co">##     OtherBloodHosts, OviTraps, OwnBedNet, parse_outputs,</span></span>
-<span><span class="co">##     parse_outputs_L, parse_outputs_MYZ, parse_outputs_vec,</span></span>
-<span><span class="co">##     parse_outputs_X, put_Lvars, put_MYZvars, put_Xvars, Rainfall,</span></span>
-<span><span class="co">##     Relative_Humidity, Resources, runt, set_Dday, setup_abiotic_forced,</span></span>
-<span><span class="co">##     setup_abiotic_null, setup_area_spray_null, setup_behavior,</span></span>
-<span><span class="co">##     setup_behavior_forced, setup_behavior_null, setup_BFpar_static,</span></span>
-<span><span class="co">##     setup_bionomics_static, setup_BloodFeeding,</span></span>
-<span><span class="co">##     setup_care_seeking_null, setup_civil_forced, setup_civil_null,</span></span>
-<span><span class="co">##     setup_clinic_forced, setup_clinic_null, setup_control,</span></span>
-<span><span class="co">##     setup_control_forced, setup_control_null, setup_development_null,</span></span>
-<span><span class="co">##     setup_EggLaying_simple, setup_EggLaying_static,</span></span>
-<span><span class="co">##     setup_EGGpar_static, setup_EIP, setup_eip_fixedlag_dts,</span></span>
-<span><span class="co">##     setup_eip_static_xde, setup_exposure_multiday,</span></span>
-<span><span class="co">##     setup_habitat_dynamics_static, setup_Hpar_static,</span></span>
-<span><span class="co">##     setup_hydrology_null, setup_irs_null, setup_itn_lemenach,</span></span>
-<span><span class="co">##     setup_itn_null, setup_Linits, setup_local_fraction_simple,</span></span>
-<span><span class="co">##     setup_lsm_null, setup_mass_medical_forced, setup_mass_medical_null,</span></span>
-<span><span class="co">##     setup_MYZinits, setup_other_blood_hosts_static,</span></span>
-<span><span class="co">##     setup_ovitraps_null, setup_rainfall_null,</span></span>
-<span><span class="co">##     setup_relative_humidity_null, setup_resources_forced,</span></span>
-<span><span class="co">##     setup_resources_null, setup_resources_static, setup_shock_null,</span></span>
-<span><span class="co">##     setup_sugar_baits_null, setup_sugar_static, setup_temperature_null,</span></span>
-<span><span class="co">##     setup_travel_ar, setup_travel_eir, setup_travel_foi,</span></span>
-<span><span class="co">##     setup_travel_multiday, setup_travel_static, setup_vc_control,</span></span>
-<span><span class="co">##     setup_vc_null, setup_visitors_basic, setup_visitors_static,</span></span>
-<span><span class="co">##     setup_weather_forced, setup_weather_null, setup_Xinits, shapeIt,</span></span>
-<span><span class="co">##     Shock, SprayHouses, SugarBaitEffects, SugarBaitEffectSizes,</span></span>
-<span><span class="co">##     SugarBaits, SugarDynamics, Temperature, Transmission,</span></span>
-<span><span class="co">##     travel_malaria, TreatHabitats, update_inits, update_inits_L,</span></span>
-<span><span class="co">##     update_inits_MYZ, update_inits_X, Update_Lt, Update_MYZt,</span></span>
-<span><span class="co">##     Update_Xt, UseBedNet, VectorControl, VectorControlEffects,</span></span>
-<span><span class="co">##     VectorControlEffectSizes, Visitors, Weather, xDE_diffeqn,</span></span>
-<span><span class="co">##     xDE_diffeqn_aquatic, xDE_diffeqn_cohort, xDE_diffeqn_human,</span></span>
-<span><span class="co">##     xDE_diffeqn_mosy, xde_make_Lpar_basicL, xde_make_MYZpar_basicM,</span></span>
-<span><span class="co">##     xde_make_MYZpar_RM, xde_make_MYZpar_si, xde_make_Xpar_hMoI,</span></span>
-<span><span class="co">##     xde_make_Xpar_SEIS, xde_make_Xpar_SEISd, xde_make_Xpar_SIP,</span></span>
-<span><span class="co">##     xde_make_Xpar_SIS, xde_setup, xde_setup_aquatic, xde_setup_cohort,</span></span>
-<span><span class="co">##     xde_setup_exposure_nb, xde_setup_exposure_pois, xde_setup_human,</span></span>
-<span><span class="co">##     xde_setup_Lpar, xde_setup_mosy, xde_setup_MYZpar, xde_setup_Xpar,</span></span>
-<span><span class="co">##     xde_solve, xde_stable_orbit, xde_steady, xde_steady_state_L,</span></span>
-<span><span class="co">##     xde_steady_state_M, xde_steady_state_MYZ, xde_steady_state_X,</span></span>
-<span><span class="co">##     xds_lines_aEIR, xds_lines_EIR, xds_lines_M, xds_lines_PR,</span></span>
-<span><span class="co">##     xds_lines_YZ, xds_lines_YZ_fracs, xds_lines_Z_fracs, xds_plot_aEIR,</span></span>
-<span><span class="co">##     xds_plot_EIR, xds_plot_M, xds_plot_PR, xds_plot_X, xds_plot_YZ,</span></span>
-<span><span class="co">##     xds_plot_YZ_fracs, xds_plot_Z_fracs</span></span></code></pre>
+<p>In this vignette, we describe four basic compartmental models for
+mosquito-borne pathogens commonly used for humans in
+<code>ramp.library</code>. The models are named by their states:
+susceptible (S) - exposed (E) infected (I) - recovered and immune (R),
+and vaccinated (V). According to their setup, not all models include all
+of the states. There are four compartmental models: SIR, SIRS, SEIR, and
+SEIRV. The other models including SIS, SEI and SIP and SEIS are
+described in the <code>ramp.xds</code>.</p>
 <div class="section level2">
-<h2 id="section"></h2>
-<p>In this vignette, we describe five basic compartmental models for
-mosquito-borne pathogens. The models are named by their states:
-susceptible (S) - exposed (I) - recovered and immune (R), chemoprotected
-(P), vaccinated (V). Not all models include all of the states. In
-ramp.xds, there are six compartmental models: SIS, SIPS, SIR, SIRS,
-SEIR, and SEIRV.</p>
-<div class="section level4">
-<h4 id="variables">Variables<a class="anchor" aria-label="anchor" href="#variables"></a>
-</h4>
+<h2 id="model-variables">Model Variables<a class="anchor" aria-label="anchor" href="#model-variables"></a>
+</h2>
 <ul>
+<li><p><span class="math inline">\(S\)</span> is the density of
+susceptible humans</p></li>
+<li><p><span class="math inline">\(E\)</span> is the density of exposed
+humans</p></li>
 <li><p><span class="math inline">\(I\)</span> is the density of infected
 humans</p></li>
+<li><p><span class="math inline">\(R\)</span> is the density of
+recovered and immune humans</p></li>
+<li><p><span class="math inline">\(V\)</span> is the density of
+vaccinated humans</p></li>
 <li><p><span class="math inline">\(H\)</span> is the density of
 humans</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
-</h4>
+<div class="section level2">
+<h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
+</h2>
 <ul>
 <li><p><span class="math inline">\(r\)</span> is the rate infections
 clear</p></li>
@@ -256,38 +162,154 @@ by infective mosquitoes that transmit parasites and cause an
 infection.</p></li>
 <li><p><span class="math inline">\(c\)</span> is the fraction of bites
 on an infectious human that would infect a mosquito.</p></li>
+<li><p><span class="math inline">\(\varepsilon\)</span> proportion of
+recovered individuals progressing into vaccinated class</p></li>
+<li><p><span class="math inline">\(\alpha\)</span> is a proportion of
+vaccinated humans</p></li>
+<li><p><span class="math inline">\(\tau\)</span> is the rate at which
+exposed humans become infectious (incubation rate)</p></li>
+<li><p><span class="math inline">\(\gamma\)</span> rate at which
+recovered human loss their immunity</p></li>
+<li><p><span class="math inline">\(\delta\)</span> proportion of
+recovered humans progressing to vaccinated class</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="dynamics">Dynamics<a class="anchor" aria-label="anchor" href="#dynamics"></a>
-</h4>
-<p>The model defined herein is defined in two parts. To model exposure
-and infection (<em>i.e.</em> the conversion of eir into foi), we assume
-that the fraction of infective bites that cause an infection is <span class="math inline">\(b\)</span>. The dynamics are given by:</p>
+<div class="section level2">
+<h2 id="dynamics">Dynamics<a class="anchor" aria-label="anchor" href="#dynamics"></a>
+</h2>
+<p>The models defined herein is defined in two parts. To model exposure
+and infection (<em>i.e.</em> the conversion of EIR into FoI (h)), The
+equations are formulated around <span class="math inline">\(h\)</span>.
+Under the default model, we get the relationship <span class="math inline">\(h=bE\)</span>, where E is the daily EIR:</p>
+<div class="section level3">
+<h3 id="the-dynamics-of-susceptible-infected--recovered-sir-are-given-by">The dynamics of Susceptible-Infected- Recovered (SIR) are given
+by:<a class="anchor" aria-label="anchor" href="#the-dynamics-of-susceptible-infected--recovered-sir-are-given-by"></a>
+</h3>
 <p><span class="math display">\[
-\frac{dI}{dt} = h (H-I)-rI
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp;B(H) - h S - \mu S\\
+\frac{dI}{dt} &amp;=&amp; h S- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- \mu R
+\end{eqnarray*}
+\]</span> Without demography i.e $ B(H) = = 0$, SIR model has steady
+states as <span class="math display">\[
+\bar{S} = 0, \quad  \bar{I} =0, \quad \bar{R} = H\]</span>.</p>
+</div>
+<div class="section level3">
+<h3 id="the-dynamics-of-susceptible-infected--recovered--suscepitible-sirs-are-given-by">The dynamics of Susceptible-Infected- Recovered -Suscepitible (SIRS)
+are given by:<a class="anchor" aria-label="anchor" href="#the-dynamics-of-susceptible-infected--recovered--suscepitible-sirs-are-given-by"></a>
+</h3>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp; B(H) - h S + \gamma R - \mu S\\
+\frac{dI}{dt} &amp;=&amp; h S- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- (\mu+ \gamma) R
+\end{eqnarray*}
+\]</span> Without demography, the SIRS model has the following steady
+states as</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\bar{I} &amp;=&amp; \frac{h H\gamma}{r\gamma + h(\gamma+r) }\\
+\bar{R} &amp;=&amp; \frac{h r H}{r\gamma + h(\gamma+r) }\\
+\bar{S} &amp;=&amp; H- \bar{I}-\bar{R}
+\end{eqnarray*}
 \]</span></p>
 </div>
-<div class="section level4">
-<h4 id="terms">Terms<a class="anchor" aria-label="anchor" href="#terms"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-dynamics-of-susceptible--exposed--infected--recovered-seir-are-given-by">The dynamics of Susceptible -Exposed -Infected- Recovered (SEIR) are
+given by:<a class="anchor" aria-label="anchor" href="#the-dynamics-of-susceptible--exposed--infected--recovered-seir-are-given-by"></a>
+</h3>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp; B(H) - h S - \mu S\\
+\frac{dE}{dt} &amp;=&amp; hS - \tau E- \mu E\\
+\frac{dI}{dt} &amp;=&amp; \tau E- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- \mu R
+\end{eqnarray*}
+\]</span> Without demography, the SEIR model has the steady states given
+as <span class="math display">\[ \bar{S} = 0, \quad \bar{E} = 0,\quad
+\bar{I} = 0,\quad \bar{R} = H\]</span></p>
+</div>
+<div class="section level3">
+<h3 id="the-dynamics-of-susceptible-infected--recovered--suscepitible--vaccinated-seirv-are-based-on-the-are-given-by">The dynamics of Susceptible-Infected- Recovered -Suscepitible-
+Vaccinated (SEIRV) are based on the are given by:<a class="anchor" aria-label="anchor" href="#the-dynamics-of-susceptible-infected--recovered--suscepitible--vaccinated-seirv-are-based-on-the-are-given-by"></a>
+</h3>
+<p><span class="math display">\[\begin{eqnarray}
+\frac{dS}{dt} &amp;=&amp;(1-\alpha)B(H) - h S + \gamma R - \mu S\\
+\frac{dE}{dt} &amp;=&amp; h S - (\tau  + \mu)E\\
+\frac{dI}{dt} &amp;= &amp;\tau E - (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; (1-\varepsilon) r I- (\gamma+\mu) R\\
+\frac{dV}{dt} &amp;=&amp; \alpha B(H)+ \varepsilon r I -\mu V
+\end{eqnarray}
+\]</span> Without demography, the SEIRV has the following steady states:
+<span class="math display">\[ \bar{S} = 0, \quad \bar{E} = 0,\quad
+\bar{I} = 0,\quad \bar{R} = 0,\quad  \bar{V}= H\]</span></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="terms">Terms<a class="anchor" aria-label="anchor" href="#terms"></a>
+</h2>
 <p><strong>Net Infectiousness</strong></p>
 <p>True prevalence is:</p>
 <p><span class="math display">\[x = \frac{X}{H}.\]</span></p>
 <p>In our implementation, net infectiousness (NI) is linearly
 proportional to prevalence:</p>
-<p><span class="math display">\[c x.\]</span></p>
+<p><span class="math display">\[ni = c x.\]</span></p>
 <p><strong>Human Transmitting Capacity</strong></p>
 <p>After exposure, a human would remain infected for <span class="math inline">\(1/r\)</span> days, transmitting with probability
 <span class="math inline">\(c\)</span> so:</p>
-<p><span class="math display">\[c/r\]</span></p>
-<p><strong>Exposure and Infection</strong></p>
-<p>In this model family, there is no immunity. The model assumes that a
-constant fraction of all infectious bites, <span class="math inline">\(b\)</span>, cause an infection.</p>
+<p><span class="math display">\[HTC= c/r\]</span></p>
 </div>
-<div class="section level3">
-<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h3>
+<div class="section level2">
+<h2 id="example-ramp-xds-setup">Example <code>ramp.xds</code> Setup<a class="anchor" aria-label="anchor" href="#example-ramp-xds-setup"></a>
+</h2>
+<p>We run each of the models using a default setup with 1- stratum to
+equilibrium and compare our results with the analytic steady states
+given above</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dd-harp.github.io/ramp.xds/" class="external-link">ramp.xds</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ramp.library</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: package 'data.table' was built under R version 4.3.3</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_SIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SIR"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SIR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf</span> </span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_SIRS</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SIRS"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SIRS"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SIRS</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIRS</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIRS</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SIRS</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SIRS</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_SEIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SEIR"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SEIR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SEIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIR</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIR</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIR</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_SEIRV</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SEIRV"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SEIRV"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SEIRV</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIRV</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIRV</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIRV</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIRV</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIRV</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIRV</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <ol style="list-style-type: decimal">
 <li>Ross R. Report on the Prevention of Malaria in Mauritius. London:
 Waterlow; 1908.</li>
@@ -298,7 +320,6 @@ Macdonald, and a theory for the dynamics and control of
 mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. <a href="doi:10.1371/journal.ppat.1002588" class="uri">doi:10.1371/journal.ppat.1002588</a>
 </li>
 </ol>
-</div>
 </div>
   </div>
 

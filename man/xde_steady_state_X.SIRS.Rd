@@ -5,23 +5,17 @@
 \title{Compute the steady states for the SIRS model as a function of the daily EIR}
 \usage{
 \method{xde_steady_state_X}{SIRS}(foi, H, Xpar)
-
-\method{xde_steady_state_X}{SIRS}(foi, H, Xpar)
 }
 \arguments{
 \item{foi}{the daily FoI}
 
-\item{H}{host density}
+\item{H}{human / host population density}
 
-\item{Xpar}{a list that defines a X-class model}
+\item{Xpar}{a list that defines an \eqn{\cal X} model}
 }
 \value{
-the steady states as a named vector
-
 the steady states as a named vector
 }
 \description{
 Compute the steady state of the SIRS model as a function of the daily eir.
-
-Compute the steady state of the SIS model as a function of the daily eir.
 }

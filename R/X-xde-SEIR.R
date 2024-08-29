@@ -29,22 +29,31 @@ dXdt.SEIR<- function(t, y, pars, i) {
   })
 }
 
+#' @title Compute the steady states for the SIRS model as a function of the daily EIR
+#' @description Compute the steady state of the SIRS model as a function of the daily eir.
+#' @inheritParams  ramp.xds::xde_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+xde_steady_state_X.SEIR = function(foi, H, Xpar){with(Xpar,{
+  Eeq = 0
+  Ieq = 0
+  Req =H
+  Seq = H-Ieq-Req
+  return(c(S=as.vector(Seq),E = as.vector(Eeq), I=as.vector(Ieq), R = as.vector(Req)))
+})}
 
 
 #' @title Make initial values for the SEIR human model, with defaults
 #' @param nStrata the number of strata in the model
+#' @param H the initial value for H
 #' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial value for H
-#' @param S the initial value for S
 #' @param E the initial value for E
 #' @param I the initial value for I
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-create_Xinits_SEIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, E=0,R = 1){with(Xopts,{
-  if(is.null(S)) S = H0-(E+I+R)
-  stopifnot(is.numeric(S))
-  S = checkIt(S, nStrata)
+create_Xinits_SEIR = function(nStrata, H, Xopts = list(), I=1, E=0, R = 1){with(Xopts,{
+  S = checkIt(H-I-E-R, nStrata)
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
@@ -61,8 +70,8 @@ create_Xinits_SEIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, E=
 #' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SEIR = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, create_Xinits_SEIR(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SEIR = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = create_Xinits_SEIR(pars$nStrata[i], H, Xopts)
   return(pars)
 }
 
@@ -140,7 +149,7 @@ get_Xinits.SEIR <- function(pars, i){
 #' @export
 update_Xinits.SEIR <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = create_Xinits_SEIR(pars, list(), S=S,E= E, I=I, R=R)
+    pars = create_Xinits_SEIR(pars$nStrata[i], pars$H0, list(), E=E, I=I, R=R)
     return(pars)
   })}
 
@@ -192,7 +201,7 @@ make_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIR <- function(y, pars, i) {
+F_X.SEIR <- function(t,y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -204,7 +213,7 @@ F_X.SEIR <- function(y, pars, i) {
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SEIR <- function(y, pars, i){
+F_H.SEIR <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), return(H))
 }
 
@@ -223,20 +232,19 @@ F_b.SEIR <- function(y, pars, i) {
 
 
 #' @title Parse the output of deSolve and return variables for the SEIR model
-#' @description Implements [parse_outputs_X] for the SEIR model
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for the SEIR model
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.SEIR <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    S = outputs[,S_ix+1]
-    E = outputs[,E_ix+1]
-    I = outputs[,I_ix+1]
-    R = outputs[,R_ix+1]
-
+parse_Xorbits.SEIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+    S = outputs[,S_ix]
+    E = outputs[,E_ix]
+    I = outputs[,I_ix]
+    R = outputs[,R_ix]
     H = S+I+R
-    return(list(time=time, S=S, E=E,I=I, R=R, H=H))
+    ni <- pars$Xpar[[i]]$c*I/H
+    true_pr <- (I+E)/H
+    return(list(S=S, E=E,I=I, R=R, H=H,ni=ni, true_pr= true_pr))
   })}
 
 
@@ -274,33 +282,29 @@ HTC.SEIR <- function(pars, i) {
 
 
 #' Add lines for the density of infected individuals for the SEIR model
-#'
+#' @param time time points for the observations
 #' @param XH a list with the outputs of parse_outputs_X_SEIR
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_SEIR = function(XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen"), llty=1){
+xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen"), llty=1){
+  if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
       lines(time, E, col=clrs[2], lty = llty[1])
-      lines(time, I, col=clrs[3], lty = llty[1])
-      lines(time, R, col=clrs[4], lty = llty[1])
-    }
-    if(nStrata>1){
-      if (length(clrs)==3) clrs=matrix(clrs, 3, nStrata)
-      if (length(llty)==1) llty=rep(llty, nStrata)
+      lines(time, I, col=clrs[2], lty = llty[1])
+      lines(time, R, col=clrs[3], lty = llty[1])
+    } else {
+      for(i in 1:nStrata)
+        lines(time, S[,i], col=clrs[1], lty = llty[i])
+      lines(time, E[,i], col=clrs[2], lty = llty[i])
+      lines(time, I[,i], col=clrs[2], lty = llty[i])
+      lines(time, R[,i], col=clrs[3], lty = llty[i])
+    }})}
 
-      for(i in 1:nStrata){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, E[,i], col=clrs[2,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[3,i], lty = llty[i])
-        lines(time, R[,i], col=clrs[4,i], lty = llty[i])
-      }
-    }
-  })}
 
 
 
@@ -311,14 +315,13 @@ xde_lines_X_SEIR = function(XH, nStrata, clrs=c("black","darkblue","darkred","da
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add_axes=TRUE){
+  XH = pars$outputs$orbits$XH[[i]]
+  time = pars$outputs$time
 
   if(add_axes==TRUE)
-    with(vars$XH[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "No of. Infected", xlab = "Time"))
-
-
-  xde_lines_X_SEIR(vars$XH[[i]], pars$nStrata[i], clrs, llty)
+    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "No of. Infected", xlab = "Time")
+  xds_lines_X_SEIR(time, XH, pars$nStrata[i], clrs, llty)
 }
+

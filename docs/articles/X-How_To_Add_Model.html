@@ -215,12 +215,12 @@ document the variables by name and assign each one an index, to store,
 assign and update initial values. These functions streamline setup, and
 guarantee consistency.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p><code>make_Xinits_newXname</code> - each model requires a
+<li><p><code>create_Xinits_newXname</code> - each model requires a
 function that documents the variables by name and assigns initial
 values</p></li>
-<li><p><code>setup_Xinits.newXname</code> - is a wrapper, that gets
+<li><p><code>make_Xinits.newXname</code> - is a wrapper, that gets
 called by <code>ramp.xds::xde_setup.</code> It gets called by
-<code>make_Xinits_newXname,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
+<code>create_Xinits_newXname,</code> and for the <span class="math inline">\(i^{th}\)</span> host, the initial values are
 stored as <code>pars$Xinits[[i]].</code></p></li>
 <li><p><code>make_indices_X.newXname</code> - is the function that
 assigns an index to each variable in the model, and stores it as
@@ -229,12 +229,12 @@ list.</p></li>
 <li><p><code>list_Xvars.newXname</code> - retrieves the value of
 variables at a point in time and returns the values by name in a list;
 the function gets called by <code>dXdt</code> and by
-<code>update_inits_X</code> and it can be useful in other
+<code>update_Xinits</code> and it can be useful in other
 contexts.</p></li>
 <li><p><code>get_inits_X.newXname</code> - retrieves the stored initial
 values in the same order that they are returned by
 <code>dXdt.newXname</code></p></li>
-<li><p><code>update_inits_X.newXname</code> - a utility that makes it
+<li><p><code>update_Xinits.newXname</code> - a utility that makes it
 possible to extract and store a new set of initial values for
 <code>newXname</code> from a vector <span class="math inline">\(y\)</span> holding all the variables in a
 model.</p></li>
@@ -242,14 +242,14 @@ model.</p></li>
 <p><strong>Parameters</strong></p>
 <ol start="8" style="list-style-type: decimal">
 <li>
-<p><code>make_Xpar_newXname</code> returns a formatted list:</p>
+<p><code>create_Xpar_newXname</code> returns a formatted list:</p>
 <ul>
 <li><p>the parameter values are stored by name</p></li>
 <li><p><code>class(pars)</code> = <code>newXname</code></p></li>
 </ul>
 </li>
-<li><p><code>setup_Xpar.newXname</code> is a wrapper that calls
-<code>make_Xpar_newXname</code></p></li>
+<li><p><code>make_Xpar.newXname</code> is a wrapper that calls
+<code>create_Xpar_newXname</code></p></li>
 </ol>
 <p><strong>Dynamical Terms</strong> are Computed using a Standard Set of
 Functions</p>
@@ -345,11 +345,11 @@ parameter names attached to lists to make the code easy to read.</p>
 <span></span>
 <span>  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">pars</span><span class="op">$</span><span class="va">FoI</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
-<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu">F_H</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
+<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/F_H.html" class="external-link">F_H</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
-<span>      <span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu">Births</span><span class="op">(</span><span class="va">t</span>, <span class="va">H</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">+</span> <span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">S</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>      <span class="va">dI</span> <span class="op">&lt;-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="fu">dHdt</span><span class="op">(</span><span class="va">t</span>, <span class="va">I</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>      <span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">H</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span> <span class="op">-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">+</span> <span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/dHdt.html" class="external-link">dHdt</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">S</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>      <span class="va">dI</span> <span class="op">&lt;-</span> <span class="va">foi</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">r</span><span class="op">*</span><span class="va">I</span> <span class="op">+</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/dHdt.html" class="external-link">dHdt</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">I</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
 <span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
@@ -395,11 +395,11 @@ calls.</p></li>
 <span>  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">pars</span><span class="op">$</span><span class="va">FoI</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span>  <span class="co"># attach the variables by name </span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
 <span>    <span class="co"># compute H (if it isn't one of the variables) </span></span>
-<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu">F_H</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/F_H.html" class="external-link">F_H</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span></span>
 <span></span>
-<span>    <span class="co"># expose the parameters (see make_Xpar_Xname) </span></span>
+<span>    <span class="co"># expose the parameters (see create_Xpar_Xname) </span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
 <span>      <span class="co"># compute the derivatives </span></span>
 <span>      <span class="va">dX1</span> <span class="op">&lt;-</span> <span class="va">...</span> </span>
@@ -420,10 +420,10 @@ calls.</p></li>
 <h2 id="variables">Variables<a class="anchor" aria-label="anchor" href="#variables"></a>
 </h2>
 <div class="section level3">
-<h3 id="make_xinits">2. make_Xinits<a class="anchor" aria-label="anchor" href="#make_xinits"></a>
+<h3 id="create_xinits">2. create_Xinits<a class="anchor" aria-label="anchor" href="#create_xinits"></a>
 </h3>
 <div class="section level4">
-<h4 id="make_xinits_sis">make_Xinits_SIS<a class="anchor" aria-label="anchor" href="#make_xinits_sis"></a>
+<h4 id="create_xinits_sis">create_Xinits_SIS<a class="anchor" aria-label="anchor" href="#create_xinits_sis"></a>
 </h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make initial values for the SIS human model, with defaults</span></span>
@@ -434,16 +434,16 @@ calls.</p></li>
 <span><span class="co">#' @param I0 the initial values of the parameter I</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xinits_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">H0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">S0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">I0</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
+<span><span class="va">create_Xinits_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">H0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">S0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">I0</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span> <span class="va">S0</span> <span class="op">=</span> <span class="va">H0</span> <span class="op">-</span> <span class="va">I0</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">S</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">S0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">I</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">I0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">S</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">S0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">I0</span>, <span class="va">nStrata</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S<span class="op">=</span><span class="va">S</span>, I<span class="op">=</span><span class="va">I</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="make_xinits_newxname">make_Xinits_newXname<a class="anchor" aria-label="anchor" href="#make_xinits_newxname"></a>
+<h4 id="create_xinits_newxname">create_Xinits_newXname<a class="anchor" aria-label="anchor" href="#create_xinits_newxname"></a>
 </h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make initial values for the Xname human model, with defaults</span></span>
@@ -453,25 +453,25 @@ calls.</p></li>
 <span><span class="co">#' @param X20 the initial value for X1 </span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xinits_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">X10</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">X20</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
+<span><span class="va">create_Xinits_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">X10</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">X20</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">X10</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">X20</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">X1</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">X10</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>  <span class="va">X2</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">X20</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">X1</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X10</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>  <span class="va">X2</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X20</span>, <span class="va">nStrata</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="setup_xinits">3. setup_Xinits<a class="anchor" aria-label="anchor" href="#setup_xinits"></a>
+<h3 id="make_xinits">3. make_Xinits<a class="anchor" aria-label="anchor" href="#make_xinits"></a>
 </h3>
 <p>In the <code>xde_setup</code> family of setup functions, initial
 values for a model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
-set up by the function <code>setup_Xinits.</code></p>
+set up by the function <code>make_Xinits.</code></p>
 <div class="section level4">
 <h4 id="generic">Generic<a class="anchor" aria-label="anchor" href="#generic"></a>
 </h4>
-<p>The <code>setup_Xinits</code> function dispatches on
+<p>The <code>make_Xinits</code> function dispatches on
 <code>pars$Xpar[[i]]</code></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title A function to set up Xpar</span></span>
@@ -481,38 +481,38 @@ set up by the function <code>setup_Xinits.</code></p>
 <span><span class="co">#' @param Xopts a [list]</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xinits</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"setup_Xinits"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">make_Xinits</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"make_Xinits"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xinits-sis">setup_Xinits.SIS<a class="anchor" aria-label="anchor" href="#setup_xinits-sis"></a>
+<h4 id="make_xinits-sis">make_Xinits.SIS<a class="anchor" aria-label="anchor" href="#make_xinits-sis"></a>
 </h4>
-<p>The <code>setup_Xinits.SIS</code> calls
-<code>make_Xinits_SIS</code></p>
+<p>The <code>make_Xinits.SIS</code> calls
+<code>create_Xinits_SIS</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xinits.SIS</span></span>
-<span><span class="co">#' @description Implements [setup_Xinits] for the SIS model</span></span>
-<span><span class="co">#' @inheritParams setup_Xinits</span></span>
+<span><span class="co">#' @description Implements [make_Xinits] for the SIS model</span></span>
+<span><span class="co">#' @inheritParams make_Xinits</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xinits.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu">make_Xinits_SIS</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">make_Xinits.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/create_Xinits_SIS.html" class="external-link">create_Xinits_SIS</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xinits-newxname">setup_Xinits.newXname<a class="anchor" aria-label="anchor" href="#setup_xinits-newxname"></a>
+<h4 id="make_xinits-newxname">make_Xinits.newXname<a class="anchor" aria-label="anchor" href="#make_xinits-newxname"></a>
 </h4>
 <p>To modify, replace <code>newXname</code></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xinits.newXname</span></span>
-<span><span class="co">#' @description Implements [setup_Xinits] for the newXname model</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_Xinits</span></span>
+<span><span class="co">#' @description Implements [make_Xinits] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::make_Xinits</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xinits.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu">make_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">make_Xinits.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu">create_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span>, H0<span class="op">=</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -686,7 +686,7 @@ name.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="update_inits_x">7. update_inits_X<a class="anchor" aria-label="anchor" href="#update_inits_x"></a>
+<h3 id="update_xinits">7. update_Xinits<a class="anchor" aria-label="anchor" href="#update_xinits"></a>
 </h3>
 <p>Pass a vector <code>y</code>, extract the values of the variables,
 and modify the initial values.</p>
@@ -701,35 +701,35 @@ and modify the initial values.</p>
 <span><span class="co">#' @param i the host species index</span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">update_inits_X</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"update_inits_X"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">update_Xinits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"update_Xinits"</span>, <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="update_inits_x-sis">update_inits_X.SIS<a class="anchor" aria-label="anchor" href="#update_inits_x-sis"></a>
+<h4 id="update_xinits-sis">update_Xinits.SIS<a class="anchor" aria-label="anchor" href="#update_xinits-sis"></a>
 </h4>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Update inits for the SIS human model from a vector of states</span></span>
-<span><span class="co">#' @inheritParams update_inits_X</span></span>
+<span><span class="co">#' @inheritParams update_Xinits</span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">update_inits_X.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y0</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
-<span>    <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_Xinits_SIS</span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, S0<span class="op">=</span><span class="va">S</span>, I0<span class="op">=</span><span class="va">I</span><span class="op">)</span></span>
+<span><span class="va">update_Xinits.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y0</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
+<span>    <span class="va">pars</span><span class="op">$</span><span class="va">Xinits</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/create_Xinits_SIS.html" class="external-link">create_Xinits_SIS</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, S0<span class="op">=</span><span class="va">S</span>, I0<span class="op">=</span><span class="va">I</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="update_inits_x-newxname">update_inits_X.newXname<a class="anchor" aria-label="anchor" href="#update_inits_x-newxname"></a>
+<h4 id="update_xinits-newxname">update_Xinits.newXname<a class="anchor" aria-label="anchor" href="#update_xinits-newxname"></a>
 </h4>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Update inits for the newXname human model from a vector of states</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::update_inits_X </span></span>
+<span><span class="co">#' @inheritParams ramp.xds::update_Xinits </span></span>
 <span><span class="co">#' @return none</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">update_inits_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y0</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
-<span>    <span class="va">pars</span> <span class="op">=</span> <span class="fu">make_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, X10<span class="op">=</span><span class="va">X1</span>, X20<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="va">update_Xinits.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">y0</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y0</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>,<span class="op">{</span></span>
+<span>    <span class="va">pars</span> <span class="op">=</span> <span class="fu">create_Xinits_newXname</span><span class="op">(</span><span class="va">pars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, X10<span class="op">=</span><span class="va">X1</span>, X20<span class="op">=</span><span class="va">X2</span>, <span class="va">...</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -741,13 +741,13 @@ and modify the initial values.</p>
 <p>The second function sets up a list <code>Xpar</code> that dispatches
 <code>dXdt</code> and that has the parameter values.</p>
 <div class="section level3">
-<h3 id="make_xpar_sis">8. make_Xpar_SIS<a class="anchor" aria-label="anchor" href="#make_xpar_sis"></a>
+<h3 id="create_xpar_sis">8. create_Xpar_SIS<a class="anchor" aria-label="anchor" href="#create_xpar_sis"></a>
 </h3>
 <p>There is no <code>S3</code> definition for the
-<code>make_Xpar_*</code> class of functions. Instead, we write a generic
-<code>S3</code> function called <code>setup_Xpar</code> that calls a
-function <code>make_Xpar_*</code> There is, nevertheless, a reasonably
-standard formula for <code>make_Xpar_*</code></p>
+<code>create_Xpar_*</code> class of functions. Instead, we write a
+generic <code>S3</code> function called <code>make_Xpar</code> that
+calls a function <code>make_Xpar_*</code> There is, nevertheless, a
+reasonably standard formula for <code>make_Xpar_*</code></p>
 <ul>
 <li><p>The first argument is <code>nStrata</code> the number of
 population strata for the species.</p></li>
@@ -759,11 +759,11 @@ be the same ones used in <code>dXdt</code></p></li>
 <li><p>By default, they should have
 <code>length(*)= nStrata</code></p></li>
 <li><p>The last part of the function name is the string that dispatches
-the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
+the <code>S3</code> functions. In <code>create_Xpar_SIS,</code> we write
 <code>class(Xpar) &lt;- "SIS"</code></p></li>
 </ul>
 <div class="section level4">
-<h4 id="make_xpar_sis-1">make_Xpar_SIS<a class="anchor" aria-label="anchor" href="#make_xpar_sis-1"></a>
+<h4 id="create_xpar_sis-1">create_Xpar_SIS<a class="anchor" aria-label="anchor" href="#create_xpar_sis-1"></a>
 </h4>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make parameters for SIS human model, with defaults</span></span>
@@ -774,21 +774,21 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span><span class="co">#' @param r recovery rate</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xpar_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span><span class="va">create_Xpar_SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                         <span class="va">b</span><span class="op">=</span><span class="fl">0.55</span>, <span class="va">r</span><span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">180</span>, <span class="va">c</span><span class="op">=</span><span class="fl">0.15</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
 <span>    <span class="va">Xpar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"SIS"</span></span>
 <span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">b</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">b</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">c</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">c</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">r</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">r</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">b</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">c</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">nStrata</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="make_xpar_newxname">make_Xpar_newXname<a class="anchor" aria-label="anchor" href="#make_xpar_newxname"></a>
+<h4 id="create_xpar_newxname">create_Xpar_newXname<a class="anchor" aria-label="anchor" href="#create_xpar_newxname"></a>
 </h4>
 <p>To format this for a new function, do a search and replace on
 <code>newXname</code> and replace the parmeter names and values <span class="math inline">\(p1\)</span>, <span class="math inline">\(p2\)</span>, <span class="math inline">\(\ldots\)</span></p>
@@ -801,33 +801,33 @@ the <code>S3</code> functions. In <code>make_Xpar_SIS,</code> we write
 <span><span class="co">#' @param p3 the third parameter </span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_Xpar_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span><span class="va">create_Xpar_newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                         <span class="va">p1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">p2</span><span class="op">=</span><span class="fl">2</span>, <span class="va">p3</span><span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Xopts</span>,<span class="op">{</span></span>
 <span>    <span class="va">Xpar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"newXname"</span><span class="op">)</span></span>
 <span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p1</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p1</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p2</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p3</span> <span class="op">=</span> <span class="fu">checkIt</span><span class="op">(</span><span class="va">p3</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">Xpar</span><span class="op">$</span><span class="va">p3</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p3</span>, <span class="va">nStrata</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">Xpar</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="setup_xpar">9. setup_Xpar<a class="anchor" aria-label="anchor" href="#setup_xpar"></a>
+<h3 id="make_xpar">9. make_Xpar<a class="anchor" aria-label="anchor" href="#make_xpar"></a>
 </h3>
 <p>In the <code>xde_setup</code> family of setup functions, setup for a
 model fulfilling the dynamical component <span class="math inline">\(\cal X,\)</span> called <code>newXname</code> is
-set up by the function <code>setup_Xpar.</code></p>
+set up by the function <code>make_Xpar.</code></p>
 <div class="section level4">
 <h4 id="generic-5">Generic<a class="anchor" aria-label="anchor" href="#generic-5"></a>
 </h4>
 <p>This function must set up <code>Xpar</code> and it must also set up
 the initial values. By convention, the functions that get called are not
 <code>S3</code> class functions.</p>
-<p>The <code>setup_Xpar</code> functions assigns to <code>Xname</code>
+<p>The <code>make_Xpar</code> functions assigns to <code>Xname</code>
 the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title A function to set up Xpar</span></span>
@@ -838,40 +838,40 @@ the <code>class(Xname)</code> and dispatches on <code>Xname</code></p>
 <span><span class="co">#' @param Xopts a [list]</span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xpar</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">Xname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">make_Xpar</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">Xname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xname</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">Xname</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"setup_Xpar"</span>, <span class="va">Xname</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"make_Xpar"</span>, <span class="va">Xname</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xpar-sis">setup_Xpar.SIS<a class="anchor" aria-label="anchor" href="#setup_xpar-sis"></a>
+<h4 id="make_xpar-sis">make_Xpar.SIS<a class="anchor" aria-label="anchor" href="#make_xpar-sis"></a>
 </h4>
 <p>The dispatched function <code>SIS</code> ignores xname, but it calls
-a function <code>make_Xpar_SIS</code></p>
+a function <code>create_Xpar_SIS</code></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xpar.SIS</span></span>
-<span><span class="co">#' @description Implements [setup_Xpar] for the SIS model</span></span>
-<span><span class="co">#' @inheritParams setup_Xpar</span></span>
+<span><span class="co">#' @description Implements [make_Xpar] for the SIS model</span></span>
+<span><span class="co">#' @inheritParams make_Xpar</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xpar.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">Xname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_Xpar_SIS</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
+<span><span class="va">make_Xpar.SIS</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">Xname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/create_Xpar_SIS.html" class="external-link">create_Xpar_SIS</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="setup_xpar-newxname">setup_Xpar.newXname<a class="anchor" aria-label="anchor" href="#setup_xpar-newxname"></a>
+<h4 id="make_xpar-newxname">make_Xpar.newXname<a class="anchor" aria-label="anchor" href="#make_xpar-newxname"></a>
 </h4>
 <p>To use this, simply to a search and replace on
 <code>newXname.</code></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup Xpar.newXname</span></span>
-<span><span class="co">#' @description Implements [setup_Xpar] for the newXname model</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_Xpar</span></span>
+<span><span class="co">#' @description Implements [make_Xpar] for the newXname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::make_Xpar</span></span>
 <span><span class="co">#' @return a [list] vector</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_Xpar.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">newXname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_Xpar_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
+<span><span class="va">make_Xpar.newXname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">newXname</span>, <span class="va">pars</span>, <span class="va">i</span>, <span class="va">Xopts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">pars</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">create_Xpar_newXname</span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">Hpar</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">nStrata</span>, <span class="va">Xopts</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -1008,7 +1008,7 @@ S+I\)</span> for the <code>SIS</code> model.</p>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_H.SIS</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -1025,7 +1025,7 @@ model, assuming <span class="math inline">\(H\)</span> is computed in
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_H.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">list_Xvars</span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">pars</span>, <span class="va">i</span><span class="op">)</span>, <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>

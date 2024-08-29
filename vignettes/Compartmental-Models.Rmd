@@ -13,40 +13,109 @@ suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
 suppressMessages(library(ramp.library))
 library(deSolve)
-#library(ramp.library)
+library(ramp.library)
 #devtools::load_all()
 ```
-```
 
-#  
-
-In this vignette, we describe five basic compartmental models for mosquito-borne pathogens. The models are named by their states: susceptible (S) - exposed (I) - recovered and immune (R), chemoprotected (P), vaccinated (V). Not all models include all of the states. In ramp.xds, there are six compartmental models: SIS, SIPS, SIR, SIRS, SEIR, and SEIRV.
+In this vignette, we describe four basic compartmental models for mosquito-borne pathogens commonly used for humans in `ramp.library`. The models are named by their states: susceptible (S) - exposed (E) infected (I) - recovered and immune (R), and vaccinated (V). According to their setup, not all models include all of the states. There are four compartmental models: SIR, SIRS, SEIR, and SEIRV. The other models including SIS, SEI and SIP and SEIS are described in the `ramp.xds`.
   
-### Variables
+##  Model Variables
 
 + $S$ is the density of susceptible humans
 
++ $E$ is the density of exposed humans
+
 + $I$ is the density of infected humans
+
++ $R$ is the density of recovered and immune humans
+
++ $V$ is the density of vaccinated humans
 
 + $H$ is the density of humans
 
-### Parameters
+## Parameters
 
 + $r$ is the rate infections clear
 
 + $b$ is the fraction of bites by infective mosquitoes that transmit parasites and cause an infection. 
 
-+ $c$ is the fraction of bites on an infectious human that would infect a mosquito. 
++ $c$ is the fraction of bites on an infectious human that would infect a mosquito.
 
-### Dynamics
++ $\varepsilon$ proportion of recovered individuals progressing into vaccinated class
 
-The model defined herein is defined in two parts. To model exposure and infection (*i.e.* the conversion of eir into foi), we assume that the fraction of infective bites that cause an infection is $b$. The dynamics are given by: 
++ $\alpha$ is a proportion of vaccinated humans
+
++ $\tau$ is the rate at which exposed humans become infectious (incubation rate)
+
++ $\gamma$ rate at which recovered human loss their immunity
+
++ $\delta$ proportion of recovered humans progressing to vaccinated class
+
+## Dynamics
+
+The models defined herein is defined in two parts. To model exposure and infection (*i.e.* the conversion of EIR into FoI (h)), The equations are formulated around $h$. Under the default model, we get the relationship $h=bE$, where E is the daily EIR:
+
+
+### The dynamics of Susceptible-Infected- Recovered (SIR) are given by: 
 
 $$
-\frac{dI}{dt} = h (H-I)-rI
+\begin{eqnarray*}
+\frac{dS}{dt} &=&B(H) - h S - \mu S\\
+\frac{dI}{dt} &=& h S- (r +\mu) I\\
+\frac{dR}{dt} &=& r I- \mu R
+\end{eqnarray*}
+$$
+Without demography i.e $ B(H) = \mu = 0$, SIR model has steady states as $$ 
+\bar{S} = 0, \quad  \bar{I} =0, \quad \bar{R} = H$$.
+
+### The dynamics of Susceptible-Infected- Recovered -Suscepitible  (SIRS) are given by:
+
+$$
+\begin{eqnarray*}
+\frac{dS}{dt} &=& B(H) - h S + \gamma R - \mu S\\
+\frac{dI}{dt} &=& h S- (r +\mu) I\\
+\frac{dR}{dt} &=& r I- (\mu+ \gamma) R
+\end{eqnarray*}
+$$
+Without demography, the SIRS model has the following steady states as
+ 
+$$
+\begin{eqnarray*}
+\bar{I} &=& \frac{h H\gamma}{r\gamma + h(\gamma+r) }\\
+\bar{R} &=& \frac{h r H}{r\gamma + h(\gamma+r) }\\
+\bar{S} &=& H- \bar{I}-\bar{R}
+\end{eqnarray*}
 $$
 
-### Terms 
+
+### The dynamics of Susceptible -Exposed -Infected- Recovered  (SEIR) are given by: 
+
+$$
+\begin{eqnarray*}
+\frac{dS}{dt} &=& B(H) - h S - \mu S\\
+\frac{dE}{dt} &=& hS - \tau E- \mu E\\
+\frac{dI}{dt} &=& \tau E- (r +\mu) I\\
+\frac{dR}{dt} &=& r I- \mu R
+\end{eqnarray*}
+$$
+Without demography, the SEIR model has the steady states given as 
+$$ \bar{S} = 0, \quad \bar{E} = 0,\quad \bar{I} = 0,\quad \bar{R} = H$$
+
+### The dynamics of Susceptible-Infected- Recovered -Suscepitible- Vaccinated (SEIRV)  are based on the  are given by: 
+
+$$\begin{eqnarray}
+\frac{dS}{dt} &=&(1-\alpha)B(H) - h S + \gamma R - \mu S\\
+\frac{dE}{dt} &=& h S - (\tau  + \mu)E\\
+\frac{dI}{dt} &= &\tau E - (r +\mu) I\\
+\frac{dR}{dt} &=& (1-\varepsilon) r I- (\gamma+\mu) R\\
+\frac{dV}{dt} &=& \alpha B(H)+ \varepsilon r I -\mu V
+\end{eqnarray}
+$$
+Without demography, the SEIRV has the following steady states:
+$$ \bar{S} = 0, \quad \bar{E} = 0,\quad \bar{I} = 0,\quad \bar{R} = 0,\quad  \bar{V}= H$$
+
+
+## Terms 
 
 **Net Infectiousness**
 
@@ -56,17 +125,59 @@ $$x = \frac{X}{H}.$$
 
 In our implementation, net infectiousness (NI) is linearly proportional to prevalence:
 
-$$c x.$$
+$$ni = c x.$$
 
 **Human Transmitting Capacity**
 
 After exposure, a human would remain infected for $1/r$ days, transmitting with probability $c$ so:
 
-$$c/r$$
+$$HTC= c/r$$
 
-**Exposure and Infection**
+## Example `ramp.xds` Setup
 
-In this model family, there is no immunity. The model assumes that a constant fraction of all infectious bites, $b$, cause an infection. 
+We run each of the models using a default setup with 1- stratum  to equilibrium and compare our results with the analytic steady states given above
+
+```{r}
+library(ramp.xds)
+library(ramp.library)
+library(deSolve)
+library(data.table)
+library(ggplot2)
+```
+
+```{r}
+test_SIR<- xds_setup( "test_SIR",dlay = "ode","RM", "SIR")
+xde_solve(test_SIR, 365*5) -> test_SIR
+foi_eq = test_SIR$Xpar[[1]]$b*tail(test_SIR$outputs$terms$EIR,1)
+unlist(list_Xvars(test_SIR$outputs$last_y, test_SIR, 1)) -> inf 
+xde_steady_state_X(foi_eq, 1000, test_SIR$Xpar[[1]]) -> ss
+xds_plot_X(test_SIR)
+```
+
+```{r}
+test_SIRS<- xds_setup( "test_SIRS",dlay = "ode","RM", "SIRS")
+xde_solve(test_SIRS, 365*3) -> test_SIRS
+foi_eq = test_SIRS$Xpar[[1]]$b*tail(test_SIRS$outputs$terms$EIR,1)
+unlist(list_Xvars(test_SIRS$outputs$last_y, test_SIRS, 1)) -> inf_SIRS
+xde_steady_state_X(foi_eq, 1000, test_SIRS$Xpar[[1]]) -> ss_SIRS
+xds_plot_X(test_SIRS)
+```
+```{r}
+test_SEIR<- xds_setup( "test_SEIR",dlay = "ode","RM", "SEIR")
+xde_solve(test_SEIR, 365*5) -> test_SEIR
+foi_eq = test_SEIR$Xpar[[1]]$b*tail(test_SEIR$outputs$terms$EIR,1)
+unlist(list_Xvars(test_SEIR$outputs$last_y, test_SEIR, 1)) -> inf_SEIR
+xde_steady_state_X(foi_eq, 1000, test_SEIR$Xpar[[1]]) -> ss_SEIR
+xds_plot_X(test_SEIR)
+```
+```{r}
+test_SEIRV<- xds_setup( "test_SEIRV",dlay = "ode","RM", "SEIRV")
+xde_solve(test_SEIRV, 365*5) -> test_SEIRV
+foi_eq = test_SEIRV$Xpar[[1]]$b*tail(test_SEIRV$outputs$terms$EIR,1)
+unlist(list_Xvars(test_SEIRV$outputs$last_y, test_SEIRV, 1)) -> inf_SEIRV
+xde_steady_state_X(foi_eq, 1000, test_SEIRV$Xpar[[1]]) -> ss_SEIRV
+xds_plot_X(test_SEIRV)
+```
 
 
 
@@ -75,4 +186,5 @@ In this model family, there is no immunity. The model assumes that a constant fr
 1. Ross R. Report on the Prevention of Malaria in Mauritius. London: Waterlow; 1908.
 2. Ross R. The Prevention of Malaria. 2nd ed. London: John Murray; 1911.
 3. Smith DL, Battle KE, Hay SI, Barker CM, Scott TW, McKenzie FE. Ross, Macdonald, and a theory for the dynamics and control of mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. doi:10.1371/journal.ppat.1002588
+
 

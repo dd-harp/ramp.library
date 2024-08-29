@@ -160,7 +160,7 @@ make_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.workhorse <- function(y, pars, i) {
+F_X.workhorse <- function(t, y, pars, i) {
   with(list_Xvars(y, pars,i),
   with(pars$Xpar[[i]],{
     X = c1*(A1+I1) + c2*(A2+I2) + c3*(A3+I3) + c4*(A4+I4) + cG*G
@@ -173,7 +173,7 @@ F_X.workhorse <- function(y, pars, i) {
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.workhorse <- function(y, pars, i){
+F_H.workhorse <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i), return(H))
 }
 
@@ -337,28 +337,26 @@ update_Xinits.workhorse <- function(pars, y0, i) {
 
 
 #' @title Parse the output of deSolve and return variables for the workhorse model
-#' @description Implements [parse_outputs_X] for the workhorse model
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for the workhorse model
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.workhorse <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    U = outputs[,U_ix+1]
-    A0 = outputs[,A0_ix+1]
-    P = outputs[,P_ix+1]
-    G = outputs[,G_ix+1]
-    I1 = outputs[,I1_ix+1]
-    I2 = outputs[,I2_ix+1]
-    I3 = outputs[,I3_ix+1]
-    I4 = outputs[,I4_ix+1]
-    A1 = outputs[,A1_ix+1]
-    A2 = outputs[,A2_ix+1]
-    A3 = outputs[,A3_ix+1]
-    A4 = outputs[,A4_ix+1]
-    w = outputs[,w_ix+1]
+parse_Xorbits.workhorse <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+    U = outputs[,U_ix]
+    A0 = outputs[,A0_ix]
+    P = outputs[,P_ix]
+    G = outputs[,G_ix]
+    I1 = outputs[,I1_ix]
+    I2 = outputs[,I2_ix]
+    I3 = outputs[,I3_ix]
+    I4 = outputs[,I4_ix]
+    A1 = outputs[,A1_ix]
+    A2 = outputs[,A2_ix]
+    A3 = outputs[,A3_ix]
+    A4 = outputs[,A4_ix]
+    w = outputs[,w_ix]
     H = U+A0+P+G+I1+I2+I3+I4+A1+A2+A3+A4
-    return(list(time=time, U=U, A0=A0, P=P, G=G,
+    return(list( U=U, A0=A0, P=P, G=G,
                 I1=I1, I2=I2, I3=I3, I4=I4,
                 A1=A1, A2=A2, A3=A3, A4=A4,
                 w=w, H=H))
@@ -394,13 +392,14 @@ HTC.workhorse <- function(pars, i) {
 
 #' Add lines for the density of infected individuals for the workhorse model
 #'
+#' @param time a list with the outputs of parse_outputs_X_workhorse
 #' @param XH a list with the outputs of parse_outputs_X_workhorse
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xde_lines_X_workhorse = function(XH, nStrata, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1){
+xds_lines_X_workhorse = function(time, XH, nStrata, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1){
   with(XH,{
     PG = P+G
     I = A0+A1+A2+A3+A4+I1+I2+I3+I4
@@ -432,14 +431,13 @@ xde_lines_X_workhorse = function(XH, nStrata, clrs=c("darkblue","darkgreen", "da
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+xds_plot_X.workhorse = function(pars, i=1, clrs=c("darkblue","darkgreen", "darkred", "purple"), llty=1, add_axes=TRUE){
+  XH = pars$outputs$orbits$XH[[i]]
+  time = pars$outputs$time
 
   if(add_axes==TRUE)
-    with(vars$XH[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
+    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "No of. Infected", xlab = "Time")
 
-
-  xde_lines_X_workhorse(vars$XH[[i]], pars$nStrata[i], clrs, llty)
+  xds_lines_X_workhorse(time, XH, pars$nStrata[i], clrs, llty)
 }

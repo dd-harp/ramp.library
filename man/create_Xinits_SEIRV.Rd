@@ -4,25 +4,14 @@
 \alias{create_Xinits_SEIRV}
 \title{Make initial values for the SEIRV human model, with defaults}
 \usage{
-create_Xinits_SEIRV(
-  nStrata,
-  Xopts = list(),
-  H0 = NULL,
-  S = NULL,
-  I = 1,
-  E = 0,
-  R = 1,
-  V = 1
-)
+create_Xinits_SEIRV(nStrata, H, Xopts = list(), I = 1, E = 0, R = 1, V = 1)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
+\item{H}{the initial value for H}
+
 \item{Xopts}{a [list] to overwrite defaults}
-
-\item{H0}{the initial value for H}
-
-\item{S}{the initial value for S}
 
 \item{I}{the initial value for I}
 

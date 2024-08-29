@@ -6,9 +6,9 @@
 dXdt.SIR<- function(t, y, pars, i) {
 
   foi <- pars$FoI[[i]]
-  Hpar <- pars$Hpar[[i]]
 
   with(list_Xvars(y, pars, i),{
+    Hpar <- pars$Hpar[[i]]
     with(pars$Xpar[[i]], {
 
       dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S
@@ -29,22 +29,19 @@ xde_steady_state_X.SIR = function(foi, H, Xpar){with(Xpar,{
   Ieq = 0
   Req = H
   Seq = 0
-  return(c(S=Seq, I=Ieq, R=Req))
+  return(c(S=as.vector(Seq), I=as.vector(Ieq), R=as.vector(Req)))
 })}
 
 #' @title Make initial values for the SIR human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial value for H
-#' @param S the initial value for S
+#' @param H the initial value for H
 #' @param I the initial value for I
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-create_Xinits_SIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, R = 1){with(Xopts,{
-  if(is.null(S)) S = H0-(I+R)
-  stopifnot(is.numeric(S))
-  S = checkIt(S, nStrata)
+create_Xinits_SIR = function(nStrata,H, Xopts = list(),I=1, R=0){with(Xopts,{
+  S = checkIt(H-I-R, nStrata)
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
   return(list(S=S, I=I, R =R))
@@ -60,10 +57,11 @@ create_Xinits_SIR = function(nStrata, Xopts = list(), H0= NULL, S=NULL, I=1, R =
 #' @inheritParams ramp.xds::make_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SIR = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, create_Xinits_SIR(pars$nStrata[i], Xopts, H0=Hpar[[i]]$H))
+make_Xinits.SIR = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = create_Xinits_SIR(pars$nStrata[i], H, Xopts)
   return(pars)
 }
+
 
 
 #' @title Add indices for human population to parameter list
@@ -130,7 +128,7 @@ get_Xinits.SIR <- function(pars, i){
 #' @export
 update_Xinits.SIR <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = create_Xinits_SIR(pars, list(), S=S, I=I, R=R)
+    pars$Xinits[[i]] = create_Xinits_SIR(pars$nStrata[i], pars$H0, list(), I=I, R=R)
     return(pars)
   })}
 
@@ -177,7 +175,7 @@ make_Xpar.SIR = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIR <- function(y, pars, i) {
+F_X.SIR <- function(t, y, pars, i) {
   I = y[pars$ix$X[[i]]$I_ix]
   Y = with(pars$Xpar[[i]], c*I)
   return(Y)
@@ -192,11 +190,10 @@ F_X.SIR <- function(y, pars, i) {
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SIR <- function(y, pars, i){
-  with(list_Xvars(y, pars, i), {
-    H <- S + I+R
-    return(H)
-  })}
+F_H.SIR <- function(t, y, pars, i){
+  with(list_Xvars(y, pars, i),
+    return(H))
+  }
 
 
 
@@ -208,22 +205,23 @@ F_H.SIR <- function(y, pars, i){
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SIR <- function(y, pars, i) {
-  with(pars$Xpar[[i]],return(b))
+  with(pars$Xpar[[i]], b)
 }
 
 #' @title Parse the output of deSolve and return variables for the SIR model
-#' @description Implements [parse_outputs_X] for the SIR model
-#' @inheritParams ramp.xds::parse_outputs_X
+#' @description Implements [parse_Xorbits] for the SIR model
+#' @inheritParams ramp.xds::parse_Xorbits
 #' @return none
 #' @export
-parse_outputs_X.SIR <- function(outputs, pars, i) {
-  time = outputs[,1]
-  with(pars$ix$X[[i]],{
-    S = outputs[,S_ix+1]
-    I = outputs[,I_ix+1]
-    R = outputs[,R_ix+1]
-    H = S+I+R
-    return(list(time=time, S=S, I=I, R=R, H=H))
+parse_Xorbits.SIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+  S <- outputs[,S_ix]
+  I <- outputs[,I_ix]
+  R <- outputs[,R_ix]
+  H <- S+I+R
+  ni <- pars$Xpar[[i]]$c*I/H
+  true_pr <- I/H
+  vars <- list(S=S, I=I,R=R, H=H, ni=ni, true_pr=true_pr)
+  return(vars)
 })}
 
 
@@ -262,30 +260,26 @@ HTC.SIR <- function(pars, i) {
 
 #' Add lines for the density of infected individuals for the SIR model
 #'
+#' @param time time points for the observations
 #' @param XH a list with the outputs of parse_outputs_X_SIR
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
-#'
 #' @export
-xde_lines_X_SIR = function(XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
+
+xds_lines_X_SIR = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
+  if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
       lines(time, I, col=clrs[2], lty = llty[1])
       lines(time, R, col=clrs[3], lty = llty[1])
-    }
-    if(nStrata>1){
-      if (length(clrs)==3) clrs=matrix(clrs, 3, nStrata)
-      if (length(llty)==1) llty=rep(llty, nStrata)
-
-      for(i in 1:nStrata){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-        lines(time, R[,i], col=clrs[3,i], lty = llty[i])
-      }
-    }
-  })}
+    } else {
+      for(i in 1:nStrata)
+      lines(time, S[,i], col=clrs[1], lty = llty[i])
+      lines(time, I[,i], col=clrs[2], lty = llty[i])
+      lines(time, R[,i], col=clrs[3], lty = llty[i])
+  }})}
 
 
 
@@ -296,14 +290,14 @@ xde_lines_X_SIR = function(XH, nStrata, clrs=c("darkblue","darkred","darkgreen")
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SIR = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+xds_plot_X.SIR = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1,  add_axes=TRUE){
+  XH = pars$outputs$orbits$XH[[i]]
+  time = pars$outputs$time
 
   if(add_axes==TRUE)
-    with(vars$XH[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "No of. Infected", xlab = "Time"))
+         plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+              ylab = "No of. Infected", xlab = "Time")
 
-
-  xde_lines_X_SIR(vars$XH[[i]], pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIR(time, XH, pars$nStrata[i], clrs, llty)
 }
+
