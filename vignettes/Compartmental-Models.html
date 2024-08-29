@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2024-07-29" />
+<meta name="date" content="2024-08-28" />
 
 <title>Compartmental Models</title>
 
@@ -40,6 +40,107 @@ ul.task-list{list-style: none;}
 
 
 
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -237,32 +338,37 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Compartmental Models</h1>
-<h4 class="date">July 29, 2024</h4>
+<h4 class="date">August 28, 2024</h4>
 
 
 
-<p>```</p>
-<div id="section" class="section level1">
-<h1></h1>
-<p>In this vignette, we describe five basic compartmental models for
-mosquito-borne pathogens. The models are named by their states:
-susceptible (S) - exposed (I) - recovered and immune (R), chemoprotected
-(P), vaccinated (V). Not all models include all of the states. In
-ramp.xds, there are six compartmental models: SIS, SIPS, SIR, SIRS,
-SEIR, and SEIRV.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>In this vignette, we describe four basic compartmental models for
+mosquito-borne pathogens commonly used for humans in
+<code>ramp.library</code>. The models are named by their states:
+susceptible (S) - exposed (E) infected (I) - recovered and immune (R),
+and vaccinated (V). According to their setup, not all models include all
+of the states. There are four compartmental models: SIR, SIRS, SEIR, and
+SEIRV. The other models including SIS, SEI and SIP and SEIS are
+described in the <code>ramp.xds</code>.</p>
+<div id="model-variables" class="section level2">
+<h2>Model Variables</h2>
 <ul>
 <li><p><span class="math inline">\(S\)</span> is the density of
 susceptible humans</p></li>
+<li><p><span class="math inline">\(E\)</span> is the density of exposed
+humans</p></li>
 <li><p><span class="math inline">\(I\)</span> is the density of infected
 humans</p></li>
+<li><p><span class="math inline">\(R\)</span> is the density of
+recovered and immune humans</p></li>
+<li><p><span class="math inline">\(V\)</span> is the density of
+vaccinated humans</p></li>
 <li><p><span class="math inline">\(H\)</span> is the density of
 humans</p></li>
 </ul>
 </div>
-<div id="parameters" class="section level3">
-<h3>Parameters</h3>
+<div id="parameters" class="section level2">
+<h2>Parameters</h2>
 <ul>
 <li><p><span class="math inline">\(r\)</span> is the rate infections
 clear</p></li>
@@ -271,32 +377,136 @@ by infective mosquitoes that transmit parasites and cause an
 infection.</p></li>
 <li><p><span class="math inline">\(c\)</span> is the fraction of bites
 on an infectious human that would infect a mosquito.</p></li>
+<li><p><span class="math inline">\(\varepsilon\)</span> proportion of
+recovered individuals progressing into vaccinated class</p></li>
+<li><p><span class="math inline">\(\alpha\)</span> is a proportion of
+vaccinated humans</p></li>
+<li><p><span class="math inline">\(\tau\)</span> is the rate at which
+exposed humans become infectious (incubation rate)</p></li>
+<li><p><span class="math inline">\(\gamma\)</span> rate at which
+recovered human loss their immunity</p></li>
+<li><p><span class="math inline">\(\delta\)</span> proportion of
+recovered humans progressing to vaccinated class</p></li>
 </ul>
 </div>
-<div id="dynamics" class="section level3">
-<h3>Dynamics</h3>
-<p>The model defined herein is defined in two parts. To model exposure
-and infection (<em>i.e.</em> the conversion of eir into foi), we assume
-that the fraction of infective bites that cause an infection is <span class="math inline">\(b\)</span>. The dynamics are given by:</p>
+<div id="dynamics" class="section level2">
+<h2>Dynamics</h2>
+<p>The models defined herein is defined in two parts. To model exposure
+and infection (<em>i.e.</em> the conversion of EIR into FoI (h)), The
+equations are formulated around <span class="math inline">\(h\)</span>.
+Under the default model, we get the relationship <span class="math inline">\(h=bE\)</span>, where E is the daily EIR:</p>
+<div id="the-dynamics-of-susceptible-infected--recovered-sir-are-given-by" class="section level3">
+<h3>The dynamics of Susceptible-Infected- Recovered (SIR) are given
+by:</h3>
 <p><span class="math display">\[
-\frac{dI}{dt} = h (H-I)-rI
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp;B(H) - h S - \mu S\\
+\frac{dI}{dt} &amp;=&amp; h S- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- \mu R
+\end{eqnarray*}
+\]</span> Without demography i.e $ B(H) = = 0$, SIR model has steady
+states as <span class="math display">\[
+\bar{S} = 0, \quad  \bar{I} =0, \quad \bar{R} = H\]</span>.</p>
+</div>
+<div id="the-dynamics-of-susceptible-infected--recovered--suscepitible-sirs-are-given-by" class="section level3">
+<h3>The dynamics of Susceptible-Infected- Recovered -Suscepitible (SIRS)
+are given by:</h3>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp; B(H) - h S + \gamma R - \mu S\\
+\frac{dI}{dt} &amp;=&amp; h S- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- (\mu+ \gamma) R
+\end{eqnarray*}
+\]</span> Without demography, the SIRS model has the following steady
+states as</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\bar{I} &amp;=&amp; \frac{h H\gamma}{r\gamma + h(\gamma+r) }\\
+\bar{R} &amp;=&amp; \frac{h r H}{r\gamma + h(\gamma+r) }\\
+\bar{S} &amp;=&amp; H- \bar{I}-\bar{R}
+\end{eqnarray*}
 \]</span></p>
 </div>
-<div id="terms" class="section level3">
-<h3>Terms</h3>
+<div id="the-dynamics-of-susceptible--exposed--infected--recovered-seir-are-given-by" class="section level3">
+<h3>The dynamics of Susceptible -Exposed -Infected- Recovered (SEIR) are
+given by:</h3>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\frac{dS}{dt} &amp;=&amp; B(H) - h S - \mu S\\
+\frac{dE}{dt} &amp;=&amp; hS - \tau E- \mu E\\
+\frac{dI}{dt} &amp;=&amp; \tau E- (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; r I- \mu R
+\end{eqnarray*}
+\]</span> Without demography, the SEIR model has the steady states given
+as <span class="math display">\[ \bar{S} = 0, \quad \bar{E} = 0,\quad
+\bar{I} = 0,\quad \bar{R} = H\]</span></p>
+</div>
+<div id="the-dynamics-of-susceptible-infected--recovered--suscepitible--vaccinated-seirv-are-based-on-the-are-given-by" class="section level3">
+<h3>The dynamics of Susceptible-Infected- Recovered -Suscepitible-
+Vaccinated (SEIRV) are based on the are given by:</h3>
+<p><span class="math display">\[\begin{eqnarray}
+\frac{dS}{dt} &amp;=&amp;(1-\alpha)B(H) - h S + \gamma R - \mu S\\
+\frac{dE}{dt} &amp;=&amp; h S - (\tau  + \mu)E\\
+\frac{dI}{dt} &amp;= &amp;\tau E - (r +\mu) I\\
+\frac{dR}{dt} &amp;=&amp; (1-\varepsilon) r I- (\gamma+\mu) R\\
+\frac{dV}{dt} &amp;=&amp; \alpha B(H)+ \varepsilon r I -\mu V
+\end{eqnarray}
+\]</span> Without demography, the SEIRV has the following steady states:
+<span class="math display">\[ \bar{S} = 0, \quad \bar{E} = 0,\quad
+\bar{I} = 0,\quad \bar{R} = 0,\quad  \bar{V}= H\]</span></p>
+</div>
+</div>
+<div id="terms" class="section level2">
+<h2>Terms</h2>
 <p><strong>Net Infectiousness</strong></p>
 <p>True prevalence is:</p>
 <p><span class="math display">\[x = \frac{X}{H}.\]</span></p>
 <p>In our implementation, net infectiousness (NI) is linearly
 proportional to prevalence:</p>
-<p><span class="math display">\[c x.\]</span></p>
+<p><span class="math display">\[ni = c x.\]</span></p>
 <p><strong>Human Transmitting Capacity</strong></p>
 <p>After exposure, a human would remain infected for <span class="math inline">\(1/r\)</span> days, transmitting with probability
 <span class="math inline">\(c\)</span> so:</p>
-<p><span class="math display">\[c/r\]</span></p>
-<p><strong>Exposure and Infection</strong></p>
-<p>In this model family, there is no immunity. The model assumes that a
-constant fraction of all infectious bites, <span class="math inline">\(b\)</span>, cause an infection.</p>
+<p><span class="math display">\[HTC= c/r\]</span></p>
+</div>
+<div id="example-ramp.xds-setup" class="section level2">
+<h2>Example <code>ramp.xds</code> Setup</h2>
+<p>We run each of the models using a default setup with 1- stratum to
+equilibrium and compare our results with the analytic steady states
+given above</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ramp.xds)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ramp.library)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>test_SIR<span class="ot">&lt;-</span> <span class="fu">xds_setup</span>( <span class="st">&quot;test_SIR&quot;</span>,<span class="at">dlay =</span> <span class="st">&quot;ode&quot;</span>,<span class="st">&quot;RM&quot;</span>, <span class="st">&quot;SIR&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">xde_solve</span>(test_SIR, <span class="dv">365</span><span class="sc">*</span><span class="dv">5</span>) <span class="ot">-&gt;</span> test_SIR</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>foi_eq <span class="ot">=</span> test_SIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>b<span class="sc">*</span><span class="fu">tail</span>(test_SIR<span class="sc">$</span>outputs<span class="sc">$</span>terms<span class="sc">$</span>EIR,<span class="dv">1</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">list_Xvars</span>(test_SIR<span class="sc">$</span>outputs<span class="sc">$</span>last_y, test_SIR, <span class="dv">1</span>)) <span class="ot">-&gt;</span> inf </span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">xde_steady_state_X</span>(foi_eq, <span class="dv">1000</span>, test_SIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]) <span class="ot">-&gt;</span> ss</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">xds_plot_X</span>(test_SIR)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>test_SIRS<span class="ot">&lt;-</span> <span class="fu">xds_setup</span>( <span class="st">&quot;test_SIRS&quot;</span>,<span class="at">dlay =</span> <span class="st">&quot;ode&quot;</span>,<span class="st">&quot;RM&quot;</span>, <span class="st">&quot;SIRS&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">xde_solve</span>(test_SIRS, <span class="dv">365</span><span class="sc">*</span><span class="dv">3</span>) <span class="ot">-&gt;</span> test_SIRS</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>foi_eq <span class="ot">=</span> test_SIRS<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>b<span class="sc">*</span><span class="fu">tail</span>(test_SIRS<span class="sc">$</span>outputs<span class="sc">$</span>terms<span class="sc">$</span>EIR,<span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">list_Xvars</span>(test_SIRS<span class="sc">$</span>outputs<span class="sc">$</span>last_y, test_SIRS, <span class="dv">1</span>)) <span class="ot">-&gt;</span> inf_SIRS</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">xde_steady_state_X</span>(foi_eq, <span class="dv">1000</span>, test_SIRS<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]) <span class="ot">-&gt;</span> ss_SIRS</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">xds_plot_X</span>(test_SIRS)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>test_SEIR<span class="ot">&lt;-</span> <span class="fu">xds_setup</span>( <span class="st">&quot;test_SEIR&quot;</span>,<span class="at">dlay =</span> <span class="st">&quot;ode&quot;</span>,<span class="st">&quot;RM&quot;</span>, <span class="st">&quot;SEIR&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">xde_solve</span>(test_SEIR, <span class="dv">365</span><span class="sc">*</span><span class="dv">5</span>) <span class="ot">-&gt;</span> test_SEIR</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>foi_eq <span class="ot">=</span> test_SEIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>b<span class="sc">*</span><span class="fu">tail</span>(test_SEIR<span class="sc">$</span>outputs<span class="sc">$</span>terms<span class="sc">$</span>EIR,<span class="dv">1</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">list_Xvars</span>(test_SEIR<span class="sc">$</span>outputs<span class="sc">$</span>last_y, test_SEIR, <span class="dv">1</span>)) <span class="ot">-&gt;</span> inf_SEIR</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">xde_steady_state_X</span>(foi_eq, <span class="dv">1000</span>, test_SEIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]) <span class="ot">-&gt;</span> ss_SEIR</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">xds_plot_X</span>(test_SEIR)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>test_SEIRV<span class="ot">&lt;-</span> <span class="fu">xds_setup</span>( <span class="st">&quot;test_SEIRV&quot;</span>,<span class="at">dlay =</span> <span class="st">&quot;ode&quot;</span>,<span class="st">&quot;RM&quot;</span>, <span class="st">&quot;SEIRV&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">xde_solve</span>(test_SEIRV, <span class="dv">365</span><span class="sc">*</span><span class="dv">5</span>) <span class="ot">-&gt;</span> test_SEIRV</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>foi_eq <span class="ot">=</span> test_SEIRV<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>b<span class="sc">*</span><span class="fu">tail</span>(test_SEIRV<span class="sc">$</span>outputs<span class="sc">$</span>terms<span class="sc">$</span>EIR,<span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">list_Xvars</span>(test_SEIRV<span class="sc">$</span>outputs<span class="sc">$</span>last_y, test_SEIRV, <span class="dv">1</span>)) <span class="ot">-&gt;</span> inf_SEIRV</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">xde_steady_state_X</span>(foi_eq, <span class="dv">1000</span>, test_SEIRV<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]) <span class="ot">-&gt;</span> ss_SEIRV</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">xds_plot_X</span>(test_SEIRV)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
@@ -309,7 +519,6 @@ Waterlow; 1908.</li>
 Macdonald, and a theory for the dynamics and control of
 mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. <a href="doi:10.1371/journal.ppat.1002588" class="uri">doi:10.1371/journal.ppat.1002588</a></li>
 </ol>
-</div>
 </div>
 
 
