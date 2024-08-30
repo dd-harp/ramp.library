@@ -3,28 +3,30 @@ navbar:
   left:
   - text: Functions
     href: reference/index.html
-  - text: Adding Models
+  - text: Articles
     menu:
     - text: Adding Models
       href: articles/Adding_Models.html
-    - text: How to add a new X model
-      href: articles/X-How_To_Add_Model.html
+  - text: Mosquito - Adult
+    menu:
     - text: How to add a new MYZ model
       href: articles/MYZ-How_To_Add_Model.html
+    - text: A Behavioral State Model
+      href: articles/MYZ-xde-RMG.html
+  - text: Mosquito - Aquatic
+    menu:
     - text: How to add a new L model
       href: articles/L-How_To_Add_Model.html
-  - text: X
+  - text: Human / Host
     menu:
+    - text: How to add a new X model
+      href: articles/X-How_To_Add_Model.html
     - text: Compartmental Models
       href: articles/Compartmental-Models.html
     - text: The Garki Model
       href: articles/X-garki.html
     - text: Workhorse
       href: articles/X-xde-workhorse.html
-  - text: MYZ
-    menu:
-    - text: A Behavioral State Model
-      href: articles/MYZ-xde-RMG.html
   right:
   - icon: fa-github
     href: https://github.com/dd-harp/ramp.library/
