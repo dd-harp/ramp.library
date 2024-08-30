@@ -1,5 +1,5 @@
-# **`ramp.library`** - Dynamical Systems Models for Mosquito-Transmitted Pathogens
-## *A code library for the epidemiology, spatial transmission dynamics, and control of malaria and other mosquito-borne pathogens*
+# **`ramp.library`** - A Code Library for [**`ramp.xds`**](https://dd-harp.github.io/ramp.xds/) 
+## *Dynamical Systems Models Describing the Epidemiology, Spatial Transmission Dynamics, and Control of Malaria and Other Mosquito-borne Pathogens*
 
 <!-- badges: start -->
 [![PLoS Computational Biology](https://img.shields.io/badge/doi%3A10.1371%2Fjournal.pcbi.1010684-cornflowerblue?style=for-the-badge&logoColor=cornflowerblue&label=PLoS%20Comp%20Bio&labelColor=slategrey&link=https%3A%2F%2Fjournals.plos.org%2Fploscompbiol%2Farticle%3Fid%3D10.1371%2Fjournal.pcbi.1010684)](https://doi.org/10.1371/journal.pcbi.1010684)
