@@ -271,37 +271,37 @@ get_Xinits.SIPw <- function(pars, i){pars$Xinits[[i]]}
 #' @export
 xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add_axes=TRUE){
   XH = pars$outputs$orbits$XH[[i]]
-  time = pars$outputs$time
+  times = pars$outputs$time
 
   if(add_axes==TRUE)
-    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+    plot(times, 0*times, type = "n", ylim = c(0, max(XH$H)),
          ylab = "# Infected", xlab = "Time")
 
-  xds_lines_X_SIPw(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIPw(times, XH, pars$nStrata[i], clrs, llty)
 }
 
 
 #' Add lines for the density of infected individuals for the SIP model
 #'
-#' @param time time points for the observations
+#' @param times time points for the observations
 #' @param XH a list with the outputs of parse_Xorbits.SIP
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xds_lines_X_SIPw = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
+xds_lines_X_SIPw = function(times, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata == 1){
-      lines(time, S, col=clrs[1], lty = llty)
-      lines(time, I, col=clrs[2], lty = llty)
-      lines(time, P, col=clrs[3], lty = llty)
+      lines(times, S, col=clrs[1], lty = llty)
+      lines(times, I, col=clrs[2], lty = llty)
+      lines(times, P, col=clrs[3], lty = llty)
     } else {
       for(i in 1:nStrata)
-        lines(time, S[,i], col=clrs[1], lty = llty[i])
-      lines(time, I[,i], col=clrs[2], lty = llty[i])
-      lines(time, P[,i], col=clrs[3], lty = llty[i])
+        lines(times, S[,i], col=clrs[1], lty = llty[i])
+        lines(times, I[,i], col=clrs[2], lty = llty[i])
+        lines(times, P[,i], col=clrs[3], lty = llty[i])
     }})
 }
 
