@@ -44,7 +44,7 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Adding Models
+    Articles
      
     <span class="caret"></span>
   </a>
@@ -52,25 +52,46 @@
 <li>
       <a href="articles/Adding_Models.html">Adding Models</a>
     </li>
-    <li>
-      <a href="articles/X-How_To_Add_Model.html">How to add a new X model</a>
-    </li>
-    <li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
+      <a href="articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    X
+    Human / Host
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/X-How_To_Add_Model.html">How to add a new X model</a>
+    </li>
+    <li>
       <a href="articles/Compartmental-Models.html">Compartmental Models</a>
     </li>
     <li>
@@ -78,18 +99,6 @@
     </li>
     <li>
       <a href="articles/X-xde-workhorse.html">Workhorse</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    MYZ
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
     </li>
   </ul>
 </li>
@@ -146,7 +155,11 @@
 </h2>
 <p><strong><code>ramp.xds</code></strong> is an R software package that supports nimble model building for simulation-based analytics and malaria research. It was designed to help research scientists and policy analysts set up, analyze, solve, and apply dynamical systems models describing the epidemiology, spatial transmission dynamics, and control of malaria and other mosquito-transmitted pathogens. The software also supports nimble model building and analysis for mosquito ecology, with the capability to handle forcing by weather and other exogenous variables.</p>
 <p>The software was designed around a rigorous mathematical framework for modular model building, described in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" class="external-link">Spatial Dynamics of Malaria Transmission</a> (Wu SL, <em>et al.</em> 2023. PLoS Computational Biology)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The mathematical framework has now been extended to cover <em>exogenous forcing</em> by weather and vector control.</p>
-<p><strong><code>ramp.library</code></strong> is a code library for <strong><code>ramp.xds</code>.</strong> These two packages are part of a suite of R packages developed to support RAMP:</p>
+</div>
+<div class="section level2">
+<h2 id="what-is-ramplibrary">What is <strong><code>ramp.library</code></strong>?<a class="anchor" aria-label="anchor" href="#what-is-ramplibrary"></a>
+</h2>
+<p><strong><code>ramp.library</code></strong> is a code library with models that can be used by <strong><code>ramp.xds</code>.</strong> Thee two packages are part of a suite of R packages developed to support RAMP:</p>
 <ul>
 <li><p><strong><code>ramp.xds</code></strong> is the core computational engine for simulation-based analytics. It includes a basic set of models – enough to design, verify, and demonstrate the basic features of modular software.</p></li>
 <li><p><a href="https://dd-harp.github.io/ramp.library/"><strong><code>ramp.library</code></strong></a> is an extended library of stable code that has been tested and verified. It includes a large set of model families published in peer review that are not included in <strong><code>ramp.xds</code></strong> The ability to reuse code reduces the costs of replicating studies. Through this library, <strong><code>ramp.xds</code></strong> also supports nimble model building and analytics for other mosquito-borne pathogens.</p></li>

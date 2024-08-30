@@ -44,7 +44,7 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Adding Models
+    Articles
      
     <span class="caret"></span>
   </a>
@@ -52,25 +52,46 @@
 <li>
       <a href="../articles/Adding_Models.html">Adding Models</a>
     </li>
-    <li>
-      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
-    </li>
-    <li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
+      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    X
+    Human / Host
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+    </li>
+    <li>
       <a href="../articles/Compartmental-Models.html">Compartmental Models</a>
     </li>
     <li>
@@ -78,18 +99,6 @@
     </li>
     <li>
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    MYZ
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
     </li>
   </ul>
 </li>
@@ -116,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Compartmental Models</h1>
             
-            <h4 data-toc-skip class="date">August 29, 2024</h4>
+            <h4 data-toc-skip class="date">August 30, 2024</h4>
       
       
       <div class="hidden name"><code>Compartmental-Models.Rmd</code></div>
@@ -270,11 +279,9 @@ given above</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dd-harp.github.io/ramp.xds/" class="external-link">ramp.xds</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ramp.library</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: package 'data.table' was built under R version 4.3.3</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_SIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SIR"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SIR"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
 <span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
@@ -282,7 +289,7 @@ given above</p>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_SIRS</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SIRS"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SIRS"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SIRS</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIRS</span></span>
 <span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
@@ -290,7 +297,7 @@ given above</p>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SIRS</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_SEIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SEIR"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SEIR"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SEIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIR</span></span>
 <span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
@@ -298,7 +305,7 @@ given above</p>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIR</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_SEIRV</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span> <span class="st">"test_SEIRV"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>,<span class="st">"RM"</span>, <span class="st">"SEIRV"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SEIRV</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIRV</span></span>
 <span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIRV</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
@@ -335,7 +342,7 @@ mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. <a href="doi:10.1
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by David L. Smith.</p>
+<p>Developed by David L. Smith, Juliet Nsumba Nakakawa, Doreen Mbabazi Ssebuliba.</p>
 </div>
 
 <div class="pkgdown">

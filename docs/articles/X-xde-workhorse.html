@@ -44,7 +44,7 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Adding Models
+    Articles
      
     <span class="caret"></span>
   </a>
@@ -52,25 +52,46 @@
 <li>
       <a href="../articles/Adding_Models.html">Adding Models</a>
     </li>
-    <li>
-      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
-    </li>
-    <li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
+      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
       <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    X
+    Human / Host
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+    </li>
+    <li>
       <a href="../articles/Compartmental-Models.html">Compartmental Models</a>
     </li>
     <li>
@@ -78,18 +99,6 @@
     </li>
     <li>
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    MYZ
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
     </li>
   </ul>
 </li>
@@ -116,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>A Workhorse Model for Human Infection</h1>
             
-            <h4 data-toc-skip class="date">August 29, 2024</h4>
+            <h4 data-toc-skip class="date">August 30, 2024</h4>
       
       
       <div class="hidden name"><code>X-xde-workhorse.Rmd</code></div>
@@ -126,10 +135,8 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: package 'knitr' was built under R version 4.3.3</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dd-harp.github.io/ramp.xds/" class="external-link">ramp.xds</a></span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dd-harp.github.io/ramp.xds/" class="external-link">ramp.xds</a></span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#suppressMessages(library(ramp.library))</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ramp.library</span><span class="op">)</span></span>
@@ -217,9 +224,9 @@ I_n\\
 \frac{d w_i}{da} &amp;=  h_\tau - \delta_I w_i \\
 \end{array}
 \]</span></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#devtools::load_all()</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>dlay <span class="op">=</span> <span class="st">'dde'</span>, </span>
 <span>                Xname <span class="op">=</span> <span class="st">"workhorse"</span>, </span>
 <span>                HPop<span class="op">=</span><span class="fl">1000</span>,</span>
@@ -229,16 +236,16 @@ I_n\\
 <span>                  season <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">pi</span><span class="op">*</span><span class="va">t</span><span class="op">/</span><span class="fl">365</span><span class="op">)</span><span class="op">}</span></span>
 <span>                  <span class="op">)</span></span>
 <span>                <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">wh</span>, Tmax <span class="op">=</span> <span class="fl">5</span><span class="op">*</span><span class="fl">365</span>, dt<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wh1</span> <span class="op">=</span> <span class="va">wh</span> </span>
 <span><span class="va">wh1</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">zeta_1</span> <span class="op">=</span> <span class="fl">0.02</span></span>
 <span><span class="va">wh1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">wh1</span>, Tmax <span class="op">=</span> <span class="fl">5</span><span class="op">*</span><span class="fl">365</span>, dt<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">wh</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">wh1</span>, llty<span class="op">=</span><span class="fl">2</span>, add_axes<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">wh</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">orbits</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,<span class="op">{</span></span>
 <span>  <span class="va">A</span> <span class="op">=</span> <span class="va">A0</span><span class="op">+</span><span class="va">A1</span><span class="op">+</span><span class="va">A2</span><span class="op">+</span><span class="va">A3</span><span class="op">+</span><span class="va">A4</span></span>
 <span>  <span class="va">I</span> <span class="op">=</span> <span class="va">I1</span><span class="op">+</span><span class="va">I2</span><span class="op">+</span><span class="va">I3</span><span class="op">+</span><span class="va">I4</span></span>
@@ -274,7 +281,7 @@ I_n\\
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by David L. Smith.</p>
+<p>Developed by David L. Smith, Juliet Nsumba Nakakawa, Doreen Mbabazi Ssebuliba.</p>
 </div>
 
 <div class="pkgdown">
