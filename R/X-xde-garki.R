@@ -6,16 +6,16 @@
 #' @return a [numeric] vector
 #' @export
 dXdt.garki = function(t, y, pars, i){
-  
+
   foi <- pars$FoI[[i]]
   Hpar <- pars$Hpar[[i]]
-  
+
   with(list_Xvars(y, pars, i),{
-    
+
     with(pars$Xpar[[i]],{
       R1 = foi/(exp(foi/r1) - 1)
       R2 = foi/(exp(foi/r2) - 1)
-      
+
       #dx1 = Births(t, x1, pars) - FoI*x1 + R1*y2 + dHdt(t, x1, pars)
       dx1 = - foi*x1 + R1*y2 + dHdt(t, x1, Hpar)
       dx2 = foi*x1 - nu*x2 + dHdt(t, x2, Hpar)
@@ -25,7 +25,7 @@ dXdt.garki = function(t, y, pars, i){
       dx3 = R2*y3 - foi*x3 + dHdt(t, x3, Hpar)
       dx4 = foi*x3 - nu*x4 + dHdt(t, x4, Hpar)
       #dH =  dHdt(t, H, pars)
-      
+
       return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4, dH))
     })
   })
@@ -64,7 +64,7 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
   with(Xopts,{
     xde <- 'ode'
     class(xde) <- 'ode'
-    
+
     garki = list()
     class(garki) <- "garki_xde"
     garki$xde <- xde
@@ -78,7 +78,7 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
     garki$q1=checkIt(q1, nStrata)
     garki$q2=checkIt(q2, nStrata)
     garki$q3=checkIt(q3, nStrata)
-    
+
     return(garki)
   })}
 
@@ -168,7 +168,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
   stopifnot(is.numeric(x4))
   if(is.null(x1)) x1 = H0 - x2 - y1 - y2 - y3 - x3 - x4
   stopifnot(x1>0)
-  
+
   x1 = checkIt(x1, nStrata)
   x2 = checkIt(x2, nStrata)
   y1 = checkIt(y1, nStrata)
@@ -185,7 +185,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
 #' @return a [list] vector
 #' @export
 make_Xinits.garki = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,create_Xinits_garki(pars$nStrata[i], H,Xopts))
+  pars$Xinits[[i]] = with(pars,create_Xinits_garki(pars$nStrata[i], Xopts, H=H))
   return(pars)
 }
 
@@ -205,33 +205,33 @@ get_Xinits.garki <- function(pars, i){
 #' @importFrom utils tail
 #' @export
 make_X_indices.garki <- function(pars, i) {with(pars,{
-  
+
   x1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x1_ix, 1)
-  
+
   x2_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x2_ix, 1)
-  
+
   y1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y1_ix, 1)
-  
+
   y2_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y2_ix, 1)
-  
+
   y3_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(y3_ix, 1)
-  
+
   x3_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x3_ix, 1)
-  
+
   x4_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x4_ix, 1)
-  
+
   pars$max_ix <- max_ix
   pars$ix$X[[i]] = list(x1_ix = x1_ix,  x2_ix = x2_ix,
                         y1_iy = y1_iy,  y2_iy = y2_iy,  y3_iy = y3_iy,
                         x3_ix = x3_ix,  x4_ix = x4_ix)
-  
+
   return(pars)
 })}
 
@@ -273,12 +273,12 @@ parse_Xorbits.garki <- function(outputs, pars, i) {
 #' @export
 xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, add_axes=TRUE){
   vars=with(pars$outputs,if(stable==TRUE){stable_orbits}else{orbits})
-  
+
   if(add_axes==TRUE)
     with(vars$XH[[i]],
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
               ylab = "# Infected", xlab = "Time"))
-  
+
   xds_lines_X_garki(vars$XH, pars, clrs, llty)
 }
 
