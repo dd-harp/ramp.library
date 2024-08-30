@@ -5,7 +5,7 @@
 \title{Add lines for the density of infected individuals for the SIP model}
 \usage{
 xds_lines_X_SIPw(
-  time,
+  times,
   XH,
   nStrata,
   clrs = c("darkblue", "darkred", "darkgreen"),
@@ -13,7 +13,7 @@ xds_lines_X_SIPw(
 )
 }
 \arguments{
-\item{time}{time points for the observations}
+\item{times}{time points for the observations}
 
 \item{XH}{a list with the outputs of parse_Xorbits.SIP}
 

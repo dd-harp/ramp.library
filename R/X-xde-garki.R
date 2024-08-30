@@ -185,7 +185,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
 #' @return a [list] vector
 #' @export
 make_Xinits.garki = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,create_Xinits_garki(pars$nStrata[i], H,Xopts))
+  pars$Xinits[[i]] = with(pars,create_Xinits_garki(pars$nStrata[i], Xopts, H=H))
   return(pars)
 }
 
@@ -323,15 +323,15 @@ xds_lines_X_garki= function(XH, pars, clrs=viridisLite::turbo(7), llty=1){
 #' @return none
 #' @export
 parse_Xorbits.garki <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-    x1 = outputs[,x1_ix]
-    x2 = outputs[,x2_ix]
-    y1 = outputs[,y1_ix]
-    y2 = outputs[,y2_ix]
-    y3 = outputs[,y3_ix]
-    x3 = outputs[,x3_ix]
-    x4 = outputs[,x4_ix]
-    return(list(x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
-  })}
+  x1 = outputs[,x1_ix]
+  x2 = outputs[,x2_ix]
+  y1 = outputs[,y1_ix]
+  y2 = outputs[,y2_ix]
+  y3 = outputs[,y3_ix]
+  x3 = outputs[,x3_ix]
+  x4 = outputs[,x4_ix]
+  return(list(x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
+})}
 
 
 #' @title Compute the HTC for the garki model
