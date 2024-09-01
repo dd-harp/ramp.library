@@ -5,13 +5,17 @@ articles:
   Adding_Models: Adding_Models.html
   Compartmental-Models: Compartmental-Models.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
+  L-Overview: L-Overview.html
+  Malaria-Overview: Malaria-Overview.html
   MYZ-How_To_Add_Model: MYZ-How_To_Add_Model.html
+  MYZ-macdonald: MYZ-macdonald.html
+  MYZ-Overview: MYZ-Overview.html
   MYZ-xde-RMG: MYZ-xde-RMG.html
   X-garki: X-garki.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
   X-xde-workhorse: X-xde-workhorse.html
-last_built: 2024-08-30T16:11Z
+last_built: 2024-09-01T04:54Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

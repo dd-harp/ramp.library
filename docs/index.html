@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A library of models and algorithms for RAMP (Robust Analytics for Malaria Policy) • ramp.library</title>
+<title>A code library for ramp.xds • ramp.library</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A library of models and algorithms for RAMP (Robust Analytics for Malaria Policy)">
+<script src="pkgdown.js"></script><meta property="og:title" content="A code library for ramp.xds">
 <meta property="og:description" content="Reusable algorithms, encoded and rigorously tested, to implement dynamical systems models for malaria and other mosquito-transmitted pathogens.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
       </span>
     </div>
 
@@ -62,6 +62,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/MYZ-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
@@ -77,6 +80,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul>
@@ -89,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/X-How_To_Add_Model.html">How to add a new X model</a>
+      <a href="articles/Malaria-Overview.html">Malaria Overview</a>
     </li>
     <li>
       <a href="articles/Compartmental-Models.html">Compartmental Models</a>
+    </li>
+    <li>
+      <a href="articles/X-How_To_Add_Model.html">How to add a new X model</a>
     </li>
     <li>
       <a href="articles/X-garki.html">The Garki Model</a>
@@ -139,7 +148,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><strong><code>ramp.library</code></strong> is a code library that extends <a href="https://dd-harp.github.io/ramp.xds/" class="external-link"><strong><code>ramp.xds</code>.</strong></a></p>
+<p><strong><code>ramp.library</code></strong> is a code library of model families that extends <a href="https://dd-harp.github.io/ramp.xds/" class="external-link"><strong><code>ramp.xds</code>.</strong></a> It aims to become a comprehensive library holding published model families with code that has been verified and tested.</p>
 <p>To install the latest version of <strong><code>ramp.xds</code></strong> from GitHub, run the following lines of code in an R session.</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"dd-harp/ramp.xds"</span><span class="op">)</span></span></code></pre>
@@ -162,8 +171,8 @@
 </h2>
 <p><strong><code>ramp.library</code></strong> is a code library with models that can be used by <strong><code>ramp.xds</code>.</strong> Thee two packages are part of a suite of R packages developed to support RAMP:</p>
 <ul>
-<li><p><strong><code>ramp.xds</code></strong> is the core computational engine for simulation-based analytics. It includes a basic set of models – enough to design, verify, and demonstrate the basic features of modular software.</p></li>
-<li><p><a href="https://dd-harp.github.io/ramp.library/"><strong><code>ramp.library</code></strong></a> is an extended library of stable code that has been tested and verified. It includes a large set of model families published in peer review that are not included in <strong><code>ramp.xds</code></strong> The ability to reuse code reduces the costs of replicating studies. Through this library, <strong><code>ramp.xds</code></strong> also supports nimble model building and analytics for other mosquito-borne pathogens.</p></li>
+<li><p><a href="https://dd-harp.github.io/ramp.xds/" class="external-link"><strong><code>ramp.xds</code>.</strong></a> is the core computational engine for simulation-based analytics. It includes a basic set of models – enough to design, verify, and demonstrate the basic features of modular software.</p></li>
+<li><p><strong><code>ramp.library</code></strong> is an extended library of stable code that has been tested and verified. It includes a large set of model families published in peer review that are not included in <strong><code>ramp.xds</code></strong> The ability to reuse code reduces the costs of replicating studies. Through this library, <strong><code>ramp.xds</code></strong> also supports nimble model building and analytics for other mosquito-borne pathogens.</p></li>
 <li><p><a href="https://dd-harp.github.io/ramp.work/" class="external-link"><strong><code>ramp.work</code></strong></a> includes algorithms to apply the framework, include code to fit models to data and to do constrained optimization</p></li>
 <li><p><a href="https://dd-harp.github.io/ramp.malaria/" class="external-link"><strong><code>ramp.malaria</code></strong></a> includes a large set of models illustrating capabilities of <strong><code>ramp.xds</code></strong></p></li>
 </ul>

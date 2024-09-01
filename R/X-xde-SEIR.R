@@ -315,11 +315,11 @@ xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkre
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add_axes=TRUE){
+xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add=FALSE){
   XH = pars$outputs$orbits$XH[[i]]
   time = pars$outputs$time
 
-  if(add_axes==TRUE)
+  if(add==FALSE)
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "No of. Infected", xlab = "Time")
   xds_lines_X_SEIR(time, XH, pars$nStrata[i], clrs, llty)

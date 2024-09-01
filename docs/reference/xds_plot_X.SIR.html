@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
       </span>
     </div>
 
@@ -42,6 +42,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/MYZ-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
@@ -55,6 +58,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul></li>
@@ -65,10 +71,13 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+      <a href="../articles/Malaria-Overview.html">Malaria Overview</a>
     </li>
     <li>
       <a href="../articles/Compartmental-Models.html">Compartmental Models</a>
+    </li>
+    <li>
+      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
     </li>
     <li>
       <a href="../articles/X-garki.html">The Garki Model</a>
@@ -108,7 +117,7 @@
 <span>  i <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  clrs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"darkred"</span>, <span class="st">"darkgreen"</span><span class="op">)</span>,</span>
 <span>  llty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  add_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,8 +139,8 @@
 <dd><p>an integer (or integers) to set the <code>lty</code> for plotting</p></dd>
 
 
-<dt>add_axes</dt>
-<dd><p>a logical: plot axes only if TRUE</p></dd>
+<dt>add</dt>
+<dd><p>plot axes only if FALSE</p></dd>
 
 </dl></div>
 

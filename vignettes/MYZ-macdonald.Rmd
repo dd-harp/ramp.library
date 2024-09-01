@@ -1,0 +1,30 @@
+---
+title: "Macdonald's Model for Mosquito Infection Dynamics"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Macdonald's Model for Mosquito Infection Dynamics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
+library(knitr)
+library(ramp.xds)
+library(deSolve)
+library(ramp.library)
+```
+
+In 1952, George Macdonald published [*The analysis of the sporozoite rate*](https://pubmed.ncbi.nlm.nih.gov/14958825/).  Later that year, in  [*The analysis of equilibrium in malaria*](https://pubmed.ncbi.nlm.nih.gov/12995455/), Macdonald presented a formula for the *basic reproduction rate* of malaria parasites, now often called $R_0$ (pronounced R-naught). We have included a version of that model, called *`macdonald`* in **`ramp.library`** for several reasons. For a longer discussion, see the [overview](MYZ-Overview.html). 
+
+## Before Macdonald
+
+Before Macdonald, Ross had published mathematical models describing the coupled dynamics of parasite infections in mosquitoes and humans. 
+
+## Macdonald's Model
+
+## Aron's Model 
+
+## Generalized 
+
+

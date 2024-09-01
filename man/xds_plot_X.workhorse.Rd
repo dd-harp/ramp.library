@@ -9,7 +9,7 @@
   i = 1,
   clrs = c("darkblue", "darkgreen", "darkred", "purple"),
   llty = 1,
-  add_axes = TRUE
+  add = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@
 
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 
-\item{add_axes}{a logical: plot axes only if TRUE}
+\item{add}{plot axes only if FALSE}
 }
 \description{
 Plot the density of infected individuals for the workhorse model

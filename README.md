@@ -8,7 +8,7 @@
 
 ## Installation 
 
-**`ramp.library`** is a code library that extends [**`ramp.xds`.**](https://dd-harp.github.io/ramp.xds/) 
+**`ramp.library`** is a code library of model families that extends [**`ramp.xds`.**](https://dd-harp.github.io/ramp.xds/) It aims to become a comprehensive library holding published model families with code that has been verified and tested. 
 
 To install the latest version of **`ramp.xds`** from GitHub, run the following lines of code in an R session.
 
@@ -36,9 +36,9 @@ The software was designed around a rigorous mathematical framework for modular m
 
 **`ramp.library`** is a code library with models that can be used by **`ramp.xds`.** Thee two packages are part of a suite of R packages developed to support RAMP: 
 
-+ **`ramp.xds`** is the core computational engine for simulation-based analytics. It includes a basic set of models -- enough to design, verify, and demonstrate the basic features of modular software. 
++ [**`ramp.xds`.**](https://dd-harp.github.io/ramp.xds/) is the core computational engine for simulation-based analytics. It includes a basic set of models -- enough to design, verify, and demonstrate the basic features of modular software. 
 
-+  [**`ramp.library`**](https://dd-harp.github.io/ramp.library/) is an extended library of stable code that has been tested and verified. It includes a large set of model families published in peer review that are not included in **`ramp.xds`** The ability to reuse code reduces the costs of replicating studies. Through this library, **`ramp.xds`** also supports nimble model building and analytics for other mosquito-borne pathogens. 
++  **`ramp.library`** is an extended library of stable code that has been tested and verified. It includes a large set of model families published in peer review that are not included in **`ramp.xds`** The ability to reuse code reduces the costs of replicating studies. Through this library, **`ramp.xds`** also supports nimble model building and analytics for other mosquito-borne pathogens. 
 
 + [**`ramp.work`**](https://dd-harp.github.io/ramp.work/) includes algorithms to apply the framework, include code to fit models to data and to do constrained optimization 
 

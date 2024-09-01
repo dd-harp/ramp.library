@@ -1,0 +1,19 @@
+---
+title: "Models for Malaria Epidemiology"
+subtitle: "An Overview"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Models for Malaria Epidemiology}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
+library(knitr)
+library(ramp.xds)
+library(deSolve)
+library(ramp.library)
+```
+
+

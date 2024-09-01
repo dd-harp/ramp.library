@@ -19,13 +19,25 @@
     <loc>https://dd-harp.github.io/ramp.library/articles/L-How_To_Add_Model.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/L-Overview.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-How_To_Add_Model.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-Overview.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-xde-RMG.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZmod-RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/Malaria-Overview.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/X-How_To_Add_Model.html</loc>
@@ -190,6 +202,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_emerge.stages_dts.html</loc>
   </url>
   <url>
@@ -205,6 +220,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.ENBRQ_dts.html</loc>
   </url>
   <url>
@@ -212,6 +230,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_nu.dddn.html</loc>
@@ -304,6 +325,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SIPw.html</loc>
   </url>
   <url>
@@ -325,10 +349,16 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/create_MYZinits_RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/create_MYZinits_macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/create_MYZpar_ENBRQ_dts.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/create_MYZpar_RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/create_MYZpar_macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/create_Xinits_SEIR.html</loc>
@@ -385,6 +415,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.SEIR.html</loc>
   </url>
   <url>
@@ -439,6 +472,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZinits.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_Xinits.SEIR.html</loc>
   </url>
   <url>
@@ -463,7 +499,13 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_f.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_f.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_g.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_g.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_inits_L.stages_dts.html</loc>
@@ -514,7 +556,13 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_q.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_q.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/hello.html</loc>
@@ -527,6 +575,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/list_MYZvars.ENBRQ_dts.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/list_MYZvars.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/list_Xvars.SEIR.html</loc>
@@ -580,6 +631,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_ENBRQ_dts.html</loc>
   </url>
   <url>
@@ -593,6 +647,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_ENBRQ_dts.html</loc>
@@ -745,6 +802,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_MYZ.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_MYZ.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_indices_X.SEIR.html</loc>
   </url>
   <url>
@@ -809,6 +869,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_MYZorbits.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_MYZorbits.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_Xorbits.SEIR.html</loc>
@@ -1009,6 +1072,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/update_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/update_MYZinits.macdonald.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_Xinits.SEIR.html</loc>
   </url>
   <url>
@@ -1151,6 +1217,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_setup_Xpar.workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xde_steady_state_MYZ.macdonald.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_steady_state_X.SEIR.html</loc>
