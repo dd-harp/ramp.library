@@ -9,20 +9,26 @@ navbar:
       href: articles/Adding_Models.html
   - text: Mosquito - Adult
     menu:
+    - text: Overview
+      href: articles/MYZ-Overview.html
     - text: How to add a new MYZ model
       href: articles/MYZ-How_To_Add_Model.html
     - text: A Behavioral State Model
       href: articles/MYZ-xde-RMG.html
   - text: Mosquito - Aquatic
     menu:
+    - text: Overview
+      href: articles/L-Overview.html
     - text: How to add a new L model
       href: articles/L-How_To_Add_Model.html
   - text: Human / Host
     menu:
-    - text: How to add a new X model
-      href: articles/X-How_To_Add_Model.html
+    - text: Malaria Overview
+      href: articles/Malaria-Overview.html
     - text: Compartmental Models
       href: articles/Compartmental-Models.html
+    - text: How to add a new X model
+      href: articles/X-How_To_Add_Model.html
     - text: The Garki Model
       href: articles/X-garki.html
     - text: Workhorse
@@ -62,6 +68,27 @@ reference:
   - get_f.RMG
   - get_q.RMG
   - get_sigma.RMG
+- subtitle: Macdonald's Adult Mosquito Model
+  contents:
+  - F_eggs.macdonald
+  - F_fqZ.macdonald
+  - F_fqM.macdonald
+  - list_MYZvars.macdonald
+  - xde_steady_state_MYZ.macdonald
+  - MBionomics.macdonald
+  - dMYZdt.macdonald
+  - get_MYZinits.macdonald
+  - make_MYZinits.macdonald
+  - create_MYZinits_macdonald
+  - make_MYZpar.macdonald
+  - create_MYZpar_macdonald
+  - make_indices_MYZ.macdonald
+  - parse_MYZorbits.macdonald
+  - update_MYZinits.macdonald
+  - get_g.macdonald
+  - get_f.macdonald
+  - get_q.macdonald
+  - get_sigma.macdonald
 - subtitle: ENBRQ_dts
   desc: |
     Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.

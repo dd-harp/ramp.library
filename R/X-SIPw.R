@@ -269,11 +269,11 @@ get_Xinits.SIPw <- function(pars, i){pars$Xinits[[i]]}
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add_axes=TRUE){
+xds_plot_X.SIPw = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add=FALSE){
   XH = pars$outputs$orbits$XH[[i]]
   times = pars$outputs$time
 
-  if(add_axes==TRUE)
+  if(add==FALSE)
     plot(times, 0*times, type = "n", ylim = c(0, max(XH$H)),
          ylab = "# Infected", xlab = "Time")
 

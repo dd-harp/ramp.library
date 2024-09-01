@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
       </span>
     </div>
 
@@ -42,6 +42,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/MYZ-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
@@ -55,6 +58,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
       <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul></li>
@@ -65,10 +71,13 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+      <a href="../articles/Malaria-Overview.html">Malaria Overview</a>
     </li>
     <li>
       <a href="../articles/Compartmental-Models.html">Compartmental Models</a>
+    </li>
+    <li>
+      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
     </li>
     <li>
       <a href="../articles/X-garki.html">The Garki Model</a>
@@ -169,6 +178,86 @@
         <td><p>Get the feeding rate</p></td>
       </tr><tr><td>
           <p><code><a href="get_sigma.RMG.html">get_sigma(<i>&lt;RMG&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the feeding rate</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="macdonald-s-adult-mosquito-model">Macdonald’s Adult Mosquito Model <a href="#macdonald-s-adult-mosquito-model" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="F_eggs.macdonald.html">F_eggs(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Number of eggs laid by adult mosquitoes</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_fqZ.macdonald.html">F_fqZ(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The net blood feeding rate of the infective mosquito population in a patch</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_fqM.macdonald.html">F_fqM(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The net blood feeding rate of the infective mosquito population in a patch</p></td>
+      </tr><tr><td>
+          <p><code><a href="list_MYZvars.macdonald.html">list_MYZvars(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="xde_steady_state_MYZ.macdonald.html">xde_steady_state_MYZ(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="MBionomics.macdonald.html">MBionomics(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Macdonald-style adult mosquito bionomics</p></td>
+      </tr><tr><td>
+          <p><code><a href="dMYZdt.macdonald.html">dMYZdt(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Derivatives for adult mosquitoes</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_MYZinits.macdonald.html">get_MYZinits(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return initial values as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_MYZinits.macdonald.html">make_MYZinits(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup initial values for the macdonald model</p></td>
+      </tr><tr><td>
+          <p><code><a href="create_MYZinits_macdonald.html">create_MYZinits_macdonald()</a></code> </p>
+        </td>
+        <td><p>Make inits for macdonald adult mosquito model</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_MYZpar.macdonald.html">make_MYZpar(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup MYZpar for the macdonald model</p></td>
+      </tr><tr><td>
+          <p><code><a href="create_MYZpar_macdonald.html">create_MYZpar_macdonald()</a></code> </p>
+        </td>
+        <td><p>Make parameters for macdonald ODE adult mosquito model</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_indices_MYZ.macdonald.html">make_indices_MYZ(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for adult mosquitoes to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="parse_MYZorbits.macdonald.html">parse_MYZorbits(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Parse the output of deSolve and return variables for the macdonald model</p></td>
+      </tr><tr><td>
+          <p><code><a href="update_MYZinits.macdonald.html">update_MYZinits(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Update inits for macdonald adult mosquito model</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_g.macdonald.html">get_g(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the feeding rate</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_f.macdonald.html">get_f(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the feeding rate</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_q.macdonald.html">get_q(<i>&lt;macdonald&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the feeding rate</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_sigma.macdonald.html">get_sigma(<i>&lt;macdonald&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get the feeding rate</p></td>
       </tr></tbody><tbody><tr><th colspan="2">

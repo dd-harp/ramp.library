@@ -257,24 +257,24 @@ HTC.SIRS <- function(pars, i) {
 
 #' Add lines for the density of infected individuals for the SIRS model
 #'
-#' @param time time points for the observations
+#' @param times time points for the observations
 #' @param XH a list with the outputs of parse_outputs_X_SIRS
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #' @export
-xds_lines_X_SIRS = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
+xds_lines_X_SIRS = function(times, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
     if(nStrata==1) {
-      lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-      lines(time, R, col=clrs[3], lty = llty[1])
+      lines(times, S, col=clrs[1], lty = llty[1])
+      lines(times, I, col=clrs[2], lty = llty[1])
+      lines(times, R, col=clrs[3], lty = llty[1])
     } else {
       for(i in 1:nStrata)
-      lines(time, S[,i], col=clrs[1], lty = llty[i])
-      lines(time, I[,i], col=clrs[2], lty = llty[i])
-      lines(time, R[,i], col=clrs[3], lty = llty[i])
+      lines(times, S[,i], col=clrs[1], lty = llty[i])
+      lines(times, I[,i], col=clrs[2], lty = llty[i])
+      lines(times, R[,i], col=clrs[3], lty = llty[i])
     }})}
 
 
@@ -285,13 +285,13 @@ xds_lines_X_SIRS = function(time, XH, nStrata, clrs=c("darkblue","darkred","dark
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, add_axes=TRUE){
+xds_plot_X.SIRS = function(pars, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, add=FALSE){
   XH = pars$outputs$orbits$XH[[i]]
-  time = pars$outputs$time
+  times = pars$outputs$time
 
-  if(add_axes==TRUE)
-    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+  if(add==FALSE)
+    plot(times, 0*times, type = "n", ylim = c(0, max(XH$H)),
          ylab = "No of. Infected", xlab = "Time")
-  xds_lines_X_SIRS(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SIRS(times, XH, pars$nStrata[i], clrs, llty)
 }
 

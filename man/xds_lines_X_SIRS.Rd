@@ -5,7 +5,7 @@
 \title{Add lines for the density of infected individuals for the SIRS model}
 \usage{
 xds_lines_X_SIRS(
-  time,
+  times,
   XH,
   nStrata,
   clrs = c("darkblue", "darkred", "darkgreen"),
@@ -13,7 +13,7 @@ xds_lines_X_SIRS(
 )
 }
 \arguments{
-\item{time}{time points for the observations}
+\item{times}{time points for the observations}
 
 \item{XH}{a list with the outputs of parse_outputs_X_SIRS}
 
