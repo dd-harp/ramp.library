@@ -159,7 +159,7 @@ list_Xvars.garki <- function(y, pars, i) {
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
 #' @export
-create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
+create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {with(Xopts,{
   stopifnot(is.numeric(x2))
   stopifnot(is.numeric(y1))
   stopifnot(is.numeric(y2))
@@ -177,7 +177,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
   x3 = checkIt(x3, nStrata)
   x4 = checkIt(x4, nStrata)
   return(list(x1=x1,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
-}
+})}
 
 #' @title Setup Xinits.garki
 #' @description Implements [make_Xinits] for the garki model
