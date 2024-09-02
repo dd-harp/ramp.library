@@ -4,7 +4,7 @@
 \alias{xds_plot_X.garki}
 \title{Plot the density of infected individuals for the garki model}
 \usage{
-\method{xds_plot_X}{garki}(pars, i, clrs = viridisLite::turbo(7), llty = 1, add = FALSE)
+\method{xds_plot_X}{garki}(pars, i = 1, clrs = viridisLite::turbo(7), llty = 1, add = FALSE)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}

@@ -134,7 +134,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>The Garki Model</h1>
             
-            <h4 data-toc-skip class="date">August 31, 2024</h4>
+            <h4 data-toc-skip class="date">September 02, 2024</h4>
       
       
       <div class="hidden name"><code>X-garki.Rmd</code></div>
@@ -143,8 +143,14 @@
 
     
     
-<div class="section level2">
-<h2 id="section"></h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Loading <span style="color: #0000BB;">ramp.library</span></span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">garki</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"garki"</span>, MYZname <span class="op">=</span> <span class="st">"si"</span><span class="op">)</span></span>
+<span><span class="va">garki</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">garki</span>, Tmax<span class="op">=</span><span class="fl">3650</span>, dt <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">garki</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="X-garki_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <p>In the early 1950s, George Macdonald’s updated Ross’s mathematical
 theory and published a quantitative synthesis of malaria epidemiology
 and control. In field trials in the late 1960s, Macdonald’s models were
@@ -172,13 +178,10 @@ from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2481204/pdf/bullwho00
 WHO</a>.</p></li>
 </ol>
 </div>
-  </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
