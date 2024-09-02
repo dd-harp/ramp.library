@@ -25,8 +25,7 @@ dXdt.garki = function(t, y, pars, i){
       dx3 = R2*y3 - foi*x3 + dHdt(t, x3, Hpar)
       dx4 = foi*x3 - nu*x4 + dHdt(t, x4, Hpar)
       #dH =  dHdt(t, H, pars)
-
-      return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4, dH))
+      return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4))
     })
   })
 }
@@ -66,7 +65,7 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
     class(xde) <- 'ode'
 
     garki = list()
-    class(garki) <- "garki_xde"
+    class(garki) <- "garki"
     garki$xde <- xde
     garki$b=checkIt(b, nStrata)
     garki$r1=checkIt(r1, nStrata)
@@ -89,9 +88,8 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_X.garki <- function(t, y, pars, i){
-  y1 <- y[pars$Xpar[[i]]$y1_ix]
-  X = with(pars$Xpar[[i]], y1)
-  return(X)
+  y1 <- y[pars$ix$X[[i]]$y1_ix]
+  return(y1)
 }
 
 #' @title Size of effective infectious human population
@@ -101,7 +99,6 @@ F_X.garki <- function(t, y, pars, i){
 #' @export
 F_H.garki <- function(t, y, pars, i){
   with(list_Xvars(y, pars,i),{
-    H = x1+x2+x3+x4+y1+y2+y3
     return(H)
   })
 }
@@ -142,14 +139,14 @@ list_Xvars.garki <- function(y, pars, i) {
     y2 <- y[y2_ix]
     y3 <- y[y3_ix]
     H = x1+x2+x3+x4+y1+y2+y3
-    return(list(x1=x1,x2=x2,x3=x3,x4=x4,y1=y1,y2=y2,y3=y3))})
+    return(list(x1=x1,x2=x2,x3=x3,x4=x4,y1=y1,y2=y2,y3=y3,H=H))})
 }
 
 
 #' @title Make inits for garki human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] with values to override default values
-#' @param H0 a [numeric] initial value for total human population density
+#' @param H a [numeric] initial value for total human population density
 #' @param x1 a [numeric] initial value for the variable x1
 #' @param x2 a [numeric] initial value for the variable x2
 #' @param y1 a [numeric] initial value for the variable y1
@@ -159,14 +156,14 @@ list_Xvars.garki <- function(y, pars, i) {
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
 #' @export
-create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {with(Xopts,{
+create_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
   stopifnot(is.numeric(x2))
   stopifnot(is.numeric(y1))
   stopifnot(is.numeric(y2))
   stopifnot(is.numeric(y3))
   stopifnot(is.numeric(x3))
   stopifnot(is.numeric(x4))
-  if(is.null(x1)) x1 = H0 - x2 - y1 - y2 - y3 - x3 - x4
+  if(is.null(x1)) x1 = H - x2 - y1 - y2 - y3 - x3 - x4
   stopifnot(x1>0)
 
   x1 = checkIt(x1, nStrata)
@@ -177,7 +174,7 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H0=NULL, x1=NULL, x2=0,
   x3 = checkIt(x3, nStrata)
   x4 = checkIt(x4, nStrata)
   return(list(x1=x1,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
-})}
+}
 
 #' @title Setup Xinits.garki
 #' @description Implements [make_Xinits] for the garki model
@@ -229,7 +226,7 @@ make_X_indices.garki <- function(pars, i) {with(pars,{
 
   pars$max_ix <- max_ix
   pars$ix$X[[i]] = list(x1_ix = x1_ix,  x2_ix = x2_ix,
-                        y1_iy = y1_iy,  y2_iy = y2_iy,  y3_iy = y3_iy,
+                        y1_ix = y1_ix,  y2_ix = y2_ix,  y3_ix = y3_ix,
                         x3_ix = x3_ix,  x4_ix = x4_ix)
 
   return(pars)
@@ -271,7 +268,7 @@ parse_Xorbits.garki <- function(outputs, pars, i) {
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.garki = function(pars, i, clrs=viridisLite::turbo(7), llty=1, add=FALSE){
+xds_plot_X.garki = function(pars, i=1, clrs=viridisLite::turbo(7), llty=1, add=FALSE){
   XH = pars$outputs$orbits$XH[[i]]
   times = pars$outputs$time
 
@@ -332,6 +329,7 @@ parse_Xorbits.garki <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
   y3 = outputs[,y3_ix]
   x3 = outputs[,x3_ix]
   x4 = outputs[,x4_ix]
+  H = x1+x2+x3+x4+y1+y2+y3
   return(list(x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
 })}
 
