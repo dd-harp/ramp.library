@@ -7,7 +7,7 @@
 create_Xinits_garki(
   nStrata,
   Xopts = list(),
-  H0 = NULL,
+  H = NULL,
   x1 = NULL,
   x2 = 0,
   y1 = 0,
@@ -22,7 +22,7 @@ create_Xinits_garki(
 
 \item{Xopts}{a [list] with values to override default values}
 
-\item{H0}{a [numeric] initial value for total human population density}
+\item{H}{a [numeric] initial value for total human population density}
 
 \item{x1}{a [numeric] initial value for the variable x1}
 
