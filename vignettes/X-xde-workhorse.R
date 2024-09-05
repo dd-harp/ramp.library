@@ -10,23 +10,22 @@ library(ramp.library)
 #devtools::load_all()
 
 ## -----------------------------------------------------------------------------
-wh <- xds_setup(dlay = 'dde', 
-                Xname = "workhorse", 
+wh <- xds_setup(Xname = "workhorse", 
                 HPop=1000,
                 Lname = "trivial", 
                 Lopts = list(
                   Lambda = 3000, 
-                  season = function(t){1+sin(2*pi*t/365)}
+                  F_season = function(t){1+sin(2*pi*t/365)}
                   )
                 )
 
 ## -----------------------------------------------------------------------------
-wh <- xde_solve(wh, Tmax = 5*365, dt=10)
+wh <- xds_solve(wh, Tmax = 5*365, dt=10)
 
 ## -----------------------------------------------------------------------------
 wh1 = wh 
 wh1$Xpar[[1]]$zeta_1 = 0.02
-wh1 <- xde_solve(wh1, Tmax = 5*365, dt=10)
+wh1 <- xds_solve(wh1, Tmax = 5*365, dt=10)
 
 ## ----eval=F-------------------------------------------------------------------
 #  xds_plot_X(wh)

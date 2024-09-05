@@ -6,32 +6,32 @@ library(data.table)
 library(ggplot2)
 
 ## -----------------------------------------------------------------------------
-test_SIR<- xds_setup( "test_SIR",dlay = "ode","RM", "SIR")
-xde_solve(test_SIR, 365*5) -> test_SIR
+test_SIR<- xds_setup(MYZname="RM", Xname="SIR")
+xds_solve(test_SIR, 365*5) -> test_SIR
 foi_eq = test_SIR$Xpar[[1]]$b*tail(test_SIR$outputs$terms$EIR,1)
 unlist(list_Xvars(test_SIR$outputs$last_y, test_SIR, 1)) -> inf 
 xde_steady_state_X(foi_eq, 1000, test_SIR$Xpar[[1]]) -> ss
 xds_plot_X(test_SIR)
 
 ## -----------------------------------------------------------------------------
-test_SIRS<- xds_setup( "test_SIRS",dlay = "ode","RM", "SIRS")
-xde_solve(test_SIRS, 365*3) -> test_SIRS
+test_SIRS<- xds_setup(MYZname="RM", Xname="SIRS")
+xds_solve(test_SIRS, 365*3) -> test_SIRS
 foi_eq = test_SIRS$Xpar[[1]]$b*tail(test_SIRS$outputs$terms$EIR,1)
 unlist(list_Xvars(test_SIRS$outputs$last_y, test_SIRS, 1)) -> inf_SIRS
 xde_steady_state_X(foi_eq, 1000, test_SIRS$Xpar[[1]]) -> ss_SIRS
 xds_plot_X(test_SIRS)
 
 ## -----------------------------------------------------------------------------
-test_SEIR<- xds_setup( "test_SEIR",dlay = "ode","RM", "SEIR")
-xde_solve(test_SEIR, 365*5) -> test_SEIR
+test_SEIR<- xds_setup(MYZname="RM", Xname="SEIR")
+xds_solve(test_SEIR, 365*5) -> test_SEIR
 foi_eq = test_SEIR$Xpar[[1]]$b*tail(test_SEIR$outputs$terms$EIR,1)
 unlist(list_Xvars(test_SEIR$outputs$last_y, test_SEIR, 1)) -> inf_SEIR
 xde_steady_state_X(foi_eq, 1000, test_SEIR$Xpar[[1]]) -> ss_SEIR
 xds_plot_X(test_SEIR)
 
 ## -----------------------------------------------------------------------------
-test_SEIRV<- xds_setup( "test_SEIRV",dlay = "ode","RM", "SEIRV")
-xde_solve(test_SEIRV, 365*5) -> test_SEIRV
+test_SEIRV<- xds_setup(MYZname="RM", Xname="SEIRV")
+xds_solve(test_SEIRV, 365*5) -> test_SEIRV
 foi_eq = test_SEIRV$Xpar[[1]]$b*tail(test_SEIRV$outputs$terms$EIR,1)
 unlist(list_Xvars(test_SEIRV$outputs$last_y, test_SEIRV, 1)) -> inf_SEIRV
 xde_steady_state_X(foi_eq, 1000, test_SEIRV$Xpar[[1]]) -> ss_SEIRV
