@@ -4,7 +4,7 @@ residence = c(1:3)
 model <- xds_setup(MYZname="RMG", Lname="trivial", Xname = "trivial",  residence=residence, HPop =HPop, nPatches=3)
 
 ## -----------------------------------------------------------------------------
-model <- xde_solve(model, dt=5)
+model <- xds_solve(model, dt=5)
 
 ## ----fig.height=7.5, fig.width=5.5, eval=F------------------------------------
 #  par(mfrow = c(2,1))

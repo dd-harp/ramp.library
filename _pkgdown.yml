@@ -1,8 +1,6 @@
 url: https://dd-harp.github.io/ramp.library/
 navbar:
   left:
-  - text: Functions
-    href: reference/index.html
   - text: Articles
     menu:
     - text: Adding Models
@@ -33,6 +31,8 @@ navbar:
       href: articles/X-garki.html
     - text: Workhorse
       href: articles/X-xde-workhorse.html
+  - text: Functions
+    href: reference/index.html
   right:
   - icon: fa-github
     href: https://github.com/dd-harp/ramp.library/

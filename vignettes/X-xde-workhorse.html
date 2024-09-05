@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2024-08-29" />
+<meta name="date" content="2024-09-05" />
 
 <title>A Workhorse Model for Human Infection</title>
 
@@ -50,7 +50,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">A Workhorse Model for Human Infection</h1>
-<h4 class="date">August 29, 2024</h4>
+<h4 class="date">September 05, 2024</h4>
 
 
 
@@ -431,19 +431,18 @@ I_n\\
 \end{array}
 \]</span></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#devtools::load_all()</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xds_setup</span>(<span class="at">dlay =</span> <span class="st">&#39;dde&#39;</span>, </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                <span class="at">Xname =</span> <span class="st">&quot;workhorse&quot;</span>, </span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                <span class="at">HPop=</span><span class="dv">1000</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                <span class="at">Lname =</span> <span class="st">&quot;trivial&quot;</span>, </span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                <span class="at">Lopts =</span> <span class="fu">list</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                  <span class="at">Lambda =</span> <span class="dv">3000</span>, </span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                  <span class="at">season =</span> <span class="cf">function</span>(t){<span class="dv">1</span><span class="sc">+</span><span class="fu">sin</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>t<span class="sc">/</span><span class="dv">365</span>)}</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>                  )</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>                )</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xde_solve</span>(wh, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xds_setup</span>(<span class="at">Xname =</span> <span class="st">&quot;workhorse&quot;</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                <span class="at">HPop=</span><span class="dv">1000</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                <span class="at">Lname =</span> <span class="st">&quot;trivial&quot;</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                <span class="at">Lopts =</span> <span class="fu">list</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                  <span class="at">Lambda =</span> <span class="dv">3000</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                  <span class="at">F_season =</span> <span class="cf">function</span>(t){<span class="dv">1</span><span class="sc">+</span><span class="fu">sin</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>t<span class="sc">/</span><span class="dv">365</span>)}</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                  )</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>                )</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xds_solve</span>(wh, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>wh1 <span class="ot">=</span> wh </span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>wh1<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>zeta_1 <span class="ot">=</span> <span class="fl">0.02</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>wh1 <span class="ot">&lt;-</span> <span class="fu">xde_solve</span>(wh1, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>wh1 <span class="ot">&lt;-</span> <span class="fu">xds_solve</span>(wh1, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh)</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh1, <span class="at">llty=</span><span class="dv">2</span>, <span class="at">add_axes=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">with</span>(wh<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>

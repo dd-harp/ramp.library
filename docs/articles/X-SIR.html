@@ -39,9 +39,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Functions</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
@@ -110,6 +107,9 @@
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Functions</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -189,10 +189,9 @@ object. We solve the model to equilibrium and check with the analytic
 steady state using the <code>ramp.xds::xde_steady_state</code> and
 compare the results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SIR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span></span>
-<span>  <span class="st">"test_SIR"</span>,dlay <span class="op">=</span> <span class="st">"ode"</span>, <span class="st">"RM"</span>,<span class="st">"SIR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_SIR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname <span class="op">=</span><span class="st">"RM"</span>, Xname<span class="op">=</span><span class="st">"SIR"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">10</span><span class="op">)</span><span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">10</span><span class="op">)</span><span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">out1</span></span></code></pre></div>
 </div>
 <div class="section level3">

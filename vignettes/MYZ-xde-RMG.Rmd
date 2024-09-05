@@ -119,7 +119,7 @@ model <- xds_setup(MYZname="RMG", Lname="trivial", Xname = "trivial",  residence
 ```
 
 ```{r}
-model <- xde_solve(model, dt=5)
+model <- xds_solve(model, dt=5)
 ```
 
 ```{r, fig.height=7.5, fig.width=5.5, eval=F}

@@ -15,11 +15,10 @@ library(ggplot2)
 #devtools::load_all()
 
 ## -----------------------------------------------------------------------------
-test_SIR <- xds_setup(
-  "test_SIR",dlay = "ode", "RM","SIR")
+test_SIR <- xds_setup(MYZname ="RM", Xname="SIR")
 
 ## -----------------------------------------------------------------------------
-xde_solve(test_SIR, 365*10)-> test_SIR
+xds_solve(test_SIR, 365*10)-> test_SIR
 unlist(list_Xvars(test_SIR$outputs$last_y, test_SIR, 1)) -> out1
 
 ## -----------------------------------------------------------------------------

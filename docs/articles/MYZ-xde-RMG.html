@@ -39,9 +39,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Functions</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
@@ -111,6 +108,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../reference/index.html">Functions</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -136,7 +136,7 @@
             <h3 data-toc-skip class="subtitle">A Behavioral State
 Model</h3>
             
-            <h4 data-toc-skip class="date">September 02, 2024</h4>
+            <h4 data-toc-skip class="date">September 05, 2024</h4>
       
       
       <div class="hidden name"><code>MYZ-xde-RMG.Rmd</code></div>
@@ -281,7 +281,7 @@ K.\)</span> During <code><a href="https://dd-harp.github.io/ramp.xds/reference/x
 <span><span class="va">residence</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> </span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>,  residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_solve.html" class="external-link">xde_solve</a></span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_M.html" class="external-link">xds_plot_M</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
