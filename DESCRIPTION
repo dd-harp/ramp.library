@@ -14,15 +14,15 @@ LazyData: true
 RoxygenNote: 7.3.2
 Depends:
   ramp.xds,
-  MASS,
-  deSolve,
-  expm 
 Imports:
   viridisLite
 Suggests:
-    knitr,
-    ggplot2,
-    data.table,
-    viridis,
-    rmarkdown 
+  MASS,
+  deSolve,
+  expm,
+  knitr,
+  ggplot2,
+  data.table,
+  viridis,
+  rmarkdown 
 VignetteBuilder: knitr

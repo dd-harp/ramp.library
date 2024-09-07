@@ -1,16 +1,36 @@
 # specialized methods for the adult mosquito RMG model
 
 #' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBionomics] for the RMG model
-#' @inheritParams ramp.xds::MBionomics
+#' @description Implements [MBaseline] for the RMG model
+#' @inheritParams ramp.xds::MBaseline
 #' @return a named [list]
 #' @export
-MBionomics.RMG <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
+MBaseline.RMG <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
   pars$MYZpar[[s]]$es_g       <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_sigma_b <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_sigma_q <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_f       <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_q       <- rep(1, nPatches)
+  return(pars)
+})}
+
+
+#' @title Reset bloodfeeding and mortality rates to baseline
+#' @description Implements [MBionomics] for the RMG model
+#' @inheritParams ramp.xds::MBionomics
+#' @return a named [list]
+#' @export
+MBionomics.RMG <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
+  pars$MYZpar[[s]]$f <- es_f*f_t
+  pars$MYZpar[[s]]$q <- es_q*q_t
+  g <- es_g*g_t
+  sigma_b <- es_sigma_b*sigma_b_t
+  sigma_q <- es_sigma_q*sigma_q_t
+  pars$MYZpar[[s]]$g <- g
+  pars$MYZpar[[s]]$sigma_b <- sigma_b
+  pars$MYZpar[[s]]$sigma_q <- sigma_q
+  pars$MYZpar[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
+  pars$MYZpar[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
   return(pars)
 })}
 
@@ -72,15 +92,7 @@ dMYZdt.RMG <- function(t, y, pars, s){
     Z_g <- y[Z_g_ix]
 
     with(pars$MYZpar[[s]],{
-      f = f_t*es_f
-      q = q_t*es_q
-      g = g_t*es_g
-      sigma_b = sigma_b_t*es_sigma_b
-      sigma_q = sigma_q_t*es_sigma_q
-      Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
-      Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
 
-      #browser()
       dU_bdt <- Lambda + nu*U_g - f*U_b - (Omega_b %*% U_b)
       dU_gdt <- f*(1-q*kappa)*U_b - nu*U_g - (Omega_q %*% U_g)
       dY_bdt <- nu*Y_g - f*Y_b - phi*Y_b - (Omega_b %*% Y_b)
