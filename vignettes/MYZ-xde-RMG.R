@@ -1,3 +1,12 @@
+## ----message=FALSE, warning=FALSE---------------------------------------------
+library(knitr)
+library(ramp.xds)
+library(deSolve) 
+library(ramp.library)
+
+## ----echo=F-------------------------------------------------------------------
+#devtools::load_all()
+
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 

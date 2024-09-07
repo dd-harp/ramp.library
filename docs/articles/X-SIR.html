@@ -189,7 +189,7 @@ object. We solve the model to equilibrium and check with the analytic
 steady state using the <code>ramp.xds::xde_steady_state</code> and
 compare the results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SIR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname <span class="op">=</span><span class="st">"RM"</span>, Xname<span class="op">=</span><span class="st">"SIR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_SIR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname <span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SIR"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">10</span><span class="op">)</span><span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">out1</span></span></code></pre></div>
@@ -208,7 +208,7 @@ compare the results.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span></span>
 <span><span class="co">#&gt;            S            I            R            H </span></span>
-<span><span class="co">#&gt; 1.338806e-20 2.701808e-06 1.000000e+03 1.000000e+03</span></span></code></pre></div>
+<span><span class="co">#&gt; 1.338665e-20 2.701808e-06 1.000000e+03 1.000000e+03</span></span></code></pre></div>
 </div>
 </div>
   </div>

@@ -53,7 +53,7 @@ Here we use `ramp.xds::xds_setup` to set up the model object. We solve the model
 
 
 ```{r}
-test_SIR <- xds_setup(MYZname ="RM", Xname="SIR")
+test_SIR <- xds_setup(MYZname ="macdonald", Xname="SIR")
 ```
 
 ```{r}

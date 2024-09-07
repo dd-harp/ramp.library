@@ -54,6 +54,7 @@ reference:
   - F_eggs.RMG
   - F_fqZ.RMG
   - F_fqM.RMG
+  - MBaseline.RMG
   - MBionomics.RMG
   - dMYZdt.RMG
   - get_MYZinits.RMG
@@ -68,27 +69,6 @@ reference:
   - get_f.RMG
   - get_q.RMG
   - get_sigma.RMG
-- subtitle: Macdonald's Adult Mosquito Model
-  contents:
-  - F_eggs.macdonald
-  - F_fqZ.macdonald
-  - F_fqM.macdonald
-  - list_MYZvars.macdonald
-  - xde_steady_state_MYZ.macdonald
-  - MBionomics.macdonald
-  - dMYZdt.macdonald
-  - get_MYZinits.macdonald
-  - make_MYZinits.macdonald
-  - create_MYZinits_macdonald
-  - make_MYZpar.macdonald
-  - create_MYZpar_macdonald
-  - make_indices_MYZ.macdonald
-  - parse_MYZorbits.macdonald
-  - update_MYZinits.macdonald
-  - get_g.macdonald
-  - get_f.macdonald
-  - get_q.macdonald
-  - get_sigma.macdonald
 - subtitle: ENBRQ_dts
   desc: |
     Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.

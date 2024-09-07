@@ -11,7 +11,7 @@
 
 \item{y}{state vector}
 
-\item{pars}{an \code{xds} object}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the species index}
 }

@@ -15,7 +15,7 @@ library(ggplot2)
 #devtools::load_all()
 
 ## -----------------------------------------------------------------------------
-test_SIR <- xds_setup(MYZname ="RM", Xname="SIR")
+test_SIR <- xds_setup(MYZname ="macdonald", Xname="SIR")
 
 ## -----------------------------------------------------------------------------
 xds_solve(test_SIR, 365*10)-> test_SIR
