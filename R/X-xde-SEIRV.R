@@ -23,6 +23,44 @@ dXdt.SEIRV<- function(t, y, pars, i) {
   })
 }
 
+#' @title DTS updating for the SIS model for human / vertebrate host infections
+#' @description Implements [Update_Xt] for the SIS model
+#' @inheritParams ramp.xds::Update_Xt
+#' @return a [numeric] vector
+#' @export
+Update_Xt.SEIRV<- function(t, y, pars, i) {
+
+  ar <- pars$AR[[i]]
+  Hpar <- pars$Hpar[[i]]
+  with(list_Xvars(y, pars, i),{
+    with(pars$Xpar[[i]], {
+
+      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      Et <- a*S +(1-tau)*E
+      It <- (1-r)*I + tau*E + dHdt(t, I, Hpar)
+      Rt <- (1-gamma)*R + (1-varepsilon)*r*I + dHdt(t, R, Hpar)
+      Vt  <- V + varepsilon*r* I +  dHdt(t, V, Hpar)
+
+      return(c(S=unname(St), E = unname(It), I=unname(It), R = unname(Rt), V = unname(Vt)))
+    })
+  })
+}
+
+#' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
+#' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
+#' @inheritParams ramp.xds::dts_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+dts_steady_state_X.SEIRV= function(ar, H, Xpar){with(Xpar,{
+  Steq = 0
+  Eteq = 0
+  Iteq = 0
+  Rteq = 0
+  Vteq = H -Steq - Eteq-Iteq-Rteq
+
+  return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq, V= Vteq))
+})}
+
 
 
 #' @title Make initial values for the SEIRV human model, with defaults
