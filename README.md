@@ -6,7 +6,6 @@
 
 <!-- badges: end -->
 
-blargh! 
 
 ## Installation 
 
