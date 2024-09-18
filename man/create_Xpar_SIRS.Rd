@@ -10,7 +10,7 @@ create_Xpar_SIRS(
   b = 0.55,
   r = 1/180,
   c = 0.15,
-  gam = 0.5
+  gamma = 0.5
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ create_Xpar_SIRS(
 
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
 
-\item{gam}{the rate of loss of immunity}
+\item{gamma}{the rate of loss of immunity}
 }
 \value{
 a [list]

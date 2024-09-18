@@ -11,14 +11,49 @@ dXdt.SIRS <- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S + gam*R
+      dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S + gamma*R
       dI <- foi*S- r*I + dHdt(t, I, Hpar)
-      dR <- r*I - gam*R + dHdt(t, R, Hpar)
+      dR <- r*I - gamma*R + dHdt(t, R, Hpar)
 
       return(c(dS, dI, dR))
     })
   })
 }
+
+#' @title DTS updating for the SIS model for human / vertebrate host infections
+#' @description Implements [Update_Xt] for the SIS model
+#' @inheritParams ramp.xds::Update_Xt
+#' @return a [numeric] vector
+#' @export
+Update_Xt.SIRS<- function(t, y, pars, i) {
+
+  ar <- pars$AR[[i]]
+  Hpar <- pars$Hpar[[i]]
+  with(list_Xvars(y, pars, i),{
+    with(pars$Xpar[[i]], {
+
+      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      It <- (1-r)*I + ar*S + dHdt(t, I, Hpar)
+      Rt <- (1-gamma)*R + r*I + dHdt(t, R, Hpar)
+
+      return(c(S=unname(St), I=unname(It), R = unname(Rt)))
+    })
+  })
+}
+
+#' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
+#' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
+#' @inheritParams ramp.xds::dts_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+dts_steady_state_X.SIRS= function(ar, H, Xpar){with(Xpar,{
+  Iteq = (ar*H*gamma)/(r*gamma + ar*(r+gamma))
+  Rteq = (ar*H*r)/(r*gamma + ar*(r+gamma))
+  Steq = H -Iteq-Rteq
+
+  return(c(S=Steq, I=Iteq, R=Rteq))
+})}
+
 
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
@@ -27,8 +62,8 @@ dXdt.SIRS <- function(t, y, pars, i) {
 #' @return the steady states as a named vector
 #' @export
 xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
-  Ieq = (foi*H*gam)/((r*gam) +foi*(gam+r))
-  Req =(foi*r*H)/((r*gam) +foi*(gam+r))
+  Ieq = (foi*H*gamma)/((r*gamma) +foi*(gamma+r))
+  Req =(foi*r*H)/((r*gamma) +foi*(gamma+r))
   Seq = H-Ieq-Req
   return(c(S=as.vector(Seq), I=as.vector(Ieq), R = as.vector(Req)))
 })}
@@ -135,11 +170,11 @@ update_Xinits.SIRS <- function(pars, y0, i) {
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the the duration of an infection
 #' @param c the proportion of bites on infected humans that infect a mosquito
-#' @param gam the rate of loss of immunity
+#' @param gamma the rate of loss of immunity
 #' @return a [list]
 #' @export
 create_Xpar_SIRS = function(nStrata, Xopts=list(),
-                          b=0.55, r=1/180, c=0.15,gam=0.5){
+                          b=0.55, r=1/180, c=0.15,gamma=0.5){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SIRS")
@@ -147,7 +182,7 @@ create_Xpar_SIRS = function(nStrata, Xopts=list(),
     Xpar$b = checkIt(b, nStrata)
     Xpar$c = checkIt(c, nStrata)
     Xpar$r = checkIt(r, nStrata)
-    Xpar$gam = checkIt(gam, nStrata)
+    Xpar$gamma = checkIt(gamma, nStrata)
 
     return(Xpar)
   })}

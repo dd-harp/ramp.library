@@ -29,6 +29,44 @@ dXdt.SEIR<- function(t, y, pars, i) {
   })
 }
 
+
+#' @title DTS updating for the SIS model for human / vertebrate host infections
+#' @description Implements [Update_Xt] for the SIS model
+#' @inheritParams ramp.xds::Update_Xt
+#' @return a [numeric] vector
+#' @export
+Update_Xt.SEIR<- function(t, y, pars, i) {
+
+  ar <- pars$AR[[i]]
+  Hpar <- pars$Hpar[[i]]
+  with(list_Xvars(y, pars, i),{
+    with(pars$Xpar[[i]], {
+
+      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      Et <- a*S +(1-tau)*E
+      It <- (1-r)*I + tau*E + dHdt(t, I, Hpar)
+      Rt <- R + r*I + dHdt(t, R, Hpar)
+
+      return(c(S=unname(St), E = unname(It), I=unname(It), R = unname(Rt)))
+    })
+  })
+}
+
+#' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
+#' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
+#' @inheritParams ramp.xds::dts_steady_state_X
+#' @return the steady states as a named vector
+#' @export
+dts_steady_state_X.SEIR= function(ar, H, Xpar){with(Xpar,{
+  Steq = 0
+  Eteq = 0
+  Iteq = 0
+  Rteq = H -Steq - Eteq-Iteq
+
+  return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq))
+})}
+
+
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIRS model as a function of the daily eir.
 #' @inheritParams  ramp.xds::xde_steady_state_X
