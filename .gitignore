@@ -6,3 +6,7 @@
 *.Rproj
 docs
 *.html
+*.html
+docs/articles/MYZ-xde-RMG.html
+*.html
+/docs
