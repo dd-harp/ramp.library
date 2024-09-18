@@ -331,7 +331,19 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.macdonald.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SEIRV.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SIPw.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/Update_Xt.SIRS.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIPw.html</loc>
@@ -464,6 +476,18 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dts_setup_Xpar.SIPw.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dts_steady_state_X.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dts_steady_state_X.SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dts_steady_state_X.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dts_steady_state_X.SIRS.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_Linits.stages_dts.html</loc>

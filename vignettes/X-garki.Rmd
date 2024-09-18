@@ -7,7 +7,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
+add this.
+
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
 suppressMessages(library(knitr))
 suppressMessages(library(ramp.xds))
