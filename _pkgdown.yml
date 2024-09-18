@@ -203,6 +203,8 @@ reference:
   - xds_plot_X.SIR
   - xds_lines_X_SIR
   - xde_steady_state_X.SIR
+  - Update_Xt.SIR
+  - dts_steady_state_X.SIR
 - subtitle: The SIRS Model
   contents:
   - F_X.SIRS
@@ -223,6 +225,8 @@ reference:
   - xds_plot_X.SIRS
   - xds_lines_X_SIRS
   - xde_steady_state_X.SIRS
+  - Update_Xt.SIRS
+  - dts_steady_state_X.SIRS
 - subtitle: The SEIR model
   contents:
   - F_X.SEIR
@@ -243,6 +247,8 @@ reference:
   - xds_plot_X.SEIR
   - xds_lines_X_SEIR
   - xde_steady_state_X.SEIR
+  - Update_Xt.SEIR
+  - dts_steady_state_X.SEIR
 - subtitle: The SEIRV model
   contents:
   - F_X.SEIRV
@@ -263,3 +269,5 @@ reference:
   - xds_plot_X.SEIRV
   - xds_lines_X_SEIRV
   - xde_steady_state_X.SEIRV
+  - Update_Xt.SEIRV
+  - dts_steady_state_X.SEIRV
