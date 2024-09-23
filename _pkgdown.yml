@@ -27,6 +27,10 @@ navbar:
       href: articles/Compartmental-Models.html
     - text: How to add a new X model
       href: articles/X-How_To_Add_Model.html
+    - text: SIP xde model
+      href: articles/human_sip.html
+    - text: SEIS model
+      href: articles/human_seis.html
     - text: The Garki Model
       href: articles/X-garki.html
     - text: Workhorse
@@ -50,6 +54,8 @@ reference:
   desc: |
      The model library for adult mosquito infection dynamics
 - subtitle: The Adult Mosquito RMG Model
+  desc: |
+     A behavioral state model
   contents:
   - F_eggs.RMG
   - F_fqZ.RMG
@@ -89,6 +95,33 @@ reference:
   - get_MYZinits.ENBRQ_dts
   - update_MYZinits.ENBRQ_dts
   - make_parameters_MYZ_ENBRQ_dts
+- subtitle: The "SEI" compartment model for infection
+  desc: |
+    Specialized methods for simple infection dynamics for an adult mosquito population
+  contents:
+  - dMYZdt.SEI
+  - MBaseline.SEI
+  - MBionomics.SEI
+  - xde_steady_state_MYZ.SEI
+  - Update_MYZt.SEI
+  - make_MYZpar.SEI
+  - create_MYZpar_SEI
+  - F_fqZ.SEI
+  - F_fqM.SEI
+  - F_eggs.SEI
+  - list_MYZvars.SEI
+  - get_MYZpars.SEI
+  - put_MYZvars.SEI
+  - make_MYZinits.SEI
+  - create_MYZinits_SEI
+  - make_indices_MYZ.SEI
+  - parse_MYZorbits.SEI
+  - get_MYZinits.SEI
+  - update_MYZinits.SEI
+  - get_f.SEI
+  - get_q.SEI
+  - get_g.SEI
+  - get_sigma.SEI
 - subtitle: bionomics
   contents:
   - F_sigma.dddn
@@ -271,3 +304,120 @@ reference:
   - xde_steady_state_X.SEIRV
   - Update_Xt.SEIRV
   - dts_steady_state_X.SEIRV
+- subtitle: SEIS
+  desc: |
+    Specialized methods for the SEIS (Susceptible-Infected-Susceptible) model of human dynamics.
+  contents:
+  - dXdt.SEIS
+  - Update_Xt.SEIS
+  - make_Xpar.SEIS
+  - create_Xpar_SEIS
+  - make_Xinits.SEIS
+  - create_Xinits_SEIS
+  - make_X_indices.SEIS
+  - list_Xvars.SEIS
+  - get_Xpars.SEIS
+  - put_Xvars.SEIS
+  - F_X.SEIS
+  - F_H.SEIS
+  - F_pr.SEIS
+  - F_pr_by_lm.SEIS
+  - F_pr_by_rdt.SEIS
+  - F_pr_by_pcr.SEIS
+  - F_ni.SEIS
+  - F_b.SEIS
+  - parse_Xorbits.SEIS
+  - get_Xinits.SEIS
+  - update_Xinits.SEIS
+  - HTC.SEIS
+  - xds_plot_X.SEIS
+  - add_lines_X_SEIS
+  - xde_steady_state_X.SEIS
+  - dts_steady_state_X.SEIS
+- subtitle: SEISd
+  desc: |
+    Specialized methods for the SEISd (Susceptible-Infected-Susceptible) model of human dynamics.
+  contents:
+  - dXdt.SEISd
+  - Update_Xt.SEISd
+  - make_Xpar.SEISd
+  - create_Xpar_SEISd
+  - xde_steady_state_X.SEISd
+  - make_Xinits.SEISd
+  - create_Xinits_SEISd
+  - make_X_indices.SEISd
+  - list_Xvars.SEISd
+  - get_Xpars.SEISd
+  - put_Xvars.SEISd
+  - F_X.SEISd
+  - F_H.SEISd
+  - F_b.SEISd
+  - parse_Xorbits.SEISd
+  - get_Xinits.SEISd
+  - update_Xinits.SEISd
+  - HTC.SEISd
+  - F_pr.SEISd
+  - F_pr_by_lm.SEISd
+  - F_pr_by_rdt.SEISd
+  - F_pr_by_pcr.SEISd
+  - F_ni.SEISd
+  - xds_plot_X.SEISd
+  - add_lines_X_SEISd
+- subtitle: SIP
+  desc: |
+    Specialized methods for the SIP (Susceptible-Infected-Prophylaxis) model of human dynamics.
+  contents:
+  - dXdt.SIP
+  - Update_Xt.SIP
+  - make_Xpar.SIP
+  - create_Xpar_SIP
+  - xde_steady_state_X.SIP
+  - dts_steady_state_X.SIP
+  - make_Xinits.SIP
+  - create_Xinits_SIP
+  - make_X_indices.SIP
+  - list_Xvars.SIP
+  - get_Xpars.SIP
+  - F_X.SIP
+  - F_H.SIP
+  - F_b.SIP
+  - parse_Xorbits.SIP
+  - get_Xinits.SIP
+  - update_Xinits.SIP
+  - HTC.SIP
+  - F_pr.SIP
+  - F_pr_by_lm.SIP
+  - F_pr_by_rdt.SIP
+  - F_pr_by_pcr.SIP
+  - F_ni.SIP
+  - xds_plot_X.SIP
+  - add_lines_X_SIP
+- subtitle: SIPd
+  desc: |
+    Specialized methods for the SIPd (Susceptible-Infected-Prophylaxis) model of human dynamics.
+  contents:
+  - dXdt.SIPd
+  - Update_Xt.SIPd
+  - make_Xpar.SIPd
+  - create_Xpar_SIPd
+  - xde_steady_state_X.SIPd
+  - dts_steady_state_X.SIPd
+  - make_Xinits.SIPd
+  - create_Xinits_SIPd
+  - make_X_indices.SIPd
+  - list_Xvars.SIPd
+  - get_Xpars.SIPd
+  - F_X.SIPd
+  - F_H.SIPd
+  - F_b.SIPd
+  - parse_Xorbits.SIPd
+  - get_Xinits.SIPd
+  - update_Xinits.SIPd
+  - HTC.SIPd
+  - F_pr.SIPd
+  - F_pr_by_lm.SIPd
+  - F_pr_by_rdt.SIPd
+  - F_pr_by_pcr.SIPd
+  - F_ni.SIPd
+  - xds_plot_X.SIPd
+  - add_lines_X_SIPd
