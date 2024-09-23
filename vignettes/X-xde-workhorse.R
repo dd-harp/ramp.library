@@ -15,7 +15,7 @@ wh <- xds_setup(Xname = "workhorse",
                 Lname = "trivial", 
                 Lopts = list(
                   Lambda = 3000, 
-                  F_season = function(t){1+sin(2*pi*t/365)}
+                  F_season = function(t, phase=0, season_opts=list()){1+sin(2*pi*t/365)}
                   )
                 )
 

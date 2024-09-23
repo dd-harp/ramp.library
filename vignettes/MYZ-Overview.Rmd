@@ -16,7 +16,23 @@ library(deSolve)
 library(ramp.library)
 ```
 
-**`ramp.library`** aims to build a comprehensive code library for models of adult mosquito ecology, behaviors, and infection dynamics. The following is a short overview of existing model families. 
+**`ramp.library`** and **`ramp.xds`** aim to provide a comprehensive code library for models of adult mosquito ecology, behaviors, and infection dynamics. The following is a short overview of existing model families:
+
+Modules in **`ramp.xds`**
+
+- `basicM` 
+
+- `macdonald` 
+
+- `si` 
+
+- `GeRM` 
+
+Modules in **`ramp.library`**
+
+- `SEI` 
+
+- `RMG` 
 
 ## Macdonald's Model 
 

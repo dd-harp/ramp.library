@@ -14,16 +14,18 @@ LazyData: true
 RoxygenNote: 7.3.2
 Remotes: github::dd-harp/ramp.xds
 Depends:
-  ramp.xds,
+  ramp.xds
 Imports:
-  viridisLite
+  viridisLite,
+  deSolve
 Suggests:
-  MASS,
-  deSolve,
-  expm,
-  knitr,
-  ggplot2,
-  data.table,
-  viridis,
-  rmarkdown 
+    MASS,
+    expm,
+    knitr,
+    ggplot2,
+    data.table,
+    viridis,
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

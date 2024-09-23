@@ -4,6 +4,8 @@ pkgdown_sha: ~
 articles:
   Adding_Models: Adding_Models.html
   Compartmental-Models: Compartmental-Models.html
+  human_seis: human_seis.html
+  human_sip: human_sip.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   L-Overview: L-Overview.html
   Malaria-Overview: Malaria-Overview.html
@@ -15,7 +17,7 @@ articles:
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
   X-xde-workhorse: X-xde-workhorse.html
-last_built: 2024-09-18T19:20Z
+last_built: 2024-09-23T21:12Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles
