@@ -46,6 +46,38 @@ Update_Xt.SEIRV<- function(t, y, pars, i) {
   })
 }
 
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xpars
+#' @return an **`xds`** object
+#' @export
+set_Xpars.SEIRV <- function(pars, i=1, Xopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xpar[[i]]$b <- b
+    pars$Xpar[[i]]$c <- c
+    pars$Xpar[[i]]$r <- r
+    pars$Xpar[[i]]$tau <- tau
+    pars$Xpar[[i]]$gamma <- gamma
+    return(pars)
+  }))}
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xinits
+#' @return an **`xds`** object
+#' @export
+set_Xinits.SEIRV <- function(pars, i=1, Xopts=list()) {
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$S = S
+    pars$Xinits[[i]]$E = E
+    pars$Xinits[[i]]$I = I
+    pars$Xinits[[i]]$R = R
+    pars$Xinits[[i]]$V = V
+    return(pars)
+  }))}
+
 #' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
 #' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
 #' @inheritParams ramp.xds::dts_steady_state_X

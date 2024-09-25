@@ -34,7 +34,7 @@ dXdt.SIP <- function(t, y, pars, i){
 }
 
 #' @title Setup `Xpar` for an `SIP`
-#' @description Implements [make_Xpar] for the SIP model
+#' @description Set up the `SIP` model with parameters
 #' @inheritParams ramp.xds::make_Xpar
 #' @return a [list] vector
 #' @export
@@ -71,6 +71,39 @@ create_Xpar_SIP = function(nStrata, Xopts=list(),
 
     return(Xpar)
   })}
+
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xpars
+#' @return an **`xds`** object
+#' @export
+set_Xpars.SIP <- function(pars, i=1, Xopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xpar[[i]]$b <- b
+    pars$Xpar[[i]]$c <- c
+    pars$Xpar[[i]]$r <- r
+    pars$Xpar[[i]]$rho <- rho
+    pars$Xpar[[i]]$eta <- eta
+    pars$Xpar[[i]]$xi <- xi
+    return(pars)
+  }))}
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xinits
+#' @return an **`xds`** object
+#' @export
+set_Xinits.SIP <- function(pars, i=1, Xopts=list()) {
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$S = S
+    pars$Xinits[[i]]$I = I
+    pars$Xinits[[i]]$P = P
+    return(pars)
+  }))}
 
 
 #' @title Return the parameters as a list
@@ -329,7 +362,7 @@ xds_plot_X.SIP = function(pars, i=1, clrs=c("darkblue", "darkred", "darkgreen"),
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "# Infected", xlab = "Time")
 
-  add_lines_X_SIS(time, XH, pars$nStrata[i], clrs, llty)
+  add_lines_X_SIP(time, XH, pars$nStrata[i], clrs, llty)
 }
 
 

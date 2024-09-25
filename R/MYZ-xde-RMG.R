@@ -176,6 +176,39 @@ create_MYZpar_RMG = function(nPatches, MYZopts=list(), eip=12,
     return(MYZpar)
 })}
 
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
+#' @param pars an **`xds`** object
+#' @param s the vector species index
+#' @return a [list]
+#' @export
+get_MYZpars.RMG <- function(pars, s=1) {
+  with(pars$MYZpar[[s]], list(
+    f=f_t, q=q_t, g=g_t, sigma_b=sigma_b_t, sigma_q = sigma_q_t, eip=eip, mu=mu_t,
+    nu=nu_t, eggsPerBatch=eggsPerBatch, calK=calK
+  ))
+}
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
+#' @inheritParams ramp.xds::set_MYZpars
+#' @return an **`xds`** object
+#' @export
+set_MYZpars.RMG <- function(pars, s=1, MYZopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$MYZpar[[s]], with(MYZopts,{
+    pars$MYZpar[[s]]$f_t = f
+    pars$MYZpar[[s]]$q_t = q
+    pars$MYZpar[[s]]$g_t = g
+    pars$MYZpar[[s]]$sigma_b_t = sigma_b
+    pars$MYZpar[[s]]$sigma_q_t = sigma_q
+    pars$MYZpar[[s]]$eip = eip
+    pars$MYZpar[[s]]$mu = mu
+    pars$MYZpar[[s]]$nu_t = nu
+    pars$MYZpar[[s]]$eggsPerBatch = eggsPerBatch
+    return(pars)
+  }))}
+
 #' @title Setup initial values for the RMG model
 #' @description Implements [make_MYZinits] for the RM model
 #' @inheritParams ramp.xds::make_MYZinits
@@ -280,6 +313,21 @@ update_MYZinits.RMG <- function(pars, y0, s) {
     return(pars)
 })}
 
+#' @title Set new MYZ parameter values
+#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
+#' @inheritParams ramp.xds::set_MYZinits
+#' @return an `xds` object
+#' @export
+set_MYZinits.RMG <- function(pars, s=1, MYZopts=list()) {
+  with(pars$MYZpar[[s]], with(MYZopts,{
+    pars$MYZinits[[s]]$U_b = U_b
+    pars$MYZinits[[s]]$U_g = U_g
+    pars$MYZinits[[s]]$Y_b = Y_b
+    pars$MYZinits[[s]]$Y_g = Y_g
+    pars$MZZinits[[s]]$Z_b = Z_b
+    pars$MYZinits[[s]]$Y_g = Y_g
+    return(pars)
+  }))}
 
 #' @title Return initial values as a vector
 #' @description Implements [get_MYZinits] for the RMG model.
