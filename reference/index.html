@@ -45,6 +45,9 @@
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
     </li>
     <li>
+      <a href="../articles/MYZ-macdonald.html">Macdonald's Model</a>
+    </li>
+    <li>
       <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
     </li>
   </ul></li>
@@ -143,9 +146,21 @@
         </td>
         <td><p>Derivatives for adult mosquitoes</p></td>
       </tr><tr><td>
+          <p><code><a href="get_MYZpars.RMG.html">get_MYZpars(<i>&lt;RMG&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_MYZpars.RMG.html">set_MYZpars(<i>&lt;RMG&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="get_MYZinits.RMG.html">get_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_MYZinits.RMG.html">set_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set new MYZ parameter values</p></td>
       </tr><tr><td>
           <p><code><a href="make_MYZinits.RMG.html">make_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
@@ -259,7 +274,7 @@
         </td>
         <td><p>Make parameters for ENBRQ_dts adult mosquito model</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="the-sei-compartment-model-for-infection">The “SEI” compartment model for infection <a href="#the-sei-compartment-model-for-infection" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="the-sei-compartment-model">The SEI compartment model <a href="#the-sei-compartment-model" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p><p>Specialized methods for simple infection dynamics for an adult mosquito population</p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -311,6 +326,10 @@
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
+          <p><code><a href="set_MYZpars.SEI.html">set_MYZpars(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="put_MYZvars.SEI.html">put_MYZvars(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
@@ -334,6 +353,10 @@
           <p><code><a href="get_MYZinits.SEI.html">get_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_MYZinits.SEI.html">set_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set new MYZ parameter values</p></td>
       </tr><tr><td>
           <p><code><a href="update_MYZinits.SEI.html">update_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
@@ -502,6 +525,14 @@
           <p><code><a href="get_Xinits.garki.html">get_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector for the garki model</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.garki.html">set_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.garki.html">set_Xpars(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.garki.html">update_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
@@ -735,6 +766,14 @@
         </td>
         <td><p>Return initial values as a vector</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Xinits.SIR.html">set_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.SIR.html">set_Xpars(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="update_Xinits.SIR.html">update_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Update inits for the SIR human model from a vector of states</p></td>
@@ -818,6 +857,14 @@
           <p><code><a href="get_Xinits.SIRS.html">get_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.SIRS.html">set_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.SIRS.html">set_Xpars(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.SIRS.html">update_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
@@ -903,6 +950,14 @@
         </td>
         <td><p>Return initial values as a vector</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Xinits.SEIR.html">set_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.SEIR.html">set_Xpars(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="update_Xinits.SEIR.html">update_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Update inits for the SEIR human model from a vector of states</p></td>
@@ -986,6 +1041,14 @@
           <p><code><a href="get_Xinits.SEIRV.html">get_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.SEIRV.html">set_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.SEIRV.html">set_Xpars(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.SEIRV.html">update_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
@@ -1099,6 +1162,14 @@
         </td>
         <td><p>Return initial values as a vector</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Xinits.SEIS.html">set_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xpars.SEIS.html">set_Xpars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="update_Xinits.SEIS.html">update_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Update inits for the SEIS xde human model from a vector of states</p></td>
@@ -1163,7 +1234,7 @@
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xpars.SEISd.html">get_Xpars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="set_Xpars.SEISd.html">set_Xpars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
@@ -1190,6 +1261,14 @@
           <p><code><a href="get_Xinits.SEISd.html">get_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.SEISd.html">set_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_Xpars.SEISd.html">get_Xpars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.SEISd.html">update_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
@@ -1275,6 +1354,10 @@
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Xpars.SIP.html">set_Xpars(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="F_X.SIP.html">F_X(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -1294,6 +1377,10 @@
           <p><code><a href="get_Xinits.SIP.html">get_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.SIP.html">set_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.SIP.html">update_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
@@ -1379,6 +1466,10 @@
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Xpars.SIPd.html">set_Xpars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="F_X.SIPd.html">F_X(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -1398,6 +1489,10 @@
           <p><code><a href="get_Xinits.SIPd.html">get_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return initial values as a vector</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_Xinits.SIPd.html">set_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
           <p><code><a href="update_Xinits.SIPd.html">update_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
