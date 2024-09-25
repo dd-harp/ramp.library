@@ -82,6 +82,34 @@ create_Xinits_SIR = function(nStrata,H, Xopts = list(),I=1, R=0){with(Xopts,{
 })}
 
 
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xpars
+#' @return an **`xds`** object
+#' @export
+set_Xpars.SIR <- function(pars, i=1, Xopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xpar[[i]]$b <- b
+    pars$Xpar[[i]]$c <- c
+    pars$Xpar[[i]]$r <- r
+    return(pars)
+  }))}
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xinits
+#' @return an **`xds`** object
+#' @export
+set_Xinits.SIR <- function(pars, i=1, Xopts=list()) {
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$S = S
+    pars$Xinits[[i]]$I = I
+    pars$Xinits[[i]]$R = R
+    return(pars)
+  }))}
+
 
 
 

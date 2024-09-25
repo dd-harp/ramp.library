@@ -1,13 +1,13 @@
 ---
-title: "Macdonald's Model for Mosquito Infection Dynamics"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+title: "Macdonald's Model"
+subtitle: "A Delay Differential Equation for Adult Mosquito Infection Dynamics"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Macdonald's Model for Mosquito Infection Dynamics}
+  %\VignetteIndexEntry{Macdonald's Model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
 ```{r, echo=FALSE, warning=FALSE, messages=FALSE, purl=F}
 library(knitr)
 library(ramp.xds)
@@ -15,16 +15,137 @@ library(deSolve)
 library(ramp.library)
 ```
 
-In 1952, George Macdonald published [*The analysis of the sporozoite rate*](https://pubmed.ncbi.nlm.nih.gov/14958825/).  Later that year, in  [*The analysis of equilibrium in malaria*](https://pubmed.ncbi.nlm.nih.gov/12995455/), Macdonald presented a formula for the *basic reproduction rate* of malaria parasites, now often called $R_0$ (pronounced R-naught). We have included a version of that model, called *`macdonald`* in **`ramp.library`** for several reasons. For a longer discussion, see the [overview](MYZ-Overview.html). 
+The `macdonald` module was included in **`ramp.xds`** for historical reasons: Macdonald's model for mosquito infection dynamics is a special case. What I am calling *Macdonald's Model* comes from three publications in 1952-1953. In 1952, George Macdonald published [*The analysis of the sporozoite rate*](https://pubmed.ncbi.nlm.nih.gov/14958825/)^[The analysis of the sporozoite rate. Macdonald G (1952). Trop Dis Bull 49(6):569-86.].  Later that year, in  [*The analysis of equilibrium in malaria*](https://pubmed.ncbi.nlm.nih.gov/12995455/)^[The analysis of equilibrium in malaria. Macdonald G (1952). Trop Dis Bull 49(9):813-29.], Macdonald presented a formula for the *basic reproduction rate* of malaria parasites, now often called $R_0$ (pronounced R-naught). Macdonald gives credit to his colleague Armitage for the mathematics. Armitage's paper, [*A note on the epidemiology of malaria*](https://pubmed.ncbi.nlm.nih.gov/13113672/)^[A note on the epidemiology of malaria. Armitage P (1953). Trop Dis Bull 50(10):890-2] would appear in 1953, but it was not presented as a system of differential equations. 
 
-## Before Macdonald
+The module called *`macdonald`* was included in **`ramp.library`** as an example of a module that was *not* extensible. The model was formulated as a system of delay diferential equations, and the formulation of the *non-autonomous* model (*e.g.* with forcing due to weather or vector control) requires some mathematics. This is, perhaps, why compartment models are so commonly used.  A fully extensible delay differential equation model that extends Macdonald's model is the generalized, non-autonomous Ross-Macdonald module `GeRM.`
 
-Before Macdonald, Ross had published mathematical models describing the coupled dynamics of parasite infections in mosquitoes and humans. 
+In the following, we present a version of Macdonald's model. Next, we present an extension of Macdonald's model that is extensible, published by Joan Aron and Robert M. May in 1982. Finally, we present `macdonald` as an *autonomous* spatial version of Macdonald's model.  
 
 ## Macdonald's Model
 
-## Aron's Model 
+If Macdonald's analysis were presented as a mathematical model, it would almost certainly look something like the following. Consider
+a simple system of differential equations the sporozoite rate has three parameters and one term: 
 
-## Generalized 
++ the human blood feeding rate, $a$
+
++ the extrinsic incubation period, $\tau$  
+
++ the mosquito death rate, $g$; or the probability of surviving one day, $p=e^{-g}$, so $g=-\ln p$  
+
++ the fraction of bites on humans that infect a mosquito, $\kappa$ 
+
+Let $y$ denote the fraction of mosquitoes that are infected. The dynamics are given by:
+$$\frac{dy}{dt} = a \kappa (1-y) - g y$$ 
+Let $z$ denote the fraction of mosquitoes that are infectious. The model is a delay differential equation. Let $y_\tau$ denote the value of $y$ at time $t-\tau.$ If the parameters and terms are constant, then:  
+$$\frac{dz}{dt} = e^{-g\tau} a \kappa (1-y_\tau) - g z$$ 
+The model has a steady state for the fraction infected: 
+$$\bar y = \frac{a \kappa} {a \kappa + g}$$ 
+The fraction infectious, also called the sporozoite rate, is 
+$$\bar z = \frac{a \kappa} {a \kappa + g}e^{-g\tau}.$$ 
+Macdonald used $p$ so his formula was: 
+$$\bar z = \frac{a \kappa} {a \kappa -\ln p}e^{-p\tau}$$ 
+
+To generate the formula for $R_0,$ Macdonald introduces another variable and three additional parameters: 
+
++ the ratio of mosquitoes to humans, $m$ 
+
++ the rate infections clear, $r$ 
+
++ the fraction of infectious bites that infect a human, $b$ 
+
+The fraction of infected and infectious humans, $x,$ is given by the equation: 
+
+$$\frac{dx}{dt} = m a z (1-y) - r x$$
+and the model assumes that $\kappa = x.$ The formula for $R_0$ in this system is:
+$$R_0 = \frac{m b a^2}{gr} e^{-g\tau} = \frac{m b a^2}{(-\ln p)r} e^{-p\tau}$$ 
+In this form, the model is difficult to use or extend. 
+
+## Aron & May  
+
+The mosquito module in **`ramp.xds`** called `macdonald` is based on a model first published in 1982 by Joan Aron and Robert May^[The population dynamics of malaria. In *The Population Dynamics of Infectious Diseases: Theory and Applications,* R. M. Anderson, ed. (Springer US), pp. 139–179. [online](https://link.springer.com/chapter/10.1007/978-1-4899-2901-3_5){target="_blank"}]. It includes state variables for total mosquito density $M$, infected mosquito density $Y$, and infectious mosquito density $Z$. In this model, the blood feeding rate is split into an overall blood feeding rate, $f$, and the human fraction, $q$ such that $$a=fq.$$ The Aron & May's equations are: 
+$$\begin{array}{rl} 
+\frac{dM}{dt} &= \Lambda(t) - g M \\
+\frac{dY}{dt} &= fq\kappa(M-Y) - g Y \\
+\frac{dZ}{dt} &= e^{-g\tau}fq\kappa_\tau(M_\tau-Y_\tau) - g Z \\
+\end{array}$$
+
+## `macdonald`  
+
+The module called `macdonald` has been extended beyond the Aron & May formulation to include spatial dynamics and parity. To formulate the spatial model, a spatial domain is sub-divided into a set of patches. Variable and parameter names do not change, but they can now represent vectors of length $n_p.$ To formulate the *demographic matrix,* denoted $\Omega,$ that describes mosquito mortality, emigration, and other loss from the system. We let $\sigma$ denote the emigration rate and $\cal K$ the mosquito dispersal matrix. We also introduce a parameter, $\mu$ to model the fraction of mosquitoes that are lost to emigration from each patch. 
+$$\Omega = \mbox{diag} \left(g\right) + \left(\mbox{diag} \left(1-\mu\right)  - \cal K\right) \cdot \mbox{diag} \left(\sigma\right) 
+$$
+
+### Dynamics
+
+$$\begin{array}{rl}
+\dot{M} & = \Lambda - \Omega\cdot M  \\
+\dot{P} & = \mbox{diag}(f) \cdot (M-P) -  \Omega \cdot P\\ 
+\dot{Y} & = \mbox{diag}(fq\kappa) \cdot (M-Y) - \Omega \cdot Y \\
+\dot{Z} & = 
+\dot{Z} = e^{-\Omega \tau} \cdot \mbox{diag}(fq\kappa_{t-\tau}) \cdot (M_{t-\tau}-Y_{t-\tau}) - \Omega \cdot Z
+\end{array}
+$$
+
+## Ordinary Differential Equations
+
+We note that the module `SI` provides a reasonably simple approximating model that has no delay, but in computing $fqZ,$ it includes mortality and dispersal that would have occurred during the EIP: 
+$$
+Z = e^{-\Omega \tau} \cdot Y 
+$$
+The implementation of `SI` is similar in spirit to the simple model presented in  Smith & McKenzie (2004)^[Smith, D.L., Ellis McKenzie, F. Statics and dynamics of malaria infection in Anopheles mosquitoes. Malar J 3, 13 (2004). [online](https://doi.org/10.1186/1475-2875-3-13){target="_blank"}]. in that mortality and dispersal over the EIP is accounted for, but the time lag is not. While
+transient dynamics of the ODE model will not equal the DDE model, they have the same
+equilibrium values, and so for numerical work requiring finding equilibrium points, the faster
+ODE model can be safely substituted.
 
 
+## Steady States
+
+There are two logical ways to begin solving the non-trivial equilibrium. The first
+assumes $\Lambda$ is known, which implies good knowledge of mosquito ecology. The
+second assumes $Z$ is known, which implies knowledge of the biting rate on the
+human population. We show both below.
+
+### Starting with $\Lambda$
+
+Given $\Lambda$ we can solve:
+
+$$
+M = \Omega^{-1} \cdot \Lambda
+$$
+Then given $M$ we set $\dot{Y}$ to zero and factor out $Y$ to get:
+
+$$
+Y = (\mbox{diag}(fq\kappa) + \Omega)^{-1} \cdot \mbox{diag}(fq\kappa) \cdot M
+$$
+We set $\dot{Z}$ to zero to get:
+
+$$
+Z = \Omega^{-1} \cdot e^{-\Omega \tau} \cdot \mbox{diag}(fq\kappa) \cdot (M-Y)
+$$
+
+Because the dynamics of $P$ are independent of the infection dynamics, we can solve it given $M$ as:
+
+$$
+P = (\Omega + \mbox{diag}(f))^{-1} \cdot \mbox{diag}(f) \cdot M
+$$
+
+### Starting with $Z$
+
+It is more common that we start from an estimate of $Z$, perhaps derived from an estimated EIR (entomological inoculation rate). Given $Z$, we can calculate the other state variables and $\Lambda$. For numerical implementation, note that $(e^{-\Omega\tau})^{-1} = e^{\Omega\tau}$.
+
+$$
+M-Y = \mbox{diag}(1/fq\kappa) \cdot (e^{-\Omega\tau})^{-1} \cdot \Omega \cdot Z
+$$
+
+$$
+Y = \Omega^{-1} \cdot \mbox{diag}(fq\kappa) \cdot (M-Y)
+$$
+
+$$
+M = (M - Y) + Y
+$$
+
+$$
+\Lambda = \Omega \cdot M
+$$
+We can use the same equation for $P$ as above.

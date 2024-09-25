@@ -19,5 +19,5 @@
 a [list] vector
 }
 \description{
-Implements [make_Xpar] for the SIP model
+Set up the `SIP` model with parameters
 }

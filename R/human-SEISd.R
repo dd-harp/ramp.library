@@ -88,6 +88,37 @@ create_Xpar_SEISd = function(nStrata, Xopts=list(),
     return(Xpar)
   })}
 
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xpars
+#' @return an **`xds`** object
+#' @export
+set_Xpars.SEISd <- function(pars, i=1, Xopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xpar[[i]]$b <- b
+    pars$Xpar[[i]]$c <- c
+    pars$Xpar[[i]]$r <- r
+    pars$Xpar[[i]]$nu <- nu
+    return(pars)
+  }))}
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xinits
+#' @return an **`xds`** object
+#' @export
+set_Xinits.SEISd <- function(pars, i=1, Xopts=list()) {
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$S = S
+    pars$Xinits[[i]]$E = E
+    pars$Xinits[[i]]$I = I
+    return(pars)
+  }))}
+
+
 #' @title Return the parameters as a list
 #' @description Parameter values for the \eqn{i^{th}} host are
 #' stored as `pars$Xpar[[i]]`. This returns the stored parameter

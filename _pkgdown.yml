@@ -11,6 +11,8 @@ navbar:
       href: articles/MYZ-Overview.html
     - text: How to add a new MYZ model
       href: articles/MYZ-How_To_Add_Model.html
+    - text: Macdonald's Model
+      href: articles/MYZ-macdonald.html
     - text: A Behavioral State Model
       href: articles/MYZ-xde-RMG.html
   - text: Mosquito - Aquatic
@@ -63,7 +65,10 @@ reference:
   - MBaseline.RMG
   - MBionomics.RMG
   - dMYZdt.RMG
+  - get_MYZpars.RMG
+  - set_MYZpars.RMG
   - get_MYZinits.RMG
+  - set_MYZinits.RMG
   - make_MYZinits.RMG
   - create_MYZinits_RMG
   - make_MYZpar.RMG
@@ -95,7 +100,7 @@ reference:
   - get_MYZinits.ENBRQ_dts
   - update_MYZinits.ENBRQ_dts
   - make_parameters_MYZ_ENBRQ_dts
-- subtitle: The "SEI" compartment model for infection
+- subtitle: The SEI compartment model
   desc: |
     Specialized methods for simple infection dynamics for an adult mosquito population
   contents:
@@ -111,12 +116,14 @@ reference:
   - F_eggs.SEI
   - list_MYZvars.SEI
   - get_MYZpars.SEI
+  - set_MYZpars.SEI
   - put_MYZvars.SEI
   - make_MYZinits.SEI
   - create_MYZinits_SEI
   - make_indices_MYZ.SEI
   - parse_MYZorbits.SEI
   - get_MYZinits.SEI
+  - set_MYZinits.SEI
   - update_MYZinits.SEI
   - get_f.SEI
   - get_q.SEI
@@ -168,6 +175,8 @@ reference:
   - make_X_indices.garki
   - parse_Xorbits.garki
   - get_Xinits.garki
+  - set_Xinits.garki
+  - set_Xpars.garki
   - update_Xinits.garki
   - HTC.garki
   - xds_plot_X.garki
@@ -231,6 +240,8 @@ reference:
   - make_X_indices.SIR
   - parse_Xorbits.SIR
   - get_Xinits.SIR
+  - set_Xinits.SIR
+  - set_Xpars.SIR
   - update_Xinits.SIR
   - HTC.SIR
   - xds_plot_X.SIR
@@ -253,6 +264,8 @@ reference:
   - make_X_indices.SIRS
   - parse_Xorbits.SIRS
   - get_Xinits.SIRS
+  - set_Xinits.SIRS
+  - set_Xpars.SIRS
   - update_Xinits.SIRS
   - HTC.SIRS
   - xds_plot_X.SIRS
@@ -275,6 +288,8 @@ reference:
   - make_X_indices.SEIR
   - parse_Xorbits.SEIR
   - get_Xinits.SEIR
+  - set_Xinits.SEIR
+  - set_Xpars.SEIR
   - update_Xinits.SEIR
   - HTC.SEIR
   - xds_plot_X.SEIR
@@ -297,6 +312,8 @@ reference:
   - make_X_indices.SEIRV
   - parse_Xorbits.SEIRV
   - get_Xinits.SEIRV
+  - set_Xinits.SEIRV
+  - set_Xpars.SEIRV
   - update_Xinits.SEIRV
   - HTC.SEIRV
   - xds_plot_X.SEIRV
@@ -328,6 +345,8 @@ reference:
   - F_b.SEIS
   - parse_Xorbits.SEIS
   - get_Xinits.SEIS
+  - set_Xinits.SEIS
+  - set_Xpars.SEIS
   - update_Xinits.SEIS
   - HTC.SEIS
   - xds_plot_X.SEIS
@@ -347,13 +366,16 @@ reference:
   - create_Xinits_SEISd
   - make_X_indices.SEISd
   - list_Xvars.SEISd
-  - get_Xpars.SEISd
+  - set_Xpars.SEISd
   - put_Xvars.SEISd
   - F_X.SEISd
   - F_H.SEISd
   - F_b.SEISd
   - parse_Xorbits.SEISd
   - get_Xinits.SEISd
+  - set_Xinits.SEISd
+  - get_Xpars.SEISd
+  - set_Xpars.SEISd
   - update_Xinits.SEISd
   - HTC.SEISd
   - F_pr.SEISd
@@ -378,11 +400,13 @@ reference:
   - make_X_indices.SIP
   - list_Xvars.SIP
   - get_Xpars.SIP
+  - set_Xpars.SIP
   - F_X.SIP
   - F_H.SIP
   - F_b.SIP
   - parse_Xorbits.SIP
   - get_Xinits.SIP
+  - set_Xinits.SIP
   - update_Xinits.SIP
   - HTC.SIP
   - F_pr.SIP
@@ -407,11 +431,13 @@ reference:
   - make_X_indices.SIPd
   - list_Xvars.SIPd
   - get_Xpars.SIPd
+  - set_Xpars.SIPd
   - F_X.SIPd
   - F_H.SIPd
   - F_b.SIPd
   - parse_Xorbits.SIPd
   - get_Xinits.SIPd
+  - set_Xinits.SIPd
   - update_Xinits.SIPd
   - HTC.SIPd
   - F_pr.SIPd

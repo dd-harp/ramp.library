@@ -17,3 +17,22 @@ library(ramp.library)
 ```
 
 
+In **`ramp.xds`** and **`ramp.library`** there are several modules that would be considered suitable for modeling some aspects of malaria epidemiology.
+
++ **`ramp.xds`**
+
+  +  `hMoI`
+  
+  +  `SIS`
+
++ **`ramp.library`**
+  
+  +  `SIP`
+  
+  +  `SIPd`
+  
+  +  `SEIS`
+  
+  +  `SEISd`
+  
+  +  `garki`

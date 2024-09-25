@@ -82,6 +82,46 @@ create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
   })}
 
 
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xpars
+#' @return an **`xds`** object
+#' @export
+set_Xpars.garki <- function(pars, i=1, Xopts=list()) {
+  nHabitats <- pars$nHabitats
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xpar[[i]]$b <- b
+    pars$Xpar[[i]]$r1 <- r1
+    pars$Xpar[[i]]$r2 <- r2
+    pars$Xpar[[i]]$nu <- nu
+    pars$Xpar[[i]]$alpha1 <- alpha1
+    pars$Xpar[[i]]$alpha2 <- alpha2
+    pars$Xpar[[i]]$mu <- mu
+    pars$Xpar[[i]]$q1 <- q1
+    pars$Xpar[[i]]$q2 <- q2
+    pars$Xpar[[i]]$q3 <- q3
+    return(pars)
+  }))}
+
+
+#' @title Return the parameters as a list
+#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
+#' @inheritParams ramp.xds::set_Xinits
+#' @return an **`xds`** object
+#' @export
+set_Xinits.garki <- function(pars, i=1, Xopts=list()) {
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$x1 = x1
+    pars$Xinits[[i]]$x2 = x2
+    pars$Xinits[[i]]$x3 = x3
+    pars$Xinits[[i]]$x4 = x4
+    pars$Xinits[[i]]$y1 = y1
+    pars$Xinits[[i]]$y2 = y2
+    pars$Xinits[[i]]$y3 = y3
+    return(pars)
+  }))}
+
+
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the garki model.
 #' @inheritParams ramp.xds::F_X

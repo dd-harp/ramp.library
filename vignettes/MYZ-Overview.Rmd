@@ -22,9 +22,9 @@ Modules in **`ramp.xds`**
 
 - `basicM` 
 
-- `macdonald` 
+- [`macdonald`](MYZ-Macdonald.html)
 
-- `si` 
+- `SI` 
 
 - `GeRM` 
 
