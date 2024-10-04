@@ -12,7 +12,7 @@
 #' where \eqn{H = S+I+P}; \eqn{B(t, H)} is the
 #' time-dependent birth rate; and the \eqn{d{\cal H}}
 #' operator computes derivatives for the demographic model \eqn{\cal H}.
-#' @seealso The parameters are defined in [create_Xpar_SIP]
+#' @seealso The parameters are defined in [make_Xpar_SIP]
 #' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export
@@ -35,11 +35,11 @@ dXdt.SIP <- function(t, y, pars, i){
 
 #' @title Setup `Xpar` for an `SIP`
 #' @description Set up the `SIP` model with parameters
-#' @inheritParams ramp.xds::make_Xpar
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.SIP = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = create_Xpar_SIP(pars$nStrata[i], Xopts)
+setup_Xpar.SIP = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_SIP(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -55,7 +55,7 @@ make_Xpar.SIP = function(Xname, pars, i, Xopts=list()){
 #' @param xi background treatment rate
 #' @return a [list]
 #' @export
-create_Xpar_SIP = function(nStrata, Xopts=list(),
+make_Xpar_SIP = function(nStrata, Xopts=list(),
                            b=0.55, r=1/180, c=0.15,
                            rho=.1, eta=1/25, xi=1/365){
   with(Xopts,{
@@ -98,8 +98,8 @@ set_Xpars.SIP <- function(pars, i=1, Xopts=list()) {
 #' @return an **`xds`** object
 #' @export
 set_Xinits.SIP <- function(pars, i=1, Xopts=list()) {
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$S = S
+  with(get_Xinits(pars, i), with(Xopts,{
+    pars$Xinits[[i]]$S = get_H(pars,i)-I-P
     pars$Xinits[[i]]$I = I
     pars$Xinits[[i]]$P = P
     return(pars)
@@ -112,7 +112,7 @@ set_Xinits.SIP <- function(pars, i=1, Xopts=list()) {
 #' values as a list.
 #' @inheritParams ramp.xds::get_Xpars
 #' @return a [list]
-#' @seealso [create_Xpar_SIP]
+#' @seealso [make_Xpar_SIP]
 #' @export
 get_Xpars.SIP <- function(pars, i=1) {
   with(pars$Xpar[[i]],list(b=b, c=c, r=r, rho=rho, eta=eta, xi=xi))
@@ -215,12 +215,12 @@ HTC.SIP <- function(pars, i) {
 
 
 #' @title Setup Xinits.SIP
-#' @description Implements [make_Xinits] for the SIP model
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the SIP model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SIP = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = create_Xinits_SIP(pars$nStrata[i], H, Xopts)
+setup_Xinits.SIP = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = make_Xinits_SIP(pars$nStrata[i], H, Xopts)
   return(pars)
 }
 
@@ -232,7 +232,7 @@ make_Xinits.SIP = function(pars, H, i, Xopts=list()){
 #' @param P the initial values of the parameter P
 #' @return a [list]
 #' @export
-create_Xinits_SIP = function(nStrata, H, Xopts = list(),
+make_Xinits_SIP = function(nStrata, H, Xopts = list(),
                            I=1, P=0){with(Xopts,{
   S = checkIt(H-I-P, nStrata)
   I = checkIt(I, nStrata)
@@ -258,12 +258,12 @@ parse_Xorbits.SIP <- function(outputs, pars, i) {
 })}
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for the SIP model.
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for the SIP model.
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.SIP <- function(pars, i) {with(pars,{
+setup_Xix.SIP <- function(pars, i) {with(pars,{
 
   S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
@@ -286,7 +286,7 @@ make_X_indices.SIP <- function(pars, i) {with(pars,{
 #' @export
 update_Xinits.SIP <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-  pars$Xinits[[i]] = create_Xinits_SIP(pars$nStrata[i], pars$H0, list(), I=I, P=P)
+  pars$Xinits[[i]] = make_Xinits_SIP(pars$nStrata[i], pars$H0, list(), I=I, P=P)
   return(pars)
 })}
 

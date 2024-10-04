@@ -4,12 +4,12 @@
 \alias{update_Linits.stages_dts}
 \title{Update inits for the stages_dts aquatic mosquito competition model}
 \usage{
-\method{update_Linits}{stages_dts}(pars, y0, s)
+\method{update_Linits}{stages_dts}(pars, y, s)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
 
-\item{y0}{a vector of variable values from a simulation}
+\item{y}{the state variables}
 
 \item{s}{the species index}
 }

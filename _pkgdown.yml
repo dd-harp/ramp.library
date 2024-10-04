@@ -69,11 +69,11 @@ reference:
   - set_MYZpars.RMG
   - get_MYZinits.RMG
   - set_MYZinits.RMG
-  - make_MYZinits.RMG
-  - create_MYZinits_RMG
-  - make_MYZpar.RMG
-  - create_MYZpar_RMG
-  - make_indices_MYZ.RMG
+  - setup_MYZinits.RMG
+  - setup_MYZpar.RMG
+  - make_MYZinits_RMG
+  - make_MYZpar_RMG
+  - setup_MYZix.RMG
   - parse_MYZorbits.RMG
   - update_MYZinits.RMG
   - get_g.RMG
@@ -89,12 +89,12 @@ reference:
   - F_fqM.ENBRQ_dts
   - F_eggs.ENBRQ_dts
   - dMYZdt.ENBRQ_dts
-  - make_MYZpar.ENBRQ_dts
-  - create_MYZpar_ENBRQ_dts
-  - make_MYZinits.ENBRQ_dts
-  - create_MYZinits_ENBRQ_dts
+  - setup_MYZpar.ENBRQ_dts
+  - make_MYZpar_ENBRQ_dts
+  - setup_MYZinits.ENBRQ_dts
+  - make_MYZinits_ENBRQ_dts
   - list_MYZvars.ENBRQ_dts
-  - make_indices_MYZ.ENBRQ_dts
+  - setup_MYZix.ENBRQ_dts
   - parse_MYZorbits.ENBRQ_dts
   - make_inits_MYZ_ENBRQ_dts
   - get_MYZinits.ENBRQ_dts
@@ -109,8 +109,8 @@ reference:
   - MBionomics.SEI
   - xde_steady_state_MYZ.SEI
   - Update_MYZt.SEI
-  - make_MYZpar.SEI
-  - create_MYZpar_SEI
+  - setup_MYZpar.SEI
+  - make_MYZpar_SEI
   - F_fqZ.SEI
   - F_fqM.SEI
   - F_eggs.SEI
@@ -118,9 +118,9 @@ reference:
   - get_MYZpars.SEI
   - set_MYZpars.SEI
   - put_MYZvars.SEI
-  - make_MYZinits.SEI
-  - create_MYZinits_SEI
-  - make_indices_MYZ.SEI
+  - setup_MYZinits.SEI
+  - make_MYZinits_SEI
+  - setup_MYZix.SEI
   - parse_MYZorbits.SEI
   - get_MYZinits.SEI
   - set_MYZinits.SEI
@@ -146,11 +146,11 @@ reference:
   - LBionomics.stages_dts
   - F_emerge.stages_dts
   - dLdt.stages_dts
-  - make_Lpar.stages_dts
-  - make_Linits.stages_dts
-  - create_Lpar_stages_dts
-  - create_Linits_stages_dts
-  - make_indices_L.stages_dts
+  - setup_Lpar.stages_dts
+  - setup_Linits.stages_dts
+  - make_Lpar_stages_dts
+  - make_Linits_stages_dts
+  - setup_Lix.stages_dts
   - list_Lvars.stages_dts
   - parse_Lorbits.stages_dts
   - make_inits_L_stages_dts
@@ -167,12 +167,12 @@ reference:
   - F_pr.garki
   - F_b.garki
   - dXdt.garki
-  - make_Xpar.garki
-  - create_Xpar_garki
-  - make_Xinits.garki
-  - create_Xinits_garki
+  - setup_Xpar.garki
+  - make_Xpar_garki
+  - setup_Xinits.garki
+  - make_Xinits_garki
   - list_Xvars.garki
-  - make_X_indices.garki
+  - setup_Xix.garki
   - parse_Xorbits.garki
   - get_Xinits.garki
   - set_Xinits.garki
@@ -188,17 +188,17 @@ reference:
   contents:
   - dXdt.SIPw
   - Update_Xt.SIPw
-  - make_Xpar.SIPw
-  - create_Xpar_SIPw
+  - setup_Xpar.SIPw
+  - make_Xpar_SIPw
   - F_X.SIPw
   - F_H.SIPw
   - F_pr.SIPw
   - F_b.SIPw
-  - make_Xinits.SIPw
-  - create_Xinits_SIPw
+  - setup_Xinits.SIPw
+  - make_Xinits_SIPw
   - list_Xvars.SIPw
   - put_Xvars.SIPw
-  - make_X_indices.SIPw
+  - setup_Xix.SIPw
   - parse_Xorbits.SIPw
   - get_Xinits.SIPw
   - update_Xinits.SIPw
@@ -213,12 +213,12 @@ reference:
   - F_pr.workhorse
   - F_b.workhorse
   - dXdt.workhorse
-  - make_Xinits.workhorse
+  - setup_Xinits.workhorse
   - list_Xvars.workhorse
-  - make_Xpar.workhorse
-  - create_Xpar_workhorse
-  - create_Xinits_workhorse
-  - make_X_indices.workhorse
+  - setup_Xpar.workhorse
+  - make_Xpar_workhorse
+  - make_Xinits_workhorse
+  - setup_Xix.workhorse
   - parse_Xorbits.workhorse
   - get_Xinits.workhorse
   - update_Xinits.workhorse
@@ -228,16 +228,16 @@ reference:
 - subtitle: The SIR model
   contents:
   - dXdt.SIR
-  - make_Xpar.SIR
-  - create_Xpar_SIR
+  - setup_Xpar.SIR
+  - make_Xpar_SIR
   - F_X.SIR
   - F_H.SIR
   - F_pr.SIR
   - F_b.SIR
-  - make_Xinits.SIR
+  - setup_Xinits.SIR
   - list_Xvars.SIR
-  - create_Xinits_SIR
-  - make_X_indices.SIR
+  - make_Xinits_SIR
+  - setup_Xix.SIR
   - parse_Xorbits.SIR
   - get_Xinits.SIR
   - set_Xinits.SIR
@@ -256,12 +256,12 @@ reference:
   - F_pr.SIRS
   - F_b.SIRS
   - dXdt.SIRS
-  - make_Xpar.SIRS
-  - make_Xinits.SIRS
+  - setup_Xpar.SIRS
+  - setup_Xinits.SIRS
   - list_Xvars.SIRS
-  - create_Xpar_SIRS
-  - create_Xinits_SIRS
-  - make_X_indices.SIRS
+  - make_Xpar_SIRS
+  - make_Xinits_SIRS
+  - setup_Xix.SIRS
   - parse_Xorbits.SIRS
   - get_Xinits.SIRS
   - set_Xinits.SIRS
@@ -280,12 +280,12 @@ reference:
   - F_pr.SEIR
   - F_b.SEIR
   - dXdt.SEIR
-  - make_Xpar.SEIR
-  - make_Xinits.SEIR
+  - setup_Xpar.SEIR
+  - setup_Xinits.SEIR
   - list_Xvars.SEIR
-  - create_Xpar_SEIR
-  - create_Xinits_SEIR
-  - make_X_indices.SEIR
+  - make_Xpar_SEIR
+  - make_Xinits_SEIR
+  - setup_Xix.SEIR
   - parse_Xorbits.SEIR
   - get_Xinits.SEIR
   - set_Xinits.SEIR
@@ -305,11 +305,11 @@ reference:
   - F_b.SEIRV
   - dXdt.SEIRV
   - list_Xvars.SEIRV
-  - make_Xpar.SEIRV
-  - make_Xinits.SEIRV
-  - create_Xpar_SEIRV
-  - create_Xinits_SEIRV
-  - make_X_indices.SEIRV
+  - setup_Xpar.SEIRV
+  - setup_Xinits.SEIRV
+  - make_Xpar_SEIRV
+  - make_Xinits_SEIRV
+  - setup_Xix.SEIRV
   - parse_Xorbits.SEIRV
   - get_Xinits.SEIRV
   - set_Xinits.SEIRV
@@ -327,11 +327,11 @@ reference:
   contents:
   - dXdt.SEIS
   - Update_Xt.SEIS
-  - make_Xpar.SEIS
-  - create_Xpar_SEIS
-  - make_Xinits.SEIS
-  - create_Xinits_SEIS
-  - make_X_indices.SEIS
+  - setup_Xpar.SEIS
+  - make_Xpar_SEIS
+  - setup_Xinits.SEIS
+  - make_Xinits_SEIS
+  - setup_Xix.SEIS
   - list_Xvars.SEIS
   - get_Xpars.SEIS
   - put_Xvars.SEIS
@@ -359,12 +359,12 @@ reference:
   contents:
   - dXdt.SEISd
   - Update_Xt.SEISd
-  - make_Xpar.SEISd
-  - create_Xpar_SEISd
+  - setup_Xpar.SEISd
+  - make_Xpar_SEISd
   - xde_steady_state_X.SEISd
-  - make_Xinits.SEISd
-  - create_Xinits_SEISd
-  - make_X_indices.SEISd
+  - setup_Xinits.SEISd
+  - make_Xinits_SEISd
+  - setup_Xix.SEISd
   - list_Xvars.SEISd
   - set_Xpars.SEISd
   - put_Xvars.SEISd
@@ -391,13 +391,13 @@ reference:
   contents:
   - dXdt.SIP
   - Update_Xt.SIP
-  - make_Xpar.SIP
-  - create_Xpar_SIP
+  - setup_Xpar.SIP
+  - make_Xpar_SIP
   - xde_steady_state_X.SIP
   - dts_steady_state_X.SIP
-  - make_Xinits.SIP
-  - create_Xinits_SIP
-  - make_X_indices.SIP
+  - setup_Xinits.SIP
+  - make_Xinits_SIP
+  - setup_Xix.SIP
   - list_Xvars.SIP
   - get_Xpars.SIP
   - set_Xpars.SIP
@@ -422,13 +422,13 @@ reference:
   contents:
   - dXdt.SIPd
   - Update_Xt.SIPd
-  - make_Xpar.SIPd
-  - create_Xpar_SIPd
+  - setup_Xpar.SIPd
+  - make_Xpar_SIPd
   - xde_steady_state_X.SIPd
   - dts_steady_state_X.SIPd
-  - make_Xinits.SIPd
-  - create_Xinits_SIPd
-  - make_X_indices.SIPd
+  - setup_Xinits.SIPd
+  - make_Xinits_SIPd
+  - setup_Xix.SIPd
   - list_Xvars.SIPd
   - get_Xpars.SIPd
   - set_Xpars.SIPd

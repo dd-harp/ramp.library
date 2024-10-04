@@ -60,12 +60,12 @@ Update_MYZt.SEI <- function(t, y, pars, s) {
 }
 
 #' @title Setup MYZpar for the SEI model
-#' @description Implements [make_MYZpar] for the SEI model
-#' @inheritParams ramp.xds::make_MYZpar
+#' @description Implements [setup_MYZpar] for the SEI model
+#' @inheritParams ramp.xds::setup_MYZpar
 #' @return a [list] vector
 #' @export
-make_MYZpar.SEI = function(MYZname, pars, s, MYZopts=list()){
-  MYZpar <- create_MYZpar_SEI(pars$nPatches, MYZopts)
+setup_MYZpar.SEI = function(MYZname, pars, s, MYZopts=list()){
+  MYZpar <- make_MYZpar_SEI(pars$nPatches, MYZopts)
   class(MYZpar) <- 'SEI'
   pars$MYZpar[[s]] <- MYZpar
   return(pars)
@@ -186,12 +186,12 @@ put_MYZvars.SEI <- function(MYZvars, y, pars, s){
 
 
 #' @title Setup initial values for the SEI model
-#' @description Implements [make_MYZinits] for the SEI model
-#' @inheritParams ramp.xds::make_MYZinits
+#' @description Implements [setup_MYZinits] for the SEI model
+#' @inheritParams ramp.xds::setup_MYZinits
 #' @return a [list]
 #' @export
-make_MYZinits.SEI = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], create_MYZinits_SEI(nPatches, MYZopts))
+setup_MYZinits.SEI = function(pars, s, MYZopts=list()){
+  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_SEI(nPatches, MYZopts))
   return(pars)
 }
 
@@ -204,7 +204,7 @@ make_MYZinits.SEI = function(pars, s, MYZopts=list()){
 #' @param Z infectious mosquito density at each patch
 #' @return a [list]
 #' @export
-create_MYZinits_SEI = function(nPatches, MYZopts = list(),
+make_MYZinits_SEI = function(nPatches, MYZopts = list(),
                                M=5, Y=1, Z=0){
   with(MYZopts,{
     M = checkIt(M, nPatches)
@@ -217,12 +217,12 @@ create_MYZinits_SEI = function(nPatches, MYZopts = list(),
 
 
 #' @title Add indices for adult mosquitoes to parameter list
-#' @description Implements [make_indices_MYZ] for the SEI model.
-#' @inheritParams ramp.xds::make_indices_MYZ
+#' @description Implements [setup_MYZix] for the SEI model.
+#' @inheritParams ramp.xds::setup_MYZix
 #' @return a [list]
 #' @importFrom utils tail
 #' @export
-make_indices_MYZ.SEI <- function(pars, s) {with(pars,{
+setup_MYZix.SEI <- function(pars, s) {with(pars,{
 
   M_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(M_ix, 1)
@@ -291,7 +291,7 @@ update_MYZinits.SEI <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{
   M = y0[M_ix]
   Y = y0[Y_ix]
   Z = y0[Z_ix]
-  pars$MYZinits[[s]] = create_MYZinits_SEI(pars$nPatches, list(), M=M, Y=Y, Z=Z)
+  pars$MYZinits[[s]] = setup_MYZinits_SEI(pars$nPatches, list(), M=M, Y=Y, Z=Z)
   return(pars)
 })}
 
@@ -309,7 +309,7 @@ update_MYZinits.SEI <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
 #' @export
-create_MYZpar_SEI = function(nPatches, MYZopts=list(), eip =12,
+make_MYZpar_SEI = function(nPatches, MYZopts=list(), eip =12,
                              g=1/12,  sigma=1/8,  mu=0,
                              f=0.3,  q=0.95,
                              nu=1,  eggsPerBatch=60){

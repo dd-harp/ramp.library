@@ -20,5 +20,5 @@ stored as `pars$Xpar[[i]]`. This returns the stored parameter
 values as a list.
 }
 \seealso{
-[create_Xpar_SIP]
+[make_Xpar_SIP]
 }

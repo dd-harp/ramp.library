@@ -53,12 +53,12 @@ Update_Xt.SIPw <- function(t, y, pars, i){
 }
 
 #' @title Setup the Xpar for the SIPw_xde model
-#' @description implements [make_Xpar] for the SIPw model
-#' @inheritParams ramp.xds::make_Xpar
+#' @description implements [setup_Xpar] for the SIPw model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = create_Xpar_SIPw(pars$nStrata[i], Xopts)
+setup_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_SIPw(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -74,7 +74,7 @@ make_Xpar.SIPw = function(Xname, pars, i, Xopts=list()){
 #' @param eta rate of loss of chemo-protection
 #' @return a [list]
 #' @export
-create_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
+make_Xpar_SIPw= function(nStrata, Xopts=list(), b=0.55, c=0.15, r=1/180,
                              rho=.1, sigma=1/730, xi=1/365,  eta=1/25){
   with(Xopts,{
     Xpar = list()
@@ -178,12 +178,12 @@ HTC.SIPw <- function(pars, i) {
 
 
 #' @title Setup Xinits.SIPw
-#' @description Implements [make_Xinits] for the SIPw models
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the SIPw models
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SIPw = function(pars,H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,create_Xinits_SIPw(pars$nStrata[i],H, Xopts))
+setup_Xinits.SIPw = function(pars,H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars,make_Xinits_SIPw(pars$nStrata[i],H, Xopts))
   return(pars)
 }
 
@@ -196,7 +196,7 @@ make_Xinits.SIPw = function(pars,H, i, Xopts=list()){
 #' @param w the initial values of the tracking variable w
 #' @return a [list]
 #' @export
-create_Xinits_SIPw = function(nStrata, H, Xopts = list(),
+make_Xinits_SIPw = function(nStrata, H, Xopts = list(),
                            I=1, P=0, w=0){with(Xopts, {
     S = unname(as.vector(checkIt(H -I-P, nStrata)))
     I = unname(as.vector(checkIt(I, nStrata)))
@@ -222,12 +222,12 @@ parse_Xorbits.SIPw <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
   })}
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for SIPw models
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for SIPw models
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.SIPw <- function(pars, i) {with(pars,{
+setup_Xix.SIPw <- function(pars, i) {with(pars,{
 
   S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
@@ -252,7 +252,7 @@ make_X_indices.SIPw <- function(pars, i) {with(pars,{
 #' @export
 update_Xinits.SIPw <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = create_Xinits_SIPw(pars$nStrata[i], pars$H0,list(), I=I, P=P, w=w)
+    pars$Xinits[[i]] = make_Xinits_SIPw(pars$nStrata[i], pars$H0,list(), I=I, P=P, w=w)
     return(pars)
   })}
 

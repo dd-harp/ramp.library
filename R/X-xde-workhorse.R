@@ -104,7 +104,7 @@ list_Xvars.workhorse <- function(y, pars, i) {
 #' @param zeta_4 the treatment rate for stage 4
 #' @return a [list]
 #' @export
-create_Xpar_workhorse = function(nStrata, Xopts=list(),
+make_Xpar_workhorse = function(nStrata, Xopts=list(),
                                tau = 12,
                                b = 0.55,
                                r = 1/200,
@@ -145,12 +145,12 @@ create_Xpar_workhorse = function(nStrata, Xopts=list(),
   })}
 
 #' @title make Xpar.workhorse
-#' @description Implements [make_Xpar] for the workhorse model
-#' @inheritParams ramp.xds::make_Xpar
+#' @description Implements [setup_Xpar] for the workhorse model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = create_Xpar_workhorse(pars$nStrata[i], Xopts)
+setup_Xpar.workhorse = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_workhorse(pars$nStrata[i], Xopts)
   pars$xde = "dde"
   return(pars)
 }
@@ -190,12 +190,12 @@ F_b.workhorse <- function(y, pars, i) {
 })}
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for the workhorse model.
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for the workhorse model.
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.workhorse <- function(pars, i) {with(pars,{
+setup_Xix.workhorse <- function(pars, i) {with(pars,{
 
   U_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(U_ix, 1)
@@ -268,7 +268,7 @@ make_X_indices.workhorse <- function(pars, i) {with(pars,{
 #' @param w exposure tracking variable
 #' @return a [list]
 #' @export
-create_Xinits_workhorse = function(nStrata, Xopts = list(), H0 = NULL,
+make_Xinits_workhorse = function(nStrata, Xopts = list(), H0 = NULL,
                                  U = 180,  A0 = 13, P = 11,  G = 3,
                                  I1 = 20, I2 = 40, I3 = 80, I4 = 100,
                                  A1 = 2, A2 = 4, A3 = 8, A4 = 12,
@@ -301,12 +301,12 @@ create_Xinits_workhorse = function(nStrata, Xopts = list(), H0 = NULL,
 
 
 #' @title Setup Xinits.workhorse
-#' @description Implements [make_Xinits] for the workhorse model
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the workhorse model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.workhorse = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, create_Xinits_workhorse(pars$nStrata[i], Xopts, H=H))
+setup_Xinits.workhorse = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_workhorse(pars$nStrata[i], Xopts, H=H))
   return(pars)
 }
 
@@ -327,7 +327,7 @@ get_Xinits.workhorse <- function(pars, i){
 #' @export
 update_Xinits.workhorse <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = create_Xinits_workhorse(pars, list(), list(
+    pars = make_Xinits_workhorse(pars, list(), list(
       U=U,    A0=A0,  P=P,    G=G,
       I1=I1,  I2=I2,  I3=I3,  I4=I4,
       A1=A1,  A2=A2,  A3=A3,  A4=A4,

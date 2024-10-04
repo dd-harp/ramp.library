@@ -17,28 +17,48 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav"><li>
-  <a href="../reference/index.html">Functions</a>
-</li>
-<li class="dropdown">
+      <ul class="nav navbar-nav"><li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Adding Models
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/Adding_Models.html">Adding Models</a>
     </li>
-    <li>
-      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+  </ul></li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/MYZ-Overview.html">Overview</a>
     </li>
     <li>
       <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
+    </li>
+    <li>
+      <a href="../articles/MYZ-macdonald.html">Macdonald's Model</a>
+    </li>
+    <li>
+      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul></li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/L-Overview.html">Overview</a>
     </li>
     <li>
       <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
@@ -46,12 +66,24 @@
   </ul></li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    X
+    Human / Host
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/Malaria-Overview.html">Malaria Overview</a>
+    </li>
+    <li>
       <a href="../articles/Compartmental-Models.html">Compartmental Models</a>
+    </li>
+    <li>
+      <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
+    </li>
+    <li>
+      <a href="../articles/human_sip.html">SIP xde model</a>
+    </li>
+    <li>
+      <a href="../articles/human_seis.html">SEIS model</a>
     </li>
     <li>
       <a href="../articles/X-garki.html">The Garki Model</a>
@@ -60,16 +92,9 @@
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
     </li>
   </ul></li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    MYZ
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
-    </li>
-  </ul></li>
+<li>
+  <a href="../reference/index.html">Functions</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/dd-harp/ramp.library/" class="external-link">
     <span class="fa fa-github"></span>
@@ -99,12 +124,12 @@
 <span>  <span class="va">nPatches</span>,</span>
 <span>  <span class="va">nR1</span>,</span>
 <span>  MYZopts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  E0 <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  N0 <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  B0 <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  Q0 <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  R10 <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  R20 <span class="op">=</span> <span class="fl">0</span></span>
+<span>  E <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  N <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  B <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Q <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  R1 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  R2 <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -122,27 +147,27 @@
 <dd><p>a [list] of values that overwrites the defaults</p></dd>
 
 
-<dt>E0</dt>
+<dt>E</dt>
 <dd><p>total null-parous, blood feeding mosquito density</p></dd>
 
 
-<dt>N0</dt>
+<dt>N</dt>
 <dd><p>total null-parous, blood feeding mosquito density</p></dd>
 
 
-<dt>B0</dt>
+<dt>B</dt>
 <dd><p>total parous, blood feeding mosquito density at each patch</p></dd>
 
 
-<dt>Q0</dt>
+<dt>Q</dt>
 <dd><p>total egg laying mosquito density at each patch</p></dd>
 
 
-<dt>R10</dt>
+<dt>R1</dt>
 <dd><p>resting, stage 1, mosquito density at each patch</p></dd>
 
 
-<dt>R20</dt>
+<dt>R2</dt>
 <dd><p>resting, stage 2, mosquito density at each patch</p></dd>
 
 </dl></div>
@@ -161,7 +186,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by David L. Smith.</p>
+  <p></p><p>Developed by David L. Smith, Juliet Nsumba Nakakawa, Doreen Mbabazi Ssebuliba.</p>
 </div>
 
 <div class="pkgdown">

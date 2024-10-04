@@ -54,12 +54,12 @@ dts_steady_state_X.SEIS = function(ar, H, Xpar){with(Xpar,{
 })}
 
 #' @title Setup Xpar.SEIS
-#' @description Implements [make_Xpar] for the SEIS model
-#' @inheritParams ramp.xds::make_Xpar
+#' @description Implements [setup_Xpar] for the SEIS model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.SEIS = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = create_Xpar_SEIS(pars$nStrata[i], Xopts)
+setup_Xpar.SEIS = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_SEIS(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -72,7 +72,7 @@ make_Xpar.SEIS = function(Xname, pars, i, Xopts=list()){
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @return a [list]
 #' @export
-create_Xpar_SEIS = function(nStrata, Xopts=list(),
+make_Xpar_SEIS = function(nStrata, Xopts=list(),
                             b=0.55, r=1/180, nu=1/14, c=0.15){
   with(Xopts,{
     Xpar = list()
@@ -109,8 +109,8 @@ set_Xpars.SEIS <- function(pars, i=1, Xopts=list()) {
 #' @return an **`xds`** object
 #' @export
 set_Xinits.SEIS <- function(pars, i=1, Xopts=list()) {
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$S = S
+  with(get_Xinits(pars, i), with(Xopts,{
+    pars$Xinits[[i]]$S = get_H(pars,i)-E-I
     pars$Xinits[[i]]$E = E
     pars$Xinits[[i]]$I = I
     return(pars)
@@ -122,7 +122,7 @@ set_Xinits.SEIS <- function(pars, i=1, Xopts=list()) {
 #' values as a list.
 #' @inheritParams ramp.xds::get_Xpars
 #' @return a [list]
-#' @seealso [create_Xpar_SEIS]
+#' @seealso [make_Xpar_SEIS]
 #' @export
 get_Xpars.SEIS <- function(pars, i=1) {
   with(pars$Xpar[[i]],list(b=b, c=c, r=r, nu=nu))
@@ -169,7 +169,7 @@ F_b.SEIS <- function(y, pars, i) {
 #' @param I the initial values of the parameter I
 #' @return a [list]
 #' @export
-create_Xinits_SEIS = function(nStrata, H0, Xopts = list(), E=0, I=1){with(Xopts,{
+make_Xinits_SEIS = function(nStrata, H0, Xopts = list(), E=0, I=1){with(Xopts,{
   S = checkIt(H0-E-I, nStrata)
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
@@ -209,22 +209,22 @@ list_Xvars.SEIS <- function(y, pars, i) {
 
 
 #' @title Setup Xinits.SEIS
-#' @description Implements [make_Xinits] for the SEIS model
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the SEIS model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SEIS = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, create_Xinits_SEIS(pars$nStrata[i], H, Xopts))
+setup_Xinits.SEIS = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_SEIS(pars$nStrata[i], H, Xopts))
   return(pars)
 }
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for the SEIS model.
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for the SEIS model.
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.SEIS <- function(pars, i) {with(pars,{
+setup_Xix.SEIS <- function(pars, i) {with(pars,{
 
   S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
@@ -255,7 +255,7 @@ get_Xinits.SEIS <- function(pars, i){
 #' @export
 update_Xinits.SEIS <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = create_Xinits_SEIS(pars$nStrata[i], H, list(), E=E, I=I)
+    pars$Xinits[[i]] = make_Xinits_SEIS(pars$nStrata[i], H, list(), E=E, I=I)
     return(pars)
   })}
 
