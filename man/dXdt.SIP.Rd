@@ -32,5 +32,5 @@ time-dependent birth rate; and the \eqn{d{\cal H}}
 operator computes derivatives for the demographic model \eqn{\cal H}.
 }
 \seealso{
-The parameters are defined in [create_Xpar_SIP]
+The parameters are defined in [make_Xpar_SIP]
 }

@@ -32,12 +32,12 @@ dXdt.garki = function(t, y, pars, i){
 
 
 #' @title make Xpar.garki
-#' @description Implements [make_Xpar] for the garki model
-#' @inheritParams ramp.xds::make_Xpar
+#' @description Implements [setup_Xpar] for the garki model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.garki = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = create_Xpar_garki(pars$nStrata, Xopts)
+setup_Xpar.garki = function(Xname, pars, i, Xopts=list()){
+  pars$Xpar[[i]] = make_Xpar_garki(pars$nStrata, Xopts)
   return(pars)
 }
 
@@ -56,7 +56,7 @@ make_Xpar.garki = function(Xname, pars, i, Xopts=list()){
 #' @param mu a [numeric] the death rate
 #' @return a [list]
 #' @export
-create_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
+make_Xpar_garki = function(nStrata, Xopts=list(), b=0.55,
                              r1=.0023, r2=.023, nu=1/15,
                              alpha1=.002, alpha2=.00019,
                              q1=.7, q2=0.5, q3=0.3, mu=1/65/365){
@@ -196,7 +196,7 @@ list_Xvars.garki <- function(y, pars, i) {
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
 #' @export
-create_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
+make_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
   stopifnot(is.numeric(x2))
   stopifnot(is.numeric(y1))
   stopifnot(is.numeric(y2))
@@ -217,12 +217,12 @@ create_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, 
 }
 
 #' @title Setup Xinits.garki
-#' @description Implements [make_Xinits] for the garki model
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the garki model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.garki = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,create_Xinits_garki(pars$nStrata[i], Xopts, H=H))
+setup_Xinits.garki = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars,make_Xinits_garki(pars$nStrata[i], Xopts, H=H))
   return(pars)
 }
 
@@ -236,12 +236,12 @@ get_Xinits.garki <- function(pars, i){
 }
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for the garki model.
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for the garki model.
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.garki <- function(pars, i) {with(pars,{
+setup_Xix.garki <- function(pars, i) {with(pars,{
 
   x1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x1_ix, 1)
@@ -278,7 +278,7 @@ make_X_indices.garki <- function(pars, i) {with(pars,{
 #' @export
 update_Xinits.garki <- function(pars, y0, i){
   with(list_Xvars(y0, pars, i),{
-    pars = create_Xinits_garki(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
+    pars = make_Xinits_garki(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
     return(pars)
   })}
 

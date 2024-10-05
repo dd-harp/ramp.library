@@ -41,8 +41,8 @@ Xo$I <- ss$I
 Xo$P <- ss$P
 
 ## -----------------------------------------------------------------------------
-params = make_Xpar("SIP", params, 1, Xo) 
-params = make_Xinits(params, H, 1, Xo)
+params = setup_Xpar("SIP", params, 1, Xo) 
+params = setup_Xinits(params, H, 1, Xo)
 
 ## -----------------------------------------------------------------------------
 MYZo = list(
@@ -50,11 +50,11 @@ MYZo = list(
 )
 
 ## -----------------------------------------------------------------------------
-params = make_MYZpar("trivial", params, 1, MYZo)
-params = make_MYZinits(params, 1)
+params = setup_MYZpar("trivial", params, 1, MYZo)
+params = setup_MYZinits(params, 1)
 params <- setup_Hpar_static(params, 1)
-params = make_Lpar("trivial", params, 1)
-params = make_Linits(params, 1)
+params = setup_Lpar("trivial", params, 1)
+params = setup_Linits(params, 1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)

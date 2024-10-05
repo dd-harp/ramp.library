@@ -55,13 +55,13 @@ Update_Xt.SEISd <- function(t, y, pars, i) {
 }
 
 #' @title Setup Xpar.SEISd
-#' @description Implements [make_Xpar] for the SEISd model
-#' @inheritParams ramp.xds::make_Xpar
+#' @description Implements [setup_Xpar] for the SEISd model
+#' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-make_Xpar.SEISd = function(Xname, pars, i, Xopts=list()){
+setup_Xpar.SEISd = function(Xname, pars, i, Xopts=list()){
   pars = xds_dde(pars)
-  pars$Xpar[[i]] = create_Xpar_SEISd(pars$nStrata[i], Xopts)
+  pars$Xpar[[i]] = make_Xpar_SEISd(pars$nStrata[i], Xopts)
   return(pars)
 }
 
@@ -74,7 +74,7 @@ make_Xpar.SEISd = function(Xname, pars, i, Xopts=list()){
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @return a [list]
 #' @export
-create_Xpar_SEISd = function(nStrata, Xopts=list(),
+make_Xpar_SEISd = function(nStrata, Xopts=list(),
                              b=0.55, r=1/180, nu=14, c=0.15){
   with(Xopts,{
     Xpar = list()
@@ -111,8 +111,8 @@ set_Xpars.SEISd <- function(pars, i=1, Xopts=list()) {
 #' @return an **`xds`** object
 #' @export
 set_Xinits.SEISd <- function(pars, i=1, Xopts=list()) {
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$S = S
+  with(get_Xinits(pars, i), with(Xopts,{
+    pars$Xinits[[i]]$S = get_H(pars,i)-E-I
     pars$Xinits[[i]]$E = E
     pars$Xinits[[i]]$I = I
     return(pars)
@@ -125,7 +125,7 @@ set_Xinits.SEISd <- function(pars, i=1, Xopts=list()) {
 #' values as a list.
 #' @inheritParams ramp.xds::get_Xpars
 #' @return a [list]
-#' @seealso [create_Xpar_SEISd]
+#' @seealso [make_Xpar_SEISd]
 #' @export
 get_Xpars.SEISd <- function(pars, i=1) {
   with(pars$Xpar[[i]],list(b=b, c=c, r=r, nu=nu))
@@ -171,7 +171,7 @@ F_b.SEISd <- function(y, pars, i) {
 #' @param I the initial values of the parameter I
 #' @return a [list]
 #' @export
-create_Xinits_SEISd = function(nStrata, H, Xopts = list(), E=0, I=1){with(Xopts,{
+make_Xinits_SEISd = function(nStrata, H, Xopts = list(), E=0, I=1){with(Xopts,{
   stopifnot(length(H-E-I) == nStrata)
   S = H-E-I
   E = checkIt(E, nStrata)
@@ -213,22 +213,22 @@ list_Xvars.SEISd <- function(y, pars, i) {
 }
 
 #' @title Setup Xinits.SEISd
-#' @description Implements [make_Xinits] for the SEISd model
-#' @inheritParams ramp.xds::make_Xinits
+#' @description Implements [setup_Xinits] for the SEISd model
+#' @inheritParams ramp.xds::setup_Xinits
 #' @return a [list] vector
 #' @export
-make_Xinits.SEISd = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, create_Xinits_SEISd(pars$nStrata[i], H, Xopts))
+setup_Xinits.SEISd = function(pars, H, i, Xopts=list()){
+  pars$Xinits[[i]] = with(pars, make_Xinits_SEISd(pars$nStrata[i], H, Xopts))
   return(pars)
 }
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [make_X_indices] for the SEISd model.
-#' @inheritParams ramp.xds::make_X_indices
+#' @description Implements [setup_Xix] for the SEISd model.
+#' @inheritParams ramp.xds::setup_Xix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_X_indices.SEISd <- function(pars, i) {with(pars,{
+setup_Xix.SEISd <- function(pars, i) {with(pars,{
 
   S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(S_ix, 1)
@@ -261,7 +261,7 @@ get_Xinits.SEISd <- function(pars, i){pars$Xinits[[i]]
 #' @export
 update_Xinits.SEISd <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = create_Xinits_SEISd(pars$nStrata[1], H, list(), E=E, I=I)
+    pars$Xinits[[i]] = make_Xinits_SEISd(pars$nStrata[1], H, list(), E=E, I=I)
     return(pars)
   })}
 

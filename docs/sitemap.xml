@@ -946,6 +946,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_SEI.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar.ENBRQ_dts.html</loc>
   </url>
   <url>
@@ -965,6 +968,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_SEI.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_X_indices.SEIR.html</loc>
@@ -1042,6 +1048,18 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SEIRnew.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIPd.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIPw.html</loc>
   </url>
   <url>
@@ -1106,6 +1124,21 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SEIRnew.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPw.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPw_dts.html</loc>
@@ -1399,6 +1432,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Linits.stages_dts.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Lix.stages_dts.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Lpar.stages_dts.html</loc>
   </url>
   <url>
@@ -1411,6 +1447,18 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.SEI.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.ENBRQ_dts.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.SEI.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.ENBRQ_dts.html</loc>
   </url>
   <url>
@@ -1420,6 +1468,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.SEI.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SEIR.html</loc>
   </url>
   <url>
@@ -1427,6 +1478,18 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SEIRnew.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIPd.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIPw.html</loc>
@@ -1453,6 +1516,39 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIPw.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIRS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.workhorse.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SEIR.html</loc>
   </url>
   <url>
@@ -1460,6 +1556,21 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SEIRnew.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPw.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPw_dts.html</loc>

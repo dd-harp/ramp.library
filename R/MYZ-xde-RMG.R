@@ -106,12 +106,12 @@ dMYZdt.RMG <- function(t, y, pars, s){
 }
 
 #' @title Setup MYZpar for the RMG model
-#' @description Implements [make_MYZpar] for the RM model
-#' @inheritParams ramp.xds::make_MYZpar
+#' @description Implements [setup_MYZpar] for the RM model
+#' @inheritParams ramp.xds::setup_MYZpar
 #' @return a [list] vector
 #' @export
-make_MYZpar.RMG = function(MYZname, pars, s, MYZopts=list()){
-  pars$MYZpar[[s]] = create_MYZpar_RMG(pars$nPatches, MYZopts)
+setup_MYZpar.RMG = function(MYZname, pars, s, MYZopts=list()){
+  pars$MYZpar[[s]] = make_MYZpar_RMG(pars$nPatches, MYZopts)
   return(pars)
 }
 
@@ -129,7 +129,7 @@ make_MYZpar.RMG = function(MYZname, pars, s, MYZopts=list()){
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
 #' @export
-create_MYZpar_RMG = function(nPatches, MYZopts=list(), eip=12,
+make_MYZpar_RMG = function(nPatches, MYZopts=list(), eip=12,
                           g=1/12, sigma_b=1/8, sigma_q=1/8, mu=0, f=0.5, q=0.95,
                           nu=1, eggsPerBatch=60){
 
@@ -210,12 +210,12 @@ set_MYZpars.RMG <- function(pars, s=1, MYZopts=list()) {
   }))}
 
 #' @title Setup initial values for the RMG model
-#' @description Implements [make_MYZinits] for the RM model
-#' @inheritParams ramp.xds::make_MYZinits
+#' @description Implements [setup_MYZinits] for the RM model
+#' @inheritParams ramp.xds::setup_MYZinits
 #' @return a [list]
 #' @export
-make_MYZinits.RMG = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], create_MYZinits_RMG(nPatches, MYZopts))
+setup_MYZinits.RMG = function(pars, s, MYZopts=list()){
+  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_RMG(nPatches, MYZopts))
   return(pars)
 }
 
@@ -230,7 +230,7 @@ make_MYZinits.RMG = function(pars, s, MYZopts=list()){
 #' @param Z_g0 infectious, gravid mosquito density at each patch
 #' @return a [list]
 #' @export
-create_MYZinits_RMG = function(nPatches, MYZopts = list(),
+make_MYZinits_RMG = function(nPatches, MYZopts = list(),
                              U_b0=5, U_g0=1, Y_b0=1, Y_g0=1, Z_b0=1, Z_g0=1){
   with(MYZopts,{
     U_b = checkIt(U_b0, nPatches)
@@ -244,12 +244,12 @@ create_MYZinits_RMG = function(nPatches, MYZopts = list(),
   })}
 
 #' @title Add indices for adult mosquitoes to parameter list
-#' @description Implements [make_indices_MYZ] for the RMG model.
-#' @inheritParams ramp.xds::make_indices_MYZ
+#' @description Implements [setup_MYZix] for the RMG model.
+#' @inheritParams ramp.xds::setup_MYZix
 #' @return none
 #' @importFrom utils tail
 #' @export
-make_indices_MYZ.RMG <- function(pars, s) {with(pars,{
+setup_MYZix.RMG <- function(pars, s) {with(pars,{
 
   U_b_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(U_b_ix, 1)
@@ -309,7 +309,7 @@ update_MYZinits.RMG <- function(pars, y0, s) {
     Y_g = y[Y_g_ix]
     Z_b = y[Z_b_ix]
     Z_g = y[Z_g_ix]
-    pars = create_MYZinits_RMG(pars$nPatches, U_b0=U_b, U_g0=U_g, Y_b0=Y_b, Y_g0=Y_g, Z_b0=Z_b, Z_g0=Z_g)
+    pars = setup_MYZinits_RMG(pars$nPatches, U_b0=U_b, U_g0=U_g, Y_b0=Y_b, Y_g0=Y_g, Z_b0=Z_b, Z_g0=Z_g)
     return(pars)
 })}
 
