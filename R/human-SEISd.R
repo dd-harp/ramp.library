@@ -255,6 +255,7 @@ setup_Xix.SEISd <- function(pars, i) {with(pars,{
 get_Xinits.SEISd <- function(pars, i){pars$Xinits[[i]]
 }
 
+
 #' @title Update inits for the SEISd xde human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none

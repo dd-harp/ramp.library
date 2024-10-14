@@ -286,7 +286,7 @@ setup_Xix.SIP <- function(pars, i) {with(pars,{
 #' @export
 update_Xinits.SIP <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-  pars$Xinits[[i]] = make_Xinits_SIP(pars$nStrata[i], pars$H0, list(), I=I, P=P)
+  pars$Xinits[[i]] = make_Xinits_SIP(pars$nStrata[i], H, list(), I=I, P=P)
   return(pars)
 })}
 
