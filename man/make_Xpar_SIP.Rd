@@ -12,7 +12,8 @@ make_Xpar_SIP(
   c = 0.15,
   rho = 0.1,
   eta = 1/25,
-  xi = 1/365
+  xi = 1/365,
+  F_mass_treat = F_zero
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ make_Xpar_SIP(
 \item{eta}{prophylaxis waning rate}
 
 \item{xi}{background treatment rate}
+
+\item{F_mass_treat}{mass treatment rates as a function of time}
 }
 \value{
 a [list]

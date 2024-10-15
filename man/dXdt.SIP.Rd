@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SIP.R
 \name{dXdt.SIP}
 \alias{dXdt.SIP}
-\title{\eqn{\cal X} Component Derivatives for the `SIP` Model}
+\title{Derivatives for the `SIP` Module (**X** Component)}
 \usage{
 \method{dXdt}{SIP}(t, y, pars, i)
 }
