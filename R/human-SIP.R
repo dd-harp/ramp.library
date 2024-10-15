@@ -1,6 +1,6 @@
 # specialized methods for the human SIP model
 
-#' @title \eqn{\cal X} Component Derivatives for the `SIP` Model
+#' @title Derivatives for the `SIP` Module (**X** Component)
 #' @description Compute the derivatives for SIP compartmental model:
 #' \deqn{
 #' \begin{array}{rrrrcc}
@@ -24,9 +24,11 @@ dXdt.SIP <- function(t, y, pars, i){
     Hpar <- pars$Hpar[[i]]
     with(pars$Xpar[[i]], {
 
-      dS <- Births(t, H, Hpar) - foi*S -xi*S + r*I + eta*P + dHdt(t, S, Hpar)
-      dI <- (1-rho)*foi*S - (r+xi)*I + dHdt(t, I, Hpar)
-      dP <- rho*foi*S + xi*(S+I) - eta*P + dHdt(t, P, Hpar)
+      xi_t = xi + mass_treat(t)
+
+      dS <- Births(t, H, Hpar) - foi*S - xi_t*S + r*I + eta*P + dHdt(t, S, Hpar)
+      dI <- (1-rho)*foi*S - (r+xi_t)*I + dHdt(t, I, Hpar)
+      dP <- rho*foi*S + xi_t*(S+I) - eta*P + dHdt(t, P, Hpar)
 
       return(c(dS, dI, dP))
     })
@@ -53,11 +55,14 @@ setup_Xpar.SIP = function(Xname, pars, i, Xopts=list()){
 #' @param rho probability of successful treatment upon infection
 #' @param eta prophylaxis waning rate
 #' @param xi background treatment rate
+#' @param F_mass_treat mass treatment rates as a function of time
+#' @importFrom ramp.xds F_zero
 #' @return a [list]
 #' @export
 make_Xpar_SIP = function(nStrata, Xopts=list(),
                            b=0.55, r=1/180, c=0.15,
-                           rho=.1, eta=1/25, xi=1/365){
+                           rho=.1, eta=1/25, xi=1/365,
+                           F_mass_treat = F_zero){
   with(Xopts,{
     Xpar = list()
     class(Xpar) <- c("SIP")
@@ -68,6 +73,7 @@ make_Xpar_SIP = function(nStrata, Xopts=list(),
     Xpar$rho = checkIt(rho, nStrata)
     Xpar$eta = checkIt(eta, nStrata)
     Xpar$xi = checkIt(xi, nStrata)
+    Xpar$mass_treat = F_mass_treat
 
     return(Xpar)
   })}
@@ -88,6 +94,7 @@ set_Xpars.SIP <- function(pars, i=1, Xopts=list()) {
     pars$Xpar[[i]]$rho <- rho
     pars$Xpar[[i]]$eta <- eta
     pars$Xpar[[i]]$xi <- xi
+    pars$Xpar[[i]]$mda <- mda
     return(pars)
   }))}
 
