@@ -23,7 +23,7 @@ dXdt.SIPd <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i),{
     Hpar <- pars$Hpar[[i]]
     with(pars$Xpar[[i]], {
-      if (t <= nu) {
+      if (t <= eta) {
         S_eta = 0
         I_eta = 0
         foi_eta = foi
@@ -48,10 +48,7 @@ dXdt.SIPd <- function(t, y, pars, i){
 #' @return a [list] vector
 #' @export
 setup_Xpar.SIPd = function(Xname, pars, i, Xopts=list()){
-  if(pars$xds != 'dts'){
-    pars$xds = 'dde'
-    class(pars$xds) = c('dde', 'xde')
-  }
+  pars = xds_dde(pars)
   pars$Xpar[[i]] = make_Xpar_SIPd(pars$nStrata[i], Xopts)
   return(pars)
 }
