@@ -477,26 +477,27 @@ I_n\\
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>wh1<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>zeta_1 <span class="ot">=</span> <span class="fl">0.02</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>wh1 <span class="ot">&lt;-</span> <span class="fu">xds_solve</span>(wh1, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#xds_plot_X(wh1, llty=2, add_axes=FALSE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">with</span>(wh<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">plot</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylim =</span> <span class="fu">range</span>(<span class="dv">0</span>, H), <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>) </span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>) </span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>) </span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) </span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>) </span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>})</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">with</span>(wh1<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="fu">lines</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>})</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh1, <span class="at">llty=</span><span class="dv">2</span>, <span class="at">add=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>time <span class="ot">=</span> wh<span class="sc">$</span>outputs<span class="sc">$</span>time</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">with</span>(wh<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">plot</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylim =</span> <span class="fu">range</span>(<span class="dv">0</span>, H), <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>) </span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>) </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>) </span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) </span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>) </span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>})</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">with</span>(wh1<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="fu">lines</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>})</span></code></pre></div>
 </div>
 </div>
 
