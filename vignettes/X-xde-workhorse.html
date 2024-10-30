@@ -11,7 +11,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
+<<<<<<< Updated upstream
 <meta name="date" content="2024-10-30" />
+=======
+<meta name="date" content="2024-10-24" />
+>>>>>>> Stashed changes
 
 <title>A Workhorse Model for Human Infection</title>
 
@@ -50,7 +54,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -338,16 +342,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">A Workhorse Model for Human Infection</h1>
+<<<<<<< Updated upstream
 <h4 class="date">October 30, 2024</h4>
+=======
+<h4 class="date">October 24, 2024</h4>
+>>>>>>> Stashed changes
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(knitr))</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(ramp.xds))</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#suppressMessages(library(ramp.library))</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(ramp.library)</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#devtools::load_all()</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(knitr))</span></code></pre></div>
+<pre><code>## Warning: package &#39;knitr&#39; was built under R version 4.3.3</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(ramp.xds))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#suppressMessages(library(ramp.library))</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">library</span>(ramp.library)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#devtools::load_all()</span></span></code></pre></div>
 <div id="section" class="section level1">
 <h1></h1>
 <p><strong>Warning:</strong> <code>workhorse</code> is in
@@ -463,6 +472,7 @@ I_n\\
 \frac{d w_i}{da} &amp;=  h_\tau - \delta_I w_i \\
 \end{array}
 \]</span></p>
+<<<<<<< Updated upstream
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#devtools::load_all()</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xds_setup</span>(<span class="at">Xname =</span> <span class="st">&quot;workhorse&quot;</span>, </span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                <span class="at">HPop=</span><span class="dv">1000</span>,</span>
@@ -498,6 +508,43 @@ I_n\\
 <span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
 <span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
 <span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>})</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#devtools::load_all()</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xds_setup</span>(<span class="at">dlay =</span> <span class="st">&#39;dde&#39;</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                <span class="at">Xname =</span> <span class="st">&quot;workhorse&quot;</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                <span class="at">HPop=</span><span class="dv">1000</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                <span class="at">Lname =</span> <span class="st">&quot;trivial&quot;</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                <span class="at">Lopts =</span> <span class="fu">list</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                  <span class="at">Lambda =</span> <span class="dv">3000</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                  <span class="at">season =</span> <span class="cf">function</span>(t){<span class="dv">1</span><span class="sc">+</span><span class="fu">sin</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>t<span class="sc">/</span><span class="dv">365</span>)}</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>                  )</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>                )</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>wh <span class="ot">&lt;-</span> <span class="fu">xde_solve</span>(wh, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>wh1 <span class="ot">=</span> wh </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>wh1<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>zeta_1 <span class="ot">=</span> <span class="fl">0.02</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>wh1 <span class="ot">&lt;-</span> <span class="fu">xde_solve</span>(wh1, <span class="at">Tmax =</span> <span class="dv">5</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">dt=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">xds_plot_X</span>(wh1, <span class="at">llty=</span><span class="dv">2</span>, <span class="at">add_axes=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">with</span>(wh<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">plot</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylim =</span> <span class="fu">range</span>(<span class="dv">0</span>, H), <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>) </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>) </span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>) </span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) </span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>) </span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>})</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">with</span>(wh1<span class="sc">$</span>outputs<span class="sc">$</span>orbits<span class="sc">$</span>XH[[<span class="dv">1</span>]],{</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  A <span class="ot">=</span> A0<span class="sc">+</span>A1<span class="sc">+</span>A2<span class="sc">+</span>A3<span class="sc">+</span>A4</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  I <span class="ot">=</span> I1<span class="sc">+</span>I2<span class="sc">+</span>I3<span class="sc">+</span>I4</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="fu">lines</span>(time, U <span class="sc">+</span> P <span class="sc">+</span> G, <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="fu">lines</span>(time, A<span class="sc">+</span>I, <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  <span class="fu">lines</span>(time, A, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  <span class="fu">lines</span>(time, I<span class="sc">-</span>I1, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  <span class="fu">lines</span>(time, P<span class="sc">+</span>G, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>) </span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>})</span></code></pre></div>
+>>>>>>> Stashed changes
 </div>
 </div>
 

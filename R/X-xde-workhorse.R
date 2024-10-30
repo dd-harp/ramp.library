@@ -17,8 +17,6 @@ dXdt.workhorse <- function(t, y, pars, i) {
       trt_3 = zeta_3 + zeta_U
       trt_4 = zeta_4 + zeta_U
 
-
-
       if(t <= tau) {
         foi_tau = foi
       } else {

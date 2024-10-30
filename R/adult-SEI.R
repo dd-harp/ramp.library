@@ -191,7 +191,8 @@ put_MYZvars.SEI <- function(MYZvars, y, pars, s){
 #' @return a [list]
 #' @export
 setup_MYZinits.SEI = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_SEI(nPatches, MYZopts))
+  pars$MYZinits[[s]] = with(pars$MYZpar[[s]],
+                            make_MYZinits_SEI(nPatches, MYZopts))
   return(pars)
 }
 
@@ -291,7 +292,7 @@ update_MYZinits.SEI <- function(pars, y0, s) {with(pars$ix$MYZ[[s]],{
   M = y0[M_ix]
   Y = y0[Y_ix]
   Z = y0[Z_ix]
-  pars$MYZinits[[s]] = setup_MYZinits_SEI(pars$nPatches, list(), M=M, Y=Y, Z=Z)
+  pars$MYZinits[[s]] = make_MYZinits_SEI(pars$nPatches, list(), M=M, Y=Y, Z=Z)
   return(pars)
 })}
 
