@@ -25,11 +25,11 @@ In the following, we present a stage of infection (SoI) model for malaria infect
 
 + Uninfected individuals are either susceptible to infection $U$ or chemoprotected and not susceptible to infection. 
 
-+ Some recently treated, chemoprotected individuals remain infections $G.$ The remainder are chemoprotected and not infectious, $P.$
++ Some recently treated, chemoprotected individuals remain infectious $G.$ The remainder are chemoprotected and not infectious, $P.$
 
-+ There are four chronic infection stages.
++ There are four chronic infection stages: $I_{1},\ I_{2},\ I_{3}$ and $I_{4}$ .
 
-+ There are five acute infection stages: four that correspond to an acute-phase infection concurrently infected with parasites in the chronic phase; and one that corresponds to carrying an acute phase infection but being otherwise uninfected. 
++ There are five acute infection stages: four ($A_{1},\ A_{2},\ A_{3},\ A_{4}$) that correspond to an acute-phase infection concurrently infected with parasites in the chronic phase; and one ($A_{0}$) that corresponds to carrying an acute phase infection but being otherwise uninfected. 
 
 + All acutely infected individuals transition into $I_1$  
 
@@ -41,7 +41,35 @@ The variables are thus:
 
 + $U$ 
 
-+ Chemoprotected states are $P$ and $G$ 
++ Chemoprotected states are $P$ and $G$
+
++ Acute stages of infection: $A_{0},\ A_{1},\ A_{2},\ A_{3},\ A_{4}$
+
++ Chronic stages of infection: $I_{1},\ I_{2},\ I_{3},\ I_{4}$
+
+## Parameters
+
+These are:
+
++ $r$ - the rate of recovery from infection
+
++ $\sigma$ - treatment rate
+
++ $h_{\tau}$ - rate at which immunity is acquired
+
++ $\zeta_{U}$ - rate at which chemoprophylaxis is administered to uninfected individuals
+
++ $\zeta_{A}$ - rate at which chemoprophylaxis is administered to individuals in acute phase of infection
+
++ $\phi$ - rate at which individuals in acute phase move into chronic stage of infection
+
++ $\zeta_{i}, i= 1,2,3,4$ - rate at which individuals in chronic stages of infection obtain chemoprophylaxis
+
++ $p(w)$ - the peak of infection
+
++ $\xi_{i},i=1,2,3,4$ - rate at which individuals move through the different chronic stages of infection
+
++ $\delta_{I}$ - rate of loss of immunity
 
 
 Active acute-phase infections become apparent after $\tau$ days, and:
@@ -124,7 +152,7 @@ wh1 <- xds_solve(wh1, Tmax = 5*365, dt=10)
 
 ```{r, eval=F}
 xds_plot_X(wh)
-xds_plot_X(wh1, llty=2, add_axes=FALSE)
+#xds_plot_X(wh1, llty=2, add_axes=FALSE)
 ```
 
 ```{r, eval=F}

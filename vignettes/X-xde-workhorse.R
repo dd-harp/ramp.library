@@ -29,7 +29,7 @@ wh1 <- xds_solve(wh1, Tmax = 5*365, dt=10)
 
 ## ----eval=F-------------------------------------------------------------------
 #  xds_plot_X(wh)
-#  xds_plot_X(wh1, llty=2, add_axes=FALSE)
+#  #xds_plot_X(wh1, llty=2, add_axes=FALSE)
 
 ## ----eval=F-------------------------------------------------------------------
 #  with(wh$outputs$orbits$XH[[1]],{
