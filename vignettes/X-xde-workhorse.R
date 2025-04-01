@@ -9,29 +9,31 @@ library(ramp.library)
 ## -----------------------------------------------------------------------------
 #devtools::load_all()
 
-## -----------------------------------------------------------------------------
-wh <- xds_setup(Xname = "workhorse", 
-                HPop=1000,
-                Lname = "trivial", 
-                Lopts = list(
-                  Lambda = 3000, 
-                  F_season = function(t, phase=0, season_opts=list()){1+sin(2*pi*t/365)}
-                  )
-                )
+## ----eval=F-------------------------------------------------------------------
+#  wh <- xds_setup(dlay = 'dde',
+#                  Xname = "workhorse",
+#                  HPop=1000,
+#                  Lname = "trivial",
+#                  Lopts = list(
+#                    Lambda = 3000,
+#                    season = function(t){1+sin(2*pi*t/365)}
+#                    )
+#                  )
 
-## -----------------------------------------------------------------------------
-wh <- xds_solve(wh, Tmax = 5*365, dt=10)
+## ----eval=F-------------------------------------------------------------------
+#  wh <- xde_solve(wh, Tmax = 5*365, dt=10)
 
-## -----------------------------------------------------------------------------
-wh1 = wh 
-wh1$Xpar[[1]]$zeta_1 = 0.02
-wh1 <- xds_solve(wh1, Tmax = 5*365, dt=10)
+## ----eval=F-------------------------------------------------------------------
+#  wh1 = wh
+#  wh1$Xpar[[1]]$zeta_1 = 0.02
+#  wh1 <- xde_solve(wh1, Tmax = 5*365, dt=10)
 
 ## ----eval=F-------------------------------------------------------------------
 #  xds_plot_X(wh)
-#  xds_plot_X(wh1, llty=2, add_axes=FALSE)
+#  xds_plot_X(wh1, llty=2, add=FALSE)
 
 ## ----eval=F-------------------------------------------------------------------
+#  time = wh$outputs$time
 #  with(wh$outputs$orbits$XH[[1]],{
 #    A = A0+A1+A2+A3+A4
 #    I = I1+I2+I3+I4

@@ -23,6 +23,8 @@ To install the latest version of **`ramp.library`** from Github, run the followi
 devtools::install_github("dd-harp/ramp.library")
 ```
 
+Also see [**SimBA**](https://faculty.washington.edu/smitdave/simba/_site/index.html)
+
 ## What is RAMP?
 
 RAMP -- **R**obust **A**nalytics for **M**alaria **P**olicy -- is a bespoke inferential system for malaria decision support and adaptive malaria control. A core goal for RAMP is to characterize, quantify, and propagate uncertainty in conventional analysis and through simulation-based analytics.

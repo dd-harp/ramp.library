@@ -80,6 +80,31 @@ reference:
   - get_f.RMG
   - get_q.RMG
   - get_sigma.RMG
+- subtitle: The Adult Mosquito SBRQ Model
+  desc: |
+     A behavioral state model
+  contents:
+  - F_eggs.SBRQ
+  - F_fqZ.SBRQ
+  - F_fqM.SBRQ
+  - MBaseline.SBRQ
+  - MBionomics.SBRQ
+  - dMYZdt.SBRQ
+  - get_MYZpars.SBRQ
+  - set_MYZpars.SBRQ
+  - get_MYZinits.SBRQ
+  - set_MYZinits.SBRQ
+  - setup_MYZinits.SBRQ
+  - setup_MYZpar.SBRQ
+  - make_MYZinits_SBRQ
+  - make_MYZpar_SBRQ
+  - setup_MYZix.SBRQ
+  - parse_MYZorbits.SBRQ
+  - update_MYZinits.SBRQ
+  - get_g.SBRQ
+  - get_f.SBRQ
+  - get_q.SBRQ
+  - get_sigma.SBRQ
 - subtitle: ENBRQ_dts
   desc: |
     Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.
