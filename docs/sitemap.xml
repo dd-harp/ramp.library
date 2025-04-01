@@ -37,6 +37,9 @@
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-xde-RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/MYZ-xde-SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/MYZmod-RMG.html</loc>
   </url>
   <url>
@@ -247,6 +250,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.SEI.html</loc>
   </url>
   <url>
@@ -268,6 +274,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.SEI.html</loc>
   </url>
   <url>
@@ -281,6 +290,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.SEI.html</loc>
@@ -445,6 +457,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.SEI.html</loc>
   </url>
   <url>
@@ -455,6 +470,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.SEI.html</loc>
@@ -619,6 +637,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dMYZdt.SEI.html</loc>
   </url>
   <url>
@@ -712,6 +733,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZinits.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZinits.SEI.html</loc>
   </url>
   <url>
@@ -719,6 +743,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZpars.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZpars.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_MYZpars.SEI.html</loc>
@@ -772,6 +799,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_f.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_f.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_f.SEI.html</loc>
   </url>
   <url>
@@ -779,6 +809,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_g.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_g.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_g.SEI.html</loc>
@@ -835,6 +868,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/get_q.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_q.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_q.SEI.html</loc>
   </url>
   <url>
@@ -842,6 +878,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.SEI.html</loc>
@@ -946,6 +985,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZinits_SEI.html</loc>
   </url>
   <url>
@@ -968,6 +1010,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_MYZpar_SEI.html</loc>
@@ -1249,6 +1294,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_MYZorbits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_MYZorbits.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_MYZorbits.SEI.html</loc>
   </url>
   <url>
@@ -1366,10 +1414,16 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZinits.RMG.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZinits.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZinits.SEI.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZpars.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZpars.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/set_MYZpars.SEI.html</loc>
@@ -1447,6 +1501,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.RMG_xde.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.SBRQ.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZinits.SEI.html</loc>
   </url>
   <url>
@@ -1454,6 +1511,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZix.SEI.html</loc>
@@ -1466,6 +1526,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.RMG_xde.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_MYZpar.SEI.html</loc>
@@ -1616,6 +1679,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_MYZinits.RMG.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/update_MYZinits.SBRQ.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_MYZinits.SEI.html</loc>

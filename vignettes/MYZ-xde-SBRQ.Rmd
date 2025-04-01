@@ -1,9 +1,10 @@
 ---
-title: "SBRQ - A Four-State Behavioral State Model"
+title: "SBRQ"
+subtitle: "A Four-State Behavioral State Model"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The Garki Model}
+  %\VignetteIndexEntry{SBRQ}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

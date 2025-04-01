@@ -131,7 +131,6 @@ F_eggs.SBRQ <- function(t, y, pars, s) {
   return(eggs)
 }
 
-}
 
 #' @title Setup MYZpar for the SBRQ model
 #' @description Implements [setup_MYZpar] for the RM model
