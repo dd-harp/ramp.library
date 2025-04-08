@@ -4,7 +4,7 @@
 \alias{get_Xinits.SEISd}
 \title{Return initial values as a vector}
 \usage{
-\method{get_Xinits}{SEISd}(pars, i)
+\method{get_Xinits}{SEISd}(pars, i = 1)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}

@@ -11,11 +11,11 @@ dXdt.SIRS <- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S + gamma*R
-      dI <- foi*S- r*I + dHdt(t, I, Hpar)
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
+      dI <- foi*S - r*I + dHdt(t, I, Hpar)
       dR <- r*I - gamma*R + dHdt(t, R, Hpar)
 
-      return(c(dS, dI, dR))
+      return(c(dH, dI, dR))
     })
   })
 }
@@ -91,8 +91,8 @@ set_Xinits.SIRS <- function(pars, i=1, Xopts=list()) {
 #' @return the steady states as a named vector
 #' @export
 xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
-  Ieq = (foi*H*gamma)/((r*gamma) +foi*(gamma+r))
-  Req =(foi*r*H)/((r*gamma) +foi*(gamma+r))
+  Ieq = foi*H*gamma/((r*gamma) + foi*(gamma+r))
+  Req = foi*r*H/((r*gamma) +foi*(gamma+r))
   Seq = H-Ieq-Req
   return(c(S=as.vector(Seq), I=as.vector(Ieq), R = as.vector(Req)))
 })}
@@ -105,11 +105,11 @@ xde_steady_state_X.SIRS = function(foi, H, Xpar){with(Xpar,{
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SIRS = function(nStrata, H,  Xopts = list(), I=1, R = 1){with(Xopts,{
-  S = checkIt(H-I-R, nStrata)
+make_Xinits_SIRS = function(nStrata, H,  Xopts = list(), I=1, R=0){with(Xopts,{
+  H = H
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
-  return(list(S=S, I=I, R =R))
+  return(list(H=H, I=I, R=R))
 })}
 
 
@@ -133,8 +133,8 @@ setup_Xinits.SIRS = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SIRS <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
@@ -142,10 +142,8 @@ setup_Xix.SIRS <- function(pars, i) {with(pars,{
   R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
-
-
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, R_ix=R_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
 })}
 
@@ -157,15 +155,12 @@ setup_Xix.SIRS <- function(pars, i) {with(pars,{
 #' @export
 list_Xvars.SIRS <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    S = y[S_ix]
+    H = y[H_ix]
     I = y[I_ix]
     R = y[R_ix]
-    H = S + I + R
+    S = H-I-R
     return(list(S=S, I=I, R=R, H=H))})
 }
-
-
-
 
 
 #' @title Return initial values as a vector
@@ -178,19 +173,15 @@ get_Xinits.SIRS <- function(pars, i){
 }
 
 
-
-
-
 #' @title Update inits for the SIRS human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SIRS <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SIRS(pars$nStrata[i], pars$H0, list(), I=I, R=R)
+update_Xinits.SIRS <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
+    pars$Xinits[[i]] = make_Xinits_SIRS(pars$nStrata[i], H, list(), I=I, R=R)
     return(pars)
   })}
-
 
 
 #' @title Make parameters for SIRS human model, with defaults
@@ -214,9 +205,7 @@ make_Xpar_SIRS = function(nStrata, Xopts=list(),
     Xpar$gamma = checkIt(gamma, nStrata)
 
     return(Xpar)
-  })}
-
-
+})}
 
 
 
@@ -278,10 +267,10 @@ F_b.SIRS <- function(y, pars, i) {
 #' @return none
 #' @export
 parse_Xorbits.SIRS <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     I = outputs[,I_ix]
     R = outputs[,R_ix]
-    H = S+I+R
+    S = H-I-R
     ni <- pars$Xpar[[i]]$c*I/H
     true_pr <- I/H
     return(list(S=S, I=I, R=R, H=H,ni=ni, true_pr= true_pr))

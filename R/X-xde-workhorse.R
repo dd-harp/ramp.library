@@ -323,8 +323,8 @@ get_Xinits.workhorse <- function(pars, i){
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.workhorse <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
+update_Xinits.workhorse <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
     pars = make_Xinits_workhorse(pars, list(), list(
       U=U,    A0=A0,  P=P,    G=G,
       I1=I1,  I2=I2,  I3=I3,  I4=I4,

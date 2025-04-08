@@ -11,10 +11,10 @@ dXdt.SEIS <- function(t, y, pars, i) {
   Hpar <- pars$Hpar[[i]]
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
-      dS <- Births(t, H, Hpar) - foi*S + r*I + dHdt(t, S, Hpar)
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dE <- foi*S - nu*E + dHdt(t, E, Hpar)
       dI <- nu*E - r*I + dHdt(t, I, Hpar)
-      return(c(dS, dE, dI))
+      return(c(dH, dE, dI))
     })
   })
 }
@@ -31,11 +31,11 @@ Update_Xt.SEIS <- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      St <- (1-ar)*S + (1-nr)*(1-ar)*I + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      Ht <- dHdt(t, H, Hpar) + Births(t, H, Hpar)
       Et <- ar*S + (1-nr)*ar*I + nu*E + dHdt(t, E, Hpar)
       It <- nr*I + (1-nu)*E + dHdt(t, I, Hpar)
 
-      return(c(S=unname(St), I=unname(It)))
+      return(c(H=unname(Ht), E=unname(Et), I=unname(It)))
     })
   })
 }
@@ -93,7 +93,6 @@ make_Xpar_SEIS = function(nStrata, Xopts=list(),
 #' @return an **`xds`** object
 #' @export
 set_Xpars.SEIS <- function(pars, i=1, Xopts=list()) {
-  nHabitats <- pars$nHabitats
   with(pars$Xpar[[i]], with(Xopts,{
     pars$Xpar[[i]]$b <- b
     pars$Xpar[[i]]$c <- c
@@ -110,9 +109,10 @@ set_Xpars.SEIS <- function(pars, i=1, Xopts=list()) {
 #' @export
 set_Xinits.SEIS <- function(pars, i=1, Xopts=list()) {
   with(get_Xinits(pars, i), with(Xopts,{
-    pars$Xinits[[i]]$S = get_H(pars,i)-E-I
+    pars$Xinits[[i]]$H = H
     pars$Xinits[[i]]$E = E
     pars$Xinits[[i]]$I = I
+    pars$Xinits[[i]]$S = H-E-I
     return(pars)
   }))}
 
@@ -163,17 +163,17 @@ F_b.SEIS <- function(y, pars, i) {
 
 #' @title Make initial values for the SEIS xde human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param H0 the initial human population density
+#' @param H the initial human population density
 #' @param Xopts a [list] to overwrite defaults
 #' @param E the initial values of the parameter E
 #' @param I the initial values of the parameter I
 #' @return a [list]
 #' @export
-make_Xinits_SEIS = function(nStrata, H0, Xopts = list(), E=0, I=1){with(Xopts,{
-  S = checkIt(H0-E-I, nStrata)
+make_Xinits_SEIS = function(nStrata, H, Xopts = list(), E=0, I=1){with(Xopts,{
+  H = checkIt(H, nStrata)
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
-  return(list(S=S, E=E, I=I))
+  return(list(H=H, E=E, I=I))
 })}
 
 
@@ -187,7 +187,7 @@ make_Xinits_SEIS = function(nStrata, H0, Xopts = list(), E=0, I=1){with(Xopts,{
 put_Xvars.SEIS <- function(Xvars, y, pars, i) {
   with(pars$ix$X[[i]],
        with(as.list(Xvars),{
-         y[S_ix] = S
+         y[H_ix] = H
          y[E_ix] = E
          y[I_ix] = I
          return(y)
@@ -200,10 +200,10 @@ put_Xvars.SEIS <- function(Xvars, y, pars, i) {
 #' @export
 list_Xvars.SEIS <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    S = y[S_ix]
+    H = y[H_ix]
     E = y[E_ix]
     I = y[I_ix]
-    H = S+E+I
+    S = H-E-I
     return(list(S=S,E=E,I=I,H=H))})
 }
 
@@ -226,8 +226,8 @@ setup_Xinits.SEIS = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SEIS <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
@@ -236,7 +236,7 @@ setup_Xix.SEIS <- function(pars, i) {with(pars,{
   max_ix <- tail(I_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, E_ix=E_ix, I_ix=I_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, E_ix=E_ix, I_ix=I_ix)
   return(pars)
 })}
 
@@ -245,16 +245,14 @@ setup_Xix.SEIS <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_Xinits.SEIS <- function(pars, i){
-  with(pars$Xinits[[i]], return(c(S=S,E=E,I=I)))
-}
+get_Xinits.SEIS <- function(pars, i=1){pars$Xinits[[i]]}
 
 #' @title Update inits for the SEIS xde human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SEIS <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
+update_Xinits.SEIS <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
     pars$Xinits[[i]] = make_Xinits_SEIS(pars$nStrata[i], H, list(), E=E, I=I)
     return(pars)
   })}
@@ -267,10 +265,10 @@ update_Xinits.SEIS <- function(pars, y0, i) {
 #' @export
 parse_Xorbits.SEIS <- function(outputs, pars, i) {
   with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     E = outputs[,E_ix]
     I = outputs[,I_ix]
-    H = S+E+I
+    S = H-E-I
     vars <- list(S=S, E=E, I=I, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
     vars$pr <- F_pr(vars, pars$Xpar[[i]])

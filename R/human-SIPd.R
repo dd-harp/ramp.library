@@ -24,20 +24,17 @@ dXdt.SIPd <- function(t, y, pars, i){
     Hpar <- pars$Hpar[[i]]
     with(pars$Xpar[[i]], {
       if (t <= eta) {
-        S_eta = 0
-        I_eta = 0
-        foi_eta = foi
+        treated_eta = 0
       } else {
-        S_eta   = lagvalue(t=t-eta, nr=pars$ix$X[[i]]$S_ix)
-        I_eta   = lagvalue(t=t-eta, nr=pars$ix$X[[i]]$I_ix)
-        foi_eta = lagderiv(t=t-eta, nr=pars$ix$X[[i]]$cfoi_ix)
+        treated_eta = lagderiv(t=t-eta, nr=pars$ix$X[[i]]$treated_ix)
       }
 
-      dS <- Births(t, H, Hpar) - foi*S -xi*S + r*I  + (rho*foi_eta + xi)*S_eta + xi*I_eta + dHdt(t, S, Hpar)
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dI <- (1-rho)*foi*S - (r+xi)*I + dHdt(t, I, Hpar)
-      dP <- rho*foi*S + xi*(S+I) - (rho*foi_eta + xi)*S_eta  - xi*I_eta + dHdt(t, P, Hpar)
+      dP <- rho*foi*S + xi*(S+I) - treated_eta + dHdt(t, P, Hpar)
+      dtreated <- (rho*foi+xi)*S + xi*I
 
-      return(c(dS, dI, dP, foi))
+      return(c(dH, dI, dP, dtreated))
     })
   })
 }
@@ -283,11 +280,11 @@ setup_Xix.SIPd <- function(pars, i) {with(pars,{
   P_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(P_ix, 1)
 
-  cfoi_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(cfoi_ix, 1)
+  treated_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(treated_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix, cfoi_ix=cfoi_ix)
+  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix, treated_ix=treated_ix)
   return(pars)
 })}
 
@@ -296,8 +293,8 @@ setup_Xix.SIPd <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SIPd <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
+update_Xinits.SIPd <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
     pars$Xinits[[i]] = make_Xinits_SIPd(pars$nStrata[i], H, list(), I=I, P=P)
     return(pars)
   })}

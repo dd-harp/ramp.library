@@ -4,7 +4,7 @@
 \alias{make_Xinits_SIRS}
 \title{Make initial values for the SIRS human model, with defaults}
 \usage{
-make_Xinits_SIRS(nStrata, H, Xopts = list(), I = 1, R = 1)
+make_Xinits_SIRS(nStrata, H, Xopts = list(), I = 1, R = 0)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}

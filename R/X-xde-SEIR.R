@@ -14,14 +14,15 @@ dXdt.SEIR<- function(t, y, pars, i) {
 
     # expose the parameters (see make_Xpar_SEIR)
     with(pars$Xpar[[i]], {
+
       # compute the derivatives
-      dS <- Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dE <- foi*S - tau*E + dHdt(t, E, Hpar)
       dI <- tau*E - r*I + dHdt(t, I, Hpar)
       dR <- r*I + dHdt(t, R, Hpar)
 
        # concatenate the derivatives
-      derivs = c(dS, dE, dI, dR)
+      derivs = c(dH, dE, dI, dR)
 
       # return the derivatives
       return(derivs)
@@ -75,7 +76,7 @@ dts_steady_state_X.SEIR= function(ar, H, Xpar){with(Xpar,{
 xde_steady_state_X.SEIR = function(foi, H, Xpar){with(Xpar,{
   Eeq = 0
   Ieq = 0
-  Req =H
+  Req = H
   Seq = H-Ieq-Req
   return(c(S=as.vector(Seq),E = as.vector(Eeq), I=as.vector(Ieq), R = as.vector(Req)))
 })}
@@ -90,12 +91,11 @@ xde_steady_state_X.SEIR = function(foi, H, Xpar){with(Xpar,{
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SEIR = function(nStrata, H, Xopts = list(), I=1, E=0, R = 1){with(Xopts,{
-  S = checkIt(H-I-E-R, nStrata)
+make_Xinits_SEIR = function(nStrata, H, Xopts=list(), I=1, E=0, R=1){with(Xopts,{
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
-  return(list(S=S, E=E, I=I, R =R))
+  return(list(H=H, E=E, I=I, R=R))
 })}
 
 
@@ -123,7 +123,7 @@ set_Xpars.SEIR <- function(pars, i=1, Xopts=list()) {
 #' @export
 set_Xinits.SEIR <- function(pars, i=1, Xopts=list()) {
   with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$S = S
+    pars$Xinits[[i]]$H = H
     pars$Xinits[[i]]$E = E
     pars$Xinits[[i]]$I = I
     pars$Xinits[[i]]$R = R
@@ -155,8 +155,8 @@ setup_Xinits.SEIR = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SEIR <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
@@ -170,12 +170,9 @@ setup_Xix.SEIR <- function(pars, i) {with(pars,{
 
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
 })}
-
-
-
 
 
 #' @title Return the variables as a list
@@ -185,16 +182,13 @@ setup_Xix.SEIR <- function(pars, i) {with(pars,{
 #' @export
 list_Xvars.SEIR <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-       S = y[S_ix]
+       H = y[H_ix]
        E = y[E_ix]
        I = y[I_ix]
        R = y[R_ix]
-       H =S+E+I+R
+       S = H - E - I - R
        return(list(S=S,E=E,I=I,R=R,H=H))})
 }
-
-
-
 
 
 #' @title Return initial values as a vector
@@ -202,22 +196,16 @@ list_Xvars.SEIR <- function(y, pars, i) {
 #' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_Xinits.SEIR <- function(pars, i){
-  pars$Xinits[[i]]
-}
-
-
-
-
+get_Xinits.SEIR <- function(pars, i){pars$Xinits[[i]]}
 
 
 #' @title Update inits for the SEIR human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SEIR <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SEIR(pars$nStrata[i], pars$H0, list(), E=E, I=I, R=R)
+update_Xinits.SEIR <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
+    pars = make_Xinits_SEIR(pars$nStrata[i], H, list(), E=E, I=I, R=R)
     return(pars)
   })}
 
@@ -261,9 +249,6 @@ setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
 }
 
 
-
-
-
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
 #' @inheritParams ramp.xds::F_X
@@ -286,9 +271,6 @@ F_H.SEIR <- function(t, y, pars, i){
 }
 
 
-
-
-
 #' @title Infection blocking pre-erythrocytic immunity
 #' @description Implements [F_b] for the SEIR model.
 #' @inheritParams ramp.xds::F_b
@@ -305,18 +287,15 @@ F_b.SEIR <- function(y, pars, i) {
 #' @return none
 #' @export
 parse_Xorbits.SEIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     E = outputs[,E_ix]
     I = outputs[,I_ix]
     R = outputs[,R_ix]
-    H = S+I+R
+    S = H-E-I-R
     ni <- pars$Xpar[[i]]$c*I/H
     true_pr <- (I+E)/H
     return(list(S=S, E=E,I=I, R=R, H=H,ni=ni, true_pr= true_pr))
-  })}
-
-
-
+})}
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
@@ -330,9 +309,6 @@ F_pr.SEIR <- function(vars, Xpar) {
 }
 
 
-
-
-
 #' @title Compute the HTC for the SEIR model
 #' @description Implements [HTC] for the SEIR model with demography.
 #' @inheritParams ramp.xds::HTC
@@ -344,9 +320,6 @@ HTC.SEIR <- function(pars, i) {
        return(HTC)
   )
 }
-
-
-
 
 
 #' Add lines for the density of infected individuals for the SEIR model
@@ -371,12 +344,7 @@ xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkre
       lines(time, E[,i], col=clrs[2], lty = llty[i])
       lines(time, I[,i], col=clrs[2], lty = llty[i])
       lines(time, R[,i], col=clrs[3], lty = llty[i])
-    }})}
-
-
-
-
-
+}})}
 
 
 #' Plot the density of infected individuals for the SEIR model

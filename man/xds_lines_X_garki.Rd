@@ -4,7 +4,7 @@
 \alias{xds_lines_X_garki}
 \title{Add lines for the density of infected individuals for the garki model}
 \usage{
-xds_lines_X_garki(times, XH, pars, clrs = viridisLite::turbo(7), llty = 1)
+xds_lines_X_garki(times, XH, pars, clrs = viridisLite::turbo(8), llty = 1)
 }
 \arguments{
 \item{times}{time points for the observations}

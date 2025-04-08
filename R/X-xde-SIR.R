@@ -11,11 +11,11 @@ dXdt.SIR<- function(t, y, pars, i) {
     Hpar <- pars$Hpar[[i]]
     with(pars$Xpar[[i]], {
 
-      dS <- Births(t, H, Hpar) + dHdt(t, S, Hpar) - foi*S
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dI <- foi*S - r*I + dHdt(t, I, Hpar)
       dR <- r*I + dHdt(t, R, Hpar)
 
-      return(c(dS, dI, dR))
+      return(c(dH, dI, dR))
     })
   })
 }
@@ -74,11 +74,10 @@ xde_steady_state_X.SIR = function(foi, H, Xpar){with(Xpar,{
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SIR = function(nStrata,H, Xopts = list(),I=1, R=0){with(Xopts,{
-  S = checkIt(H-I-R, nStrata)
+make_Xinits_SIR = function(nStrata, H, Xopts = list(), I=1, R=0){with(Xopts,{
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
-  return(list(S=S, I=I, R =R))
+  return(list(H=H, I=I, R =R))
 })}
 
 
@@ -134,8 +133,8 @@ setup_Xinits.SIR = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SIR <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
@@ -143,15 +142,10 @@ setup_Xix.SIR <- function(pars, i) {with(pars,{
   R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
-
-
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, R_ix=R_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, I_ix=I_ix, R_ix=R_ix)
   return(pars)
 })}
-
-
-
 
 
 #' @title Return the variables as a list
@@ -161,13 +155,12 @@ setup_Xix.SIR <- function(pars, i) {with(pars,{
 #' @export
 list_Xvars.SIR <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    S = y[S_ix]
+    H = y[H_ix]
     I = y[I_ix]
     R = y[R_ix]
-    H =S+I+R
+    S = H-I-R
     return(list(S=S, I=I, R=R, H=H))})
 }
-
 
 
 #' @title Return initial values as a vector
@@ -175,22 +168,16 @@ list_Xvars.SIR <- function(y, pars, i) {
 #' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_Xinits.SIR <- function(pars, i){
-  pars$Xinits[[i]]
-}
-
-
-
-
+get_Xinits.SIR <- function(pars, i){pars$Xinits[[i]]}
 
 
 #' @title Update inits for the SIR human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SIR <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SIR(pars$nStrata[i], pars$H0, list(), I=I, R=R)
+update_Xinits.SIR <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
+    pars$Xinits[[i]] = make_Xinits_SIR(pars$nStrata[i], H, list(), I=I, R=R)
     return(pars)
   })}
 
@@ -229,9 +216,6 @@ setup_Xpar.SIR = function(Xname, pars, i, Xopts=list()){
 }
 
 
-
-
-
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the SIS model.
 #' @inheritParams ramp.xds::F_X
@@ -244,9 +228,6 @@ F_X.SIR <- function(t, y, pars, i) {
 }
 
 
-
-
-
 #' @title Size of effective infectious human population
 #' @description Implements [F_H] for the SIR model.
 #' @inheritParams ramp.xds::F_H
@@ -255,10 +236,7 @@ F_X.SIR <- function(t, y, pars, i) {
 F_H.SIR <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i),
     return(H))
-  }
-
-
-
+}
 
 
 #' @title Infection blocking pre-erythrocytic immunity
@@ -276,18 +254,15 @@ F_b.SIR <- function(y, pars, i) {
 #' @return none
 #' @export
 parse_Xorbits.SIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-  S <- outputs[,S_ix]
+  H <- outputs[,H_ix]
   I <- outputs[,I_ix]
   R <- outputs[,R_ix]
-  H <- S+I+R
+  S <- H-I-R
   ni <- pars$Xpar[[i]]$c*I/H
   true_pr <- I/H
-  vars <- list(S=S, I=I,R=R, H=H, ni=ni, true_pr=true_pr)
+  vars <- list(S=S, I=I, R=R, H=H, ni=ni, true_pr=true_pr)
   return(vars)
 })}
-
-
-
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
@@ -299,9 +274,6 @@ F_pr.SIR <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
-
-
-
 
 
 #' @title Compute the HTC for the SIR model
@@ -317,9 +289,6 @@ HTC.SIR <- function(pars, i) {
 }
 
 
-
-
-
 #' Add lines for the density of infected individuals for the SIR model
 #'
 #' @param time time points for the observations
@@ -328,7 +297,6 @@ HTC.SIR <- function(pars, i) {
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #' @export
-
 xds_lines_X_SIR = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
   with(XH,{
@@ -341,11 +309,7 @@ xds_lines_X_SIR = function(time, XH, nStrata, clrs=c("darkblue","darkred","darkg
       lines(time, S[,i], col=clrs[1], lty = llty[i])
       lines(time, I[,i], col=clrs[2], lty = llty[i])
       lines(time, R[,i], col=clrs[3], lty = llty[i])
-  }})}
-
-
-
-
+}})}
 
 
 #' Plot the density of infected individuals for the SIR model

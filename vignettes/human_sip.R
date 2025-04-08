@@ -12,7 +12,7 @@ library(data.table)
 library(ggplot2)
 
 ## ----echo=FALSE---------------------------------------------------------------
-#devtools::load_all()
+devtools::load_all()
 
 ## -----------------------------------------------------------------------------
 nStrata <- 3
@@ -22,7 +22,7 @@ residence <- 1:3
 params <- make_xds_template("ode", "human", nPatches, 1, residence) 
 
 ## -----------------------------------------------------------------------------
-b <- 0.55
+b <- 0.5
 c <- 0.15
 r <- 1/200
 eta <- c(1/30, 1/40, 1/35)
@@ -32,7 +32,7 @@ Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,xi=xi)
 class(Xo) <- "SIP"
 
 ## -----------------------------------------------------------------------------
-eir <- 2/365
+eir <- c(1,2,3)/365
 xde_steady_state_X(eir*b, H, Xo) ->ss
 ss
 
@@ -46,7 +46,7 @@ params = setup_Xinits(params, H, 1, Xo)
 
 ## -----------------------------------------------------------------------------
 MYZo = list(
-  MYZm = eir*H
+  Z = eir*H, f=1, q=1
 )
 
 ## -----------------------------------------------------------------------------
@@ -66,11 +66,11 @@ xde_steady_state_X(eir*b, H, params$Xpar[[1]])
 y0 <- as.vector(unlist(get_inits(params)))
 
 ## -----------------------------------------------------------------------------
-out <- deSolve::ode(y = y0, times = c(0, 365), xde_derivatives, parms= params, method = 'lsoda') 
-out1<- out
+out <- deSolve::ode(y = y0, times = c(0, 730), xde_derivatives, parms= params, method = 'lsoda') 
+list_Xvars(out, params, 1)
 
 ## ----out.width = "100%"-------------------------------------------------------
-colnames(out)[params$ix$X[[1]]$S_ix+1] <- paste0('S_', 1:params$nStrata)
+colnames(out)[params$ix$X[[1]]$H_ix+1] <- paste0('H_', 1:params$nStrata)
 colnames(out)[params$ix$X[[1]]$I_ix+1] <- paste0('I_', 1:params$nStrata)
 colnames(out)[params$ix$X[[1]]$P_ix+1] <- paste0('P_', 1:params$nStrata)
 
@@ -88,6 +88,10 @@ ggplot(data = out, mapping = aes(x = time, y = value, color = Strata)) +
 xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, Xopts = Xo, MYZopts = MYZo) -> test_SIP_xde
 
 ## -----------------------------------------------------------------------------
-xds_solve(test_SIP_xde, 365, 365)$outputs$orbits$deout -> out2
+xde_steady_state_X(b*eir, H, test_SIP_xde$Xpar[[1]]) -> out1
+out1 <- unlist(out1)
+
+## -----------------------------------------------------------------------------
+xds_solve(test_SIP_xde, 365, 365)$outputs$last_y -> out2
 approx_equal(out2,out1) 
 

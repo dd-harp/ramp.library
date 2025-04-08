@@ -14,12 +14,12 @@ dXdt.SIPw <- function(t, y, pars, i){
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      dS <- -foi*S         - xi*S  + r*I  + eta*P + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      dH <- dHdt(t, H, Hpar) + Births(t, H, Hpar)
       dI <-  foi*(1-rho)*S - (xi+sigma)*I  - r*I          + dHdt(t, I, Hpar)
       dP <-  foi*rho*S     + xi*(S+I) + sigma*I    - eta*P + dHdt(t, P, Hpar)
       dw <- foi + dHdt(t, w, Hpar)
 
-      return(c(dS, dI, dP, dw))
+      return(c(dH, dI, dP, dw))
     })
   })
 }
@@ -139,7 +139,7 @@ F_b.SIPw <- function(y, pars,i) {
 #' @export
 list_Xvars.SIPw <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-       S = y[S_ix]
+       H = y[H_ix]
        I = y[I_ix]
        P = y[P_ix]
        w = y[w_ix]
@@ -155,7 +155,7 @@ list_Xvars.SIPw <- function(y, pars, i) {
 put_Xvars.SIPw <- function(Xvars, y, pars, i) {
   with(pars$ix$X[[i]],
     with(as.list(Xvars),{
-      y[S_ix] = S
+      y[H_ix] = H
       y[I_ix] = I
       y[P_ix] = P
       y[w_ix] = w
@@ -198,11 +198,10 @@ setup_Xinits.SIPw = function(pars,H, i, Xopts=list()){
 #' @export
 make_Xinits_SIPw = function(nStrata, H, Xopts = list(),
                            I=1, P=0, w=0){with(Xopts, {
-    S = unname(as.vector(checkIt(H -I-P, nStrata)))
     I = unname(as.vector(checkIt(I, nStrata)))
     P = unname(as.vector(checkIt(P, nStrata)))
     w = unname(as.vector(checkIt(w, nStrata)))
-    return(list(S=S, I=I, P=P, w=w))
+    return(list(H=H, I=I, P=P, w=w))
 })}
 
 #' @title Parse the output of deSolve and return variables for SIPw models
@@ -211,14 +210,14 @@ make_Xinits_SIPw = function(nStrata, H, Xopts = list(),
 #' @return none
 #' @export
 parse_Xorbits.SIPw <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-    S <-outputs[,S_ix]
+    H <- outputs[,H_ix]
     I <- outputs[,I_ix]
-    P <-outputs[,P_ix]
+    P <- outputs[,P_ix]
     w <- outputs[,w_ix]
-    H <- S+I+P
+    S <- H-I-P
     ni <- pars$Xpar[[i]]$c*I/H
     true_pr <- I/H
-    return(list(time=time,S=S,I=I,P=P,H=H,w=w,ni=ni, true_pr= true_pr))
+    return(list(time=time, S=S, I=I, P=P, H=H, w=w, ni=ni, true_pr=true_pr))
   })}
 
 #' @title Add indices for human population to parameter list
@@ -229,8 +228,8 @@ parse_Xorbits.SIPw <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
 #' @export
 setup_Xix.SIPw <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
@@ -242,7 +241,7 @@ setup_Xix.SIPw <- function(pars, i) {with(pars,{
   max_ix <- tail(w_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix, w_ix=w_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, I_ix=I_ix, P_ix=P_ix, w_ix=w_ix)
   return(pars)
 })}
 
@@ -250,9 +249,9 @@ setup_Xix.SIPw <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SIPw <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SIPw(pars$nStrata[i], pars$H0,list(), I=I, P=P, w=w)
+update_Xinits.SIPw <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
+    pars$Xinits[[i]] = make_Xinits_SIPw(pars$nStrata[i], H, list(), I=I, P=P, w=w)
     return(pars)
   })}
 
