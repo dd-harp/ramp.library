@@ -210,29 +210,31 @@ here, we assume that exposure is Poisson, so we let:</p>
 $$</span></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">HPop</span> <span class="op">=</span> <span class="fl">1000</span></span>
-<span><span class="va">MYZo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MYZm <span class="op">=</span> <span class="fl">2000</span><span class="op">/</span><span class="fl">365</span>, f<span class="op">=</span><span class="fl">1</span>, q<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">Xo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>b<span class="op">=</span> <span class="fl">0.5</span>, H<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span>
-<span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"SEIS"</span>, MYZname <span class="op">=</span> <span class="st">"trivial"</span>, MYZopts <span class="op">=</span> <span class="va">MYZo</span>, Xopts<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span>
-<span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">seis</span>, <span class="fl">3650</span>, <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">MYZo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fl">2000</span><span class="op">/</span><span class="fl">365</span>, f<span class="op">=</span><span class="fl">1</span>, q<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">Xo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>b<span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"SEIS"</span>, MYZname <span class="op">=</span> <span class="st">"trivial"</span>, MYZopts <span class="op">=</span> <span class="va">MYZo</span>, Xopts<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">seis</span>, <span class="fl">3650</span>, <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">seis</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">seis</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">seis_inf</span></span>
 <span><span class="va">seis_inf</span></span>
-<span><span class="co">#&gt;           S           E           I           H </span></span>
-<span><span class="co">#&gt;  911.577028    6.381039   82.041933 1000.000000</span></span></code></pre></div>
+<span><span class="co">#&gt;          S          E          I          H </span></span>
+<span><span class="co">#&gt;  652.95170   25.04472  322.00358 1000.00000</span></span></code></pre></div>
 <p>This model has the steady state…</p>
 <p><span class="math display">$$
 \bar E = H \frac {hr}{h(r+\nu) + r \nu} \\
 \bar I = H \frac {h\nu}{h(r+\nu) + r \nu} \\
 \bar S = H - \bar E - \bar I
 $$</span></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">365</span>, <span class="fl">1000</span>, <span class="va">seis</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">seis_ss</span></span>
 <span><span class="va">seis_ss</span></span>
 <span><span class="co">#&gt;          S          E          I          H </span></span>
 <span><span class="co">#&gt;  652.95170   25.04472  322.00358 1000.00000</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">seis_inf</span><span class="op">-</span><span class="va">seis_ss</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1e-9</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="compartment-model-as-an-dde">Compartment Model as an DDE<a class="anchor" aria-label="anchor" href="#compartment-model-as-an-dde"></a>
@@ -255,22 +257,22 @@ so</p>
 \bar E = h \bar S \nu \\
 \bar I = \frac hr \bar S \\
 $$</span></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">SEISd</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"SEISd"</span>, MYZname <span class="op">=</span> <span class="st">"trivial"</span>, MYZopts <span class="op">=</span> <span class="va">MYZo</span>, Xopts<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span>
 <span><span class="va">SEISd</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">SEISd</span>, Tmax <span class="op">=</span> <span class="fl">3650</span>, dt<span class="op">=</span><span class="fl">15</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">SEISd</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">SEISd</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="op">-&gt;</span> <span class="va">seisd_inf</span></span>
 <span><span class="va">seisd_inf</span></span>
-<span><span class="co">#&gt;           S           E           I           H </span></span>
-<span><span class="co">#&gt;  911.577042    6.381024   82.041934 1000.000000</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;          S          E          I          H </span></span>
+<span><span class="co">#&gt;  652.95173   25.04467  322.00359 1000.00000</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">365</span>, <span class="fl">1000</span>, <span class="va">SEISd</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">seisd_ss</span></span>
 <span><span class="va">seisd_ss</span></span>
 <span><span class="co">#&gt;          S          E          I          H </span></span>
 <span><span class="co">#&gt;  652.95170   25.04472  322.00358 1000.00000</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">seisd_inf</span><span class="op">-</span><span class="va">seisd_ss</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1e-5</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 </div>
   </div>

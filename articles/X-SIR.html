@@ -222,12 +222,10 @@ compare the results.</p>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">365</span>, <span class="fl">1000</span>, <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">out2</span></span></code></pre></div>
 <p>Then we compare the analytic and numerical solution</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out2</span></span>
-<span><span class="co">#&gt;    S    I    R </span></span>
-<span><span class="co">#&gt;    0    0 1000</span></span>
-<span><span class="va">out1</span></span>
-<span><span class="co">#&gt;            S            I            R            H </span></span>
-<span><span class="co">#&gt; 1.338665e-20 2.701808e-06 1.000000e+03 1.000000e+03</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">out2</span> <span class="op">-</span> <span class="va">out1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in out2 - out1: longer object length is not a multiple of shorter</span></span>
+<span><span class="co">#&gt; object length</span></span>
+<span><span class="co">#&gt; [1] 1000</span></span></code></pre></div>
 </div>
 </div>
   </div>
