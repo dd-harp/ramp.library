@@ -4,12 +4,12 @@
 \alias{update_Xinits.workhorse}
 \title{Update inits for the workhorse human model from a vector of states}
 \usage{
-\method{update_Xinits}{workhorse}(pars, y0, i)
+\method{update_Xinits}{workhorse}(pars, y, i)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
 
-\item{y0}{a vector of initial values}
+\item{y}{the variables}
 
 \item{i}{the host species index}
 }

@@ -5,8 +5,6 @@
 \title{Parse the output of deSolve and return variables for the garki model}
 \usage{
 \method{parse_Xorbits}{garki}(outputs, pars, i)
-
-\method{parse_Xorbits}{garki}(outputs, pars, i)
 }
 \arguments{
 \item{outputs}{a \link{matrix} of outputs from deSolve}
@@ -17,11 +15,7 @@
 }
 \value{
 none
-
-none
 }
 \description{
-Implements [parse_Xorbits] for the garki model
-
 Implements [parse_Xorbits] for the garki model
 }

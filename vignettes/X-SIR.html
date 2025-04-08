@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -391,12 +391,10 @@ compare the results.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>foi_eq <span class="ot">=</span> test_SIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]<span class="sc">$</span>b<span class="sc">*</span><span class="fu">tail</span>(test_SIR<span class="sc">$</span>outputs<span class="sc">$</span>terms<span class="sc">$</span>EIR,<span class="dv">1</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">xde_steady_state_X</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">365</span>, <span class="dv">1000</span>, test_SIR<span class="sc">$</span>Xpar[[<span class="dv">1</span>]]) <span class="ot">-&gt;</span> out2</span></code></pre></div>
 <p>Then we compare the analytic and numerical solution</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>out2</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt;    S    I    R </span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;    0    0 1000</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>out1</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;            S            I            R            H </span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; 1.338665e-20 2.701808e-06 1.000000e+03 1.000000e+03</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(out2 <span class="sc">-</span> out1))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Warning in out2 - out1: longer object length is not a multiple of shorter</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; object length</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 1000</span></span></code></pre></div>
 </div>
 </div>
 

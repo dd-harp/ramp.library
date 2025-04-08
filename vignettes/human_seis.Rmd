@@ -62,9 +62,17 @@ $$
 
 ```{r}
 HPop = 1000
-MYZo = list(MYZm = 2000/365, f=1, q=1)
-Xo = list(b= 0.5, H=HPop)
+MYZo = list(Z = 2000/365, f=1, q=1)
+Xo = list(b= 0.5)
+```
+
+
+```{r}
 seis = xds_setup(Xname = "SEIS", MYZname = "trivial", MYZopts = MYZo, Xopts=Xo, HPop=HPop)
+```
+
+
+```{r}
 seis = xds_solve(seis, 3650, 15)
 ```
 

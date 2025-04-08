@@ -145,7 +145,7 @@
             <h3 data-toc-skip class="subtitle">A Behavioral State
 Model</h3>
             
-            <h4 data-toc-skip class="date">March 31, 2025</h4>
+            <h4 data-toc-skip class="date">April 07, 2025</h4>
       
       
       <div class="hidden name"><code>MYZ-xde-RMG.Rmd</code></div>
@@ -278,19 +278,19 @@ U_g \\
 <div class="section level2">
 <h2 id="implementation">Implementation<a class="anchor" aria-label="anchor" href="#implementation"></a>
 </h2>
-<p>The <code><a href="https://rdrr.io/pkg/ramp.xds/man/xds_setup.html" class="external-link">xds_setup()</a></code> utilities allow the user to pass a
+<p>The <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code> utilities allow the user to pass a
 single version of the dispersal matrix <span class="math inline">\(\cal
-K.\)</span> During <code><a href="https://rdrr.io/pkg/ramp.xds/man/xds_setup.html" class="external-link">xds_setup()</a></code>, <code>Omega_b</code> and
+K.\)</span> During <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code>, <code>Omega_b</code> and
 <code>Omega_q</code> are identical.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">HPop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">residence</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> </span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ramp.xds/man/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>,  residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"RMG"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>,  residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ramp.xds/man/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">model</span>, dt<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/ramp.xds/man/xds_plot_M.html" class="external-link">xds_plot_M</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_M.html" class="external-link">xds_plot_M</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_YZ</span><span class="op">(</span><span class="va">model</span>, add_axes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu">xds_plot_YZ_fracs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

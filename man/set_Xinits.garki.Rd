@@ -2,9 +2,9 @@
 % Please edit documentation in R/X-garki.R
 \name{set_Xinits.garki}
 \alias{set_Xinits.garki}
-\title{Return the parameters as a list}
+\title{Set Xinits.garki}
 \usage{
-\method{set_Xinits}{garki}(pars, i = 1, Xopts = list())
+\method{set_Xinits}{garki}(pars, i, Xopts = list())
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
@@ -14,8 +14,8 @@
 \item{Xopts}{a named list}
 }
 \value{
-an **`xds`** object
+a [list] vector
 }
 \description{
-This method dispatches on the type of `pars$Xpar[[i]]`.
+Implements [set_Xinits] for the garki model
 }

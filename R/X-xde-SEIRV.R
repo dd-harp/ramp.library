@@ -10,13 +10,13 @@ dXdt.SEIRV<- function(t, y, pars, i) {
   with(list_Xvars(y, pars, i),{
     with(pars$Xpar[[i]], {
 
-      dS <- (1-alpha)*Births(t, H, Hpar) - foi*S + dHdt(t, S, Hpar)+ gamma*R
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dE <- foi*S - tau*E + dHdt(t, E, Hpar)
       dI <- tau*E - r*I + dHdt(t, I, Hpar)
-      dR <- (1-varepsilon)*r*I -gamma*R+ dHdt(t, R, Hpar)
+      dR <- (1-varepsilon)*r*I - gamma*R+ dHdt(t, R, Hpar)
       dV <- alpha*Births(t, H, Hpar) + varepsilon*r*I + dHdt(t, V, Hpar)
 
-      derivs = c(dS, dE, dI, dR, dV)
+      derivs = c(dH, dE, dI, dR, dV)
 
       return(derivs)
     })
@@ -105,13 +105,12 @@ dts_steady_state_X.SEIRV= function(ar, H, Xpar){with(Xpar,{
 #' @param V the initial values for V
 #' @return a [list]
 #' @export
-make_Xinits_SEIRV = function(nStrata,H, Xopts = list(), I=1, E=0,R = 1,V = 1){with(Xopts,{
-  S = checkIt(H-E-I-R-V, nStrata)
+make_Xinits_SEIRV = function(nStrata, H, Xopts = list(), I=1, E=0,R = 1,V = 1){with(Xopts,{
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
   V = checkIt(V, nStrata)
-  return(list(S=S, E=E, I=I, R =R,V=V))
+  return(list(H=H, E=E, I=I, R=R, V=V))
 })}
 
 
@@ -141,8 +140,8 @@ setup_Xinits.SEIRV = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SEIRV <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
@@ -156,10 +155,8 @@ setup_Xix.SEIRV <- function(pars, i) {with(pars,{
   V_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(V_ix, 1)
 
-
-
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
   return(pars)
 })}
 
@@ -174,16 +171,14 @@ setup_Xix.SEIRV <- function(pars, i) {with(pars,{
 #' @export
 list_Xvars.SEIRV <- function(y, pars, i) {
     with(pars$ix$X[[i]],{
-      S = y[S_ix]
+      H = y[H_ix]
       E = y[E_ix]
       I = y[I_ix]
       R = y[R_ix]
       V = y[V_ix]
-      H =S+E+I+R+V
+      S = H-E-I-R-V
       return(list(S=S,E=E,I=I,R=R,V=V,H=H))})
 }
-
-
 
 
 #' @title Return initial values as a vector
@@ -191,19 +186,16 @@ list_Xvars.SEIRV <- function(y, pars, i) {
 #' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_Xinits.SEIRV <- function(pars, i){
-  pars$Xinits[[i]]
-}
-
+get_Xinits.SEIRV <- function(pars, i){pars$Xinits[[i]]}
 
 
 #' @title Update inits for the SEIRV human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SEIRV <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
-    pars$Xinits[[i]] = make_Xinits_SEIRV(pars$nStrata[i], pars$H0,  list(), E= E, I=I, R=R,V =V)
+update_Xinits.SEIRV <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
+    pars$Xinits[[i]] = make_Xinits_SEIRV(pars$nStrata[i], H, list(), E=E, I=I, R=R, V=V)
     return(pars)
   })}
 
@@ -316,19 +308,16 @@ F_b.SEIRV <- function(y, pars, i) {
 #' @return none
 #' @export
 parse_Xorbits.SEIRV <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     E = outputs[,E_ix]
     I = outputs[,I_ix]
     R = outputs[,R_ix]
     V = outputs[,V_ix]
-    H = S+E+I+R+V
+    S = H-E-I-R-V
     ni <- pars$Xpar[[i]]$c*I/H
     true_pr <- (E+I)/H
-    return(list(S=S, E=E,I=I, R=R, V=V,H=H,ni=ni, true_pr = true_pr))
-  })}
-
-
-
+    return(list(S=S, E=E,I=I, R=R, V=V, H=H, ni=ni, true_pr=true_pr))
+})}
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
@@ -342,9 +331,6 @@ F_pr.SEIRV <- function(vars, Xpar) {
 }
 
 
-
-
-
 #' @title Compute the HTC for the SEIRV model
 #' @description Implements [HTC] for the SEIRV model with demography.
 #' @inheritParams ramp.xds::HTC
@@ -356,9 +342,6 @@ HTC.SEIRV <- function(pars, i) {
        return(HTC)
   )
 }
-
-
-
 
 
 #' Add lines for the density of infected individuals for the SEIRV model
@@ -387,11 +370,7 @@ xds_lines_X_SEIRV = function(time, XH, nStrata, clrs=c("black","darkblue","darkr
         lines(time, R[,i], col=clrs[4,i], lty = llty[i])
         lines(time, V[,i], col=clrs[5,i], lty = llty[i])
       }
-  })}
-
-
-
-
+})}
 
 
 #' Plot the density of infected individuals for the SEIRV model

@@ -4,12 +4,12 @@
 \alias{update_Xinits.SEIR}
 \title{Update inits for the SEIR human model from a vector of states}
 \usage{
-\method{update_Xinits}{SEIR}(pars, y0, i)
+\method{update_Xinits}{SEIR}(pars, y, i)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
 
-\item{y0}{a vector of initial values}
+\item{y}{the variables}
 
 \item{i}{the host species index}
 }

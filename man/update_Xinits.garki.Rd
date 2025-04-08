@@ -4,12 +4,12 @@
 \alias{update_Xinits.garki}
 \title{Update inits for the garki model}
 \usage{
-\method{update_Xinits}{garki}(pars, y0, i)
+\method{update_Xinits}{garki}(pars, y, i)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
 
-\item{y0}{a vector of initial values}
+\item{y}{the variables}
 
 \item{i}{the host species index}
 }

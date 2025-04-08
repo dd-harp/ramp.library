@@ -28,11 +28,11 @@ dXdt.SIP <- function(t, y, pars, i){
 
       xi_t = xi + mass_treat(t)
 
-      dS <- Births(t, H, Hpar) - foi*S - xi_t*S + r*I + eta*P + dHdt(t, S, Hpar)
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
       dI <- (1-rho)*foi*S - (r+xi_t)*I + dHdt(t, I, Hpar)
       dP <- rho*foi*S + xi_t*(S+I) - eta*P + dHdt(t, P, Hpar)
 
-      return(c(dS, dI, dP))
+      return(c(dH, dI, dP))
     })
   })
 }
@@ -108,7 +108,6 @@ set_Xpars.SIP <- function(pars, i=1, Xopts=list()) {
 #' @export
 set_Xinits.SIP <- function(pars, i=1, Xopts=list()) {
   with(get_Xinits(pars, i), with(Xopts,{
-    pars$Xinits[[i]]$S = get_H(pars,i)-I-P
     pars$Xinits[[i]]$I = I
     pars$Xinits[[i]]$P = P
     return(pars)
@@ -203,10 +202,10 @@ F_b.SIP <- function(y, pars,i) {
 #' @export
 list_Xvars.SIP <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    S = y[S_ix]
+    H = y[H_ix]
     I = y[I_ix]
     P = y[P_ix]
-    H = S+I+P
+    S = H-I-P
     return(list(S=S,I=I,P=P,H=H))})
 }
 
@@ -243,10 +242,10 @@ setup_Xinits.SIP = function(pars, H, i, Xopts=list()){
 #' @export
 make_Xinits_SIP = function(nStrata, H, Xopts = list(),
                            I=1, P=0){with(Xopts,{
-  S = checkIt(H-I-P, nStrata)
+  H = H
   I = checkIt(I, nStrata)
   P = checkIt(P, nStrata)
-  return(list(S=S, I=I, P=P))
+  return(list(H=H, I=I, P=P))
 })}
 
 #' @title Parse the output of deSolve and return variables for the SIP model
@@ -256,10 +255,10 @@ make_Xinits_SIP = function(nStrata, H, Xopts = list(),
 #' @export
 parse_Xorbits.SIP <- function(outputs, pars, i) {
   with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     I = outputs[,I_ix]
     P = outputs[,P_ix]
-    H = S+I+P
+    S = H-I-P
     vars <- list(S=S, I=I, P=P, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
     vars$true_pr <- F_pr(vars, pars$Xpar[[i]])
@@ -274,8 +273,8 @@ parse_Xorbits.SIP <- function(outputs, pars, i) {
 #' @export
 setup_Xix.SIP <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
@@ -284,7 +283,7 @@ setup_Xix.SIP <- function(pars, i) {with(pars,{
   max_ix <- tail(P_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, I_ix=I_ix, P_ix=P_ix)
   return(pars)
 })}
 
@@ -293,8 +292,8 @@ setup_Xix.SIP <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SIP <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
+update_Xinits.SIP <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
   pars$Xinits[[i]] = make_Xinits_SIP(pars$nStrata[i], H, list(), I=I, P=P)
   return(pars)
 })}
@@ -407,7 +406,6 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
 xde_steady_state_X.SIP = function(foi, H, Xpar){with(Xpar,{
   Ieq = (foi*H*eta*(1-rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
   Peq  = (H*xi*(foi+r+xi) + (foi*H*r*rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
-  Seq = H -Ieq - Peq
-  return(list(S=as.vector(Seq), I=as.vector(Ieq), P = as.vector(Peq)))
+  return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))
 })}
 

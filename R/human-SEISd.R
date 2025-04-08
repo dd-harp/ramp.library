@@ -15,19 +15,17 @@ dXdt.SEISd <- function(t, y, pars, i) {
     with(pars$Xpar[[i]], {
 
       if (t <= nu) {
-        S_nu = 0
-        foi_nu = 0
+        cases = 0
       } else {
-        S_nu   = lagvalue(t=t-nu, nr=pars$ix$X[[i]]$S_ix)
-        foi_nu = lagderiv(t=t-nu, nr=pars$ix$X[[i]]$cfoi_ix)
+        cases = lagderiv(t=t-nu, nr=pars$ix$X[[i]]$cases_ix)
       }
 
-      dS <- Births(t, H, Hpar) - foi*S + r*I + dHdt(t, S, Hpar)
-      dE <- foi*S - foi_nu*S_nu + dHdt(t, E, Hpar)
-      dI <- foi_nu*S_nu - r*I + dHdt(t, I, Hpar)
-      dcfoi <- foi
+      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
+      dE <- foi*S - cases + dHdt(t, E, Hpar)
+      dI <- cases - r*I + dHdt(t, I, Hpar)
+      dcases <- foi*S
 
-      return(c(dS, dE, dI, dcfoi))
+      return(c(dH, dE, dI, dcases))
     })
   })
 }
@@ -95,7 +93,6 @@ make_Xpar_SEISd = function(nStrata, Xopts=list(),
 #' @return an **`xds`** object
 #' @export
 set_Xpars.SEISd <- function(pars, i=1, Xopts=list()) {
-  nHabitats <- pars$nHabitats
   with(pars$Xpar[[i]], with(Xopts,{
     pars$Xpar[[i]]$b <- b
     pars$Xpar[[i]]$c <- c
@@ -112,9 +109,10 @@ set_Xpars.SEISd <- function(pars, i=1, Xopts=list()) {
 #' @export
 set_Xinits.SEISd <- function(pars, i=1, Xopts=list()) {
   with(get_Xinits(pars, i), with(Xopts,{
-    pars$Xinits[[i]]$S = get_H(pars,i)-E-I
+    pars$Xinits[[i]]$H = H
     pars$Xinits[[i]]$E = E
     pars$Xinits[[i]]$I = I
+    pars$Xinits[[i]]$S = H-E-I
     return(pars)
   }))}
 
@@ -173,11 +171,10 @@ F_b.SEISd <- function(y, pars, i) {
 #' @export
 make_Xinits_SEISd = function(nStrata, H, Xopts = list(), E=0, I=1){with(Xopts,{
   stopifnot(length(H-E-I) == nStrata)
-  S = H-E-I
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
-  cfoi = rep(0, nStrata)
-  return(list(S=S, E=E, I=I, cfoi=cfoi))
+  cases = rep(0, nStrata)
+  return(list(H=H, E=E, I=I, cases=cases))
 })}
 
 
@@ -191,7 +188,7 @@ make_Xinits_SEISd = function(nStrata, H, Xopts = list(), E=0, I=1){with(Xopts,{
 put_Xvars.SEISd <- function(Xvars, y, pars, i) {
   with(pars$ix$X[[i]],
        with(as.list(Xvars),{
-         y[S_ix] = S
+         y[H_ix] = H
          y[E_ix] = E
          y[I_ix] = I
          return(y)
@@ -204,12 +201,12 @@ put_Xvars.SEISd <- function(Xvars, y, pars, i) {
 #' @export
 list_Xvars.SEISd <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    S = y[S_ix]
+    H = y[H_ix]
     E = y[E_ix]
     I = y[I_ix]
-    cfoi = y[cfoi_ix]
-    H = S+E+I
-    return(list(S=S,E=E,I=I,H=H,cfoi=cfoi))})
+    cases = y[cases_ix]
+    S = H-E-I
+    return(list(S=S,E=E,I=I,H=H,cases=cases))})
 }
 
 #' @title Setup Xinits.SEISd
@@ -230,8 +227,8 @@ setup_Xinits.SEISd = function(pars, H, i, Xopts=list()){
 #' @export
 setup_Xix.SEISd <- function(pars, i) {with(pars,{
 
-  S_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(S_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(E_ix, 1)
@@ -239,11 +236,11 @@ setup_Xix.SEISd <- function(pars, i) {with(pars,{
   I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(I_ix, 1)
 
-  cfoi_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(cfoi_ix, 1)
+  cases_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(cases_ix, 1)
 
   pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(S_ix=S_ix, E_ix=E_ix, I_ix=I_ix, cfoi_ix=cfoi_ix)
+  pars$ix$X[[i]] = list(H_ix=H_ix, E_ix=E_ix, I_ix=I_ix, cases_ix=cases_ix)
   return(pars)
 })}
 
@@ -252,16 +249,14 @@ setup_Xix.SEISd <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::get_Xinits
 #' @return a [numeric] vector
 #' @export
-get_Xinits.SEISd <- function(pars, i){pars$Xinits[[i]]
-}
-
+get_Xinits.SEISd <- function(pars, i=1){pars$Xinits[[i]]}
 
 #' @title Update inits for the SEISd xde human model from a vector of states
 #' @inheritParams ramp.xds::update_Xinits
 #' @return none
 #' @export
-update_Xinits.SEISd <- function(pars, y0, i) {
-  with(list_Xvars(y0, pars, i),{
+update_Xinits.SEISd <- function(pars, y, i) {
+  with(list_Xvars(y, pars, i),{
     pars$Xinits[[i]] = make_Xinits_SEISd(pars$nStrata[1], H, list(), E=E, I=I)
     return(pars)
   })}
@@ -274,10 +269,10 @@ update_Xinits.SEISd <- function(pars, y0, i) {
 #' @export
 parse_Xorbits.SEISd <- function(outputs, pars, i) {
   with(pars$ix$X[[i]],{
-    S = outputs[,S_ix]
+    H = outputs[,H_ix]
     E = outputs[,E_ix]
     I = outputs[,I_ix]
-    H = S+E+I
+    S = H-E-I
     vars <- list(S=S, E=E, I=I, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
     vars$pr <- F_pr(vars, pars$Xpar[[i]])

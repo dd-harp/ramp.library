@@ -4,12 +4,12 @@
 \alias{make_Xinits_SEIS}
 \title{Make initial values for the SEIS xde human model, with defaults}
 \usage{
-make_Xinits_SEIS(nStrata, H0, Xopts = list(), E = 0, I = 1)
+make_Xinits_SEIS(nStrata, H, Xopts = list(), E = 0, I = 1)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{H0}{the initial human population density}
+\item{H}{the initial human population density}
 
 \item{Xopts}{a [list] to overwrite defaults}
 

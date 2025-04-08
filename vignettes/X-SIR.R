@@ -26,6 +26,6 @@ foi_eq = test_SIR$Xpar[[1]]$b*tail(test_SIR$outputs$terms$EIR,1)
 xde_steady_state_X(1/365, 1000, test_SIR$Xpar[[1]]) -> out2
 
 ## -----------------------------------------------------------------------------
-out2
-out1
+sum(abs(out2 - out1))
+
 

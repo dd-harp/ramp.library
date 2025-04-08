@@ -4,12 +4,12 @@
 \alias{update_Xinits.SIPw}
 \title{Update inits for SIPw models from a vector of states}
 \usage{
-\method{update_Xinits}{SIPw}(pars, y0, i)
+\method{update_Xinits}{SIPw}(pars, y, i)
 }
 \arguments{
 \item{pars}{an \strong{\code{xds}} object}
 
-\item{y0}{a vector of initial values}
+\item{y}{the variables}
 
 \item{i}{the host species index}
 }

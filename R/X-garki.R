@@ -16,16 +16,15 @@ dXdt.garki = function(t, y, pars, i){
       R1 = foi/(exp(foi/r1) - 1)
       R2 = foi/(exp(foi/r2) - 1)
 
-      #dx1 = Births(t, x1, pars) - FoI*x1 + R1*y2 + dHdt(t, x1, pars)
-      dx1 = - foi*x1 + R1*y2 + dHdt(t, x1, Hpar)
+      dH = Births(t, H, Hpar) + dHdt(t, H, Hpar)
+#     dx1 = Births(t, H, Hpar) -foi*x1 + R1*y2 + dHdt(t, H, Hpar)
       dx2 = foi*x1 - nu*x2 + dHdt(t, x2, Hpar)
       dy1 = nu*x2 - alpha1*y1  + dHdt(t, y1, Hpar)
       dy2 = alpha1*y1 - R1*y2 - alpha2*y2 + dHdt(t, y2, Hpar)
       dy3 = alpha2*y2 + nu*x4 - R2*y3 + dHdt(t, y3, Hpar)
       dx3 = R2*y3 - foi*x3 + dHdt(t, x3, Hpar)
       dx4 = foi*x3 - nu*x4 + dHdt(t, x4, Hpar)
-      #dH =  dHdt(t, H, pars)
-      return(c(dx1, dx2, dy1, dy2, dy3, dx3, dx4))
+      return(c(dH, dx2, dy1, dy2, dy3, dx3, dx4))
     })
   })
 }
@@ -104,24 +103,6 @@ set_Xpars.garki <- function(pars, i=1, Xopts=list()) {
   }))}
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
-#' @inheritParams ramp.xds::set_Xinits
-#' @return an **`xds`** object
-#' @export
-set_Xinits.garki <- function(pars, i=1, Xopts=list()) {
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$x1 = x1
-    pars$Xinits[[i]]$x2 = x2
-    pars$Xinits[[i]]$x3 = x3
-    pars$Xinits[[i]]$x4 = x4
-    pars$Xinits[[i]]$y1 = y1
-    pars$Xinits[[i]]$y2 = y2
-    pars$Xinits[[i]]$y3 = y3
-    return(pars)
-  }))}
-
-
 #' @title Size of effective infectious human population
 #' @description Implements [F_X] for the garki model.
 #' @inheritParams ramp.xds::F_X
@@ -171,23 +152,22 @@ F_pr.garki <- function(vars, Xpar) {
 #' @export
 list_Xvars.garki <- function(y, pars, i) {
   with(pars$ix$X[[i]],{
-    x1 <- y[x1_ix]
+    H <- y[H_ix]
     x2 <- y[x2_ix]
     x3 <- y[x3_ix]
     x4 <- y[x4_ix]
     y1 <- y[y1_ix]
     y2 <- y[y2_ix]
     y3 <- y[y3_ix]
-    H = x1+x2+x3+x4+y1+y2+y3
-    return(list(x1=x1,x2=x2,x3=x3,x4=x4,y1=y1,y2=y2,y3=y3,H=H))})
+    x1 <- H - x2 - x3 - x4 - y1 - y2 - y3
+    return(list(H=H,x1=x1,x2=x2,x3=x3,x4=x4,y1=y1,y2=y2,y3=y3,H=H))})
 }
 
 
-#' @title Make inits for garki human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.
+#' @title Make inits for garki human model. Note that the variables should sum up to H, so the initial value of H is not set. The values are passed in the same order as they are presented in the original paper.
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] with values to override default values
 #' @param H a [numeric] initial value for total human population density
-#' @param x1 a [numeric] initial value for the variable x1
 #' @param x2 a [numeric] initial value for the variable x2
 #' @param y1 a [numeric] initial value for the variable y1
 #' @param y2 a [numeric] initial value for the variable y2
@@ -196,25 +176,41 @@ list_Xvars.garki <- function(y, pars, i) {
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
 #' @export
-make_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
+make_Xinits_garki <- function(nStrata, H, Xopts = list(), x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
   stopifnot(is.numeric(x2))
   stopifnot(is.numeric(y1))
   stopifnot(is.numeric(y2))
   stopifnot(is.numeric(y3))
   stopifnot(is.numeric(x3))
   stopifnot(is.numeric(x4))
-  if(is.null(x1)) x1 = H - x2 - y1 - y2 - y3 - x3 - x4
-  stopifnot(x1>0)
+  stopifnot(H>0)
 
-  x1 = checkIt(x1, nStrata)
+  H = checkIt(H, nStrata)
   x2 = checkIt(x2, nStrata)
   y1 = checkIt(y1, nStrata)
   y2 = checkIt(y2, nStrata)
   y3 = checkIt(y3, nStrata)
   x3 = checkIt(x3, nStrata)
   x4 = checkIt(x4, nStrata)
-  return(list(x1=x1,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
+  return(list(H=H,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
 }
+
+#' @title Set Xinits.garki
+#' @description Implements [set_Xinits] for the garki model
+#' @inheritParams ramp.xds::set_Xinits
+#' @return a [list] vector
+#' @export
+set_Xinits.garki = function(pars, i, Xopts=list()){
+  with(pars$Xpar[[i]], with(Xopts,{
+    pars$Xinits[[i]]$H = H
+    pars$Xinits[[i]]$x2 = x2
+    pars$Xinits[[i]]$y1 = y1
+    pars$Xinits[[i]]$y2 = y2
+    pars$Xinits[[i]]$y3 = y3
+    pars$Xinits[[i]]$x3 = x3
+    pars$Xinits[[i]]$x4 = x4
+    return(pars)
+}))}
 
 #' @title Setup Xinits.garki
 #' @description Implements [setup_Xinits] for the garki model
@@ -222,7 +218,7 @@ make_Xinits_garki <- function(nStrata, Xopts = list(), H=NULL, x1=NULL, x2=0, y1
 #' @return a [list] vector
 #' @export
 setup_Xinits.garki = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars,make_Xinits_garki(pars$nStrata[i], Xopts, H=H))
+  pars$Xinits[[i]] = with(pars, make_Xinits_garki(pars$nStrata[i], H, Xopts))
   return(pars)
 }
 
@@ -243,8 +239,8 @@ get_Xinits.garki <- function(pars, i){
 #' @export
 setup_Xix.garki <- function(pars, i) {with(pars,{
 
-  x1_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(x1_ix, 1)
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
 
   x2_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(x2_ix, 1)
@@ -265,7 +261,7 @@ setup_Xix.garki <- function(pars, i) {with(pars,{
   max_ix <- tail(x4_ix, 1)
 
   pars$max_ix <- max_ix
-  pars$ix$X[[i]] = list(x1_ix = x1_ix,  x2_ix = x2_ix,
+  pars$ix$X[[i]] = list(H_ix = H_ix,  x2_ix = x2_ix,
                         y1_ix = y1_ix,  y2_ix = y2_ix,  y3_ix = y3_ix,
                         x3_ix = x3_ix,  x4_ix = x4_ix)
 
@@ -276,11 +272,11 @@ setup_Xix.garki <- function(pars, i) {with(pars,{
 #' @inheritParams ramp.xds::update_Xinits
 #' @return an 'xds' object
 #' @export
-update_Xinits.garki <- function(pars, y0, i){
-  with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_garki(pars, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
+update_Xinits.garki <- function(pars, y, i){
+  with(list_Xvars(y, pars, i),{
+    pars = make_Xinits_garki(pars, H=H, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
     return(pars)
-  })}
+ })}
 
 
 #' @title Parse the output of deSolve and return variables for the garki model
@@ -289,17 +285,18 @@ update_Xinits.garki <- function(pars, y0, i){
 #' @return none
 #' @export
 parse_Xorbits.garki <- function(outputs, pars, i) {
-  time = outputs[,1]
   with(pars$ix$X[[i]],{
-    x1 = outputs[,x1_ix+1]
-    x2 = outputs[,x2_ix+1]
-    y1 = outputs[,y1_ix+1]
-    y2 = outputs[,y2_ix+1]
-    y3 = outputs[,y3_ix+1]
-    x3 = outputs[,x3_ix+1]
-    x4 = outputs[,x4_ix+1]
-    H =x1+x2+y1+y2+y3+x3+x4
-    vars <- list(time=time, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H)
+    H = outputs[,H_ix]
+    x2 = outputs[,x2_ix]
+    y1 = outputs[,y1_ix]
+    y2 = outputs[,y2_ix]
+    y3 = outputs[,y3_ix]
+    x3 = outputs[,x3_ix]
+    x4 = outputs[,x4_ix]
+    x1 <- H - x2 - x3 - x4 - y1 - y2 - y3
+    ni <-  y1/H
+    true_pr <- (x3 + x4 + y2 + y3)/H
+    vars <- list(H=H, x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4)
     return(vars)
   })}
 
@@ -329,7 +326,7 @@ xds_plot_X.garki = function(pars, i=1, clrs=viridisLite::turbo(7), llty=1, add=F
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xds_lines_X_garki= function(times, XH, pars, clrs=viridisLite::turbo(7), llty=1){
+xds_lines_X_garki= function(times, XH, pars, clrs=viridisLite::turbo(8), llty=1){
   with(XH,{
     if(pars$nStrata==1){
       lines(times, x1, col=clrs[1], lty = llty[1])
@@ -339,6 +336,7 @@ xds_lines_X_garki= function(times, XH, pars, clrs=viridisLite::turbo(7), llty=1)
       lines(times, y3, col=clrs[5], lty = llty[1])
       lines(times, x3, col=clrs[6], lty = llty[1])
       lines(times, x4, col=clrs[7], lty = llty[1])
+      lines(times, H, col=clrs[8], lty = llty[1])
     }
     if(pars$nStrata>1){
       if (length(clrs)==1) clrs=rep(clrs, pars$nStrata)
@@ -351,27 +349,10 @@ xds_lines_X_garki= function(times, XH, pars, clrs=viridisLite::turbo(7), llty=1)
         lines(times, y3[,i], col=clrs[5], lty = llty[i])
         lines(times, x3[,i], col=clrs[6], lty = llty[i])
         lines(times, x4[,i], col=clrs[7], lty = llty[i])
+        lines(times, H[,i], col=clrs[8], lty = llty[i])
       }
     }
   })}
-
-
-#' @title Parse the output of deSolve and return variables for the garki model
-#' @description Implements [parse_Xorbits] for the garki model
-#' @inheritParams ramp.xds::parse_Xorbits
-#' @return none
-#' @export
-parse_Xorbits.garki <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
-  x1 = outputs[,x1_ix]
-  x2 = outputs[,x2_ix]
-  y1 = outputs[,y1_ix]
-  y2 = outputs[,y2_ix]
-  y3 = outputs[,y3_ix]
-  x3 = outputs[,x3_ix]
-  x4 = outputs[,x4_ix]
-  H = x1+x2+x3+x4+y1+y2+y3
-  return(list(x1=x1, x2=x2, y1=y1, y2=y2, y3=y3, x3=x3, x4=x4, H=H))
-})}
 
 
 #' @title Compute the HTC for the garki model

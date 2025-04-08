@@ -2,13 +2,12 @@
 % Please edit documentation in R/X-garki.R
 \name{make_Xinits_garki}
 \alias{make_Xinits_garki}
-\title{Make inits for garki human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.}
+\title{Make inits for garki human model. Note that the variables should sum up to H, so the initial value of H is not set. The values are passed in the same order as they are presented in the original paper.}
 \usage{
 make_Xinits_garki(
   nStrata,
+  H,
   Xopts = list(),
-  H = NULL,
-  x1 = NULL,
   x2 = 0,
   y1 = 0,
   y2 = 0,
@@ -20,11 +19,9 @@ make_Xinits_garki(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{a [list] with values to override default values}
-
 \item{H}{a [numeric] initial value for total human population density}
 
-\item{x1}{a [numeric] initial value for the variable x1}
+\item{Xopts}{a [list] with values to override default values}
 
 \item{x2}{a [numeric] initial value for the variable x2}
 
@@ -42,5 +39,5 @@ make_Xinits_garki(
 none
 }
 \description{
-Make inits for garki human model. Note that the variables should sum up to H, so the initial value of x1 is not set. The values are passed in the same order as they are presented in the original paper.
+Make inits for garki human model. Note that the variables should sum up to H, so the initial value of H is not set. The values are passed in the same order as they are presented in the original paper.
 }
