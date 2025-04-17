@@ -19,7 +19,7 @@ make_Xpar_SEIRV(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{alpha}{proportion of vaccinated humans}
 
@@ -36,7 +36,7 @@ make_Xpar_SEIRV(
 \item{gamma}{loss of immunity rate}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SEIRV human model, with defaults

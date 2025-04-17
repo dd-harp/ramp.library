@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [Update_MYZt] for the SEI model.
+Implements \link{Update_MYZt} for the SEI model.
 }

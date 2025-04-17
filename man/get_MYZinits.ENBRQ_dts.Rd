@@ -12,8 +12,8 @@
 \item{s}{the species index}
 }
 \value{
-[numeric]
+\link{numeric}
 }
 \description{
-Implements [get_MYZinits] for the ENBRQ_dts model.
+Implements \link{get_MYZinits} for the ENBRQ_dts model.
 }

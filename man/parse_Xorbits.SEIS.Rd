@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements [parse_Xorbits] for the SEIS model
+Implements \link{parse_Xorbits} for the SEIS model
 }

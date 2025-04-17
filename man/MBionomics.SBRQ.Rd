@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a named [list]
+a named \link{list}
 }
 \description{
-Implements [MBionomics] for the SBRQ model
+Implements \link{MBionomics} for the SBRQ model
 }

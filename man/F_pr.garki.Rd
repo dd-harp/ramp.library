@@ -12,7 +12,7 @@
 \item{Xpar}{a list defining a model for human}
 }
 \value{
-a [numeric] vector of length `nStrata`
+a \link{numeric} vector of length \code{nStrata}
 }
 \description{
 Compute the true pr for the garki model.

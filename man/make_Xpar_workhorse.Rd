@@ -31,7 +31,7 @@ make_Xpar_workhorse(
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{tau}{the incubation period}
 
@@ -72,7 +72,7 @@ make_Xpar_workhorse(
 \item{zeta_4}{the treatment rate for stage 4}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for workhorse human model, with defaults

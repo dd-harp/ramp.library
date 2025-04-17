@@ -7,12 +7,12 @@
 \method{get_sigma}{SBRQ}(pars, s = 1)
 }
 \arguments{
-\item{pars}{an **`xds`** object}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the vector species index}
 }
 \value{
-y a [numeric] vector assigned the class "dynamic"
+y a \link{numeric} vector assigned the class "dynamic"
 }
 \description{
 Get the feeding rate

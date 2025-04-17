@@ -14,8 +14,8 @@
 \item{s}{the species index}
 }
 \value{
-[list]
+\link{list}
 }
 \description{
-Implements [parse_Lorbits] for stages_dts competition model.
+Implements \link{parse_Lorbits} for stages_dts competition model.
 }

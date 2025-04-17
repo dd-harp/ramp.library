@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SIPd.R
 \name{dXdt.SIPd}
 \alias{dXdt.SIPd}
-\title{\eqn{\cal X} Component Derivatives for the `SIPd` Model}
+\title{\eqn{\cal X} Component Derivatives for the \code{SIPd} Model}
 \usage{
 \method{dXdt}{SIPd}(t, y, pars, i)
 }
@@ -16,7 +16,7 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
 Compute the derivatives for SIPd compartmental model:
@@ -32,5 +32,5 @@ time-dependent birth rate; and the \eqn{d{\cal H}}
 operator computes derivatives for the demographic model \eqn{\cal H}.
 }
 \seealso{
-The parameters are defined in [make_Xpar_SIPd]
+The parameters are defined in \link{make_Xpar_SIPd}
 }

@@ -7,13 +7,13 @@
 \method{get_MYZpars}{SEI}(pars, s = 1)
 }
 \arguments{
-\item{pars}{an **`xds`** object}
+\item{pars}{an \strong{\code{xds}} object}
 
 \item{s}{the vector species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-This method dispatches on the type of `pars$MYZpar[[s]]`.
+This method dispatches on the type of \code{pars$MYZpar[[s]]}.
 }

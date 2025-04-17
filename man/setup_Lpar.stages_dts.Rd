@@ -16,8 +16,8 @@
 \item{Lopts}{a named \link{list} to configure \strong{\code{Lpar}}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [setup_Lpar] for the stages_dts model
+Implements \link{setup_Lpar} for the stages_dts model
 }

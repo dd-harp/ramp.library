@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [get_MYZinits] for the SBRQ model.
+Implements \link{get_MYZinits} for the SBRQ model.
 }

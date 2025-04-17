@@ -11,14 +11,14 @@ make_Xinits_SIP(nStrata, H, Xopts = list(), I = 1, P = 0)
 
 \item{H}{the initial human population density}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{I}{the initial values of the parameter I}
 
 \item{P}{the initial values of the parameter P}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make initial values for the SIP human model, with defaults

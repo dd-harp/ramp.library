@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements [parse_MYZorbits] for the RMG model
+Implements \link{parse_MYZorbits} for the RMG model
 }

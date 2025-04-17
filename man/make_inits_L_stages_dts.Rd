@@ -7,7 +7,7 @@
 make_inits_L_stages_dts(pars, L1, L2, L3, L4, P)
 }
 \arguments{
-\item{pars}{a [list]}
+\item{pars}{a \link{list}}
 
 \item{L1}{initial conditions}
 
@@ -20,7 +20,7 @@ make_inits_L_stages_dts(pars, L1, L2, L3, L4, P)
 \item{P}{initial conditions}
 }
 \value{
-a [list] with Linits added
+a \link{list} with Linits added
 }
 \description{
 Make inits for stages_dts competition aquatic mosquito model

@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-the model as a [list]
+the model as a \link{list}
 }
 \description{
-Implements [MBaseline] for models with no forcing on the baseline
+Implements \link{MBaseline} for models with no forcing on the baseline
 }

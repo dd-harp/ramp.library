@@ -14,8 +14,8 @@
 \item{Xopts}{a named list}
 }
 \value{
-an **`xds`** object
+an \strong{\code{xds}} object
 }
 \description{
-This method dispatches on the type of `pars$Xpar[[i]]`.
+This method dispatches on the type of \code{pars$Xpar[[i]]}.
 }

@@ -19,7 +19,7 @@ make_Xpar_SIP(
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 
@@ -36,7 +36,7 @@ make_Xpar_SIP(
 \item{F_mass_treat}{mass treatment rates as a function of time}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SIP human model, with defaults

@@ -26,7 +26,7 @@ make_Xinits_workhorse(
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{Xopts}{a [list] to overwrite defaults}
+\item{Xopts}{a \link{list} to overwrite defaults}
 
 \item{H0}{the initial population size}
 
@@ -57,7 +57,7 @@ make_Xinits_workhorse(
 \item{w}{exposure tracking variable}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make initial values for the workhorse human model, with defaults

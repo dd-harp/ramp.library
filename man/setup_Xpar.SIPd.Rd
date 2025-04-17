@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SIPd.R
 \name{setup_Xpar.SIPd}
 \alias{setup_Xpar.SIPd}
-\title{Setup `Xpar` for an `SIPd`}
+\title{Setup \code{Xpar} for an \code{SIPd}}
 \usage{
 \method{setup_Xpar}{SIPd}(Xname, pars, i, Xopts = list())
 }
@@ -16,8 +16,8 @@
 \item{Xopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [setup_Xpar] for the SIPd model
+Implements \link{setup_Xpar} for the SIPd model
 }

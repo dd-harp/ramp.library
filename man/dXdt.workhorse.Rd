@@ -16,8 +16,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dXdt] for the SIS model, no demography.
+Implements \link{dXdt} for the SIS model, no demography.
 }

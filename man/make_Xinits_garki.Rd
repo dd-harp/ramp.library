@@ -19,21 +19,21 @@ make_Xinits_garki(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{H}{a [numeric] initial value for total human population density}
+\item{H}{a \link{numeric} initial value for total human population density}
 
-\item{Xopts}{a [list] with values to override default values}
+\item{Xopts}{a \link{list} with values to override default values}
 
-\item{x2}{a [numeric] initial value for the variable x2}
+\item{x2}{a \link{numeric} initial value for the variable x2}
 
-\item{y1}{a [numeric] initial value for the variable y1}
+\item{y1}{a \link{numeric} initial value for the variable y1}
 
-\item{y2}{a [numeric] initial value for the variable y2}
+\item{y2}{a \link{numeric} initial value for the variable y2}
 
-\item{y3}{a [numeric] initial value for the variable y3}
+\item{y3}{a \link{numeric} initial value for the variable y3}
 
-\item{x3}{a [numeric] initial value for the variable x3}
+\item{x3}{a \link{numeric} initial value for the variable x3}
 
-\item{x4}{a [numeric] initial value for the variable x4}
+\item{x4}{a \link{numeric} initial value for the variable x4}
 }
 \value{
 none

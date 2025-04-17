@@ -14,8 +14,8 @@
 \item{s}{the vector species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-This method dispatches on the type of `pars$Lpar[[s]]`
+This method dispatches on the type of \code{pars$Lpar[[s]]}
 }

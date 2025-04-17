@@ -16,7 +16,7 @@ make_Xpar_SEIS(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 
@@ -27,7 +27,7 @@ make_Xpar_SEIS(
 \item{c}{transmission probability (efficiency) from human to mosquito}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SEIS xde human model, with defaults

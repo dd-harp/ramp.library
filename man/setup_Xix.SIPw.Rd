@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_Xix] for SIPw models
+Implements \link{setup_Xix} for SIPw models
 }

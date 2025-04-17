@@ -15,5 +15,5 @@ get_Linits.stages_dts(pars, s)
 none
 }
 \description{
-Implements [get_Linits] for the GeRM model.
+Implements \link{get_Linits} for the GeRM model.
 }

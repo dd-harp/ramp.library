@@ -14,8 +14,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector of length `nStrata`
+a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements [F_b] for the workhorse model.
+Implements \link{F_b} for the workhorse model.
 }

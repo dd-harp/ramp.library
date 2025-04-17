@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dLdt] for the stages_dts competition model.
+Implements \link{dLdt} for the stages_dts competition model.
 }

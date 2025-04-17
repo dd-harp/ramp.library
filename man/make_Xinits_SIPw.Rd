@@ -11,7 +11,7 @@ make_Xinits_SIPw(nStrata, H, Xopts = list(), I = 1, P = 0, w = 0)
 
 \item{H}{the initial human population density}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{I}{the initial values of the variable I}
 
@@ -20,7 +20,7 @@ make_Xinits_SIPw(nStrata, H, Xopts = list(), I = 1, P = 0, w = 0)
 \item{w}{the initial values of the tracking variable w}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make initial values for a SIPw human model, with defaults

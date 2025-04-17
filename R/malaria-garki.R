@@ -30,7 +30,7 @@ dXdt.garki = function(t, y, pars, i){
 }
 
 
-#' @title make Xpar.garki
+#' @title make Xpar for the Garki model
 #' @description Implements [setup_Xpar] for the garki model
 #' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
@@ -164,7 +164,8 @@ list_Xvars.garki <- function(y, pars, i) {
 }
 
 
-#' @title Make inits for garki human model. Note that the variables should sum up to H, so the initial value of H is not set. The values are passed in the same order as they are presented in the original paper.
+#' @title Make inits for garki human model.
+#' @Note We use H instead of x, but other variables are passed in the same order as they are presented in the original paper.
 #' @param nStrata is the number of population strata
 #' @param Xopts a [list] with values to override default values
 #' @param H a [numeric] initial value for total human population density

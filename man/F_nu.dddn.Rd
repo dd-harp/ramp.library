@@ -14,8 +14,8 @@
 \item{nu_par}{a \link{list}}
 }
 \value{
-a [numeric] vector of length `nPatches`
+a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements [F_nu] for a dddn model
+Implements \link{F_nu} for a dddn model
 }

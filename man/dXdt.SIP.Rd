@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SIP.R
 \name{dXdt.SIP}
 \alias{dXdt.SIP}
-\title{Derivatives for the `SIP` Module (**X** Component)}
+\title{Derivatives for the \code{SIP} Module (\strong{X} Component)}
 \usage{
 \method{dXdt}{SIP}(t, y, pars, i)
 }
@@ -16,7 +16,7 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
 Compute the derivatives for SIP compartmental model:
@@ -30,9 +30,9 @@ dP/dt =& (\rho h +\xi)S & +\xi I & - \eta P &+ d{\cal H}(P)
 where \eqn{H = S+I+P}; \eqn{B(t, H)} is the
 time-dependent birth rate; and the \eqn{d{\cal H}}
 operator computes derivatives for the demographic model \eqn{\cal H}.
-The parameter \eqn{\xi} can be modified by setting `mass_treat` to a
+The parameter \eqn{\xi} can be modified by setting \code{mass_treat} to a
 non-zero function of time.
 }
 \seealso{
-The parameters are defined in [make_Xpar_SIP]
+The parameters are defined in \link{make_Xpar_SIP}
 }

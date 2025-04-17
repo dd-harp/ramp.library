@@ -9,7 +9,7 @@ make_Xpar_SIR(nStrata, Xopts = list(), b = 0.55, r = 1/180, c = 0.15)
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{the proportion of infective bites that cause an infection}
 
@@ -18,7 +18,7 @@ make_Xpar_SIR(nStrata, Xopts = list(), b = 0.55, r = 1/180, c = 0.15)
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SIR human model, with defaults

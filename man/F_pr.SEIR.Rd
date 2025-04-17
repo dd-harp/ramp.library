@@ -12,8 +12,8 @@
 \item{Xpar}{a list defining a model for human}
 }
 \value{
-a [numeric] vector of length `nStrata`
+a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements [F_pr] for the SEIR model.
+Implements \link{F_pr} for the SEIR model.
 }

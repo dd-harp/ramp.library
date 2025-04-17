@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SIP.R
 \name{setup_Xpar.SIP}
 \alias{setup_Xpar.SIP}
-\title{Setup `Xpar` for an `SIP`}
+\title{Setup \code{Xpar} for an \code{SIP}}
 \usage{
 \method{setup_Xpar}{SIP}(Xname, pars, i, Xopts = list())
 }
@@ -16,8 +16,8 @@
 \item{Xopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Set up the `SIP` model with parameters
+Set up the \code{SIP} model with parameters
 }

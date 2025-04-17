@@ -16,8 +16,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector of length `nStrata`
+a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements [F_X] for SIPw models
+Implements \link{F_X} for SIPw models
 }

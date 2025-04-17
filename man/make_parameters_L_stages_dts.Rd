@@ -25,7 +25,7 @@ make_parameters_L_stages_dts(
 )
 }
 \arguments{
-\item{pars}{a [list]}
+\item{pars}{a \link{list}}
 
 \item{psi1}{maturation rates for L1 in each aquatic habitat}
 
@@ -60,7 +60,7 @@ make_parameters_L_stages_dts(
 \item{theta4}{density-dependent mortality terms for L4 for each aquatic habitat}
 }
 \value{
-a [list] with Lpar added
+a \link{list} with Lpar added
 }
 \description{
 Make parameters for stages_dts competition aquatic mosquito model

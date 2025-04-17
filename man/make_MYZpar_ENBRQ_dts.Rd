@@ -26,7 +26,7 @@ make_MYZpar_ENBRQ_dts(
 \arguments{
 \item{nPatches}{is the number of patches, an integer}
 
-\item{MYZopts}{a [list] of values that overwrites the defaults}
+\item{MYZopts}{a \link{list} of values that overwrites the defaults}
 
 \item{D}{number of time steps per day}
 
@@ -57,7 +57,7 @@ make_MYZpar_ENBRQ_dts(
 \item{nu_mod}{a name to dispatch F_nu}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for ENBRQ_dts adult mosquito model

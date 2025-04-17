@@ -14,8 +14,8 @@
 \item{MYZopts}{a named list}
 }
 \value{
-an `xds` object
+an \code{xds} object
 }
 \description{
-This method dispatches on the type of `pars$MYZpar[[s]]`.
+This method dispatches on the type of \code{pars$MYZpar[[s]]}.
 }

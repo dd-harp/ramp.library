@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dMYZdt] for the ENBRQ_dts model.
+Implements \link{dMYZdt} for the ENBRQ_dts model.
 }

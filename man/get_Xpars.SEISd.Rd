@@ -12,13 +12,13 @@
 \item{i}{the host species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Parameter values for the \eqn{i^{th}} host are
-stored as `pars$Xpar[[i]]`. This returns the stored parameter
+stored as \code{pars$Xpar[[i]]}. This returns the stored parameter
 values as a list.
 }
 \seealso{
-[make_Xpar_SEISd]
+\link{make_Xpar_SEISd}
 }

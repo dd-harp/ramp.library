@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector of length `nPatches`
+a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements [F_fqZ] for the SBRQ model.
+Implements \link{F_fqZ} for the SBRQ model.
 }

@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a named [list]
+a named \link{list}
 }
 \description{
-Implements [MBaseline] for the SBRQ model
+Implements \link{MBaseline} for the SBRQ model
 }

@@ -21,7 +21,7 @@ make_MYZinits_ENBRQ_dts(
 
 \item{nR1}{number of time steps in R1}
 
-\item{MYZopts}{a [list] of values that overwrites the defaults}
+\item{MYZopts}{a \link{list} of values that overwrites the defaults}
 
 \item{E}{total null-parous, blood feeding mosquito density}
 
@@ -36,7 +36,7 @@ make_MYZinits_ENBRQ_dts(
 \item{R2}{resting, stage 2, mosquito density at each patch}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make inits for ENBRQ_dts adult mosquito model

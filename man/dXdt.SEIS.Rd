@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-SEIS.R
 \name{dXdt.SEIS}
 \alias{dXdt.SEIS}
-\title{\eqn{\cal X} Component Derivatives for the `SEIS` Model}
+\title{\eqn{\cal X} Component Derivatives for the \code{SEIS} Model}
 \usage{
 \method{dXdt}{SEIS}(t, y, pars, i)
 }
@@ -16,8 +16,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dXdt] for the SEIS model
+Implements \link{dXdt} for the SEIS model
 }

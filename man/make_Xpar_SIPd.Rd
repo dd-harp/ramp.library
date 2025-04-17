@@ -18,7 +18,7 @@ make_Xpar_SIPd(
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 
@@ -33,7 +33,7 @@ make_Xpar_SIPd(
 \item{xi}{background treatment rate}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SIPd human model, with defaults

@@ -19,7 +19,7 @@ make_parameters_MYZ_ENBRQ_dts(
 )
 }
 \arguments{
-\item{pars}{a [list]}
+\item{pars}{a \link{list}}
 
 \item{D}{time steps per day}
 
@@ -39,10 +39,10 @@ make_parameters_MYZ_ENBRQ_dts(
 
 \item{eggsPerBatch}{eggs laid per oviposition}
 
-\item{calK}{mosquito dispersal matrix of dimensions `nPatches` by `nPatches`}
+\item{calK}{mosquito dispersal matrix of dimensions \code{nPatches} by \code{nPatches}}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for ENBRQ_dts adult mosquito model

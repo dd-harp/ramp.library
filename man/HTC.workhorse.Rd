@@ -12,8 +12,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [HTC] for the workhorse model with demography.
+Implements \link{HTC} for the workhorse model with demography.
 }

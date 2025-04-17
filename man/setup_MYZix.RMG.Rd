@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_MYZix] for the RMG model.
+Implements \link{setup_MYZix} for the RMG model.
 }
