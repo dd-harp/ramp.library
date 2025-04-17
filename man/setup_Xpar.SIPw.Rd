@@ -16,8 +16,8 @@
 \item{Xopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-implements [setup_Xpar] for the SIPw model
+implements \link{setup_Xpar} for the SIPw model
 }

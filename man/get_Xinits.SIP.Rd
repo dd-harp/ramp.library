@@ -12,8 +12,8 @@
 \item{i}{the host species index}
 }
 \value{
-a named [vector]
+a named \link{vector}
 }
 \description{
-This method dispatches on the type of `pars$Xpar`.
+This method dispatches on the type of \code{pars$Xpar}.
 }

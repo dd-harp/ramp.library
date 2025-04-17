@@ -17,5 +17,5 @@
 none
 }
 \description{
-This method dispatches on the type of `MYZpar`.
+This method dispatches on the type of \code{MYZpar}.
 }

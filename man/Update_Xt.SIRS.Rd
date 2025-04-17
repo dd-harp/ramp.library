@@ -16,8 +16,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [Update_Xt] for the SIS model
+Implements \link{Update_Xt} for the SIS model
 }

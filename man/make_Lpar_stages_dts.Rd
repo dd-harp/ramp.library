@@ -28,7 +28,7 @@ make_Lpar_stages_dts(
 \arguments{
 \item{nHabitats}{the number of habitats in the model}
 
-\item{Lopts}{a [list] that overwrites default values}
+\item{Lopts}{a \link{list} that overwrites default values}
 
 \item{psi1}{maturation rates for L1 in each aquatic habitat}
 
@@ -63,7 +63,7 @@ make_Lpar_stages_dts(
 \item{theta4}{density-dependent mortality terms for L4 for each aquatic habitat}
 }
 \value{
-a [list] with Lpar added
+a \link{list} with Lpar added
 }
 \description{
 Make parameters for stages_dts competition aquatic mosquito model

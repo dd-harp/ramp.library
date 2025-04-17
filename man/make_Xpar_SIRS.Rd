@@ -16,7 +16,7 @@ make_Xpar_SIRS(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{the proportion of infective bites that cause an infection}
 
@@ -27,7 +27,7 @@ make_Xpar_SIRS(
 \item{gamma}{the rate of loss of immunity}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SIRS human model, with defaults

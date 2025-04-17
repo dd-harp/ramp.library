@@ -14,8 +14,8 @@
 \item{Xopts}{a named list}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [set_Xinits] for the garki model
+Implements \link{set_Xinits} for the garki model
 }

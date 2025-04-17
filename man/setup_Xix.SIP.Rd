@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_Xix] for the SIP model.
+Implements \link{setup_Xix} for the SIP model.
 }

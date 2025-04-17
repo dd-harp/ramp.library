@@ -14,8 +14,8 @@
 \item{s}{the species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-Implements [parse_MYZorbits] for the ENBRQ_dts model
+Implements \link{parse_MYZorbits} for the ENBRQ_dts model
 }

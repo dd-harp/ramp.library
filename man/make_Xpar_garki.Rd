@@ -22,30 +22,30 @@ make_Xpar_garki(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{Xopts}{an [list]}
+\item{Xopts}{an \link{list}}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 
-\item{r1}{a [numeric] recovery rate for non-immunes}
+\item{r1}{a \link{numeric} recovery rate for non-immunes}
 
-\item{r2}{a [numeric]recovery rate for partially immunes}
+\item{r2}{a \link{numeric}recovery rate for partially immunes}
 
-\item{nu}{a [numeric]incubation period}
+\item{nu}{a \link{numeric}incubation period}
 
-\item{alpha1}{a [numeric] rate of losing infectivity}
+\item{alpha1}{a \link{numeric} rate of losing infectivity}
 
-\item{alpha2}{a [numeric] rate of acquiring immunity}
+\item{alpha2}{a \link{numeric} rate of acquiring immunity}
 
-\item{q1}{a [numeric] detection of y1}
+\item{q1}{a \link{numeric} detection of y1}
 
-\item{q2}{a [numeric] detection of y2}
+\item{q2}{a \link{numeric} detection of y2}
 
-\item{q3}{a [numeric] detection of y3}
+\item{q3}{a \link{numeric} detection of y3}
 
-\item{mu}{a [numeric] the death rate}
+\item{mu}{a \link{numeric} the death rate}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for garki human model

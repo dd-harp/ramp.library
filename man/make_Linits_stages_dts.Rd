@@ -17,7 +17,7 @@ make_Linits_stages_dts(
 \arguments{
 \item{nHabitats}{the number of habitats in the model}
 
-\item{Lopts}{a [list] that overwrites default values}
+\item{Lopts}{a \link{list} that overwrites default values}
 
 \item{L1}{initial conditions}
 
@@ -30,7 +30,7 @@ make_Linits_stages_dts(
 \item{P}{initial conditions}
 }
 \value{
-a [list] with Linits added
+a \link{list} with Linits added
 }
 \description{
 Make inits for stages_dts competition aquatic mosquito model

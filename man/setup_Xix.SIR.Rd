@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_Xix] for the SIR model.
+Implements \link{setup_Xix} for the SIR model.
 }

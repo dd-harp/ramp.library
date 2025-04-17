@@ -14,8 +14,8 @@
 \item{s}{the species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-Implements [parse_MYZorbits] for the SEI model
+Implements \link{parse_MYZorbits} for the SEI model
 }

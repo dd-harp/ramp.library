@@ -16,8 +16,8 @@
 \item{i}{the host species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dXdt] for the SIR model
+Implements \link{dXdt} for the SIR model
 }

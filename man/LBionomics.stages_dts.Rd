@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a named [list]
+a named \link{list}
 }
 \description{
-Implements [LBionomics] for the stages_dts model
+Implements \link{LBionomics} for the stages_dts model
 }

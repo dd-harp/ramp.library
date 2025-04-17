@@ -18,7 +18,7 @@ make_MYZinits_RMG(
 \arguments{
 \item{nPatches}{the number of patches in the model}
 
-\item{MYZopts}{a [list] of values that overwrites the defaults}
+\item{MYZopts}{a \link{list} of values that overwrites the defaults}
 
 \item{U_b0}{total uninfected, not gravid mosquito density at each patch}
 
@@ -33,7 +33,7 @@ make_MYZinits_RMG(
 \item{Z_g0}{infectious, gravid mosquito density at each patch}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make inits for RMG adult mosquito model

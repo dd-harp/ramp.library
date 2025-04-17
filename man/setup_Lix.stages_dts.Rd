@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_Lix] for stages_dts competition model.
+Implements \link{setup_Lix} for stages_dts competition model.
 }

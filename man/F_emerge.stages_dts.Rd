@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector of length `nHabitats`
+a \link{numeric} vector of length \code{nHabitats}
 }
 \description{
-Implements [F_emerge] for the stages_dts competition model.
+Implements \link{F_emerge} for the stages_dts competition model.
 }

@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements [parse_Xorbits] for the garki model
+Implements \link{parse_Xorbits} for the garki model
 }

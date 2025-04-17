@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-the model as a [list]
+the model as a \link{list}
 }
 \description{
-Implements [MBionomics] for the ENBRQ_dts model
+Implements \link{MBionomics} for the ENBRQ_dts model
 }

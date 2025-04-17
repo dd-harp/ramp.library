@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements [setup_Xix] for the SEISd model.
+Implements \link{setup_Xix} for the SEISd model.
 }

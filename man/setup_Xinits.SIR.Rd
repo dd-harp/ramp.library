@@ -16,8 +16,8 @@
 \item{Xopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [setup_Xinits] for the SIR model
+Implements \link{setup_Xinits} for the SIR model
 }

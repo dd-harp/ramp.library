@@ -16,8 +16,8 @@
 \item{MYZopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [setup_MYZpar] for the SEI model
+Implements \link{setup_MYZpar} for the SEI model
 }

@@ -11,14 +11,14 @@ make_Xinits_SIRS(nStrata, H, Xopts = list(), I = 1, R = 0)
 
 \item{H}{the initial value for H}
 
-\item{Xopts}{a [list] to overwrite defaults}
+\item{Xopts}{a \link{list} to overwrite defaults}
 
 \item{I}{the initial value for I}
 
 \item{R}{the initial values for R}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make initial values for the SIRS human model, with defaults

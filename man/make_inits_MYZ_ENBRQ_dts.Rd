@@ -7,7 +7,7 @@
 make_inits_MYZ_ENBRQ_dts(pars, E, N, B, Q, R1, R2)
 }
 \arguments{
-\item{pars}{a [list]}
+\item{pars}{a \link{list}}
 
 \item{E}{total mosquito density at each patch}
 
@@ -22,7 +22,7 @@ make_inits_MYZ_ENBRQ_dts(pars, E, N, B, Q, R1, R2)
 \item{R2}{total stage 2 resting mosquitoes in each patch}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make inits for ENBRQ_dts adult mosquito model

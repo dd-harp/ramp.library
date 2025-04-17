@@ -16,8 +16,8 @@
 \item{s}{the vector species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-This method dispatches on the type of `pars$MYZpar[[s]]`
+This method dispatches on the type of \code{pars$MYZpar[[s]]}
 }

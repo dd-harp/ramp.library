@@ -14,8 +14,8 @@
 \item{Lopts}{a \link{list}}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-Implements [setup_Linits] for the stages_dts model
+Implements \link{setup_Linits} for the stages_dts model
 }

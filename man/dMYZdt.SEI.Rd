@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-SEI.R
 \name{dMYZdt.SEI}
 \alias{dMYZdt.SEI}
-\title{\eqn{\cal MYZ} Component Derivatives for the `SEI` Mosquito Model}
+\title{\eqn{\cal MYZ} Component Derivatives for the \code{SEI} Mosquito Model}
 \usage{
 \method{dMYZdt}{SEI}(t, y, pars, s)
 }
@@ -16,10 +16,10 @@
 \item{s}{the species index}
 }
 \value{
-a [numeric] vector
+a \link{numeric} vector
 }
 \description{
-Implements [dMYZdt] for the SEI ODE model.
+Implements \link{dMYZdt} for the SEI ODE model.
 }
 \details{
 The dynamics of adult mosquitoes:

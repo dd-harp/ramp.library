@@ -20,7 +20,7 @@ make_MYZpar_SEI(
 \arguments{
 \item{nPatches}{is the number of patches, an integer}
 
-\item{MYZopts}{a [list] of values that overwrites the defaults}
+\item{MYZopts}{a \link{list} of values that overwrites the defaults}
 
 \item{eip}{the extrinsic incubation period}
 
@@ -39,7 +39,7 @@ make_MYZpar_SEI(
 \item{eggsPerBatch}{eggs laid per oviposition}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SEI ODE adult mosquito model

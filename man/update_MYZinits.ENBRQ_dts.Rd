@@ -14,7 +14,7 @@
 \item{s}{the species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make inits for ENBRQ_dts adult mosquito model

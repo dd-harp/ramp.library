@@ -12,8 +12,8 @@
 \item{s}{the species index}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-Implements [setup_MYZix] for the ENBRQ_dts model.
+Implements \link{setup_MYZix} for the ENBRQ_dts model.
 }

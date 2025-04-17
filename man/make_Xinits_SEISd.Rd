@@ -11,14 +11,14 @@ make_Xinits_SEISd(nStrata, H, Xopts = list(), E = 0, I = 1)
 
 \item{H}{the initial human population density}
 
-\item{Xopts}{a [list] to overwrite defaults}
+\item{Xopts}{a \link{list} to overwrite defaults}
 
 \item{E}{the initial values of the parameter E}
 
 \item{I}{the initial values of the parameter I}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make initial values for the SEISd xde human model, with defaults

@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements [parse_Xorbits] for SIPw models
+Implements \link{parse_Xorbits} for SIPw models
 }

@@ -24,7 +24,7 @@ make_MYZinits_SBRQ(
 \arguments{
 \item{nPatches}{the number of patches in the model}
 
-\item{MYZopts}{a [list] of values that overwrites the defaults}
+\item{MYZopts}{a \link{list} of values that overwrites the defaults}
 
 \item{Su}{uninfected, sugar feeding mosquitoes}
 
@@ -51,7 +51,7 @@ make_MYZinits_SBRQ(
 \item{Qz}{infectious, gravid mosqutioes}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make inits for SBRQ adult mosquito model

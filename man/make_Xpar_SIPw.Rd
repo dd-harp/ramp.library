@@ -19,7 +19,7 @@ make_Xpar_SIPw(
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{Xopts}{a [list] that could overwrite defaults}
+\item{Xopts}{a \link{list} that could overwrite defaults}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 
@@ -36,7 +36,7 @@ make_Xpar_SIPw(
 \item{eta}{rate of loss of chemo-protection}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
 Make parameters for SIPw_xde human model, with defaults

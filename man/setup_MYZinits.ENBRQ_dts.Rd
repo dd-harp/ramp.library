@@ -14,8 +14,8 @@
 \item{MYZopts}{a \link{list}}
 }
 \value{
-a [list]
+a \link{list}
 }
 \description{
-Implements [setup_MYZinits] for the ENBRQ_dts model
+Implements \link{setup_MYZinits} for the ENBRQ_dts model
 }

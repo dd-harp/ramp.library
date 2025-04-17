@@ -15,7 +15,7 @@ add_lines_X_SEISd(time, XH, nStrata, clrs = c("darkblue", "darkred"), llty = 1)
 
 \item{clrs}{a vector of colors}
 
-\item{llty}{an integer (or integers) to set the `lty` for plotting}
+\item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
 Add lines for the density of infected individuals for the SEISd model

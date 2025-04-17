@@ -16,8 +16,8 @@
 \item{Xopts}{a \link{list}}
 }
 \value{
-a [list] vector
+a \link{list} vector
 }
 \description{
-Implements [setup_Xpar] for the garki model
+Implements \link{setup_Xpar} for the garki model
 }

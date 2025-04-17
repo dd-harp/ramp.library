@@ -16,8 +16,8 @@
 \item{s}{the species index}
 }
 \value{
-a named [list]
+a named \link{list}
 }
 \description{
-Implements [MBaseline] for the RMG model
+Implements \link{MBaseline} for the RMG model
 }
