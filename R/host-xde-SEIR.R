@@ -299,11 +299,11 @@ parse_Xorbits.SEIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SEIR model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SEIR model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SEIR <- function(vars, Xpar) {
+F_prevalence.SEIR <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }

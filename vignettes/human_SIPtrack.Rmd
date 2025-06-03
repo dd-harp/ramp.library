@@ -1,0 +1,292 @@
+---
+title: "Malaria Analytics with SIP-mav3"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Malaria Analytics with SIP-mav3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+A challenge for malaria is to capture the effects of a history of exposure, which affects malaria infections and the development of immunity. In other models, the issues arising have been handled in a variety of ways, such as expanding the number of compartments in the state space. Here, we handle these through development of variables that describe a history of exposure. 
+
+The model is an **SIP** compartment model, and a set of variables that track exposure. We call a *Generalized SIP* model.  The model has three states: 
+
++ infected ($I$) 
+
++ chemo-protected and not susceptible to infection ($P$) 
+
++ uninfected and not chemo-protected and thus susceptible to infection ($S$) 
+
+There are at least two hybrid variables tracking infection: 
+
++ the mean MoI ($m$)
+
++ the mean AoI ($\alpha$)
+
+There is also a set of variables that track cumulative and recent exposure, collectively called $v$. The generalized SIP model is thus a very general framework.  
+
+
+
+## Dynamics 
+
+We assume: 
+
++ the population is stratified by age, so each state variable is a vector 
+
++ aging is handled by a matrix $D,$ that also handles age-specific mortality
+
++ untreated, simple infections clear at rate $r,$ and infections overall clear at the rate $F_r(r,m)$
+
+**Treatment** occurs in three ways: 
+
++  The background treatment rate includes treatment regardless of epidemiological status. It is a function of age, exposure, and time (*i.e.* for MDA) $$\xi=F_\xi(a, t)$$
+
++  The treatment rate in infected humans, is related to moderate and mild malaria (*i.e.* for MSAT) $$\sigma=F_\sigma(a,w, t)$$
+
++  The treatment rate in response to malaria incidence: a fraction thats presents with malaria and get treated:  $$\rho= F_\rho(a,w)$$
+
+This one has three ways of treating:  
+
+$$
+\begin{array}{rl}
+\frac{\textstyle{dH}}{\textstyle{dt}} &= B(H) - D\cdot H \\ 
+\frac{\textstyle{dS}}{\textstyle{dt}} &= B(H) + F_r(r, m) \;I +  \eta P - \left(h  + \xi\right) S - D \cdot S\\ 
+\frac{\textstyle{dI}}{\textstyle{dt}} &= h \left(1-\rho\right) S  - \left( F_r\left(r,m\right) + \xi + \sigma \right) I - D \cdot I\\ 
+\frac{\textstyle{dP}}{\textstyle{dt}} &= (h \rho + \xi)(H-P)  + \sigma I - \eta P - D \cdot P\\
+\end{array}
+$$
+There is an implicit assumption about superinfection here: everyone is getting reinfected, and this is a cause of treatment.
+
+(The implementation in `ramp.library` does not compute $dS/dt$; $S$ is computed as $S=H-I-P.$)
+
+**Mean MoI**
+
+$$
+\frac{\textstyle{dm}}{\textstyle{dt}}  = h(1-\rho) - \left(\eta + h \rho + \sigma + \xi \right) m
+$$
+
+**Mean AoI**
+
+$$
+\frac{\textstyle{d\alpha}}{\textstyle{dt}}  = 1- \alpha \frac{h(1-\rho)}{m} 
+$$
+
+**Tracking Exposure**
+
+We let $h$ denote the FoI, and we a set of tracking variables, $w$. One describes cumulative exposure: 
+$$
+\frac{\textstyle{dw_0}}{\textstyle{dt}}  = h 
+$$
+...and others describe recent exposure:
+$$
+\frac{\textstyle{dw_i}}{\textstyle{dt}}  = h - \mu_i w_i 
+$$
+
+
+## Functional Responses 
+
+We need to write functions to translate the state space into measures of prevalence by various diagnostic tests:  
+
+
+| Skill Set                  | Math Notation    | Code  | Depends   | Control    | 
+| -------------------------- | -----------------------| ---------------|---------------|----------| 
+| Force of Infection         | $h=F_h(E, b)$                     | `foi`    | $b$ | 
+| Pre-Erythrocytic Immunity  | $b = F_b(w)$                    | `F_b`    |          | 
+| Infectious Density         | $X= F_c(\alpha, m) I$              | `F_X`    |          | 
+| Treatment: Incidence       | $\rho = F_\rho(a,w)$            | `rho`    | $\Upsilon_h, \Xi_h, \Phi_h$| MSAT | 
+| Treatment: Prevalence      | $\sigma = F_\sigma(a,w,t)$      | `sigma`  |   $\Upsilon_x, \Xi_x, \Phi_x$ |  
+| Treatment: Background      | $\xi = F_\xi(a,t)$              | `xi`     |     | MDA | 
+| True Prevalence            | $x = I/H$                       | `pfpr` |
+| Prevalence by LM           | $x_{lm}= d_{lm}(\alpha, m) x$   | `pfpr_lm` |
+| Prevalence by PCR          | $x_{pcr} = d_{pcr}(\alpha, m)x$ | `pfpr_pcr` |
+| Prevalence by RDT          | $x_{rdt}= d_{rdt}(\alpha, m)x$  | `pfpr_rdt` |
+| Severe Malaria Incidence   | $\Upsilon_h(h, w) + \Upsilon_x(x,w)$ | `pfi_severe` |
+| Moderate Malaria Incidence | $\Xi_h(h, w) + \Xi_x(x,w)$      | `pfi_moderate` |
+| Mild Malaria Incidence     | $\Phi_h(h, w) + \Phi(x, w)$     | `pfi_mild` |
+
+
+### Prevalence
+
++ True prevalence is $I/H$
+
++ We assume the probability of testing positive is a function of the mean MoI and the mean AoI. We develop tracking variables
+
+
+
+
+We have a picture like this:
+
+```{r, fig.height=5, fig.width=8}
+aoi = seq(20, 400, by = 5)
+test_pos = function(aoi, mx=.95, rt=1/100){
+  mx*exp(-rt*(aoi-20)) 
+}
+plot(aoi, test_pos(aoi), type = "l", 
+     xlab = expression(list(alpha, " Age of Infection")), 
+     ylab = expression(list(xi(alpha), " Test Positivity")), 
+     ylim = c(0,1), xlim = c(0,400))
+segments(20, 0, 20, 1, lty = 2)
+lines(aoi, test_pos(aoi, .8, 1/90))
+lines(aoi, test_pos(aoi, .7, 1/80))
+```
+
+If the AoI has a distribution in the population with mean $\alpha,$ and MoI $m,$ then average test positivity will be approximately:
+
+$$
+1 - e^{\xi(\alpha)m}
+$$ 
+
+```{r}
+pr_by_aoi = function(aoi, m, mx=0.95, rt=1/100){
+  xi = test_pos(aoi, mx, rt)  
+  1 - exp(-xi*m)
+}
+```
+
+```{r, fig.height=5, fig.width=8}
+plot(aoi, pr_by_aoi(aoi, 1, .8, 1/90), type = "l", xlab = expression(list(bar(alpha), " Mean AoI")), ylab = expression(list(x(bar (alpha)), " Apparent PR")), ylim = c(0,1), xlim = c(0,400))
+segments(20, 0, 20, 1, lty = 2)
+lines(aoi, pr_by_aoi(aoi, 2,  .8, 1/90))
+lines(aoi, pr_by_aoi(aoi, 4, .8, 1/90))
+```
+**To Do:** Draw this picture with a sharkfin function and not an exponential.
+
+### Infectiousness 
+
+Infectiousness is $c(w) I$   
+
+We follow the same idea as PR, but with a different lag. 
+
+### Disease Incidence
+
+In these models, we have models for *malaria* and   
+
++  The probability of severe disease, per infection, defined as malaria infection accompanied by one or more danger signs. 
+
++  The probability of severe malaria anemia, per infection, defined as malaria infection accompanied by one or more danger signs. 
+
++  The probability of moderate disease, per infection, defined as malaria infection and objective fever
+
++  The probability of mild disease, per infection, defined as malaria infection and subjective fever 
+
+
+
+
+**Severe Malaria**
+
+We assume that severe malaria is related to recent exposure. We note that exposure to malaria tends to increase with age, and it has been proposed that the risk of severe malaria is reduce by exposure.  
+
+$$
+h e^{-w \zeta}
+$$
+
+in its simplest form
+
+$$
+h e^{-h a \zeta}
+$$
+**Age and Exposure** 
+
+We note that exposure to malaria is age-dependent. 
+
+```{r, fig.height=5, fig.width=8}
+foi_age = function(a, foi=1, shft=30, A=1.5, B=2){
+  aa = (a+shft)/365
+  foi*A*aa/(B+aa)
+}
+
+age = seq(0, 10*365, by=365/12)
+plot(age/365, foi_age(age), type = "l", ylim = c(0,1.3), xlab = "Age (in Years)", ylab = "FoI by Age")
+segments(0, 1, 10, 1, col = grey(0.5))
+```
+
+The model implies that cumulative exposure is concave up: 
+
+```{r, fig.height=5, fig.width=8}
+cum_exposure = function(a, foi=1/365, shft=30, A=1.5, B=2){
+  fa <- function(a, foi, shft, A, B) 
+    integrate(foi_age, 0, a, foi=foi, shft=shft, A=A, B=B)$value
+  sapply(a, fa, foi=foi, shft=shft, A=A,B=B)
+}
+
+
+plot(age/365, cum_exposure(age, foi = 10/365), type = "l", 
+     xlab = "Age (in Years)", ylab = "Cumulative Exposure")
+lines(age/365, cum_exposure(age, foi = 3/365)) 
+lines(age/365, cum_exposure(age, foi = 1/365)) 
+```
+
+
+```{r}
+incidence = function(a, foi=3/365, z=1/10, N=100, shft=30, A=1.5, B=2){
+  w <- sapply(a, cum_exposure, foi=foi, shft=shft, A=A, B=B)
+  foi_age(a, foi)*z*exp(-w*z) 
+}
+```
+
+
+```{r, fig.height=5, fig.width=8}
+base = incidence(age, 30/365)
+plot(age/365, incidence(age, 30/365), type = "l", xlab = "Age (in Years)", ylab = "Incidence", ylim = range(0, base))
+lines(age/365, incidence(age, 10/365), col = "violet")
+lines(age/365, incidence(age, 3/365), col = "darkred")
+lines(age/365, incidence(age, 1/365), col = "darkblue")
+lines(age/365, incidence(age, 1/365/3), col = "darkgreen")
+
+```
+
+```{r, fig.height=5, fig.width=8}
+cum_incidence = function(a, foi=3/365, z=1/10, N=100, shft=30, A=1.5, B=2){
+  ci <- function(a, foi, z, N, shft, A, B)
+    integrate(incidence, 0, a, foi=foi, z=z, shft=shft, A=A, B=B)$value
+  sapply(a, ci, foi=foi, z=z, shft=shft, A=A, B=B)
+}
+
+base = cum_incidence(age, 10/365)
+
+plot(age/365, cum_incidence(age, 30/365), type = "l", xlab = "Age (in Years)", ylab = "Incidence", ylim = range(0, base))
+lines(age/365, cum_incidence(age, 10/365), col = "violet")
+lines(age/365, cum_incidence(age, 3/365), col = "darkred")
+lines(age/365, cum_incidence(age, 1/365), col = "darkblue")
+lines(age/365, cum_incidence(age, 1/365/3), col = "darkgreen")
+
+```
+
+
+**Moderate Malaria**
+
+We assume that severe malaria is related to recent exposure and chronic infection 
+
+**Mild Malaria**
+
+We assume that severe malaria is related to recent exposure and chronic infection 
+
+### Treatment 
+
+  
+### Clinical  
+
+
+
+# Example
+
+```{r, message=FALSE, warning=FALSE}
+library(ramp.xds)
+library(ramp.library)
+library(deSolve)
+library(data.table)
+library(ggplot2)
+```
+
+
+```{r, echo=FALSE} 
+devtools::load_all()
+```
+
