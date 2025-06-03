@@ -275,7 +275,7 @@ parse_Xorbits.SEISd <- function(outputs, pars, i) {
     S = H-E-I
     vars <- list(S=S, E=E, I=I, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
-    vars$pr <- F_pr(vars, pars$Xpar[[i]])
+    vars$pr <- F_prevalence(vars, pars$Xpar[[i]])
     return(vars)
   })}
 
@@ -301,41 +301,41 @@ F_ni.SEISd <- function(vars, Xpar) {
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SEISd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SEISd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SEISd <- function(vars, Xpar) {
+F_prevalence.SEISd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by light microscopy
-#' @description Implements [F_pr] for the SEISd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SEISd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_lm.SEISd <- function(vars, Xpar) {
+F_prevalence_by_lm.SEISd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by RDT
-#' @description Implements [F_pr] for the SEISd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SEISd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_rdt.SEISd <- function(vars, Xpar) {
+F_prevalence_by_rdt.SEISd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by pcr
-#' @description Implements [F_pr] for the SEISd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SEISd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_pcr.SEISd <- function(vars, Xpar) {
+F_prevalence_by_pcr.SEISd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }

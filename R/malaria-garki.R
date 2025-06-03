@@ -136,10 +136,10 @@ F_b.garki <- function(y, pars, i) {
 
 #' @title Compute the "true" prevalence of infection / parasite rate
 #' @description Compute the true pr for the garki model.
-#' @inheritParams ramp.xds::F_pr
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.garki <- function(vars, Xpar) {
+F_prevalence.garki <- function(vars, Xpar) {
   pr = with(Xpar, with(vars, (y1+y2+y3)/H))
   return(pr)
 }
