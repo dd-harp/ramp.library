@@ -4,12 +4,7 @@
 \alias{F_pr.SIP}
 \title{Compute the "true" prevalence of infection / parasite rate}
 \usage{
-\method{F_pr}{SIP}(vars, Xpar)
-}
-\arguments{
-\item{vars}{a list with the variables attached by name}
-
-\item{Xpar}{a list defining a model for human}
+F_pr.SIP(vars, Xpar)
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

@@ -4,12 +4,7 @@
 \alias{F_pr_by_rdt.SEIS}
 \title{Compute the prevalence of infection by RDT}
 \usage{
-\method{F_pr_by_rdt}{SEIS}(vars, Xpar)
-}
-\arguments{
-\item{vars}{a list with the variables attached by name}
-
-\item{Xpar}{a list defining a model for human}
+F_pr_by_rdt.SEIS(vars, Xpar)
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}
