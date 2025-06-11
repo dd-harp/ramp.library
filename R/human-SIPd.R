@@ -259,7 +259,7 @@ parse_Xorbits.SIPd <- function(outputs, pars, i) {
     H = S+I+P
     vars <- list(S=S, I=I, P=P, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
-    vars$true_pr <- F_pr(vars, pars$Xpar[[i]])
+    vars$true_pr <- F_prevalence(vars, pars$Xpar[[i]])
     return(vars)
   })}
 
@@ -320,41 +320,41 @@ F_ni.SIPd <- function(vars, Xpar) {
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SIPd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIPd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SIPd <- function(vars, Xpar) {
+F_prevalence.SIPd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by light microscopy
-#' @description Implements [F_pr] for the SIPd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIPd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_lm.SIPd <- function(vars, Xpar) {
+F_pfpr_by_lm.SIPd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by RDT
-#' @description Implements [F_pr] for the SIPd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIPd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_rdt.SIPd <- function(vars, Xpar) {
+F_pfpr_by_rdt.SIPd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by pcr
-#' @description Implements [F_pr] for the SIPd model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIPd model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_pcr.SIPd <- function(vars, Xpar) {
+F_pfpr_by_pcr.SIPd <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }

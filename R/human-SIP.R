@@ -194,7 +194,6 @@ F_b.SIP <- function(y, pars,i) {
 }
 
 
-
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `pars$Xpar`
 #' @inheritParams ramp.xds::list_Xvars
@@ -261,7 +260,7 @@ parse_Xorbits.SIP <- function(outputs, pars, i) {
     S = H-I-P
     vars <- list(S=S, I=I, P=P, H=H)
     vars$ni <- F_ni(vars, pars$Xpar[[i]])
-    vars$true_pr <- F_pr(vars, pars$Xpar[[i]])
+    vars$true_pr <- F_prevalence(vars, pars$Xpar[[i]])
     return(vars)
 })}
 
@@ -319,41 +318,41 @@ F_ni.SIP <- function(vars, Xpar) {
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_pr] for the SIP model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIP model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr.SIP <- function(vars, Xpar) {
+F_prevalence.SIP <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by light microscopy
-#' @description Implements [F_pr] for the SIP model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIP model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_lm.SIP <- function(vars, Xpar) {
+F_pfpr_by_lm.SIP <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by RDT
-#' @description Implements [F_pr] for the SIP model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIP model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_rdt.SIP <- function(vars, Xpar) {
+F_pfpr_by_rdt.SIP <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }
 
 #' @title Compute the prevalence of infection by pcr
-#' @description Implements [F_pr] for the SIP model.
-#' @inheritParams ramp.xds::F_pr
+#' @description Implements [F_prevalence] for the SIP model.
+#' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_pr_by_pcr.SIP <- function(vars, Xpar) {
+F_pfpr_by_pcr.SIP <- function(vars, Xpar) {
   pr = with(vars, I/H)
   return(pr)
 }

@@ -189,7 +189,7 @@ reference:
   contents:
   - F_X.garki
   - F_H.garki
-  - F_pr.garki
+  - F_prevalence.garki
   - F_b.garki
   - dXdt.garki
   - setup_Xpar.garki
@@ -217,7 +217,7 @@ reference:
   - make_Xpar_SIPw
   - F_X.SIPw
   - F_H.SIPw
-  - F_pr.SIPw
+  - F_prevalence.SIPw
   - F_b.SIPw
   - setup_Xinits.SIPw
   - make_Xinits_SIPw
@@ -235,7 +235,7 @@ reference:
   contents:
   - F_X.workhorse
   - F_H.workhorse
-  - F_pr.workhorse
+  - F_prevalence.workhorse
   - F_b.workhorse
   - dXdt.workhorse
   - setup_Xinits.workhorse
@@ -257,7 +257,7 @@ reference:
   - make_Xpar_SIR
   - F_X.SIR
   - F_H.SIR
-  - F_pr.SIR
+  - F_prevalence.SIR
   - F_b.SIR
   - setup_Xinits.SIR
   - list_Xvars.SIR
@@ -278,7 +278,7 @@ reference:
   contents:
   - F_X.SIRS
   - F_H.SIRS
-  - F_pr.SIRS
+  - F_prevalence.SIRS
   - F_b.SIRS
   - dXdt.SIRS
   - setup_Xpar.SIRS
@@ -302,7 +302,7 @@ reference:
   contents:
   - F_X.SEIR
   - F_H.SEIR
-  - F_pr.SEIR
+  - F_prevalence.SEIR
   - F_b.SEIR
   - dXdt.SEIR
   - setup_Xpar.SEIR
@@ -326,7 +326,7 @@ reference:
   contents:
   - F_X.SEIRV
   - F_H.SEIRV
-  - F_pr.SEIRV
+  - F_prevalence.SEIRV
   - F_b.SEIRV
   - dXdt.SEIRV
   - list_Xvars.SEIRV
@@ -362,10 +362,10 @@ reference:
   - put_Xvars.SEIS
   - F_X.SEIS
   - F_H.SEIS
-  - F_pr.SEIS
-  - F_pr_by_lm.SEIS
-  - F_pr_by_rdt.SEIS
-  - F_pr_by_pcr.SEIS
+  - F_prevalence.SEIS
+  - F_pfpr_by_lm.SEIS
+  - F_pfpr_by_rdt.SEIS
+  - F_pfpr_by_pcr.SEIS
   - F_ni.SEIS
   - F_b.SEIS
   - parse_Xorbits.SEIS
@@ -403,10 +403,10 @@ reference:
   - set_Xpars.SEISd
   - update_Xinits.SEISd
   - HTC.SEISd
-  - F_pr.SEISd
-  - F_pr_by_lm.SEISd
-  - F_pr_by_rdt.SEISd
-  - F_pr_by_pcr.SEISd
+  - F_prevalence.SEISd
+  - F_pfpr_by_lm.SEISd
+  - F_pfpr_by_rdt.SEISd
+  - F_pfpr_by_pcr.SEISd
   - F_ni.SEISd
   - xds_plot_X.SEISd
   - add_lines_X_SEISd
@@ -434,10 +434,10 @@ reference:
   - set_Xinits.SIP
   - update_Xinits.SIP
   - HTC.SIP
-  - F_pr.SIP
-  - F_pr_by_lm.SIP
-  - F_pr_by_rdt.SIP
-  - F_pr_by_pcr.SIP
+  - F_prevalence.SIP
+  - F_pfpr_by_lm.SIP
+  - F_pfpr_by_rdt.SIP
+  - F_pfpr_by_pcr.SIP
   - F_ni.SIP
   - xds_plot_X.SIP
   - add_lines_X_SIP
@@ -465,10 +465,10 @@ reference:
   - set_Xinits.SIPd
   - update_Xinits.SIPd
   - HTC.SIPd
-  - F_pr.SIPd
-  - F_pr_by_lm.SIPd
-  - F_pr_by_rdt.SIPd
-  - F_pr_by_pcr.SIPd
+  - F_prevalence.SIPd
+  - F_pfpr_by_lm.SIPd
+  - F_pfpr_by_rdt.SIPd
+  - F_pfpr_by_pcr.SIPd
   - F_ni.SIPd
   - xds_plot_X.SIPd
   - add_lines_X_SIPd
