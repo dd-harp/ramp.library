@@ -9,7 +9,7 @@ F_clear(y, Xpars)
 \arguments{
 \item{y}{state vector}
 
-\item{pars}{an \strong{\code{xds}} object}
+\item{Xpars}{an \strong{X} model object}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

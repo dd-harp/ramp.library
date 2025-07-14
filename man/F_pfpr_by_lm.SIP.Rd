@@ -4,16 +4,12 @@
 \alias{F_pfpr_by_lm.SIP}
 \title{Compute the prevalence of infection by light microscopy}
 \usage{
-<<<<<<< HEAD:man/F_pr_by_lm.SIP.Rd
-F_pr_by_lm.SIP(vars, Xpar)
-=======
 \method{F_pfpr_by_lm}{SIP}(vars, Xpar)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
 \item{Xpar}{a list defining a model for human}
->>>>>>> acc05432180b090912479adcca191d41600b0345:man/F_pfpr_by_lm.SIP.Rd
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

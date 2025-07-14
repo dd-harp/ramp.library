@@ -36,14 +36,20 @@ dXdt.SIPmav3 <- function(t, y, pars, i){
       rho = sum(pi3*c(severe_h, moderate_h, mild_h))
       sigma = sum(pi3*c(severe_x, moderate_x, mild_x))
 
+
       # Treat Malaria Infections
-#      sigma = sigma + F_mass_test_treat(t, Xpars)*F_detect(y, Xpars, Xpars$rdt_mod)
-#      sigma = sigma + F_other*F_seek*F_detect
+      rdt_pos = x*F_detect_y(y, Xpars, Xpars$rdt_mod)
+      seek_care = F_force_malaria(t, y, Xpars, Xpars$seek_care_mod)
+      ofever = F_force_malaria(t, y, Xpars, Xpars$other_fever_mod)
+      sigma = sigma + F_force_malaria(t, y, Xpars, Xpars$msat_mod)*rdt_pos
+      sigma = sigma + ofever*seek_care*rdt_pos
 
       # Background Drug Taking
-      xi     = 1/365
-#      xi     = F_treat(y, Xpars, xi_mod) +
-#      xi     = xi + F_mass_treat(t, y, pars, i)
+      xi     = F_force_malaria(t, y, Xpars, Xpars$xi_mod)
+      xi     = xi + F_force_malaria(t, y, Xpars, Xpars$mda_mod)
+      xi     = xi + ofever*(1-seek_care)
+
+      # Total Treatment Rate
       treat = rho*foi*(H-P) + sigma*I + xi*H
 
       r     = F_clear(y, Xpars)
@@ -79,13 +85,15 @@ setup_Xpar.SIPmav3 = function(Xname, pars, i, Xopts=list()){
 #' @param b_opts a list: options for setup_F_infect
 #' @param mod_c a string, the S3 class name for F_transmit
 #' @param c_opts a list: options for setup_F_transmit
+#' @param mod_r a string, the S3 class name for F_clear
+#' @param r_opts a list: options for setup_F_clear
 #' @param mod_lm a string, the S3 class name for F_detect for light microscopy
 #' @param lm_opts a list: options for setup_F_detect
 #' @param mod_pcr a string, the S3 class name for F_detect for PCR
 #' @param pcr_opts a list: options for setup_F_detect
 #' @param mod_rdt a string, the S3 class name for F_detect for RDT
 #' @param rdt_opts a list: options for setup_F_detect
-#' @param mod_mod_severe_h a string, the S3 class name for F_incidence_h for severe malaria
+#' @param mod_severe_h a string, the S3 class name for F_incidence_h for severe malaria
 #' @param severe_h_opts a list: options for setup_F_incidence_h
 #' @param mod_severe_x a string, the S3 class name for F_incidence_x for severe malaria
 #' @param severe_x_opts a list: options for setup_F_incidence_x
@@ -97,12 +105,18 @@ setup_Xpar.SIPmav3 = function(Xname, pars, i, Xopts=list()){
 #' @param mild_h_opts a list: options for setup_F_incidence_h
 #' @param mod_mild_x a string, the S3 class name for F_incidence_x for mild malaria
 #' @param mild_x_opts a list: options for setup_F_incidence_x
-
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param sigma probability of treatment for treated, above background
-#' @param xi background treatment rate
+#' @param mod_treat a string, the S3 class name for treating malaria
+#' @param treat_opts a list: options for treating malaria
+#' @param mod_xi a string, the S3 class name for background drug taking
+#' @param xi_opts a list: options for setup_F_incidence_x
+#' @param mod_seek_care a string, the S3 class name for care seeking
+#' @param care_seeking_opts a list: options to set up care seeking
+#' @param mod_other_fever a string, the S3 class name for other fever
+#' @param other_fever_opts a list: options to set up other fever
+#' @param mod_msat a string, the S3 class name for mass screen and treat
+#' @param msat_opts a list: options to set up mass screen and treat
+#' @param mod_mda a string, the S3 class name for mass drug administration
+#' @param mda_opts a list: options to set up mass drug administration
 #' @param eta rate of loss of chemo-protection
 #' @return a [list]
 #' @export
@@ -130,16 +144,15 @@ make_Xpar_SIPmav3= function(nStrata, Xopts=list(),
                              mod_treat       = "p3",    treat_opts = list(p_sev=0.95, p_mod=0.1, p_mild=0.01),
 
                              # Treatment
-                             mod_F_xi        = "xi",    xi_opts = list(xi=1/730),
-
-                             # Mass Treat
-                             mass_treat_opts = list(),
-                             mass_test_treat_opts = list(),
-
+                             mod_xi          = "val",    xi_opts = list(scale=0),
 
                              # Care Seeking
-                             mod_seek_care     = "xi",    care_seeking_opts = list(xi=1/730),
-                             mod_other_disease = "xi",    other_disease_opts = list(xi=1/730),
+                             mod_seek_care     = "val",    care_seeking_opts = list(val=0),
+                             mod_other_fever = "val",    other_fever_opts = list(val=0),
+
+                            # Care Seeking
+                             mod_mda     = "val",      mda_opts = list(val=0),
+                             mod_msat    = "val",      msat_opts = list(val=0),
 
                              eta=1/25){
   with(Xopts,{
@@ -154,9 +167,9 @@ make_Xpar_SIPmav3= function(nStrata, Xopts=list(),
     Xpar                  <- setup_F_clear(mod_r, r_opts, Xpar, nStrata)
 
     # Detection
-    Xpar$mod_d_lm          <- setup_F_detect(mod_lm, lm_opts, nStrata)
-    Xpar$mod_d_pcr         <- setup_F_detect(mod_pcr, pcr_opts, nStrata)
-    Xpar$mod_d_rdt         <- setup_F_detect(mod_rdt, rdt_opts, nStrata)
+    Xpar$lm_mod          <- setup_F_detect(mod_lm, lm_opts, nStrata)
+    Xpar$pcr_mod         <- setup_F_detect(mod_pcr, pcr_opts, nStrata)
+    Xpar$rdt_mod         <- setup_F_detect(mod_rdt, rdt_opts, nStrata)
 
     # Disease Incidence
     Xpar$severe_h            <- setup_incidence_h(mod_severe_h, severe_h_opts, nStrata)
@@ -169,19 +182,13 @@ make_Xpar_SIPmav3= function(nStrata, Xopts=list(),
     Xpar$treat3              <- setup_F_treat(mod_treat, treat_opts, nStrata)
 
     # Treatment
-#    Xpar$xi_mod             <- setup_F_xi(xi, nStrata)
+    Xpar$xi_mod              <- setup_force_malaria(mod_xi, nStrata, xi_opts)
+    Xpar$seek_care_mod       <- setup_force_malaria(mod_seek_care, nStrata, care_seeking_opts)
+    Xpar$other_fever_mod     <- setup_force_malaria(mod_other_fever, nStrata, other_fever_opts)
 
     # Mass Treatment
-#    Xpar$F_mass_treat        <- make_mass_treat(nStrata, mass_treat_opts())
-#    Xpar$F_mass_test_treat   <- make_mass_test_treat(nStrata, mass_test_treat_opts())
-
-
-    # Disease Incidence
-#    Xpar$mortality           <- setup_F_mortality(xi, nStrata)
-
-    # Care Seeking
-#    Xpar$seek_care <- setup_F_seek_care(xi, nStrata)
-#    Xpar$other_disease <- setup_F_other_disease(xi, nStrata)
+    Xpar$mda_mod              <- setup_force_malaria(mod_mda, nStrata, mda_opts)
+    Xpar$msat_mod             <- setup_force_malaria(mod_msat, nStrata, msat_opts)
 
     return(Xpar)
 })}
@@ -193,8 +200,7 @@ make_Xpar_SIPmav3= function(nStrata, Xopts=list(),
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_X.SIPmav3 <- function(t, y, pars, i) {
-  browser()
-  c <- F_transmit(y, pars$Xpars[[i]])
+  c <- F_transmit_y(y, pars$Xpars[[i]])
   I = y[pars$Xpar[[i]]$ix$I_ix]
   X = c*I
   return(X)
@@ -226,7 +232,7 @@ F_prevalence.SIPmav3 <- function(vars, Xpar) {
 #' @export
 F_pfpr_by_lm.SIPmav3 <- function(vars, Xpar) {
   x  = with(vars, I/H)
-  d = F_detect(vars, Xpar$mod_d_lm)
+  d = F_detect_y(vars, Xpar, Xpar$mod_d_lm)
   return(x*d)
 }
 
@@ -237,7 +243,7 @@ F_pfpr_by_lm.SIPmav3 <- function(vars, Xpar) {
 #' @export
 F_pfpr_by_pcr.SIPmav3 <- function(vars, Xpar) {
   x = with(vars, I/H)
-  d = F_detect(vars, Xpar$mod_d_pcr)
+  d = F_detect_y(vars, Xpar, Xpar$mod_d_pcr)
   return(x*d)
 }
 
@@ -248,7 +254,7 @@ F_pfpr_by_pcr.SIPmav3 <- function(vars, Xpar) {
 #' @export
 F_pfpr_by_rdt.SIPmav3 <- function(vars, Xpar) {
   pr = with(vars, I/H)
-  d = F_detect(vars, Xpar$mod_d_rdt)
+  d = F_detect_y(vars, Xpar, Xpar$mod_d_rdt)
   return(pr*d)
 }
 
@@ -258,7 +264,7 @@ F_pfpr_by_rdt.SIPmav3 <- function(vars, Xpar) {
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_b.SIPmav3 <- function(y, pars, i) {
-  F_infect(y, pars$Xpar[[i]])
+  F_infect_y(y, pars$Xpar[[i]])
 }
 
 
@@ -350,10 +356,12 @@ parse_Xorbits.SIPmav3 <- function(outputs, pars, i) {with(pars$Xpar[[i]]$ix,{
     mild <- outputs[,mild_ix]
     treat <- outputs[,treat_ix]
     S <- H-I-P
-    #ni <- F_transmit(y, pars$Xpar[[i]])*I/H
-    true_pr <- I/H
-#    return(list(time=time, S=S, I=I, P=P, H=H, moi=moi, aoi=aoi, vh=vh, severe=severe, moderate=moderate, mild=mild, treat=treat, ni=ni, true_pr=true_pr))
-    return(list(time=time, S=S, I=I, P=P, H=H, moi=moi, aoi=aoi, vh=vh, severe=severe, moderate=moderate, mild=mild, treat=treat, true_pr=true_pr))
+    ni <- F_transmit_vars(list(vh=vh,moi=moi,aoi=aoi), pars$Xpar[[i]])*I/H
+    prevalence <- I/H
+    return(list(time=time, S=S, I=I, P=P, H=H,
+                moi=moi, aoi=aoi, vh=vh,
+                severe=severe, moderate=moderate, mild=mild,
+                treat=treat, prevalence=prevalence))
 })}
 
 #' @title Add indices for human population to parameter list

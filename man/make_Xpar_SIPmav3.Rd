@@ -33,14 +33,16 @@ make_Xpar_SIPmav3(
   mild_x_opts = list(rate = 1/50),
   mod_treat = "p3",
   treat_opts = list(p_sev = 0.95, p_mod = 0.1, p_mild = 0.01),
-  mod_F_xi = "xi",
-  xi_opts = list(xi = 1/730),
-  mass_treat_opts = list(),
-  mass_test_treat_opts = list(),
-  mod_seek_care = "xi",
-  care_seeking_opts = list(xi = 1/730),
-  mod_other_disease = "xi",
-  other_disease_opts = list(xi = 1/730),
+  mod_xi = "val",
+  xi_opts = list(scale = 0),
+  mod_seek_care = "val",
+  care_seeking_opts = list(val = 0),
+  mod_other_fever = "val",
+  other_fever_opts = list(val = 0),
+  mod_mda = "val",
+  mda_opts = list(val = 0),
+  mod_msat = "val",
+  msat_opts = list(val = 0),
   eta = 1/25
 )
 }
@@ -57,6 +59,10 @@ make_Xpar_SIPmav3(
 
 \item{c_opts}{a list: options for setup_F_transmit}
 
+\item{mod_r}{a string, the S3 class name for F_clear}
+
+\item{r_opts}{a list: options for setup_F_clear}
+
 \item{mod_lm}{a string, the S3 class name for F_detect for light microscopy}
 
 \item{lm_opts}{a list: options for setup_F_detect}
@@ -68,6 +74,8 @@ make_Xpar_SIPmav3(
 \item{mod_rdt}{a string, the S3 class name for F_detect for RDT}
 
 \item{rdt_opts}{a list: options for setup_F_detect}
+
+\item{mod_severe_h}{a string, the S3 class name for F_incidence_h for severe malaria}
 
 \item{severe_h_opts}{a list: options for setup_F_incidence_h}
 
@@ -91,19 +99,31 @@ make_Xpar_SIPmav3(
 
 \item{mild_x_opts}{a list: options for setup_F_incidence_x}
 
+\item{mod_treat}{a string, the S3 class name for treating malaria}
+
+\item{treat_opts}{a list: options for treating malaria}
+
+\item{mod_xi}{a string, the S3 class name for background drug taking}
+
+\item{xi_opts}{a list: options for setup_F_incidence_x}
+
+\item{mod_seek_care}{a string, the S3 class name for care seeking}
+
+\item{care_seeking_opts}{a list: options to set up care seeking}
+
+\item{mod_other_fever}{a string, the S3 class name for other fever}
+
+\item{other_fever_opts}{a list: options to set up other fever}
+
+\item{mod_mda}{a string, the S3 class name for mass drug administration}
+
+\item{mda_opts}{a list: options to set up mass drug administration}
+
+\item{mod_msat}{a string, the S3 class name for mass screen and treat}
+
+\item{msat_opts}{a list: options to set up mass screen and treat}
+
 \item{eta}{rate of loss of chemo-protection}
-
-\item{mod_mod_severe_h}{a string, the S3 class name for F_incidence_h for severe malaria}
-
-\item{c}{transmission probability (efficiency) from human to mosquito}
-
-\item{r}{recovery rate}
-
-\item{rho}{probability of successful treatment upon infection}
-
-\item{sigma}{probability of treatment for treated, above background}
-
-\item{xi}{background treatment rate}
 }
 \value{
 a \link{list}

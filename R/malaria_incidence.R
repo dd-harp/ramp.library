@@ -114,8 +114,8 @@ F_incidence_h.protect <- function(y, Xpars, mod_ince_h) {with(mod_ince_h,{
 #' @inheritParams setup_incidence_h
 #' @return an `F_incidence_h.b` model object
 #' @export
-setup_incidence_h.protect <- function(mod_ince_h, ince_opts,  nStrata) {
-  ince_pars <- with(ince_opts, setup_incidence_h_protect(p0, Np, nStrata))
+setup_incidence_h.protect <- function(mod_ince_h, malaria_opts,  nStrata) {
+  ince_pars <- with(malaria_opts, setup_incidence_h_protect(p0, Np, nStrata))
   return(ince_pars)
 }
 
@@ -141,7 +141,7 @@ setup_incidence_h_protect <- function(p0, Np, nStrata) {
 #' @inheritParams F_incidence_x
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_incidence_x.protect <- function(y, Xpars, mod_ince_h) {with(mod_ince_h,{
+F_incidence_x.protect <- function(y, Xpars, mod_ince_x) {with(mod_ince_x,{
   vh <- y[Xpars$ix$vh_ix]
   rate <- rate0*exp(-vh/Np)
   return(rate)
@@ -153,8 +153,8 @@ F_incidence_x.protect <- function(y, Xpars, mod_ince_h) {with(mod_ince_h,{
 #' @inheritParams setup_incidence_x
 #' @return an `F_incidence_h.b` model object
 #' @export
-setup_incidence_x.protect <- function(mod_ince_x, ince_opts,  nStrata) {
-  ince_pars <- with(ince_opts, setup_incidence_x_protect(rate0, Np, nStrata))
+setup_incidence_x.protect <- function(mod_ince_x, malaria_opts,  nStrata) {
+  ince_pars <- with(malaria_opts, setup_incidence_x_protect(rate0, Np, nStrata))
   return(ince_pars)
 }
 

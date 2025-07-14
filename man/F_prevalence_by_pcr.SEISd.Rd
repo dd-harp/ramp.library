@@ -4,16 +4,12 @@
 \alias{F_prevalence_by_pcr.SEISd}
 \title{Compute the prevalence of infection by pcr}
 \usage{
-<<<<<<< HEAD:man/F_pr_by_pcr.SEISd.Rd
-F_pr_by_pcr.SEISd(vars, Xpar)
-=======
 F_prevalence_by_pcr.SEISd(vars, Xpar)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
 \item{Xpar}{a list defining a model for human}
->>>>>>> acc05432180b090912479adcca191d41600b0345:man/F_prevalence_by_pcr.SEISd.Rd
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

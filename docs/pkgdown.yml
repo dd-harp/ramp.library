@@ -1,4 +1,4 @@
-pandoc: '3.2'
+pandoc: '3.4'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
@@ -6,6 +6,8 @@ articles:
   Compartmental-Models: Compartmental-Models.html
   human_seis: human_seis.html
   human_sip: human_sip.html
+  human_SIPmav3: human_SIPmav3.html
+  human_SIPtrack: human_SIPtrack.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   L-Overview: L-Overview.html
   Malaria-Overview: Malaria-Overview.html
@@ -18,7 +20,7 @@ articles:
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
   X-xde-workhorse: X-xde-workhorse.html
-last_built: 2025-04-08T15:18Z
+last_built: 2025-07-14T19:39Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

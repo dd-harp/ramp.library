@@ -4,10 +4,12 @@
 \alias{setup_incidence_x.protect}
 \title{Setup an \code{F_incidence_x.protect} model object}
 \usage{
-\method{setup_incidence_x}{protect}(mod_ince_x, ince_opts, nStrata)
+\method{setup_incidence_x}{protect}(mod_ince_x, malaria_opts, nStrata)
 }
 \arguments{
 \item{mod_ince_x}{is a string that defines the S3 class}
+
+\item{malaria_opts}{a set of options to override the defaults}
 
 \item{nStrata}{the number of population strata}
 }

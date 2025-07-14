@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{y}{state vector}
+
+\item{Xpars}{an \strong{X} model object}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

@@ -4,16 +4,12 @@
 \alias{F_prevalence.SIRS}
 \title{Compute the "true" prevalence of infection / parasite rate}
 \usage{
-<<<<<<< HEAD:man/F_pr.SIRS.Rd
-F_pr.SIRS(vars, Xpar)
-=======
 \method{F_prevalence}{SIRS}(vars, Xpar)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
 \item{Xpar}{a list defining a model for human}
->>>>>>> acc05432180b090912479adcca191d41600b0345:man/F_prevalence.SIRS.Rd
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

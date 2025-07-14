@@ -91,5 +91,5 @@ library(data.table)
 library(ggplot2)
 
 ## ----echo=FALSE---------------------------------------------------------------
-devtools::load_all()
+#devtools::load_all()
 

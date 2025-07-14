@@ -4,16 +4,12 @@
 \alias{F_prevalence_rdt.SEIS}
 \title{Compute the prevalence of infection by RDT}
 \usage{
-<<<<<<< HEAD:man/F_pr_by_rdt.SEIS.Rd
-F_pr_by_rdt.SEIS(vars, Xpar)
-=======
 F_prevalence_rdt.SEIS(vars, Xpar)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
 \item{Xpar}{a list defining a model for human}
->>>>>>> acc05432180b090912479adcca191d41600b0345:man/F_prevalence_rdt.SEIS.Rd
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

@@ -79,6 +79,12 @@
     <loc>https://dd-harp.github.io/ramp.library/articles/Xmod-workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/human_SIPmav3.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/articles/human_SIPtrack.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/articles/human_seis.html</loc>
   </url>
   <url>
@@ -124,6 +130,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_H.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_H.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_H.SIPw.html</loc>
   </url>
   <url>
@@ -167,6 +176,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_X.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_X.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_X.SIPw.html</loc>
@@ -217,6 +229,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_b.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_b.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_b.SIPw.html</loc>
   </url>
   <url>
@@ -241,6 +256,33 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_b.workhorse.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_clear.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_clear.r.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_mav.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_vars.d.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_vars.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_vars.mav.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_y.d.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_y.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_detect_y.mav.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.ENBRQ_dts.html</loc>
   </url>
   <url>
@@ -263,6 +305,15 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_f.dddn.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_force_malaria.func.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_force_malaria.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_force_malaria.val.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.ENBRQ_dts.html</loc>
@@ -301,6 +352,45 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_fqZ.macdonald.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_h.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_h.p.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_h.protect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_x.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_x.protect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_incidence_x.rate.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_im.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_vars.b.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_vars.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_vars.im.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_y.b.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_y.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_infect_y.im.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_ni.SEIS.html</loc>
   </url>
   <url>
@@ -317,6 +407,33 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_p.dddn.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_lm.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_lm.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_lm.SIPmav3.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_pcr.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_pcr.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_pcr.SIPmav3.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_rdt.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_rdt.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_pfpr_by_rdt.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_pr.SEIR.html</loc>
@@ -400,10 +517,97 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/F_pr_by_rdt.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SEIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIP.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIPmav3.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIR.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIRS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.garki.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_by_lm.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_by_pcr.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_by_rdt.SEISd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_lm.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_pcr.SEIS.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence_rdt.SEIS.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_q.dddn.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/F_sigma.dddn.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_take_drugs.func.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_take_drugs.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_dim.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_vars.c.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_vars.dim.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_vars.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_y.c.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_y.dim.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_transmit_y.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_treat.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_treat.p.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/F_treat.p3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIR.html</loc>
@@ -425,6 +629,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIPw.html</loc>
@@ -667,6 +874,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/dXdt.SIPw.html</loc>
   </url>
   <url>
@@ -767,6 +977,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_Xinits.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/get_Xinits.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/get_Xinits.SIPw.html</loc>
@@ -926,6 +1139,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/list_Xvars.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/list_Xvars.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/list_Xvars.SIPw.html</loc>
@@ -1105,6 +1321,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xinits_SIPw.html</loc>
   </url>
   <url>
@@ -1181,6 +1400,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/make_Xpar_SIPw.html</loc>
@@ -1319,6 +1541,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_Xorbits.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/parse_Xorbits.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/parse_Xorbits.SIPw.html</loc>
@@ -1483,6 +1708,54 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/set_Xpars.garki.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_clear.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_clear.r.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_detect.d.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_detect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_detect.mav.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_infect.b.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_infect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_infect.im.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_infect_im.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_transmit.c.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_transmit.dim.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_transmit.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_transmit_dim.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_treat.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_treat.p.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_F_treat.p3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Linits.stages_dts.html</loc>
   </url>
   <url>
@@ -1555,6 +1828,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xinits.SIPw.html</loc>
   </url>
   <url>
@@ -1597,6 +1873,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xix.SIPw.html</loc>
   </url>
   <url>
@@ -1633,6 +1912,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.SIPw.html</loc>
   </url>
   <url>
@@ -1655,6 +1937,48 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_Xpar.workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_drug_taking_function.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_force_malaria.func.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_force_malaria.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_force_malaria.val.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_force_malaria_func.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_force_malaria_val.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_h.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_h.p.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_h.protect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_h_protect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_x.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_x.protect.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_x.rate.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/setup_incidence_x_protect.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/setup_travel_multiday.html</loc>
@@ -1706,6 +2030,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_Xinits.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/update_Xinits.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/update_Xinits.SIPw.html</loc>
@@ -1870,6 +2197,9 @@
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_steady_state_X.SIPd.html</loc>
   </url>
   <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xde_steady_state_X.SIPmav3.html</loc>
+  </url>
+  <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xde_steady_state_X.SIPw.html</loc>
   </url>
   <url>
@@ -1883,6 +2213,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xds_lines_X_SEIRV.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_lines_X_SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xds_lines_X_SIPw.html</loc>
@@ -1916,6 +2249,9 @@
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SIPd.html</loc>
+  </url>
+  <url>
+    <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SIPmav3.html</loc>
   </url>
   <url>
     <loc>https://dd-harp.github.io/ramp.library/reference/xds_plot_X.SIPw.html</loc>

@@ -209,28 +209,6 @@ reference:
 - title: XH Component
   desc: |
     Models for parasites infecting human / vertebrate hosts
-- subtitle: The SIPw model
-  contents:
-  - dXdt.SIPw
-  - Update_Xt.SIPw
-  - setup_Xpar.SIPw
-  - make_Xpar_SIPw
-  - F_X.SIPw
-  - F_H.SIPw
-  - F_prevalence.SIPw
-  - F_b.SIPw
-  - setup_Xinits.SIPw
-  - make_Xinits_SIPw
-  - list_Xvars.SIPw
-  - put_Xvars.SIPw
-  - setup_Xix.SIPw
-  - parse_Xorbits.SIPw
-  - get_Xinits.SIPw
-  - update_Xinits.SIPw
-  - HTC.SIPw
-  - xds_plot_X.SIPw
-  - xds_lines_X_SIPw
-  - xde_steady_state_X.SIPw
 - subtitle: The workhorse model
   contents:
   - F_X.workhorse
@@ -363,9 +341,9 @@ reference:
   - F_X.SEIS
   - F_H.SEIS
   - F_prevalence.SEIS
-  - F_pfpr_by_lm.SEIS
-  - F_pfpr_by_rdt.SEIS
-  - F_pfpr_by_pcr.SEIS
+  - F_prevalence_lm.SEIS
+  - F_prevalence_pcr.SEIS
+  - F_prevalence_rdt.SEIS
   - F_ni.SEIS
   - F_b.SEIS
   - parse_Xorbits.SEIS
@@ -404,9 +382,9 @@ reference:
   - update_Xinits.SEISd
   - HTC.SEISd
   - F_prevalence.SEISd
-  - F_pfpr_by_lm.SEISd
-  - F_pfpr_by_rdt.SEISd
-  - F_pfpr_by_pcr.SEISd
+  - F_prevalence_by_lm.SEISd
+  - F_prevalence_by_pcr.SEISd
+  - F_prevalence_by_rdt.SEISd
   - F_ni.SEISd
   - xds_plot_X.SEISd
   - add_lines_X_SEISd
@@ -472,3 +450,95 @@ reference:
   - F_ni.SIPd
   - xds_plot_X.SIPd
   - add_lines_X_SIPd
+- subtitle: The SIPmav3 model
+  contents:
+  - dXdt.SIPmav3
+  - setup_Xpar.SIPmav3
+  - make_Xpar_SIPmav3
+  - F_X.SIPmav3
+  - F_H.SIPmav3
+  - F_prevalence.SIPmav3
+  - F_b.SIPmav3
+  - setup_Xinits.SIPmav3
+  - make_Xinits_SIPmav3
+  - list_Xvars.SIPmav3
+  - setup_Xix.SIPmav3
+  - parse_Xorbits.SIPmav3
+  - get_Xinits.SIPmav3
+  - update_Xinits.SIPmav3
+  - HTC.SIPmav3
+  - xds_plot_X.SIPmav3
+  - xds_lines_X_SIPmav3
+  - xde_steady_state_X.SIPmav3
+- subtitle: New SIPmav3 model
+  contents:
+  - F_clear
+  - F_clear.r
+  - F_detect_mav
+  - F_detect_vars
+  - F_detect_vars.d
+  - F_detect_vars.mav
+  - F_detect_y
+  - F_detect_y.d
+  - F_detect_y.mav
+  - F_force_malaria
+  - F_force_malaria.func
+  - F_force_malaria.val
+  - F_incidence_h
+  - F_incidence_h.p
+  - F_incidence_h.protect
+  - F_incidence_x
+  - F_incidence_x.protect
+  - F_incidence_x.rate
+  - setup_incidence_x.rate
+  - setup_incidence_x_protect
+  - F_infect_im
+  - F_infect_vars
+  - F_infect_vars.b
+  - F_infect_vars.im
+  - F_infect_y
+  - F_infect_y.b
+  - F_infect_y.im
+  - F_pfpr_by_lm.SIPmav3
+  - F_pfpr_by_pcr.SIPmav3
+  - F_pfpr_by_rdt.SIPmav3
+  - F_take_drugs
+  - F_take_drugs.func
+  - F_transmit_dim
+  - F_transmit_vars
+  - F_transmit_vars.c
+  - F_transmit_vars.dim
+  - F_transmit_y
+  - F_transmit_y.c
+  - F_transmit_y.dim
+  - F_treat
+  - F_treat.p
+  - F_treat.p3
+  - setup_F_clear
+  - setup_F_clear.r
+  - setup_F_detect
+  - setup_F_detect.d
+  - setup_F_detect.mav
+  - setup_F_infect
+  - setup_F_infect.b
+  - setup_F_infect.im
+  - setup_incidence_x
+  - setup_incidence_x.protect
+  - setup_F_infect_im
+  - setup_F_transmit
+  - setup_F_transmit.c
+  - setup_F_transmit.dim
+  - setup_F_transmit_dim
+  - setup_F_treat
+  - setup_F_treat.p
+  - setup_F_treat.p3
+  - setup_drug_taking_function
+  - setup_force_malaria
+  - setup_force_malaria.func
+  - setup_force_malaria.val
+  - setup_force_malaria_func
+  - setup_force_malaria_val
+  - setup_incidence_h
+  - setup_incidence_h.p
+  - setup_incidence_h.protect
+  - setup_incidence_h_protect
