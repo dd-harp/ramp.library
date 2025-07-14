@@ -11,7 +11,7 @@
 
 \item{H}{human / host population density}
 
-\item{Xpar}{a list that defines an \eqn{\cal X} model}
+\item{Xpar}{a list that defines an \strong{X} model object}
 }
 \value{
 the steady states as a named vector

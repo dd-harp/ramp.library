@@ -4,12 +4,14 @@
 \alias{F_incidence_x.protect}
 \title{Malaria Incidents, per infection}
 \usage{
-\method{F_incidence_x}{protect}(y, Xpars, mod_ince_h)
+\method{F_incidence_x}{protect}(y, Xpars, mod_ince_x)
 }
 \arguments{
 \item{y}{state vector}
 
 \item{Xpars}{an \code{Xmod} object}
+
+\item{mod_ince_x}{an \code{F_incidence_x} model object}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

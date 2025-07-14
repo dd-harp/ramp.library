@@ -20,5 +20,5 @@ an \code{F_transmit.c} model object
 }
 \description{
 Set up a model object
-for \link{F_transmit.c}
+for a model of infection
 }

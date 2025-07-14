@@ -20,5 +20,5 @@ an \code{F_infect.b} model object
 }
 \description{
 Set up a model object
-for \link{F_infect.b}
+for the probability of infection
 }

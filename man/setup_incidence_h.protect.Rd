@@ -4,7 +4,14 @@
 \alias{setup_incidence_h.protect}
 \title{Setup an \code{F_incidence_h.protect} model object}
 \usage{
-\method{setup_incidence_h}{protect}(mod_ince_h, ince_opts, nStrata)
+\method{setup_incidence_h}{protect}(mod_ince_h, malaria_opts, nStrata)
+}
+\arguments{
+\item{mod_ince_h}{is a string that defines the S3 class}
+
+\item{malaria_opts}{a set of options to override the defaults}
+
+\item{nStrata}{the number of population strata}
 }
 \value{
 an \code{F_incidence_h.b} model object

@@ -19,5 +19,5 @@
 an \code{Xmod} model object
 }
 \description{
-Implements \link{F_transmit} for the SIP model.
+Implements the linear transmission model
 }

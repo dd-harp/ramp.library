@@ -1,24 +1,29 @@
 
 #' @title Set up a model for detection
 #' @description A model could have models
-#' for detection by different methods, so `F_detect`
-#' must pass the specific detection model.
+#' for detection by different methods, so detection
+#' models must be dispatched by passing their
+#' model objects.
 #' @param y state vector
 #' @param Xpars an `Xmod` object
 #' @param mod_detect an `F_detect` model object
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_detect <- function(y, Xpars, mod_detect) {
-  UseMethod("F_detect", mod_detect)
+F_detect_y <- function(y, Xpars, mod_detect) {
+  UseMethod("F_detect_y", mod_detect)
 }
 
-#' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [detect] for the SIP model.
-#' @inheritParams F_detect
+#' @title Set up a model for detection
+#' @description A model could have models
+#' for detection by different methods, so `F_detect`
+#' must pass the specific detection model.
+#' @param vars variables as a named list
+#' @param Xpars an **X** model object
+#' @param mod_detect an detection model object
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_detect.d <- function(y, Xpars, mod_detect) {
-  return(mod_detect$q)
+F_detect_vars <- function(vars, Xpars, mod_detect) {
+  UseMethod("F_detect_vars", mod_detect)
 }
 
 #' @title Set up default detect
@@ -33,6 +38,23 @@ setup_F_detect <- function(mod_detect, detect_opts, nStrata) {
   UseMethod("setup_F_detect", mod_detect)
 }
 
+#' @title Infection blocking pre-erythrocytic immunity
+#' @description Implements the linear model for detection
+#' @inheritParams F_detect_y
+#' @return a [numeric] vector of length `nStrata`
+#' @export
+F_detect_y.d <- function(y, Xpars, mod_detect) {
+  return(mod_detect$d)
+}
+
+#' @title Infection blocking pre-erythrocytic immunity
+#' @description Implements the linear model for detection
+#' @inheritParams F_detect_vars
+#' @return a [numeric] vector of length `nStrata`
+#' @export
+F_detect_vars.d <- function(vars, Xpars, mod_detect) {
+  return(mod_detect$d)
+}
 
 #' @title Set up a basic model for detection
 #' @description Set up a `F_detect.d` model object,
@@ -48,17 +70,45 @@ setup_F_detect.d <- function(mod_detect, detect_opts, nStrata) {
 }
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [detect] for the SIP model.
-#' @inheritParams F_detect
+#' @description Implements a model for detection motivated
+#' by parasite densities
+#' @inheritParams F_detect_y
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_detect.exp <- function(y, Xpars, mod_detect) {
-  aoi = pars$Xpar[[i]]$ix$aoi_ix
-  moi = pars$Xpar[[i]]$ix$moi_ix
-  v0 = pars$Xpar[[i]]$ix$v0_ix
+F_detect_y.mav <- function(y, Xpars, mod_detect) {with(mod_detect,{
+  aoi = pars$Xpars[[i]]$ix$aoi_ix
+  moi = pars$Xpars[[i]]$ix$moi_ix
+  v0 = pars$Xpars[[i]]$ix$v0_ix
   max_detect <- d0*exp(-mod_detect$imm_rt*v0)
   dt <- max_detect*exp(-pd_aoi*aoi*moi)
   return(dt)
+})}
+
+#' @title Infection blocking pre-erythrocytic immunity
+#' @description Implements a model for detection motivated by
+#' parasite densities and detection
+#' @inheritParams F_detect_vars
+#' @return a [numeric] vector of length `nStrata`
+#' @export
+F_detect_vars.mav <- function(vars, Xpars, mod_detect) {
+  dt <- with(vars, with(mod_detect, F_detect_mav(vh, moi, aoi, d0, imm_rt, pd_aoi)))
+  return(dt)
+}
+
+#' @title Infection blocking pre-erythrocytic immunity
+#' @description Implements [F_detect_vars.mav] for the SIP model.
+#' @param vh cumulative exposure
+#' @param moi mean multiplicity of infection
+#' @param aoi mean age of infection
+#' @param d0 maximum probability of detection
+#' @param imm_rt effect modivication by
+#' @param pd_aoi parasite densities by aoi
+#' @return a [numeric] vector of length `nStrata`
+#' @export
+F_detect_mav <- function(vh, moi, aoi, d0, imm_rt, pd_aoi) {
+  d_max <- d0*exp(-imm_rt*vh)
+  d_moi <- d_max*exp(-pd_aoi*aoi*moi)
+  return(d_moi)
 }
 
 #' @title Set up a basic model for detection
@@ -67,7 +117,7 @@ F_detect.exp <- function(y, Xpars, mod_detect) {
 #' @inheritParams setup_F_detect
 #' @return an `F_detect` model object
 #' @export
-setup_F_detect.q <- function(mod_detect, detect_opts, nStrata) {
+setup_F_detect.mav <- function(mod_detect, detect_opts, nStrata){
   detect_mod <- list()
   class(detect_mod) <- "exp"
   detect_mod$d0 <- checkIt(detect_opts$d0, nStrata)
@@ -76,48 +126,4 @@ setup_F_detect.q <- function(mod_detect, detect_opts, nStrata) {
   return(detect_mod)
 }
 
-#' @title Detection
-#' @description The basic model for the
-#' risk of transmission, per bloodmeal:
-#' a constant probability of
-#' transmission, per bloodmeal
-#' @inheritParams F_detect
-#' @return a [numeric] vector of length `nStrata`
-#' @export
-F_detect.dim <- function(y, Xpars, mod_detect) {with(mod_detect,{
-  vh <- y[Xpars$ix$vh_ix]
-  moi <- y[Xpars$ix$moi_ix]
-  aoi <- y[Xpars$ix$aoi_ix]
-  im_es = exp(-vh/Nd)
-  d <- d0*(1-exp(-moi*exp(-im_is*aoi/pda)))
-  return(c)
-})}
 
-#' @title Setup an `F_detect.dim` model object
-#' @description Set up a model object
-#' for [F_detect.dim]
-#' @inheritParams F_detect
-#' @return an `F_detect` model object
-#' @export
-setup_F_detect.dim <- function(mod_d, d_opts, Xpars, nStrata) {
-  d_pars <- with(d_opts, setup_F_detect_dim(d0, pda, nStrata))
-  Xpars$d_mod <- d_pars
-  return(Xpars)
-}
-
-#' @title Setup an `F_detect.dim` model object
-#' @description Set up a F_detect model
-#' with immunity of the form \deqn{d_0(1- e^{-\alpha}}
-#' @param c0 probability of detection per detectious cite, no immunity
-#' @param pda a model for detection by aoi, motivated by a model for parasite densities and detection
-#' @param nStrata the number of population strata
-#' @return an `F_detect.c` model object
-#' @export
-setup_F_detect_dim <- function(c0, pda, nStrata) {
-  d_pars <- list()
-  class(d_pars) <- "dim"
-  d_pars$d0 <- checkIt(d0, nStrata)
-  d_pars$pda <- checkIt(pda, nStrata)
-  d_pars$Nd <- checkIt(Nd, nStrata)
-  return(d_pars)
-}

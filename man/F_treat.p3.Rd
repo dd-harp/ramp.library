@@ -17,5 +17,5 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link{treat} for the SIP model.
+Implements \link{F_treat} for the SIP model.
 }

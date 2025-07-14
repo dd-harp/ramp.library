@@ -26,7 +26,7 @@ setup_F_treat <- function(mod_treat, treat_opts, nStrata) {
 }
 
 #' @title Basic Treat and Cure
-#' @description Implements [treat] for the SIP model.
+#' @description Implements [F_treat] for the SIP model.
 #' @inheritParams F_treat
 #' @return a [numeric] vector of length `nStrata`
 #' @export
@@ -39,7 +39,7 @@ F_treat.p <- function(y, Xpars, mod_treat) {
 #' @inheritParams setup_F_treat
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-setup_F_treat.p <- function(mod_F_treat, treat_opts, nStrata) {
+setup_F_treat.p <- function(mod_treat, treat_opts, nStrata) {
   treat_mod <- list()
   class(treat_mod) <- "p"
   treat_mod$p_treat <-  checkIt(treat_opts$p_treat, nStrata)
@@ -48,7 +48,7 @@ setup_F_treat.p <- function(mod_F_treat, treat_opts, nStrata) {
 }
 
 #' @title Basic Treat and Cure
-#' @description Implements [treat] for the SIP model.
+#' @description Implements [F_treat] for the SIP model.
 #' @inheritParams F_treat
 #' @return a [numeric] vector of length `nStrata`
 #' @export
@@ -61,7 +61,7 @@ F_treat.p3 <- function(y, Xpars, mod_treat) {
 #' @inheritParams setup_F_treat
 #' @return a [F_treat] model object
 #' @export
-setup_F_treat.p3 <- function(mod_F_treat, treat_opts, nStrata) {
+setup_F_treat.p3 <- function(mod_treat, treat_opts, nStrata) {
   treat_mod <- list()
   class(treat_mod) <- "p3"
   treat_mod$p_sev  <-  checkIt(treat_opts$p_sev, nStrata)

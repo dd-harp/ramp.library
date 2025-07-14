@@ -3,7 +3,7 @@
 #' @description Compute natural parasite clearance
 #' in a population
 #' @param y state vector
-#' @param pars an **`xds`** object
+#' @param Xpars an **X** model object
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_clear <- function(y, Xpars) {

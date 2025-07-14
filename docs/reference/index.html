@@ -570,7 +570,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.garki.html">F_pr(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.garki.html">F_prevalence(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -584,7 +584,7 @@
       </tr><tr><td>
           <p><code><a href="setup_Xpar.garki.html">setup_Xpar(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
-        <td><p>make Xpar.garki</p></td>
+        <td><p>make Xpar for the Garki model</p></td>
       </tr><tr><td>
           <p><code><a href="make_Xpar_garki.html">make_Xpar_garki()</a></code> </p>
         </td>
@@ -596,7 +596,7 @@
       </tr><tr><td>
           <p><code><a href="make_Xinits_garki.html">make_Xinits_garki()</a></code> </p>
         </td>
-        <td><p>Make inits for garki human model. Note that the variables should sum up to H, so the initial value of H is not set. The values are passed in the same order as they are presented in the original paper.</p></td>
+        <td><p>Make inits for garki human model.</p></td>
       </tr><tr><td>
           <p><code><a href="list_Xvars.garki.html">list_Xvars(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
@@ -642,90 +642,6 @@
           <p class="section-desc"></p><p>Models for parasites infecting human / vertebrate hosts</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="the-sipw-model">The SIPw model <a href="#the-sipw-model" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SIPw.html">dXdt(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="Update_Xt.SIPw.html">Update_Xt(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIPw.html">setup_Xpar(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup the Xpar for the SIPw_xde model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SIPw.html">make_Xpar_SIPw()</a></code> </p>
-        </td>
-        <td><p>Make parameters for SIPw_xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_X.SIPw.html">F_X(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Size of effective infectious human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_H.SIPw.html">F_H(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Size of effective infectious human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pr.SIPw.html">F_pr(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_b.SIPw.html">F_b(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIPw.html">setup_Xinits(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SIPw</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SIPw.html">make_Xinits_SIPw()</a></code> </p>
-        </td>
-        <td><p>Make initial values for a SIPw human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SIPw.html">list_Xvars(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the SIPw model variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="put_Xvars.SIPw.html">put_Xvars(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the SIPw model variables as a list, returned from Update_Xt.SIPw</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SIPw.html">setup_Xix(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIPw.html">parse_Xorbits(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the output of deSolve and return variables for SIPw models</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_Xinits.SIPw.html">get_Xinits(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector from a SIPw model</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIPw.html">update_Xinits(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for SIPw models from a vector of states</p></td>
-      </tr><tr><td>
-          <p><code><a href="HTC.SIPw.html">HTC(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the HTC for the SIPw_xde model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_plot_X.SIPw.html">xds_plot_X(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot the density of infected individuals for the SIPw model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_lines_X_SIPw.html">xds_lines_X_SIPw()</a></code> </p>
-        </td>
-        <td><p>Add lines for the density of infected individuals for the SIP model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIPw.html">xde_steady_state_X(<i>&lt;SIPw&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIP model as a function of the daily foi</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="the-workhorse-model">The workhorse model <a href="#the-workhorse-model" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
@@ -738,7 +654,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.workhorse.html">F_pr(<i>&lt;workhorse&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.workhorse.html">F_prevalence(<i>&lt;workhorse&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -822,7 +738,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SIR.html">F_pr(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SIR.html">F_prevalence(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -902,7 +818,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SIRS.html">F_pr(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SIRS.html">F_prevalence(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -994,7 +910,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SEIR.html">F_pr(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SEIR.html">F_prevalence(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -1086,7 +1002,7 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SEIRV.html">F_pr(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SEIRV.html">F_prevalence(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
@@ -1218,21 +1134,21 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SEIS.html">F_pr(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SEIS.html">F_prevalence(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_lm.SEIS.html">F_pr_by_lm(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence_lm.SEIS.html">F_prevalence_lm.SEIS()</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_rdt.SEIS.html">F_pr_by_rdt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the prevalence of infection by RDT</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pr_by_pcr.SEIS.html">F_pr_by_pcr(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence_pcr.SEIS.html">F_prevalence_pcr.SEIS()</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_prevalence_rdt.SEIS.html">F_prevalence_rdt.SEIS()</a></code> </p>
+        </td>
+        <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
           <p><code><a href="F_ni.SEIS.html">F_ni(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
@@ -1366,21 +1282,21 @@
         </td>
         <td><p>Compute the HTC for the SEISd model</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SEISd.html">F_pr(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SEISd.html">F_prevalence(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_lm.SEISd.html">F_pr_by_lm(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence_by_lm.SEISd.html">F_prevalence_by_lm.SEISd()</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_rdt.SEISd.html">F_pr_by_rdt(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the prevalence of infection by RDT</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pr_by_pcr.SEISd.html">F_pr_by_pcr(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence_by_pcr.SEISd.html">F_prevalence_by_pcr.SEISd()</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_prevalence_by_rdt.SEISd.html">F_prevalence_by_rdt.SEISd()</a></code> </p>
+        </td>
+        <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
           <p><code><a href="F_ni.SEISd.html">F_ni(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
@@ -1478,19 +1394,19 @@
         </td>
         <td><p>Compute the HTC for the SIP model</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SIP.html">F_pr(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SIP.html">F_prevalence(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_lm.SIP.html">F_pr_by_lm(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_lm.SIP.html">F_pfpr_by_lm(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_rdt.SIP.html">F_pr_by_rdt(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_rdt.SIP.html">F_pfpr_by_rdt(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_pcr.SIP.html">F_pr_by_pcr(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_pcr.SIP.html">F_pfpr_by_pcr(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
       </tr><tr><td>
@@ -1590,19 +1506,19 @@
         </td>
         <td><p>Compute the HTC for the SIPd model</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr.SIPd.html">F_pr(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_prevalence.SIPd.html">F_prevalence(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_lm.SIPd.html">F_pr_by_lm(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_lm.SIPd.html">F_pfpr_by_lm(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_rdt.SIPd.html">F_pr_by_rdt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_rdt.SIPd.html">F_pfpr_by_rdt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
-          <p><code><a href="F_pr_by_pcr.SIPd.html">F_pr_by_pcr(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_pfpr_by_pcr.SIPd.html">F_pfpr_by_pcr(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
       </tr><tr><td>
@@ -1617,6 +1533,366 @@
           <p><code><a href="add_lines_X_SIPd.html">add_lines_X_SIPd()</a></code> </p>
         </td>
         <td><p>Add lines for the density of infected individuals for the SIPd model</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="the-sipmav-model">The SIPmav3 model <a href="#the-sipmav-model" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dXdt.SIPmav3.html">dXdt(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Derivatives for human population</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_Xpar.SIPmav3.html">setup_Xpar(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup the Xpar for the SIPmav3_xde model</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_Xpar_SIPmav3.html">make_Xpar_SIPmav3()</a></code> </p>
+        </td>
+        <td><p>Make parameters for SIPmav3_xde human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_X.SIPmav3.html">F_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute Infectious Density, \(X\), for <code>SIPmav3</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="F_H.SIPmav3.html">F_H(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Size of effective infectious human population</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_prevalence.SIPmav3.html">F_prevalence(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_b.SIPmav3.html">F_b(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_Xinits.SIPmav3.html">setup_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Xinits.SIPmav3</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_Xinits_SIPmav3.html">make_Xinits_SIPmav3()</a></code> </p>
+        </td>
+        <td><p>Make initial values for a SIPmav3 human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="list_Xvars.SIPmav3.html">list_Xvars(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the SIPmav3 model variables as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_Xix.SIPmav3.html">setup_Xix(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for human population to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="parse_Xorbits.SIPmav3.html">parse_Xorbits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Parse the output of deSolve and return variables for SIPmav3 models</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_Xinits.SIPmav3.html">get_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return initial values as a vector from a SIPmav3 model</p></td>
+      </tr><tr><td>
+          <p><code><a href="update_Xinits.SIPmav3.html">update_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Update inits for SIPmav3 models from a vector of states</p></td>
+      </tr><tr><td>
+          <p><code><a href="HTC.SIPmav3.html">HTC(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the HTC for the SIPmav3_xde model</p></td>
+      </tr><tr><td>
+          <p><code><a href="xds_plot_X.SIPmav3.html">xds_plot_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plot the density of infected individuals for the SIPmav3 model</p></td>
+      </tr><tr><td>
+          <p><code><a href="xds_lines_X_SIPmav3.html">xds_lines_X_SIPmav3()</a></code> </p>
+        </td>
+        <td><p>Add lines for the density of infected individuals for the SIP model</p></td>
+      </tr><tr><td>
+          <p><code><a href="xde_steady_state_X.SIPmav3.html">xde_steady_state_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SIP model as a function of the daily foi</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="new-sipmav-model">New SIPmav3 model <a href="#new-sipmav-model" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="F_clear.html">F_clear()</a></code> </p>
+        </td>
+        <td><p>Natural Parasite Clearance</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_clear.r.html">F_clear(<i>&lt;r&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Natural Parasite Clearance</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_mav.html">F_detect_mav()</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_vars.html">F_detect_vars()</a></code> </p>
+        </td>
+        <td><p>Set up a model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_vars.d.html">F_detect_vars(<i>&lt;d&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_vars.mav.html">F_detect_vars(<i>&lt;mav&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_y.html">F_detect_y()</a></code> </p>
+        </td>
+        <td><p>Set up a model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_y.d.html">F_detect_y(<i>&lt;d&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_detect_y.mav.html">F_detect_y(<i>&lt;mav&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_force_malaria.html">F_force_malaria()</a></code> </p>
+        </td>
+        <td><p>Mass Treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_force_malaria.func.html">F_force_malaria(<i>&lt;func&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Mass Treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_force_malaria.val.html">F_force_malaria(<i>&lt;val&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Mass Treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_h.html">F_incidence_h()</a></code> </p>
+        </td>
+        <td><p>Malaria Incidence from Exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_h.p.html">F_incidence_h(<i>&lt;p&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Malaria from Exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_h.protect.html">F_incidence_h(<i>&lt;protect&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Malaria Incidents, per infection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_x.html">F_incidence_x()</a></code> </p>
+        </td>
+        <td><p>Malaria Incidence from Infection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_x.protect.html">F_incidence_x(<i>&lt;protect&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Malaria Incidents, per infection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_incidence_x.rate.html">F_incidence_x(<i>&lt;rate&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Basic model for</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_x.rate.html">setup_incidence_x(<i>&lt;rate&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Malaria from Infection, Basic</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_x_protect.html">setup_incidence_x_protect()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_im.html">F_infect_im()</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_vars.html">F_infect_vars()</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_vars.b.html">F_infect_vars(<i>&lt;b&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_vars.im.html">F_infect_vars(<i>&lt;im&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_y.html">F_infect_y()</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_y.b.html">F_infect_y(<i>&lt;b&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_infect_y.im.html">F_infect_y(<i>&lt;im&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infections per Infectious Bite</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_pfpr_by_lm.SIPmav3.html">F_pfpr_by_lm(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute PR by light microscopy</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_pfpr_by_pcr.SIPmav3.html">F_pfpr_by_pcr(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute PR by PCR</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_pfpr_by_rdt.SIPmav3.html">F_pfpr_by_rdt(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute PR by RDT</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_take_drugs.html">F_take_drugs()</a></code> </p>
+        </td>
+        <td><p>Mass Treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_take_drugs.func.html">F_take_drugs(<i>&lt;func&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Mass Treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_dim.html">F_transmit_dim()</a></code> </p>
+        </td>
+        <td><p>A model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_vars.html">F_transmit_vars()</a></code> </p>
+        </td>
+        <td><p>Compute Infectiousness with Named Variables</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_vars.c.html">F_transmit_vars(<i>&lt;c&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infectiousness, basic</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_vars.dim.html">F_transmit_vars(<i>&lt;dim&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>A model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_y.html">F_transmit_y()</a></code> </p>
+        </td>
+        <td><p>Compute Infectiousness from the State Variables</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_y.c.html">F_transmit_y(<i>&lt;c&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infectiousness, basic</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_transmit_y.dim.html">F_transmit_y(<i>&lt;dim&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>A model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_treat.html">F_treat()</a></code> </p>
+        </td>
+        <td><p>Treat and Cure</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_treat.p.html">F_treat(<i>&lt;p&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Basic Treat and Cure</p></td>
+      </tr><tr><td>
+          <p><code><a href="F_treat.p3.html">F_treat(<i>&lt;p3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Basic Treat and Cure</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_clear.html">setup_F_clear()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_clear</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_clear.r.html">setup_F_clear(<i>&lt;r&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up default F_clear</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_detect.html">setup_F_detect()</a></code> </p>
+        </td>
+        <td><p>Set up default detect</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_detect.d.html">setup_F_detect(<i>&lt;d&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up a basic model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_detect.mav.html">setup_F_detect(<i>&lt;mav&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up a basic model for detection</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_infect.html">setup_F_infect()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_infect</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_infect.b.html">setup_F_infect(<i>&lt;b&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_infect.im.html">setup_F_infect(<i>&lt;im&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_x.html">setup_incidence_x()</a></code> </p>
+        </td>
+        <td><p>Setup Malaria from Infection</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_x.protect.html">setup_incidence_x(<i>&lt;protect&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_incidence_x.protect</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_infect_im.html">setup_F_infect_im()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_transmit.html">setup_F_transmit()</a></code> </p>
+        </td>
+        <td><p>Setup Infectiousness</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_transmit.c.html">setup_F_transmit(<i>&lt;c&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up default F_transmit</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_transmit.dim.html">setup_F_transmit(<i>&lt;dim&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_transmit.dim</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_transmit_dim.html">setup_F_transmit_dim()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_transmit.dim</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_treat.html">setup_F_treat()</a></code> </p>
+        </td>
+        <td><p>Set up F_treat</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_treat.p.html">setup_F_treat(<i>&lt;p&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up a basic F_treat</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_F_treat.p3.html">setup_F_treat(<i>&lt;p3&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set up a basic F_treat</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_drug_taking_function.html">setup_drug_taking_function()</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_force_malaria.html">setup_force_malaria()</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_force_malaria.func.html">setup_force_malaria(<i>&lt;func&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_force_malaria.val.html">setup_force_malaria(<i>&lt;val&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_force_malaria_func.html">setup_force_malaria_func()</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_force_malaria_val.html">setup_force_malaria_val()</a></code> </p>
+        </td>
+        <td><p>Make a function to simulate mass treatment</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_h.html">setup_incidence_h()</a></code> </p>
+        </td>
+        <td><p>Setup Incidence from Exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_h.p.html">setup_incidence_h(<i>&lt;p&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Malaria from Exposure, Basic</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_h.protect.html">setup_incidence_h(<i>&lt;protect&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_incidence_h_protect.html">setup_incidence_h_protect()</a></code> </p>
+        </td>
+        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

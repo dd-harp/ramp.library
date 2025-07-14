@@ -4,9 +4,11 @@
 \alias{setup_F_treat.p3}
 \title{Set up a basic F_treat}
 \usage{
-\method{setup_F_treat}{p3}(mod_F_treat, treat_opts, nStrata)
+\method{setup_F_treat}{p3}(mod_treat, treat_opts, nStrata)
 }
 \arguments{
+\item{mod_treat}{is a string that defines the S3 class}
+
 \item{treat_opts}{a set of options to override the defaults}
 
 \item{nStrata}{the number of population strata}

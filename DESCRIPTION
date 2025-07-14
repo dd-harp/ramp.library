@@ -18,7 +18,8 @@ Roxygen: list(markdown=TRUE)
 Remotes: 
   github::dd-harp/ramp.xds
 Depends:
-  ramp.xds
+  ramp.xds,
+  stats
 Imports:
   viridisLite,
   deSolve
