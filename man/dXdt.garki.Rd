@@ -19,5 +19,5 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link{dXdt} for the garki model.
+
 }

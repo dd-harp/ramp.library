@@ -1,7 +1,9 @@
 # specialized methods for the human garki model
 
 #' @title Derivatives for human population
-#' @description Implements [dXdt] for the garki model.
+#' @importFrom Rdpack reprompt
+#' @description Implements a continuous time version of the Garki model
+#' \insertRef{DietzK1974GarkiModel}{ramp.library}}
 #' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
 #' @export

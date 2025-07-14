@@ -17,11 +17,13 @@ RoxygenNote: 7.3.2
 Roxygen: list(markdown=TRUE) 
 Remotes: 
   github::dd-harp/ramp.xds
+RdMacros: Rdpack
 Depends:
   ramp.xds,
   stats
 Imports:
   viridisLite,
+  Rdpack,
   deSolve
 Suggests:
     MASS,
