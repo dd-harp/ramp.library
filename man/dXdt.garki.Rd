@@ -19,5 +19,10 @@
 a \link{numeric} vector
 }
 \description{
-
+Implements a continuous time version of the Garki model
+}
+\references{
+{This implements a version of the model
+developed for the Garki Project
+\insertRef{DietzK1974GarkiModel}{ramp.library}}
 }
