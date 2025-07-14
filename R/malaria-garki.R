@@ -3,9 +3,11 @@
 #' @title Derivatives for human population
 #' @importFrom Rdpack reprompt
 #' @description Implements a continuous time version of the Garki model
-#' \insertRef{DietzK1974GarkiModel}{ramp.library}}
 #' @inheritParams ramp.xds::dXdt
 #' @return a [numeric] vector
+#' @references{This implements a version of the model
+#' developed for the Garki Project
+#' \insertRef{DietzK1974GarkiModel}{ramp.library}}
 #' @export
 dXdt.garki = function(t, y, pars, i){
 
