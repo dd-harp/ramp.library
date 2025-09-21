@@ -1,29 +1,54 @@
+#' @title The **XH** Module Skill Set
+#'
+#' @description The **XH** skill set is a list of
+#' an module's capabilities.
+#'
+#' @note This method dispatches on `class(xds_obj$XH_obj)`
+#'
+#' @inheritParams ramp.xds::skill_set_XH
+#'
+#' @return the skill set, as a list
+#'
+#' @export
+skill_set_XH.SEIR = function(Xname = "SEIR"){
+  return(list(
+    demography  = TRUE,
+    prevalence  = TRUE,
+    malaria     = TRUE,
+    diagnostics = FALSE
+  ))
+}
+
+#' Check / update before solving
+#'
+#' @inheritParams ramp.xds::check_XH
+#'
+#' @returns an **`xds`** model object
+#' @export
+check_XH.SEIR = function(xds_obj, i){
+  return(xds_obj)
+}
+
+
 #' @title Compute the derivatives for parasite infection dynamics in human population strata
-#' @description Implements [dXdt] for the SEIR model
-#' @inheritParams ramp.xds::dXdt
+#' @description Implements [dXHdt] for the SEIR model
+#' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @export
-dXdt.SEIR<- function(t, y, pars, i) {
+dXHdt.SEIR<- function(t, y, xds_obj, i) {
   # do not change this
-  foi <- pars$FoI[[i]]
-  Hpar <- pars$Hpar[[i]]
+  foi <- xds_obj$terms$FoI[[i]]
 
-  # attach the variables by name
-  with(list_Xvars(y, pars, i),{
-    # compute H (if it isn't one of the variables)
+  with(get_XH_vars(y, xds_obj, i),{
+    with(xds_obj$XH_obj[[i]], {
 
-    # expose the parameters (see make_Xpar_SEIR)
-    with(pars$Xpar[[i]], {
-
-      # compute the derivatives
-      dH <- Births(t, H, Hpar) + dHdt(t, H, Hpar)
-      dE <- foi*S - tau*E + dHdt(t, E, Hpar)
-      dI <- tau*E - r*I + dHdt(t, I, Hpar)
-      dR <- r*I + dHdt(t, R, Hpar)
+      dH <- Births(t, H, births) + D_matrix %*% H
+      dE <- foi*S - tau*E + D_matrix %*% E
+      dI <- tau*E - r*I + D_matrix %*% I
+      dR <- r*I + D_matrix %*% R
 
        # concatenate the derivatives
       derivs = c(dH, dE, dI, dR)
-
       # return the derivatives
       return(derivs)
     })
@@ -32,21 +57,21 @@ dXdt.SEIR<- function(t, y, pars, i) {
 
 
 #' @title DTS updating for the SIS model for human / vertebrate host infections
-#' @description Implements [Update_Xt] for the SIS model
-#' @inheritParams ramp.xds::Update_Xt
+#' @description Implements [Update_XHt] for the SIS model
+#' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
 #' @export
-Update_Xt.SEIR<- function(t, y, pars, i) {
+Update_XHt.SEIR<- function(t, y, xds_obj, i) {
 
-  ar <- pars$AR[[i]]
-  Hpar <- pars$Hpar[[i]]
-  with(list_Xvars(y, pars, i),{
-    with(pars$Xpar[[i]], {
+  ar <- xds_obj$AR[[i]]
+  Hpar <- xds_obj$Hpar[[i]]
+  with(get_XH_vars(y, xds_obj, i),{
+    with(xds_obj$XH_obj[[i]], {
 
       St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, H, Hpar)
-      Et <- a*S +(1-tau)*E
-      It <- (1-r)*I + tau*E + dHdt(t, I, Hpar)
-      Rt <- R + r*I + dHdt(t, R, Hpar)
+      Et <- a*S +(1-tau)*E + D_matrix %*% E
+      It <- (1-r)*I + tau*E + D_matrix %*% I
+      Rt <- R + r*I + D_matrix %*% R
 
       return(c(S=unname(St), E = unname(It), I=unname(It), R = unname(Rt)))
     })
@@ -55,105 +80,104 @@ Update_Xt.SEIR<- function(t, y, pars, i) {
 
 #' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
 #' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
-#' @inheritParams ramp.xds::dts_steady_state_X
+#' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @export
-dts_steady_state_X.SEIR= function(ar, H, Xpar){with(Xpar,{
-  Steq = 0
-  Eteq = 0
-  Iteq = 0
-  Rteq = H -Steq - Eteq-Iteq
-
-  return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq))
+steady_state_X.SEIR_dts = function(foi, H, xds_obj, i=1){
+  ar = exp(-foi)
+  with(xds_obj$XH_obj[[i]],{
+    Steq = 0
+    Eteq = 0
+    Iteq = 0
+    Rteq = H -Steq - Eteq-Iteq
+    return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq))
 })}
 
 
 #' @title Compute the steady states for the SIRS model as a function of the daily EIR
 #' @description Compute the steady state of the SIRS model as a function of the daily eir.
-#' @inheritParams  ramp.xds::xde_steady_state_X
+#' @inheritParams  ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @export
-xde_steady_state_X.SEIR = function(foi, H, Xpar){with(Xpar,{
-  Eeq = 0
-  Ieq = 0
-  Req = H
-  Seq = H-Ieq-Req
+steady_state_X.SEIR_ode = function(foi, H,  xds_obj, i=1){
+  with(xds_obj$XH_obj[[i]],{
+    Eeq = 0
+    Ieq = 0
+    Req = H
+    Seq = H-Ieq-Req
   return(c(S=as.vector(Seq),E = as.vector(Eeq), I=as.vector(Ieq), R = as.vector(Req)))
 })}
 
+#' @title Setup XH_obj.SEIR
+#' @description Implements [setup_XH_inits] for the SEIR model
+#' @inheritParams ramp.xds::setup_XH_inits
+#' @return a [list] vector
+#' @export
+setup_XH_inits.SEIR = function(xds_obj, H, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIR(xds_obj$nStrata[i], H, options)
+  return(xds_obj)
+}
 
 #' @title Make initial values for the SEIR human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param H the initial value for H
-#' @param Xopts a [list] to overwrite defaults
+#' @param options a [list] to overwrite defaults
 #' @param E the initial value for E
 #' @param I the initial value for I
 #' @param R the initial values for R
 #' @return a [list]
 #' @export
-make_Xinits_SEIR = function(nStrata, H, Xopts=list(), I=1, E=0, R=1){with(Xopts,{
-  E = checkIt(E, nStrata)
-  I = checkIt(I, nStrata)
-  R = checkIt(R, nStrata)
-  return(list(H=H, E=E, I=I, R=R))
+make_XH_inits_SEIR = function(nStrata, H, options=list(), I=1, E=0, R=1){
+  with(options,{
+    E = checkIt(E, nStrata)
+    I = checkIt(I, nStrata)
+    R = checkIt(R, nStrata)
+    return(list(H=H, E=E, I=I, R=R))
 })}
 
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
-#' @inheritParams ramp.xds::set_Xpars
+#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @export
-set_Xpars.SEIR <- function(pars, i=1, Xopts=list()) {
-  nHabitats <- pars$nHabitats
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xpar[[i]]$b <- b
-    pars$Xpar[[i]]$c <- c
-    pars$Xpar[[i]]$r <- r
-    pars$Xpar[[i]]$tau <- tau
-    return(pars)
+change_XH_pars.SEIR <- function(xds_obj, i=1, options=list()) {
+  nHabitats <- xds_obj$nHabitats
+  with(xds_obj$XH_obj[[i]], with(options,{
+    xds_obj$XH_obj[[i]]$b <- b
+    xds_obj$XH_obj[[i]]$c <- c
+    xds_obj$XH_obj[[i]]$r <- r
+    xds_obj$XH_obj[[i]]$tau <- tau
+    return(xds_obj)
   }))}
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `pars$Xpar[[i]]`.
-#' @inheritParams ramp.xds::set_Xinits
+#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @export
-set_Xinits.SEIR <- function(pars, i=1, Xopts=list()) {
-  with(pars$Xpar[[i]], with(Xopts,{
-    pars$Xinits[[i]]$H = H
-    pars$Xinits[[i]]$E = E
-    pars$Xinits[[i]]$I = I
-    pars$Xinits[[i]]$R = R
-    return(pars)
-  }))}
-
-
-
-
-#' @title Setup Xinits.SEIR
-#' @description Implements [setup_Xinits] for the SEIR model
-#' @inheritParams ramp.xds::setup_Xinits
-#' @return a [list] vector
-#' @export
-setup_Xinits.SEIR = function(pars, H, i, Xopts=list()){
-  pars$Xinits[[i]] = make_Xinits_SEIR(pars$nStrata[i], H, Xopts)
-  return(pars)
-}
+change_XH_inits.SEIR <- function(xds_obj, i=1, options=list()) {
+  with(xds_obj$XH_obj[[i]], with(options,{
+    xds_obj$XH_inits[[i]]$inits$H = H
+    xds_obj$XH_inits[[i]]$inits$E = E
+    xds_obj$XH_inits[[i]]$inits$I = I
+    xds_obj$XH_inits[[i]]$inits$R = R
+    return(xds_obj)
+}))}
 
 
 
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [setup_Xix] for the SEIR model.
-#' @inheritParams ramp.xds::setup_Xix
+#' @description Implements [setup_XH_ix] for the SEIR model.
+#' @inheritParams ramp.xds::setup_XH_ix
 #' @return none
 #' @importFrom utils tail
 #' @export
-setup_Xix.SEIR <- function(pars, i) {with(pars,{
+setup_XH_ix.SEIR <- function(xds_obj, i) {with(xds_obj,{
 
   H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(H_ix, 1)
@@ -167,21 +191,19 @@ setup_Xix.SEIR <- function(pars, i) {with(pars,{
   R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
   max_ix <- tail(R_ix, 1)
 
-
-
-  pars$max_ix = max_ix
-  pars$ix$X[[i]] = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix)
-  return(pars)
+  xds_obj$max_ix = max_ix
+  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix)
+  return(xds_obj)
 })}
 
 
 #' @title Return the variables as a list
-#' @description This method dispatches on the type of `pars$Xpar`
-#' @inheritParams ramp.xds::list_Xvars
+#' @description This method dispatches on the type of `xds_obj$XH_obj`
+#' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
 #' @export
-list_Xvars.SEIR <- function(y, pars, i) {
-  with(pars$ix$X[[i]],{
+get_XH_vars.SEIR <- function(y, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]]$ix,{
        H = y[H_ix]
        E = y[E_ix]
        I = y[I_ix]
@@ -191,61 +213,50 @@ list_Xvars.SEIR <- function(y, pars, i) {
 }
 
 
-#' @title Return initial values as a vector
-#' @description This method dispatches on the type of `pars$Xpar`.
-#' @inheritParams ramp.xds::get_Xinits
-#' @return a [numeric] vector
-#' @export
-get_Xinits.SEIR <- function(pars, i){pars$Xinits[[i]]}
-
-
-#' @title Update inits for the SEIR human model from a vector of states
-#' @inheritParams ramp.xds::update_Xinits
-#' @return none
-#' @export
-update_Xinits.SEIR <- function(pars, y, i) {
-  with(list_Xvars(y, pars, i),{
-    pars = make_Xinits_SEIR(pars$nStrata[i], H, list(), E=E, I=I, R=R)
-    return(pars)
-  })}
-
-
 
 #' @title Make parameters for SEIR human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param options a [list] that could overwrite defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the the duration of an infection
 #' @param c the proportion of bites on infected humans that infect a mosquito
 #' @return a [list]
 #' @export
-make_Xpar_SEIR = function(nStrata, Xopts=list(),
+make_XH_obj_SEIR = function(nStrata, options=list(),
                           b=0.55, r=1/180, c=0.15,tau= 0.5){
-  with(Xopts,{
-    Xpar = list()
-    class(Xpar) <- c("SEIR")
+  with(options,{
+    XH_obj = list()
+    class(XH_obj) <- c("SEIR")
 
-    Xpar$b = checkIt(b, nStrata)
-    Xpar$tau = checkIt(tau, nStrata)
-    Xpar$c = checkIt(c, nStrata)
-    Xpar$r = checkIt(r, nStrata)
+    XH_obj$b = checkIt(b, nStrata)
+    XH_obj$tau = checkIt(tau, nStrata)
+    XH_obj$c = checkIt(c, nStrata)
+    XH_obj$r = checkIt(r, nStrata)
 
-    return(Xpar)
+    # Ports for demographic models
+    XH_obj$D_matrix = diag(0, nStrata)
+    births = "zero"
+    class(births) = births
+    XH_obj$births = births
+
+    return(XH_obj)
   })}
 
 
 
 
 
-#' @title Setup Xpar.SEIR
-#' @description Implements [setup_Xpar] for the SEIR model
-#' @inheritParams ramp.xds::setup_Xpar
+#' @title Setup XH_obj.SEIR
+#' @description Implements [setup_XH_obj] for the SEIR model
+#' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @export
-setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
-  pars$Xpar[[i]] = make_Xpar_SEIR(pars$nStrata[i], Xopts)
-  return(pars)
+setup_XH_obj.SEIR = function(Xname, xds_obj, i, options=list()){
+  XH_obj <- make_XH_obj_SEIR(xds_obj$nStrata[i], options)
+  class(XH_obj) <- c("SEIR", paste("SEIR_", xds_obj$xds, sep=""))
+  xds_obj$XH_obj[[i]] = XH_obj
+  return(xds_obj)
 }
 
 
@@ -254,9 +265,9 @@ setup_Xpar.SEIR = function(Xname, pars, i, Xopts=list()){
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIR <- function(t,y, pars, i) {
-  I = y[pars$ix$X[[i]]$I_ix]
-  Y = with(pars$Xpar[[i]], c*I)
+F_X.SEIR <- function(t,y, xds_obj, i) {
+  I = y[xds_obj$XH_obj[[i]]$ix$I_ix]
+  Y = with(xds_obj$XH_obj[[i]], c*I)
   return(Y)
 }
 
@@ -266,33 +277,42 @@ F_X.SEIR <- function(t,y, pars, i) {
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.SEIR <- function(t, y, pars, i){
-  with(list_Xvars(y, pars, i), return(H))
+F_H.SEIR <- function(t, y, xds_obj, i){
+  with(get_XH_vars(y, xds_obj, i), return(H))
 }
 
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_b] for the SEIR model.
-#' @inheritParams ramp.xds::F_b
+#' @description Implements [F_infectivity] for the SEIR model.
+#' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_b.SEIR <- function(y, pars, i) {
-  with(pars$Xpar[[i]],return(b))
+F_infectivity.SEIR <- function(y, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]],return(b))
 }
 
+#' @title Infection blocking pre-erythrocytic immunity
+#' @description Implements [F_ni] for the SIR model.
+#' @inheritParams ramp.xds::F_ni
+#' @return a [numeric] vector of length `nStrata`
+#' @export
+F_ni.SEIR <- function(vars, XH_obj) {
+  with(vars, with(XH_obj, c*I/H))
+}
 
-#' @title Parse the output of deSolve and return variables for the SEIR model
-#' @description Implements [parse_Xorbits] for the SEIR model
-#' @inheritParams ramp.xds::parse_Xorbits
+#' @title parse the output of deSolve and return variables for the SEIR model
+#' @description Implements [parse_XH_orbits] for the SEIR model
+#' @inheritParams ramp.xds::parse_XH_orbits
 #' @return none
 #' @export
-parse_Xorbits.SEIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
+parse_XH_orbits.SEIR <- function(outputs, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]]$ix,{
     H = outputs[,H_ix]
     E = outputs[,E_ix]
     I = outputs[,I_ix]
     R = outputs[,R_ix]
     S = H-E-I-R
-    ni <- pars$Xpar[[i]]$c*I/H
+    ni <- xds_obj$XH_obj[[i]]$c*I/H
     true_pr <- (I+E)/H
     return(list(S=S, E=E,I=I, R=R, H=H,ni=ni, true_pr= true_pr))
 })}
@@ -303,7 +323,7 @@ parse_Xorbits.SEIR <- function(outputs, pars, i) {with(pars$ix$X[[i]],{
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_prevalence.SEIR <- function(vars, Xpar) {
+F_prevalence.SEIR <- function(vars, XH_obj) {
   pr = with(vars, I/H)
   return(pr)
 }
@@ -314,8 +334,8 @@ F_prevalence.SEIR <- function(vars, Xpar) {
 #' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
-HTC.SEIR <- function(pars, i) {
-  with(pars$Xpar[[i]],
+HTC.SEIR <- function(xds_obj, i) {
+  with(xds_obj$XH_obj[[i]],
        HTC <- c/r,
        return(HTC)
   )
@@ -351,13 +371,13 @@ xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkre
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.SEIR = function(pars, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add=FALSE){
-  XH = pars$outputs$orbits$XH[[i]]
-  time = pars$outputs$time
+xds_plot_X.SEIR = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add=FALSE){
+  XH = xds_obj$outputs$orbits$XH[[i]]
+  time = xds_obj$outputs$time
 
   if(add==FALSE)
     plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
          ylab = "No of. Infected", xlab = "Time")
-  xds_lines_X_SEIR(time, XH, pars$nStrata[i], clrs, llty)
+  xds_lines_X_SEIR(time, XH, xds_obj$nStrata[i], clrs, llty)
 }
 

@@ -1,7 +1,7 @@
 Package: ramp.library
 Type: Package
 Title: A code library for ramp.xds
-Version: 0.9
+Version: 1.0.0-1 
 Authors@R: c(
       person("David L.", "Smith", email = "smitdave@uw.edu", role = c("aut","cre"), comment = c(ORCID = "0000-0003-4367-3849")),
       person("Juliet Nsumba", "Nakakawa", email = "juliet.nakakawa@mak.ac.ug", role = c("aut"), comment = c(ORCID = "0009-0006-3247-9230")),
@@ -22,17 +22,17 @@ Depends:
   ramp.xds,
   stats
 Imports:
-  viridisLite,
-  Rdpack,
-  deSolve
+  deSolve,
+  Rdpack
 Suggests:
-    MASS,
-    expm,
-    knitr,
-    ggplot2,
-    data.table,
-    viridis,
-    rmarkdown,
-    testthat (>= 3.0.0)
+  viridisLite,
+  MASS,
+  expm,
+  knitr,
+  ggplot2,
+  data.table,
+  viridis,
+  rmarkdown,
+  testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3

@@ -32,20 +32,20 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   eggsPerBatch <- 30
   eip <- 11
 
-  # mosquito movement calK
-  calK <- matrix(0, nPatches, nPatches)
-  calK[upper.tri(calK)] <- rexp(sum(1:(nPatches-1)))
-  calK[lower.tri(calK)] <- rexp(sum(1:(nPatches-1)))
-  calK <- calK/rowSums(calK)
-  calK <- t(calK)
+  # mosquito movement K_matrix
+  K_matrix <- matrix(0, nPatches, nPatches)
+  K_matrix[upper.tri(K_matrix)] <- rexp(sum(1:(nPatches-1)))
+  K_matrix[lower.tri(K_matrix)] <- rexp(sum(1:(nPatches-1)))
+  K_matrix <- K_matrix/rowSums(K_matrix)
+  K_matrix <- t(K_matrix)
 
   # omega matrix
-  Omega <- compute_Omega_xde(g, sigma, mu, calK)
+  Omega <- make_Omega_xde(g, sigma, mu, K_matrix)
   Upsilon <- expm::expm(-Omega * eip)
 
-  MYZo <- list(nPatches=nPatches,
+  MYo <- list(nPatches=nPatches,
                f=f, q=q, g=g, sigma=sigma, mu=mu, nu=nu, eggsPerBatch=eggsPerBatch,
-               eip=eip, Omega=Omega, Upsilon=Upsilon, calK=calK)
+               eip=eip, K_matrix=K_matrix)
 
 
   # human PfPR and H
@@ -53,62 +53,60 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   H <- rpois(n = nStrata, lambda = 1000)
   residence = c(1,2)
   searchWtsH = c(1,1)
-  class(Xo) <- "SIP"
-  xde_steady_state_X(foi,H,Xo) -> ssI
+
+  dg <- rbeta(nStrata, 80,20)
+  TaR <- matrix(c(dg[1], 1-dg, dg[2]), 2, 2)
+
+  params <- xds_setup(MYname = "macdonald", MYoptions = MYo,
+                      Lname = "trivial", XHoptions = Xo,
+                      Xname = "SIP",
+                      TimeSpent = TaR, K_matrix=K_matrix,
+                      HPop=H, membership=membership,
+                      nPatches=nPatches, residence=residence)
+  params <- check_MY(params, 1)
+  steady_state_X(foi, H, params, 1) -> ssI
+  params <- change_XH_inits(params, 1, ssI)
+
   I <- ssI$I
   Px <- ssI$P
 
   eir <- foi/b
-  Xo$I=I
-  Xo$P=Px
-
-  # TaR
-  dg <- rbeta(nStrata, 80,20)
-  TaR <- matrix(c(dg[1], 1-dg, dg[2]), 2, 2)
 
   # ambient pop
-  W <- compute_W(searchWtsH, H, TaR)
-  beta <- compute_beta(H, W, searchWtsH, TaR)
+  W <- F_W_available(searchWtsH, H, TaR)
+  beta <- F_beta(H, W, searchWtsH, TaR)
 
   # biting distribution matrix
-  fqZ <- eir2fqZ(eir, beta)
+  fqZ <- solve(beta) %*% eir
 
   # kappa
   kappa <- t(beta) %*% (I*c)
 
   # equilibrium solutions for adults
   Z <- fqZ/f/q
-  MY <- diag(1/as.vector(f*q*kappa), nPatches, nPatches) %*% solve(Upsilon) %*% Omega %*% Z
-  Y <- solve(Omega) %*% (diag(as.vector(f*q*kappa), nPatches, nPatches) %*% MY)
-  M <- MY + Y
+  fqk <- as.vector(f*q*kappa)
+  MY <- solve(Upsilon) %*% Omega %*% Z
+  Y <- solve(Omega) %*% MY
+  M <- diag(1/fqk)%*%(diag(fqk)%*%Y + Omega %*%Y)
   P <- solve(diag(f, nPatches) + Omega) %*% diag(f, nPatches) %*% M
   Lambda <- Omega %*% M
-  class(MYZo) <- "macdonald"
-  xde_steady_state_MYZ(Lambda, kappa, MYZo) -> ss
-
-  MYZo$M=M
-  MYZo$P=P
-  MYZo$Y=Y
-  MYZo$Z=Z
-
 
   Lo = list(Lambda=Lambda)
+  params <- change_L_pars(params, 1, Lo)
 
-  # parameters for exDE
-  params <- xds_setup(MYZname = "macdonald", MYZopts=MYZo, Lname = "trivial", Lopts=Lo, TimeSpent = TaR, calK=calK,
-                      Xname = "SIP", Xopts=Xo, HPop=H, membership=membership, nPatches=nPatches, residence=residence)
-
+  steady_state_MY(Lambda, kappa, params, 1) -> ss
+  params <- change_MY_inits(params, 1, ss)
 
   params <- xds_solve(params, 730, 1)
 
   out <- params$outputs$last_y
 
-  M_sim <- out[params$ix$MYZ[[1]]$M_ix]
-  P_sim <- out[params$ix$MYZ[[1]]$P_ix]
-  Y_sim <- out[params$ix$MYZ[[1]]$Y_ix]
-  Z_sim <- out[params$ix$MYZ[[1]]$Z_ix]
-  I_sim <- out[params$ix$X[[1]]$I_ix]
-  Px_sim <- out[params$ix$X[[1]]$P_ix]
+  M_sim <- get_MY_vars(out, params, 1)$M
+  P_sim <- get_MY_vars(out, params, 1)$P
+  Y_sim <- get_MY_vars(out, params, 1)$Y
+  Z_sim <- get_MY_vars(out, params, 1)$Z
+  I_sim <- get_XH_vars(out, params, 1)$I
+  Px_sim <- get_XH_vars(out, params, 1)$P
 
 
   expect_equal(as.vector(M_sim), as.vector(M), tolerance = numeric_tol)

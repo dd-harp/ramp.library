@@ -4,10 +4,10 @@
 \alias{HTC.SEIR}
 \title{Compute the HTC for the SEIR model}
 \usage{
-\method{HTC}{SEIR}(pars, i)
+\method{HTC}{SEIR}(xds_obj, i)
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }

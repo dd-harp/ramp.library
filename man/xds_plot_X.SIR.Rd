@@ -5,7 +5,7 @@
 \title{Plot the density of infected individuals for the SIR model}
 \usage{
 \method{xds_plot_X}{SIR}(
-  pars,
+  xds_obj,
   i = 1,
   clrs = c("darkblue", "darkred", "darkgreen"),
   llty = 1,
@@ -13,7 +13,7 @@
 )
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 

@@ -1,26 +1,6 @@
 url: https://dd-harp.github.io/ramp.library/
 navbar:
   left:
-  - text: Articles
-    menu:
-    - text: Adding Models
-      href: articles/Adding_Models.html
-  - text: Mosquito - Adult
-    menu:
-    - text: Overview
-      href: articles/MYZ-Overview.html
-    - text: How to add a new MYZ model
-      href: articles/MYZ-How_To_Add_Model.html
-    - text: Macdonald's Model
-      href: articles/MYZ-macdonald.html
-    - text: A Behavioral State Model
-      href: articles/MYZ-xde-RMG.html
-  - text: Mosquito - Aquatic
-    menu:
-    - text: Overview
-      href: articles/L-Overview.html
-    - text: How to add a new L model
-      href: articles/L-How_To_Add_Model.html
   - text: Human / Host
     menu:
     - text: Malaria Overview
@@ -37,6 +17,22 @@ navbar:
       href: articles/X-garki.html
     - text: Workhorse
       href: articles/X-xde-workhorse.html
+  - text: Mosquito - Adult
+    menu:
+    - text: Overview
+      href: articles/MY-Overview.html
+    - text: How to add a new MY model
+      href: articles/MY-How_To_Add_Model.html
+    - text: Macdonald's Model
+      href: articles/MY-macdonald.html
+    - text: A Behavioral State Model
+      href: articles/MY-xde-RMG.html
+  - text: Mosquito - Aquatic
+    menu:
+    - text: Overview
+      href: articles/L-Overview.html
+    - text: How to add a new L model
+      href: articles/L-How_To_Add_Model.html
   - text: Functions
     href: reference/index.html
   right:
@@ -52,7 +48,7 @@ home:
     - authors
     - dev
 reference:
-- title: MYZ - Adult Mosquito
+- title: MY - Adult Mosquito
   desc: |
      The model library for adult mosquito infection dynamics
 - subtitle: The Adult Mosquito RMG Model
@@ -64,353 +60,263 @@ reference:
   - F_fqM.RMG
   - MBaseline.RMG
   - MBionomics.RMG
-  - dMYZdt.RMG
-  - get_MYZpars.RMG
-  - set_MYZpars.RMG
-  - get_MYZinits.RMG
-  - set_MYZinits.RMG
-  - setup_MYZinits.RMG
-  - setup_MYZpar.RMG
-  - make_MYZinits_RMG
-  - make_MYZpar_RMG
-  - setup_MYZix.RMG
-  - parse_MYZorbits.RMG
-  - update_MYZinits.RMG
+  - dMYdt.RMG
+  - get_MY_pars.RMG
+  - change_MY_pars.RMG
+  - change_MY_inits.RMG
+  - setup_MY_inits.RMG
+  - setup_MY_obj.RMG
+  - make_MY_inits_RMG
+  - make_MY_obj_RMG
+  - setup_MY_ix.RMG
+  - parse_MY_orbits.RMG
   - get_g.RMG
   - get_f.RMG
   - get_q.RMG
   - get_sigma.RMG
-- subtitle: The Adult Mosquito SBRQ Model
-  desc: |
-     A behavioral state model
-  contents:
-  - F_eggs.SBRQ
-  - F_fqZ.SBRQ
-  - F_fqM.SBRQ
-  - MBaseline.SBRQ
-  - MBionomics.SBRQ
-  - dMYZdt.SBRQ
-  - get_MYZpars.SBRQ
-  - set_MYZpars.SBRQ
-  - get_MYZinits.SBRQ
-  - set_MYZinits.SBRQ
-  - setup_MYZinits.SBRQ
-  - setup_MYZpar.SBRQ
-  - make_MYZinits_SBRQ
-  - make_MYZpar_SBRQ
-  - setup_MYZix.SBRQ
-  - parse_MYZorbits.SBRQ
-  - update_MYZinits.SBRQ
-  - get_g.SBRQ
-  - get_f.SBRQ
-  - get_q.SBRQ
-  - get_sigma.SBRQ
-- subtitle: ENBRQ_dts
-  desc: |
-    Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.
-  contents:
-  - MBionomics.ENBRQ_dts
-  - F_fqZ.ENBRQ_dts
-  - F_fqM.ENBRQ_dts
-  - F_eggs.ENBRQ_dts
-  - dMYZdt.ENBRQ_dts
-  - setup_MYZpar.ENBRQ_dts
-  - make_MYZpar_ENBRQ_dts
-  - setup_MYZinits.ENBRQ_dts
-  - make_MYZinits_ENBRQ_dts
-  - list_MYZvars.ENBRQ_dts
-  - setup_MYZix.ENBRQ_dts
-  - parse_MYZorbits.ENBRQ_dts
-  - make_inits_MYZ_ENBRQ_dts
-  - get_MYZinits.ENBRQ_dts
-  - update_MYZinits.ENBRQ_dts
-  - make_parameters_MYZ_ENBRQ_dts
+  - check_MY.RMG
+  - get_MY_vars.RMG
+  - skill_set_MY.RMG
 - subtitle: The SEI compartment model
   desc: |
     Specialized methods for simple infection dynamics for an adult mosquito population
   contents:
-  - dMYZdt.SEI
+  - Update_MYt.SEI
+  - check_MY.SEI
+  - get_MY_vars.SEI
+  - skill_set_MY.SEI
+  - dMYdt.SEI
   - MBaseline.SEI
   - MBionomics.SEI
-  - xde_steady_state_MYZ.SEI
-  - Update_MYZt.SEI
-  - setup_MYZpar.SEI
-  - make_MYZpar_SEI
+  - steady_state_MY.SEI
+  - setup_MY_obj.SEI
+  - make_MY_obj_SEI
   - F_fqZ.SEI
   - F_fqM.SEI
   - F_eggs.SEI
-  - list_MYZvars.SEI
-  - get_MYZpars.SEI
-  - set_MYZpars.SEI
-  - put_MYZvars.SEI
-  - setup_MYZinits.SEI
-  - make_MYZinits_SEI
-  - setup_MYZix.SEI
-  - parse_MYZorbits.SEI
-  - get_MYZinits.SEI
-  - set_MYZinits.SEI
-  - update_MYZinits.SEI
+  - get_MY_pars.SEI
+  - change_MY_pars.SEI
+  - setup_MY_inits.SEI
+  - make_MY_inits_SEI
+  - setup_MY_ix.SEI
+  - parse_MY_orbits.SEI
+  - change_MY_inits.SEI
   - get_f.SEI
   - get_q.SEI
   - get_g.SEI
   - get_sigma.SEI
-- subtitle: bionomics
-  contents:
-  - F_sigma.dddn
-  - F_f.dddn
-  - F_q.dddn
-  - F_p.dddn
-  - F_nu.dddn
-- title: L-Aquatic Mosquito
-  desc: |
-    Models for parasites infecting human / vertebrate hosts
-- subtitle: stages_dts
-  desc: |
-    Specialized methods for a stages_dts competition model of aquatic mosquito dynamics.
-  contents:
-  - LBionomics.stages_dts
-  - F_emerge.stages_dts
-  - dLdt.stages_dts
-  - setup_Lpar.stages_dts
-  - setup_Linits.stages_dts
-  - make_Lpar_stages_dts
-  - make_Linits_stages_dts
-  - setup_Lix.stages_dts
-  - list_Lvars.stages_dts
-  - parse_Lorbits.stages_dts
-  - make_inits_L_stages_dts
-  - get_Linits.stages_dts
-  - update_Linits.stages_dts
-  - make_parameters_L_stages_dts
 - title: X-Vertebrate Hosts
   desc: |
     Models for parasites infecting human / vertebrate hosts
 - subtitle: The Garki model
   contents:
+  - F_ni.garki
+  - skill_set_XH.garki
+  - check_XH.garki
+  - get_XH_vars.garki
   - F_X.garki
   - F_H.garki
   - F_prevalence.garki
-  - F_b.garki
-  - dXdt.garki
-  - setup_Xpar.garki
-  - make_Xpar_garki
-  - setup_Xinits.garki
-  - make_Xinits_garki
-  - list_Xvars.garki
-  - setup_Xix.garki
-  - parse_Xorbits.garki
-  - get_Xinits.garki
-  - set_Xinits.garki
-  - set_Xpars.garki
-  - update_Xinits.garki
+  - F_infectivity.garki
+  - dXHdt.garki
+  - setup_XH_obj.garki
+  - make_XH_obj_garki
+  - setup_XH_inits.garki
+  - make_XH_inits_garki
+  - setup_XH_ix.garki
+  - parse_XH_orbits.garki
+  - change_XH_inits.garki
+  - change_XH_pars.garki
   - HTC.garki
   - xds_plot_X.garki
   - xds_lines_X_garki
 - title: XH Component
   desc: |
     Models for parasites infecting human / vertebrate hosts
-- subtitle: The workhorse model
-  contents:
-  - F_X.workhorse
-  - F_H.workhorse
-  - F_prevalence.workhorse
-  - F_b.workhorse
-  - dXdt.workhorse
-  - setup_Xinits.workhorse
-  - list_Xvars.workhorse
-  - setup_Xpar.workhorse
-  - make_Xpar_workhorse
-  - make_Xinits_workhorse
-  - setup_Xix.workhorse
-  - parse_Xorbits.workhorse
-  - get_Xinits.workhorse
-  - update_Xinits.workhorse
-  - HTC.workhorse
-  - xds_plot_X.workhorse
-  - xds_lines_X_workhorse
 - subtitle: The SIR model
   contents:
-  - dXdt.SIR
-  - setup_Xpar.SIR
-  - make_Xpar_SIR
+  - F_ni.SIR
+  - check_XH.SIR
+  - skill_set_XH.SIR
+  - dXHdt.SIR
+  - Update_XHt.SIR
+  - setup_XH_obj.SIR
+  - make_XH_obj_SIR
+  - get_XH_vars.SIR
   - F_X.SIR
   - F_H.SIR
   - F_prevalence.SIR
-  - F_b.SIR
-  - setup_Xinits.SIR
-  - list_Xvars.SIR
-  - make_Xinits_SIR
-  - setup_Xix.SIR
-  - parse_Xorbits.SIR
-  - get_Xinits.SIR
-  - set_Xinits.SIR
-  - set_Xpars.SIR
-  - update_Xinits.SIR
+  - F_infectivity.SIR
+  - setup_XH_inits.SIR
+  - make_XH_inits_SIR
+  - setup_XH_ix.SIR
+  - parse_XH_orbits.SIR
+  - change_XH_inits.SIR
+  - change_XH_pars.SIR
   - HTC.SIR
   - xds_plot_X.SIR
   - xds_lines_X_SIR
-  - xde_steady_state_X.SIR
-  - Update_Xt.SIR
-  - dts_steady_state_X.SIR
+  - steady_state_X.SIR_ode
+  - steady_state_X.SIR_dts
 - subtitle: The SIRS Model
   contents:
   - F_X.SIRS
+  - F_ni.SIRS
+  - check_XH.SIRS
+  - skill_set_XH.SIRS
+  - get_XH_vars.SIRS
   - F_H.SIRS
   - F_prevalence.SIRS
-  - F_b.SIRS
-  - dXdt.SIRS
-  - setup_Xpar.SIRS
-  - setup_Xinits.SIRS
-  - list_Xvars.SIRS
-  - make_Xpar_SIRS
-  - make_Xinits_SIRS
-  - setup_Xix.SIRS
-  - parse_Xorbits.SIRS
-  - get_Xinits.SIRS
-  - set_Xinits.SIRS
-  - set_Xpars.SIRS
-  - update_Xinits.SIRS
+  - F_infectivity.SIRS
+  - dXHdt.SIRS
+  - setup_XH_obj.SIRS
+  - setup_XH_inits.SIRS
+  - make_XH_obj_SIRS
+  - make_XH_inits_SIRS
+  - setup_XH_ix.SIRS
+  - parse_XH_orbits.SIRS
+  - change_XH_inits.SIRS
+  - change_XH_pars.SIRS
   - HTC.SIRS
   - xds_plot_X.SIRS
   - xds_lines_X_SIRS
-  - xde_steady_state_X.SIRS
-  - Update_Xt.SIRS
-  - dts_steady_state_X.SIRS
+  - Update_XHt.SIRS
+  - steady_state_X.SIRS_ode
+  - steady_state_X.SIRS_dts
 - subtitle: The SEIR model
   contents:
+  - F_ni.SEIR
+  - check_XH.SEIR
+  - get_XH_vars.SEIR
+  - skill_set_XH.SEIR
   - F_X.SEIR
   - F_H.SEIR
   - F_prevalence.SEIR
-  - F_b.SEIR
-  - dXdt.SEIR
-  - setup_Xpar.SEIR
-  - setup_Xinits.SEIR
-  - list_Xvars.SEIR
-  - make_Xpar_SEIR
-  - make_Xinits_SEIR
-  - setup_Xix.SEIR
-  - parse_Xorbits.SEIR
-  - get_Xinits.SEIR
-  - set_Xinits.SEIR
-  - set_Xpars.SEIR
-  - update_Xinits.SEIR
+  - F_infectivity.SEIR
+  - dXHdt.SEIR
+  - setup_XH_obj.SEIR
+  - setup_XH_inits.SEIR
+  - make_XH_obj_SEIR
+  - make_XH_inits_SEIR
+  - setup_XH_ix.SEIR
+  - parse_XH_orbits.SEIR
+  - change_XH_inits.SEIR
+  - change_XH_pars.SEIR
   - HTC.SEIR
   - xds_plot_X.SEIR
   - xds_lines_X_SEIR
-  - xde_steady_state_X.SEIR
-  - Update_Xt.SEIR
-  - dts_steady_state_X.SEIR
+  - Update_XHt.SEIR
+  - steady_state_X.SEIR_ode
+  - steady_state_X.SEIR_dts
 - subtitle: The SEIRV model
   contents:
+  - F_ni.SEIRV
+  - check_XH.SEIRV
+  - get_XH_vars.SEIRV
+  - skill_set_XH.SEIRV
   - F_X.SEIRV
   - F_H.SEIRV
   - F_prevalence.SEIRV
-  - F_b.SEIRV
-  - dXdt.SEIRV
-  - list_Xvars.SEIRV
-  - setup_Xpar.SEIRV
-  - setup_Xinits.SEIRV
-  - make_Xpar_SEIRV
-  - make_Xinits_SEIRV
-  - setup_Xix.SEIRV
-  - parse_Xorbits.SEIRV
-  - get_Xinits.SEIRV
-  - set_Xinits.SEIRV
-  - set_Xpars.SEIRV
-  - update_Xinits.SEIRV
+  - F_infectivity.SEIRV
+  - dXHdt.SEIRV
+  - setup_XH_obj.SEIRV
+  - setup_XH_inits.SEIRV
+  - make_XH_obj_SEIRV
+  - make_XH_inits_SEIRV
+  - setup_XH_ix.SEIRV
+  - parse_XH_orbits.SEIRV
+  - change_XH_inits.SEIRV
+  - change_XH_pars.SEIRV
   - HTC.SEIRV
   - xds_plot_X.SEIRV
   - xds_lines_X_SEIRV
-  - xde_steady_state_X.SEIRV
-  - Update_Xt.SEIRV
-  - dts_steady_state_X.SEIRV
+  - Update_XHt.SEIRV
+  - steady_state_X.SEIRV_ode
+  - steady_state_X.SEIRV_dts
 - subtitle: SEIS
   desc: |
     Specialized methods for the SEIS (Susceptible-Infected-Susceptible) model of human dynamics.
   contents:
-  - dXdt.SEIS
-  - Update_Xt.SEIS
-  - setup_Xpar.SEIS
-  - make_Xpar_SEIS
-  - setup_Xinits.SEIS
-  - make_Xinits_SEIS
-  - setup_Xix.SEIS
-  - list_Xvars.SEIS
-  - get_Xpars.SEIS
-  - put_Xvars.SEIS
+  - check_XH.SEIS
+  - get_XH_vars.SEIS
+  - skill_set_XH.SEIS
+  - dXHdt.SEIS
+  - Update_XHt.SEIS
+  - setup_XH_obj.SEIS
+  - make_XH_obj_SEIS
+  - setup_XH_inits.SEIS
+  - make_XH_inits_SEIS
+  - setup_XH_ix.SEIS
+  - get_XH_pars.SEIS
   - F_X.SEIS
   - F_H.SEIS
   - F_prevalence.SEIS
-  - F_prevalence_lm.SEIS
-  - F_prevalence_pcr.SEIS
-  - F_prevalence_rdt.SEIS
+  - F_pfpr_by_lm.SEIS
+  - F_pfpr_by_pcr.SEIS
+  - F_pfpr_by_rdt.SEIS
   - F_ni.SEIS
-  - F_b.SEIS
-  - parse_Xorbits.SEIS
-  - get_Xinits.SEIS
-  - set_Xinits.SEIS
-  - set_Xpars.SEIS
-  - update_Xinits.SEIS
+  - F_infectivity.SEIS
+  - parse_XH_orbits.SEIS
+  - change_XH_inits.SEIS
+  - change_XH_pars.SEIS
   - HTC.SEIS
   - xds_plot_X.SEIS
   - add_lines_X_SEIS
-  - xde_steady_state_X.SEIS
-  - dts_steady_state_X.SEIS
+  - steady_state_X.SEIS_ode
+  - steady_state_X.SEIS_dts
 - subtitle: SEISd
   desc: |
     Specialized methods for the SEISd (Susceptible-Infected-Susceptible) model of human dynamics.
   contents:
-  - dXdt.SEISd
-  - Update_Xt.SEISd
-  - setup_Xpar.SEISd
-  - make_Xpar_SEISd
-  - xde_steady_state_X.SEISd
-  - setup_Xinits.SEISd
-  - make_Xinits_SEISd
-  - setup_Xix.SEISd
-  - list_Xvars.SEISd
-  - set_Xpars.SEISd
-  - put_Xvars.SEISd
+  - check_XH.SEISd
+  - get_XH_vars.SEISd
+  - skill_set_XH.SEISd
+  - dXHdt.SEISd
+  - setup_XH_obj.SEISd
+  - make_XH_obj_SEISd
+  - setup_XH_inits.SEISd
+  - make_XH_inits_SEISd
+  - setup_XH_ix.SEISd
+  - change_XH_pars.SEISd
   - F_X.SEISd
   - F_H.SEISd
-  - F_b.SEISd
-  - parse_Xorbits.SEISd
-  - get_Xinits.SEISd
-  - set_Xinits.SEISd
-  - get_Xpars.SEISd
-  - set_Xpars.SEISd
-  - update_Xinits.SEISd
+  - F_infectivity.SEISd
+  - parse_XH_orbits.SEISd
+  - change_XH_inits.SEISd
+  - get_XH_pars.SEISd
+  - change_XH_pars.SEISd
   - HTC.SEISd
   - F_prevalence.SEISd
-  - F_prevalence_by_lm.SEISd
-  - F_prevalence_by_pcr.SEISd
-  - F_prevalence_by_rdt.SEISd
+  - F_pfpr_by_lm.SEISd
+  - F_pfpr_by_pcr.SEISd
+  - F_pfpr_by_rdt.SEISd
   - F_ni.SEISd
   - xds_plot_X.SEISd
   - add_lines_X_SEISd
+  - steady_state_X.SEISd
 - subtitle: SIP
   desc: |
     Specialized methods for the SIP (Susceptible-Infected-Prophylaxis) model of human dynamics.
   contents:
-  - dXdt.SIP
-  - Update_Xt.SIP
-  - setup_Xpar.SIP
-  - make_Xpar_SIP
-  - xde_steady_state_X.SIP
-  - dts_steady_state_X.SIP
-  - setup_Xinits.SIP
-  - make_Xinits_SIP
-  - setup_Xix.SIP
-  - list_Xvars.SIP
-  - get_Xpars.SIP
-  - set_Xpars.SIP
+  - check_XH.SIP
+  - skill_set_XH.SIP
+  - dXHdt.SIP
+  - Update_XHt.SIP
+  - setup_XH_obj.SIP
+  - make_XH_obj_SIP
+  - get_XH_vars.SIP
+  - steady_state_X.SIP_ode
+  - steady_state_X.SIP_dts
+  - setup_XH_inits.SIP
+  - make_XH_inits_SIP
+  - setup_XH_ix.SIP
+  - get_XH_pars.SIP
+  - change_XH_pars.SIP
   - F_X.SIP
   - F_H.SIP
-  - F_b.SIP
-  - parse_Xorbits.SIP
-  - get_Xinits.SIP
-  - set_Xinits.SIP
-  - update_Xinits.SIP
+  - F_infectivity.SIP
+  - parse_XH_orbits.SIP
+  - change_XH_inits.SIP
   - HTC.SIP
   - F_prevalence.SIP
   - F_pfpr_by_lm.SIP
@@ -423,25 +329,22 @@ reference:
   desc: |
     Specialized methods for the SIPd (Susceptible-Infected-Prophylaxis) model of human dynamics.
   contents:
-  - dXdt.SIPd
-  - Update_Xt.SIPd
-  - setup_Xpar.SIPd
-  - make_Xpar_SIPd
-  - xde_steady_state_X.SIPd
-  - dts_steady_state_X.SIPd
-  - setup_Xinits.SIPd
-  - make_Xinits_SIPd
-  - setup_Xix.SIPd
-  - list_Xvars.SIPd
-  - get_Xpars.SIPd
-  - set_Xpars.SIPd
+  - check_XH.SIPd
+  - skill_set_XH.SIPd
+  - dXHdt.SIPd
+  - setup_XH_obj.SIPd
+  - make_XH_obj_SIPd
+  - get_XH_vars.SIPd
+  - setup_XH_inits.SIPd
+  - make_XH_inits_SIPd
+  - setup_XH_ix.SIPd
+  - get_XH_pars.SIPd
+  - change_XH_pars.SIPd
   - F_X.SIPd
   - F_H.SIPd
-  - F_b.SIPd
-  - parse_Xorbits.SIPd
-  - get_Xinits.SIPd
-  - set_Xinits.SIPd
-  - update_Xinits.SIPd
+  - F_infectivity.SIPd
+  - parse_XH_orbits.SIPd
+  - change_XH_inits.SIPd
   - HTC.SIPd
   - F_prevalence.SIPd
   - F_pfpr_by_lm.SIPd
@@ -450,95 +353,6 @@ reference:
   - F_ni.SIPd
   - xds_plot_X.SIPd
   - add_lines_X_SIPd
-- subtitle: The SIPmav3 model
-  contents:
-  - dXdt.SIPmav3
-  - setup_Xpar.SIPmav3
-  - make_Xpar_SIPmav3
-  - F_X.SIPmav3
-  - F_H.SIPmav3
-  - F_prevalence.SIPmav3
-  - F_b.SIPmav3
-  - setup_Xinits.SIPmav3
-  - make_Xinits_SIPmav3
-  - list_Xvars.SIPmav3
-  - setup_Xix.SIPmav3
-  - parse_Xorbits.SIPmav3
-  - get_Xinits.SIPmav3
-  - update_Xinits.SIPmav3
-  - HTC.SIPmav3
-  - xds_plot_X.SIPmav3
-  - xds_lines_X_SIPmav3
-  - xde_steady_state_X.SIPmav3
-- subtitle: New SIPmav3 model
-  contents:
-  - F_clear
-  - F_clear.r
-  - F_detect_mav
-  - F_detect_vars
-  - F_detect_vars.d
-  - F_detect_vars.mav
-  - F_detect_y
-  - F_detect_y.d
-  - F_detect_y.mav
-  - F_force_malaria
-  - F_force_malaria.func
-  - F_force_malaria.val
-  - F_incidence_h
-  - F_incidence_h.p
-  - F_incidence_h.protect
-  - F_incidence_x
-  - F_incidence_x.protect
-  - F_incidence_x.rate
-  - setup_incidence_x.rate
-  - setup_incidence_x_protect
-  - F_infect_im
-  - F_infect_vars
-  - F_infect_vars.b
-  - F_infect_vars.im
-  - F_infect_y
-  - F_infect_y.b
-  - F_infect_y.im
-  - F_pfpr_by_lm.SIPmav3
-  - F_pfpr_by_pcr.SIPmav3
-  - F_pfpr_by_rdt.SIPmav3
-  - F_take_drugs
-  - F_take_drugs.func
-  - F_transmit_dim
-  - F_transmit_vars
-  - F_transmit_vars.c
-  - F_transmit_vars.dim
-  - F_transmit_y
-  - F_transmit_y.c
-  - F_transmit_y.dim
-  - F_treat
-  - F_treat.p
-  - F_treat.p3
-  - setup_F_clear
-  - setup_F_clear.r
-  - setup_F_detect
-  - setup_F_detect.d
-  - setup_F_detect.mav
-  - setup_F_infect
-  - setup_F_infect.b
-  - setup_F_infect.im
-  - setup_incidence_x
-  - setup_incidence_x.protect
-  - setup_F_infect_im
-  - setup_F_transmit
-  - setup_F_transmit.c
-  - setup_F_transmit.dim
-  - setup_F_transmit_dim
-  - setup_F_treat
-  - setup_F_treat.p
-  - setup_F_treat.p3
-  - setup_drug_taking_function
-  - setup_force_malaria
-  - setup_force_malaria.func
-  - setup_force_malaria.val
-  - setup_force_malaria_func
-  - setup_force_malaria_val
-  - setup_incidence_h
-  - setup_incidence_h.p
-  - setup_incidence_h.protect
-  - setup_incidence_h_protect
+  - steady_state_X.SIPd
+  - Update_XHt.SIPd
+

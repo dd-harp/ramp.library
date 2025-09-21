@@ -19,7 +19,7 @@ nStrata <- 3
 H <- c(100, 500, 250)
 nPatches <- 3
 residence <- 1:3 
-params <- make_xds_template("ode", "human", nPatches, 1, residence) 
+params <- make_xds_object_template("ode", "human", nPatches, 1, residence) 
 
 ## -----------------------------------------------------------------------------
 b <- 0.5
@@ -33,16 +33,18 @@ class(Xo) <- "SIP"
 
 ## -----------------------------------------------------------------------------
 eir <- c(1,2,3)/365
-xde_steady_state_X(eir*b, H, Xo) ->ss
-ss
+params = setup_XH_obj("SIP", params, 1, Xo) 
+params = setup_XH_inits(params, H, 1, Xo)
+steady_state_X(eir*b, H, params) -> ss
+params = change_XH_inits(params, 1, ss)
 
 ## -----------------------------------------------------------------------------
 Xo$I <- ss$I
 Xo$P <- ss$P
 
 ## -----------------------------------------------------------------------------
-params = setup_Xpar("SIP", params, 1, Xo) 
-params = setup_Xinits(params, H, 1, Xo)
+params = setup_XH_obj("SIP", params, 1, Xo) 
+params = setup_XH_inits(params, H, 1, Xo)
 
 ## -----------------------------------------------------------------------------
 MYZo = list(
@@ -50,29 +52,28 @@ MYZo = list(
 )
 
 ## -----------------------------------------------------------------------------
-params = setup_MYZpar("trivial", params, 1, MYZo)
-params = setup_MYZinits(params, 1)
-params <- setup_Hpar_static(params, 1)
-params = setup_Lpar("trivial", params, 1)
-params = setup_Linits(params, 1)
+params = setup_MY_obj("trivial", params, 1, MYZo)
+params = setup_MY_inits(params, 1)
+params = setup_L_obj("trivial", params, 1)
+params = setup_L_inits(params, 1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)
 
 ## -----------------------------------------------------------------------------
-xde_steady_state_X(eir*b, H, params$Xpar[[1]])
+steady_state_X(eir*b, H, params, 1)
 
 ## -----------------------------------------------------------------------------
 y0 <- as.vector(unlist(get_inits(params)))
 
 ## -----------------------------------------------------------------------------
 out <- deSolve::ode(y = y0, times = c(0, 730), xde_derivatives, parms= params, method = 'lsoda') 
-list_Xvars(out, params, 1)
+get_XH_vars(out, params, 1)
 
 ## ----out.width = "100%"-------------------------------------------------------
-colnames(out)[params$ix$X[[1]]$H_ix+1] <- paste0('H_', 1:params$nStrata)
-colnames(out)[params$ix$X[[1]]$I_ix+1] <- paste0('I_', 1:params$nStrata)
-colnames(out)[params$ix$X[[1]]$P_ix+1] <- paste0('P_', 1:params$nStrata)
+colnames(out)[params$XH_obj[[1]]$ix$H_ix+1] <- paste0('H_', 1:params$nStrata)
+colnames(out)[params$XH_obj[[1]]$ix$I_ix+1] <- paste0('I_', 1:params$nStrata)
+colnames(out)[params$XH_obj[[1]]$ix$P_ix+1] <- paste0('P_', 1:params$nStrata)
 
 out <- as.data.table(out)
 out <- melt(out, id.vars = 'time')
@@ -85,10 +86,10 @@ ggplot(data = out, mapping = aes(x = time, y = value, color = Strata)) +
   theme_bw()
 
 ## -----------------------------------------------------------------------------
-xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, Xopts = Xo, MYZopts = MYZo) -> test_SIP_xde
+xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, XHoptions= Xo, MYoptions = MYZo) -> test_SIP_xde
 
 ## -----------------------------------------------------------------------------
-xde_steady_state_X(b*eir, H, test_SIP_xde$Xpar[[1]]) -> out1
+steady_state_X(b*eir, H, test_SIP_xde, 1) -> out1
 out1 <- unlist(out1)
 
 ## -----------------------------------------------------------------------------

@@ -4,12 +4,12 @@
 \alias{F_prevalence.garki}
 \title{Compute the "true" prevalence of infection / parasite rate}
 \usage{
-\method{F_prevalence}{garki}(vars, Xpar)
+\method{F_prevalence}{garki}(vars, XH_obj)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{Xpar}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for human}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

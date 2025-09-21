@@ -4,14 +4,14 @@
 \alias{F_H.SIRS}
 \title{Size of effective infectious human population}
 \usage{
-\method{F_H}{SIRS}(t, y, pars, i)
+\method{F_H}{SIRS}(t, y, xds_obj, i)
 }
 \arguments{
 \item{t}{current simulation time}
 
 \item{y}{state vector}
 
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }
