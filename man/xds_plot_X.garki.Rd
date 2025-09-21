@@ -4,10 +4,10 @@
 \alias{xds_plot_X.garki}
 \title{Plot the density of infected individuals for the garki model}
 \usage{
-\method{xds_plot_X}{garki}(pars, i = 1, clrs = viridisLite::turbo(7), llty = 1, add = FALSE)
+\method{xds_plot_X}{garki}(xds_obj, i = 1, clrs = viridisLite::turbo(7), llty = 1, add = FALSE)
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 

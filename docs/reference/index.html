@@ -17,54 +17,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0-1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Adding_Models.html">Adding Models</a>
-    </li>
-  </ul></li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Adult
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/MYZ-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-macdonald.html">Macdonald's Model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
-    </li>
-  </ul></li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Aquatic
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/L-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
-    </li>
-  </ul></li>
-<li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Human / Host
      
@@ -92,6 +50,38 @@
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
     </li>
   </ul></li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/MY-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/MY-How_To_Add_Model.html">How to add a new MY model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-macdonald.html">Macdonald's Model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul></li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../reference/index.html">Functions</a>
 </li>
@@ -114,7 +104,7 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="myz-adult-mosquito">MYZ - Adult Mosquito <a href="#myz-adult-mosquito" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="my-adult-mosquito">MY - Adult Mosquito <a href="#my-adult-mosquito" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>The model library for adult mosquito infection dynamics</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -142,53 +132,45 @@
         </td>
         <td><p>Reset bloodfeeding and mortality rates to baseline</p></td>
       </tr><tr><td>
-          <p><code><a href="dMYZdt.RMG.html">dMYZdt(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="dMYdt.RMG.html">dMYdt(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Derivatives for adult mosquitoes</p></td>
       </tr><tr><td>
-          <p><code><a href="get_MYZpars.RMG.html">get_MYZpars(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="get_MY_pars.RMG.html">get_MY_pars(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_MYZpars.RMG.html">set_MYZpars(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="change_MY_pars.RMG.html">change_MY_pars(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_MYZinits.RMG.html">get_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="change_MY_inits.RMG.html">change_MY_inits(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Return initial values as a vector</p></td>
+        <td><p>Set new MY parameter values</p></td>
       </tr><tr><td>
-          <p><code><a href="set_MYZinits.RMG.html">set_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set new MYZ parameter values</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZinits.RMG.html">setup_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_inits.RMG.html">setup_MY_inits(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Setup initial values for the RMG model</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_MYZpar.RMG.html">setup_MYZpar(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_obj.RMG.html">setup_MY_obj(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup MYZpar for the RMG model</p></td>
+        <td><p>Setup MY_obj for the RMG model</p></td>
       </tr><tr><td>
-          <p><code><a href="make_MYZinits_RMG.html">make_MYZinits_RMG()</a></code> </p>
+          <p><code><a href="make_MY_inits_RMG.html">make_MY_inits_RMG()</a></code> </p>
         </td>
         <td><p>Make inits for RMG adult mosquito model</p></td>
       </tr><tr><td>
-          <p><code><a href="make_MYZpar_RMG.html">make_MYZpar_RMG()</a></code> </p>
+          <p><code><a href="make_MY_obj_RMG.html">make_MY_obj_RMG()</a></code> </p>
         </td>
         <td><p>Make parameters for RM ODE adult mosquito model</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_MYZix.RMG.html">setup_MYZix(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_ix.RMG.html">setup_MY_ix(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for adult mosquitoes to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_MYZorbits.RMG.html">parse_MYZorbits(<i>&lt;RMG&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_MY_orbits.RMG.html">parse_MY_orbits(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the RMG model</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_MYZinits.RMG.html">update_MYZinits(<i>&lt;RMG&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make inits for RMG adult mosquito model</p></td>
+        <td><p>parse the output of deSolve and return variables for the RMG model</p></td>
       </tr><tr><td>
           <p><code><a href="get_g.RMG.html">get_g(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
@@ -205,170 +187,42 @@
           <p><code><a href="get_sigma.RMG.html">get_sigma(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get the feeding rate</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="the-adult-mosquito-sbrq-model">The Adult Mosquito SBRQ Model <a href="#the-adult-mosquito-sbrq-model" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p><p>A behavioral state model</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="F_eggs.SBRQ.html">F_eggs(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Number of eggs laid by adult mosquitoes</p></td>
       </tr><tr><td>
-          <p><code><a href="F_fqZ.SBRQ.html">F_fqZ(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
+          <p><code><a href="check_MY.RMG.html">check_MY(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Blood feeding rate of the infective mosquito population</p></td>
+        <td><p>Run a check before solving</p></td>
       </tr><tr><td>
-          <p><code><a href="F_fqM.SBRQ.html">F_fqM(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Blood feeding rate of the infective mosquito population</p></td>
-      </tr><tr><td>
-          <p><code><a href="MBaseline.SBRQ.html">MBaseline(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Reset bloodfeeding and mortality rates to baseline</p></td>
-      </tr><tr><td>
-          <p><code><a href="MBionomics.SBRQ.html">MBionomics(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Reset bloodfeeding and mortality rates to baseline</p></td>
-      </tr><tr><td>
-          <p><code><a href="dMYZdt.SBRQ.html">dMYZdt(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for adult mosquitoes</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_MYZpars.SBRQ.html">get_MYZpars(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_MYZpars.SBRQ.html">set_MYZpars(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_MYZinits.SBRQ.html">get_MYZinits(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_MYZinits.SBRQ.html">set_MYZinits(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set new MYZ parameter values</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZinits.SBRQ.html">setup_MYZinits(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup initial values for the SBRQ model</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZpar.SBRQ.html">setup_MYZpar(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup MYZpar for the SBRQ model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_MYZinits_SBRQ.html">make_MYZinits_SBRQ()</a></code> </p>
-        </td>
-        <td><p>Make inits for SBRQ adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_MYZpar_SBRQ.html">make_MYZpar_SBRQ()</a></code> </p>
-        </td>
-        <td><p>Make parameters for RM ODE adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZix.SBRQ.html">setup_MYZix(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for adult mosquitoes to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_MYZorbits.SBRQ.html">parse_MYZorbits(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the output of deSolve and return variables for the SBRQ model</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_MYZinits.SBRQ.html">update_MYZinits(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make inits for SBRQ adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_g.SBRQ.html">get_g(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get the feeding rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_f.SBRQ.html">get_f(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get the feeding rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_q.SBRQ.html">get_q(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get the feeding rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_sigma.SBRQ.html">get_sigma(<i>&lt;SBRQ&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get the feeding rate</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="enbrq-dts">ENBRQ_dts <a href="#enbrq-dts" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p><p>Specialized methods for ENBRQ_dts, a model of adult mosquito dynamics with no parasite infection dynamics.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="MBionomics.ENBRQ_dts.html">MBionomics(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Reset bloodfeeding and mortality rates to baseline</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_fqZ.ENBRQ_dts.html">F_fqZ(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>The net blood feeding rate of the infective mosquito population in a patch</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_fqM.ENBRQ_dts.html">F_fqM(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>The net blood feeding rate of the infective mosquito population in a patch</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_eggs.ENBRQ_dts.html">F_eggs(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Number of eggs laid by adult mosquitoes</p></td>
-      </tr><tr><td>
-          <p><code><a href="dMYZdt.ENBRQ_dts.html">dMYZdt(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for adult mosquitoes</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZpar.ENBRQ_dts.html">setup_MYZpar(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup MYZpar for the ENBRQ_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_MYZpar_ENBRQ_dts.html">make_MYZpar_ENBRQ_dts()</a></code> </p>
-        </td>
-        <td><p>Make parameters for ENBRQ_dts adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZinits.ENBRQ_dts.html">setup_MYZinits(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup initial values for the ENBRQ_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_MYZinits_ENBRQ_dts.html">make_MYZinits_ENBRQ_dts()</a></code> </p>
-        </td>
-        <td><p>Make inits for ENBRQ_dts adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_MYZvars.ENBRQ_dts.html">list_MYZvars(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
+          <p><code><a href="get_MY_vars.RMG.html">get_MY_vars(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_MYZix.ENBRQ_dts.html">setup_MYZix(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
+          <p><code><a href="skill_set_MY.RMG.html">skill_set_MY(<i>&lt;RMG&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add indices for adult mosquitoes to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_MYZorbits.ENBRQ_dts.html">parse_MYZorbits(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the output of deSolve and return variables for the ENBRQ_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_inits_MYZ_ENBRQ_dts.html">make_inits_MYZ_ENBRQ_dts()</a></code> </p>
-        </td>
-        <td><p>Make inits for ENBRQ_dts adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_MYZinits.ENBRQ_dts.html">get_MYZinits(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_MYZinits.ENBRQ_dts.html">update_MYZinits(<i>&lt;ENBRQ_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make inits for ENBRQ_dts adult mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_parameters_MYZ_ENBRQ_dts.html">make_parameters_MYZ_ENBRQ_dts()</a></code> </p>
-        </td>
-        <td><p>Make parameters for ENBRQ_dts adult mosquito model</p></td>
+        <td><p>The <strong>RMG</strong> Module Skill Set</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="the-sei-compartment-model">The SEI compartment model <a href="#the-sei-compartment-model" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p><p>Specialized methods for simple infection dynamics for an adult mosquito population</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dMYZdt.SEI.html">dMYZdt(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_MYt.SEI.html">Update_MYt(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
-        <td><p>\(\cal MYZ\) Component Derivatives for the <code>SEI</code> Mosquito Model</p></td>
+        <td><p>Derivatives for adult mosquitoes</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_MY.SEI.html">check_MY(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Run a check before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_MY_vars.SEI.html">get_MY_vars(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_MY.SEI.html">skill_set_MY(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>SEI</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dMYdt.SEI.html">dMYdt(<i>&lt;SEI&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>\(\cal MY\) Component Derivatives for the <code>SEI</code> Mosquito Model</p></td>
       </tr><tr><td>
           <p><code><a href="MBaseline.SEI.html">MBaseline(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
@@ -378,19 +232,15 @@
         </td>
         <td><p>Set mosquito bionomics to baseline</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_MYZ.SEI.html">xde_steady_state_MYZ(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_MY.SEI.html">steady_state_MY(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Steady States: MYZ-SEI</p></td>
+        <td><p>Steady States: MY-SEI</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_MYZt.SEI.html">Update_MYZt(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_obj.SEI.html">setup_MY_obj(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Derivatives for adult mosquitoes</p></td>
+        <td><p>Setup MY_obj for the SEI model</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_MYZpar.SEI.html">setup_MYZpar(<i>&lt;SEI&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup MYZpar for the SEI model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_MYZpar_SEI.html">make_MYZpar_SEI()</a></code> </p>
+          <p><code><a href="make_MY_obj_SEI.html">make_MY_obj_SEI()</a></code> </p>
         </td>
         <td><p>Make parameters for SEI ODE adult mosquito model</p></td>
       </tr><tr><td>
@@ -406,49 +256,33 @@
         </td>
         <td><p>Number of eggs laid by adult mosquitoes</p></td>
       </tr><tr><td>
-          <p><code><a href="list_MYZvars.SEI.html">list_MYZvars(<i>&lt;SEI&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_MYZpars.SEI.html">get_MYZpars(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="get_MY_pars.SEI.html">get_MY_pars(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_MYZpars.SEI.html">set_MYZpars(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="change_MY_pars.SEI.html">change_MY_pars(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="put_MYZvars.SEI.html">put_MYZvars(<i>&lt;SEI&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_MYZinits.SEI.html">setup_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_inits.SEI.html">setup_MY_inits(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Setup initial values for the SEI model</p></td>
       </tr><tr><td>
-          <p><code><a href="make_MYZinits_SEI.html">make_MYZinits_SEI()</a></code> </p>
+          <p><code><a href="make_MY_inits_SEI.html">make_MY_inits_SEI()</a></code> </p>
         </td>
         <td><p>Make inits for SEI adult mosquito model</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_MYZix.SEI.html">setup_MYZix(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_MY_ix.SEI.html">setup_MY_ix(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for adult mosquitoes to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_MYZorbits.SEI.html">parse_MYZorbits(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_MY_orbits.SEI.html">parse_MY_orbits(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SEI model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SEI model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_MYZinits.SEI.html">get_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
+          <p><code><a href="change_MY_inits.SEI.html">change_MY_inits(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_MYZinits.SEI.html">set_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set new MYZ parameter values</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_MYZinits.SEI.html">update_MYZinits(<i>&lt;SEI&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make inits for SEI adult mosquito model</p></td>
+        <td><p>Set new MY parameter values</p></td>
       </tr><tr><td>
           <p><code><a href="get_f.SEI.html">get_f(<i>&lt;SEI&gt;</i>)</a></code> </p>
         </td>
@@ -466,94 +300,6 @@
         </td>
         <td><p>Get the feeding rate</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="bionomics">bionomics <a href="#bionomics" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="F_sigma.dddn.html">F_sigma(<i>&lt;dddn&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Dawn, day, dusk, night model for the human fraction</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_f.dddn.html">F_f(<i>&lt;dddn&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Dawn, day, dusk, night model for the blood feeding rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_q.dddn.html">F_q(<i>&lt;dddn&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Dawn, day, dusk, night model for the human fraction</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_p.dddn.html">F_p(<i>&lt;dddn&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Dawn, day, dusk, night model for the human fraction</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_nu.dddn.html">F_nu(<i>&lt;dddn&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Dawn, day, dusk, night model for the human fraction</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="l-aquatic-mosquito">L-Aquatic Mosquito <a href="#l-aquatic-mosquito" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Models for parasites infecting human / vertebrate hosts</p>
-        </th>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="stages-dts">stages_dts <a href="#stages-dts" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p><p>Specialized methods for a stages_dts competition model of aquatic mosquito dynamics.</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="LBionomics.stages_dts.html">LBionomics(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Reset aquatic parameters to baseline</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_emerge.stages_dts.html">F_emerge(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Number of newly emerging adults from each larval habitat</p></td>
-      </tr><tr><td>
-          <p><code><a href="dLdt.stages_dts.html">dLdt(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for aquatic stage mosquitoes</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Lpar.stages_dts.html">setup_Lpar(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Lpar for the stages_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Linits.stages_dts.html">setup_Linits(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup the stages_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Lpar_stages_dts.html">make_Lpar_stages_dts()</a></code> </p>
-        </td>
-        <td><p>Make parameters for stages_dts competition aquatic mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Linits_stages_dts.html">make_Linits_stages_dts()</a></code> </p>
-        </td>
-        <td><p>Make inits for stages_dts competition aquatic mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Lix.stages_dts.html">setup_Lix(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for aquatic stage mosquitoes to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Lvars.stages_dts.html">list_Lvars(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_Lorbits.stages_dts.html">parse_Lorbits(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the variable names for the stages_dts model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_inits_L_stages_dts.html">make_inits_L_stages_dts()</a></code> </p>
-        </td>
-        <td><p>Make inits for stages_dts competition aquatic mosquito model</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_Linits.stages_dts.html">get_Linits.stages_dts()</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Linits.stages_dts.html">update_Linits(<i>&lt;stages_dts&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the stages_dts aquatic mosquito competition model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_parameters_L_stages_dts.html">make_parameters_L_stages_dts()</a></code> </p>
-        </td>
-        <td><p>Make parameters for stages_dts competition aquatic mosquito model</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="x-vertebrate-hosts">X-Vertebrate Hosts <a href="#x-vertebrate-hosts" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Models for parasites infecting human / vertebrate hosts</p>
         </th>
@@ -562,6 +308,22 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="F_ni.garki.html">F_ni(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.garki.html">skill_set_XH(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_XH.garki.html">check_XH(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_vars.garki.html">get_XH_vars(<i>&lt;garki&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="F_X.garki.html">F_X(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -574,57 +336,45 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.garki.html">F_b(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.garki.html">F_infectivity(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="dXdt.garki.html">dXdt(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="dXHdt.garki.html">dXHdt(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Derivatives for human population</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.garki.html">setup_Xpar(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_obj.garki.html">setup_XH_obj(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
-        <td><p>make Xpar for the Garki model</p></td>
+        <td><p>make XH_obj for the Garki model</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xpar_garki.html">make_Xpar_garki()</a></code> </p>
+          <p><code><a href="make_XH_obj_garki.html">make_XH_obj_garki()</a></code> </p>
         </td>
         <td><p>Make parameters for garki human model</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xinits.garki.html">setup_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.garki.html">setup_XH_inits(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xinits.garki</p></td>
+        <td><p>Setup XH_inits.garki</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xinits_garki.html">make_Xinits_garki()</a></code> </p>
+          <p><code><a href="make_XH_inits_garki.html">make_XH_inits_garki()</a></code> </p>
         </td>
         <td><p>Make inits for garki human model.</p></td>
       </tr><tr><td>
-          <p><code><a href="list_Xvars.garki.html">list_Xvars(<i>&lt;garki&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.garki.html">setup_Xix(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_ix.garki.html">setup_XH_ix(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for human population to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.garki.html">parse_Xorbits(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.garki.html">parse_XH_orbits(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the garki model</p></td>
+        <td><p>parse the output of deSolve and return variables for the garki model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.garki.html">get_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.garki.html">change_XH_inits(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Return initial values as a vector for the garki model</p></td>
+        <td><p>Set XH_inits.garki</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xinits.garki.html">set_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set Xinits.garki</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xpars.garki.html">set_Xpars(<i>&lt;garki&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.garki.html">change_XH_pars(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.garki.html">update_Xinits(<i>&lt;garki&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the garki model</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.garki.html">HTC(<i>&lt;garki&gt;</i>)</a></code> </p>
         </td>
@@ -642,93 +392,41 @@
           <p class="section-desc"></p><p>Models for parasites infecting human / vertebrate hosts</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="the-workhorse-model">The workhorse model <a href="#the-workhorse-model" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="F_X.workhorse.html">F_X(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Size of effective infectious human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_H.workhorse.html">F_H(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Size of effective infectious human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_prevalence.workhorse.html">F_prevalence(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_b.workhorse.html">F_b(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="dXdt.workhorse.html">dXdt(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Derivatives for human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.workhorse.html">setup_Xinits(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.workhorse</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.workhorse.html">list_Xvars(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xpar.workhorse.html">setup_Xpar(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>make Xpar.workhorse</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_workhorse.html">make_Xpar_workhorse()</a></code> </p>
-        </td>
-        <td><p>Make parameters for workhorse human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_workhorse.html">make_Xinits_workhorse()</a></code> </p>
-        </td>
-        <td><p>Make initial values for the workhorse human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.workhorse.html">setup_Xix(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_Xorbits.workhorse.html">parse_Xorbits(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the output of deSolve and return variables for the workhorse model</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_Xinits.workhorse.html">get_Xinits(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.workhorse.html">update_Xinits(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the workhorse human model from a vector of states</p></td>
-      </tr><tr><td>
-          <p><code><a href="HTC.workhorse.html">HTC(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the HTC for the workhorse model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_plot_X.workhorse.html">xds_plot_X(<i>&lt;workhorse&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot the density of infected individuals for the workhorse model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_lines_X_workhorse.html">xds_lines_X_workhorse()</a></code> </p>
-        </td>
-        <td><p>Add lines for the density of infected individuals for the workhorse model</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="the-sir-model">The SIR model <a href="#the-sir-model" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SIR.html">dXdt(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="F_ni.SIR.html">F_ni(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_XH.SIR.html">check_XH(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.SIR.html">skill_set_XH(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dXHdt.SIR.html">dXHdt(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the derivatives for parasite infection dynamics in human population strata</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIR.html">setup_Xpar(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_XHt.SIR.html">Update_XHt(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xpar.SIR</p></td>
+        <td><p>DTS updating for the SIS model for human / vertebrate host infections</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xpar_SIR.html">make_Xpar_SIR()</a></code> </p>
+          <p><code><a href="setup_XH_obj.SIR.html">setup_XH_obj(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup XH_obj.SIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_obj_SIR.html">make_XH_obj_SIR()</a></code> </p>
         </td>
         <td><p>Make parameters for SIR human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_vars.SIR.html">get_XH_vars(<i>&lt;SIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
           <p><code><a href="F_X.SIR.html">F_X(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
@@ -742,45 +440,33 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SIR.html">F_b(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SIR.html">F_infectivity(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIR.html">setup_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.SIR.html">setup_XH_inits(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xinits.SIR</p></td>
+        <td><p>Setup XH_obj.SIR</p></td>
       </tr><tr><td>
-          <p><code><a href="list_Xvars.SIR.html">list_Xvars(<i>&lt;SIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SIR.html">make_Xinits_SIR()</a></code> </p>
+          <p><code><a href="make_XH_inits_SIR.html">make_XH_inits_SIR()</a></code> </p>
         </td>
         <td><p>Make initial values for the SIR human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xix.SIR.html">setup_Xix(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_ix.SIR.html">setup_XH_ix(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for human population to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIR.html">parse_Xorbits(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SIR.html">parse_XH_orbits(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SIR model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SIR model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SIR.html">get_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SIR.html">set_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SIR.html">change_XH_inits(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SIR.html">set_Xpars(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SIR.html">change_XH_pars(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIR.html">update_Xinits(<i>&lt;SIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SIR human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SIR.html">HTC(<i>&lt;SIR&gt;</i>)</a></code> </p>
         </td>
@@ -794,15 +480,11 @@
         </td>
         <td><p>Add lines for the density of infected individuals for the SIR model</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIR.html">xde_steady_state_X(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SIR_ode.html">steady_state_X(<i>&lt;SIR_ode&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the SIR model as a function of the daily EIR</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_Xt.SIR.html">Update_Xt(<i>&lt;SIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>DTS updating for the SIS model for human / vertebrate host infections</p></td>
-      </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SIR.html">dts_steady_state_X(<i>&lt;SIR&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SIR_dts.html">steady_state_X(<i>&lt;SIR_dts&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the dts SEIS model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -814,6 +496,22 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
+          <p><code><a href="F_ni.SIRS.html">F_ni(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_XH.SIRS.html">check_XH(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.SIRS.html">skill_set_XH(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_vars.SIRS.html">get_XH_vars(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
           <p><code><a href="F_H.SIRS.html">F_H(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -822,57 +520,45 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SIRS.html">F_b(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SIRS.html">F_infectivity(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="dXdt.SIRS.html">dXdt(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="dXHdt.SIRS.html">dXHdt(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the derivatives for parasite infection dynamics in human population strata</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIRS.html">setup_Xpar(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_obj.SIRS.html">setup_XH_obj(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xpar.SIRS</p></td>
+        <td><p>Setup XH_obj.SIRS</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIRS.html">setup_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.SIRS.html">setup_XH_inits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xinits.SIRS</p></td>
+        <td><p>Setup XH_obj.SIRS</p></td>
       </tr><tr><td>
-          <p><code><a href="list_Xvars.SIRS.html">list_Xvars(<i>&lt;SIRS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SIRS.html">make_Xpar_SIRS()</a></code> </p>
+          <p><code><a href="make_XH_obj_SIRS.html">make_XH_obj_SIRS()</a></code> </p>
         </td>
         <td><p>Make parameters for SIRS human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xinits_SIRS.html">make_Xinits_SIRS()</a></code> </p>
+          <p><code><a href="make_XH_inits_SIRS.html">make_XH_inits_SIRS()</a></code> </p>
         </td>
         <td><p>Make initial values for the SIRS human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xix.SIRS.html">setup_Xix(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_ix.SIRS.html">setup_XH_ix(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for human population to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIRS.html">parse_Xorbits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SIRS.html">parse_XH_orbits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SIRS model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SIRS model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SIRS.html">get_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SIRS.html">set_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SIRS.html">change_XH_inits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SIRS.html">set_Xpars(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SIRS.html">change_XH_pars(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIRS.html">update_Xinits(<i>&lt;SIRS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SIRS human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SIRS.html">HTC(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
@@ -886,15 +572,15 @@
         </td>
         <td><p>Add lines for the density of infected individuals for the SIRS model</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIRS.html">xde_steady_state_X(<i>&lt;SIRS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIRS model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="Update_Xt.SIRS.html">Update_Xt(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_XHt.SIRS.html">Update_XHt(<i>&lt;SIRS&gt;</i>)</a></code> </p>
         </td>
         <td><p>DTS updating for the SIS model for human / vertebrate host infections</p></td>
       </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SIRS.html">dts_steady_state_X(<i>&lt;SIRS&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SIRS_ode.html">steady_state_X(<i>&lt;SIRS_ode&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SIRS model as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SIRS_dts.html">steady_state_X(<i>&lt;SIRS_dts&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the dts SEIS model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -902,6 +588,22 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="F_ni.SEIR.html">F_ni(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_XH.SEIR.html">check_XH(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_vars.SEIR.html">get_XH_vars(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.SEIR.html">skill_set_XH(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
           <p><code><a href="F_X.SEIR.html">F_X(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -914,57 +616,45 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SEIR.html">F_b(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SEIR.html">F_infectivity(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="dXdt.SEIR.html">dXdt(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="dXHdt.SEIR.html">dXHdt(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the derivatives for parasite infection dynamics in human population strata</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SEIR.html">setup_Xpar(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_obj.SEIR.html">setup_XH_obj(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xpar.SEIR</p></td>
+        <td><p>Setup XH_obj.SEIR</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xinits.SEIR.html">setup_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.SEIR.html">setup_XH_inits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xinits.SEIR</p></td>
+        <td><p>Setup XH_obj.SEIR</p></td>
       </tr><tr><td>
-          <p><code><a href="list_Xvars.SEIR.html">list_Xvars(<i>&lt;SEIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SEIR.html">make_Xpar_SEIR()</a></code> </p>
+          <p><code><a href="make_XH_obj_SEIR.html">make_XH_obj_SEIR()</a></code> </p>
         </td>
         <td><p>Make parameters for SEIR human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xinits_SEIR.html">make_Xinits_SEIR()</a></code> </p>
+          <p><code><a href="make_XH_inits_SEIR.html">make_XH_inits_SEIR()</a></code> </p>
         </td>
         <td><p>Make initial values for the SEIR human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xix.SEIR.html">setup_Xix(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_ix.SEIR.html">setup_XH_ix(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for human population to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SEIR.html">parse_Xorbits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SEIR.html">parse_XH_orbits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SEIR model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SEIR model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SEIR.html">get_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SEIR.html">set_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SEIR.html">change_XH_inits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SEIR.html">set_Xpars(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SEIR.html">change_XH_pars(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SEIR.html">update_Xinits(<i>&lt;SEIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SEIR human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SEIR.html">HTC(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
@@ -978,15 +668,15 @@
         </td>
         <td><p>Add lines for the density of infected individuals for the SEIR model</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SEIR.html">xde_steady_state_X(<i>&lt;SEIR&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIRS model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="Update_Xt.SEIR.html">Update_Xt(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_XHt.SEIR.html">Update_XHt(<i>&lt;SEIR&gt;</i>)</a></code> </p>
         </td>
         <td><p>DTS updating for the SIS model for human / vertebrate host infections</p></td>
       </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SEIR.html">dts_steady_state_X(<i>&lt;SEIR&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SEIR_ode.html">steady_state_X(<i>&lt;SEIR_ode&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SIRS model as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SEIR_dts.html">steady_state_X(<i>&lt;SEIR_dts&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the dts SEIS model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -994,6 +684,22 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="F_ni.SEIRV.html">F_ni(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the NI</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_XH.SEIRV.html">check_XH(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_vars.SEIRV.html">get_XH_vars(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Return the variables as a list</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.SEIRV.html">skill_set_XH(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
           <p><code><a href="F_X.SEIRV.html">F_X(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Size of effective infectious human population</p></td>
@@ -1006,57 +712,45 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SEIRV.html">F_b(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SEIRV.html">F_infectivity(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="dXdt.SEIRV.html">dXdt(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="dXHdt.SEIRV.html">dXHdt(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the derivatives for parasite infection dynamics in human population strata</p></td>
       </tr><tr><td>
-          <p><code><a href="list_Xvars.SEIRV.html">list_Xvars(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_obj.SEIRV.html">setup_XH_obj(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Return the variables as a list</p></td>
+        <td><p>Setup XH_obj.SEIRV</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SEIRV.html">setup_Xpar(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.SEIRV.html">setup_XH_inits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup Xpar.SEIRV</p></td>
+        <td><p>Setup XH_obj.SEIRV</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xinits.SEIRV.html">setup_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SEIRV</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SEIRV.html">make_Xpar_SEIRV()</a></code> </p>
+          <p><code><a href="make_XH_obj_SEIRV.html">make_XH_obj_SEIRV()</a></code> </p>
         </td>
         <td><p>Make parameters for SEIRV human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xinits_SEIRV.html">make_Xinits_SEIRV()</a></code> </p>
+          <p><code><a href="make_XH_inits_SEIRV.html">make_XH_inits_SEIRV()</a></code> </p>
         </td>
         <td><p>Make initial values for the SEIRV human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xix.SEIRV.html">setup_Xix(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_ix.SEIRV.html">setup_XH_ix(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add indices for human population to parameter list</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SEIRV.html">parse_Xorbits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SEIRV.html">parse_XH_orbits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SEIRV model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SEIRV model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SEIRV.html">get_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SEIRV.html">set_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SEIRV.html">change_XH_inits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SEIRV.html">set_Xpars(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SEIRV.html">change_XH_pars(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SEIRV.html">update_Xinits(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SEIRV human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SEIRV.html">HTC(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
@@ -1070,15 +764,15 @@
         </td>
         <td><p>Add lines for the density of infected individuals for the SEIRV model</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SEIRV.html">xde_steady_state_X(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SEIRV model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="Update_Xt.SEIRV.html">Update_Xt(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_XHt.SEIRV.html">Update_XHt(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
         </td>
         <td><p>DTS updating for the SIS model for human / vertebrate host infections</p></td>
       </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SEIRV.html">dts_steady_state_X(<i>&lt;SEIRV&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SEIRV_ode.html">steady_state_X(<i>&lt;SEIRV_ode&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SEIRV model as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SEIRV_dts.html">steady_state_X(<i>&lt;SEIRV_dts&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the dts SEIS model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -1086,45 +780,49 @@
           <p class="section-desc"></p><p>Specialized methods for the SEIS (Susceptible-Infected-Susceptible) model of human dynamics.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SEIS.html">dXdt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="check_XH.SEIS.html">check_XH(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
-        <td><p>\(\cal X\) Component Derivatives for the <code>SEIS</code> Model</p></td>
+        <td><p>Check / update before solving</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_Xt.SEIS.html">Update_Xt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>DTS updating for the SEIS model for human / vertebrate host infections</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xpar.SEIS.html">setup_Xpar(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xpar.SEIS</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SEIS.html">make_Xpar_SEIS()</a></code> </p>
-        </td>
-        <td><p>Make parameters for SEIS xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SEIS.html">setup_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SEIS</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SEIS.html">make_Xinits_SEIS()</a></code> </p>
-        </td>
-        <td><p>Make initial values for the SEIS xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SEIS.html">setup_Xix(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SEIS.html">list_Xvars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="get_XH_vars.SEIS.html">get_XH_vars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xpars.SEIS.html">get_Xpars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="skill_set_XH.SEIS.html">skill_set_XH(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dXHdt.SEIS.html">dXHdt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>\(\cal X\) Component Derivatives for the <code>SEIS</code> Model</p></td>
+      </tr><tr><td>
+          <p><code><a href="Update_XHt.SEIS.html">Update_XHt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>DTS updating for the SEIS model for human / vertebrate host infections</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_obj.SEIS.html">setup_XH_obj(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup XH_obj.SEIS</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_obj_SEIS.html">make_XH_obj_SEIS()</a></code> </p>
+        </td>
+        <td><p>Make parameters for SEIS xde human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_inits.SEIS.html">setup_XH_inits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Xinits.SEIS</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_inits_SEIS.html">make_XH_inits_SEIS()</a></code> </p>
+        </td>
+        <td><p>Make initial values for the SEIS xde human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_ix.SEIS.html">setup_XH_ix(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for human population to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_pars.SEIS.html">get_XH_pars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="put_Xvars.SEIS.html">put_Xvars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the SEIS model variables as a list, returned from Update_Xt.SISd</p></td>
       </tr><tr><td>
           <p><code><a href="F_X.SEIS.html">F_X(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
@@ -1138,15 +836,15 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_lm.SEIS.html">F_prevalence_lm.SEIS()</a></code> </p>
+          <p><code><a href="F_pfpr_by_lm.SEIS.html">F_pfpr_by_lm(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_pcr.SEIS.html">F_prevalence_pcr.SEIS()</a></code> </p>
+          <p><code><a href="F_pfpr_by_pcr.SEIS.html">F_pfpr_by_pcr(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_rdt.SEIS.html">F_prevalence_rdt.SEIS()</a></code> </p>
+          <p><code><a href="F_pfpr_by_rdt.SEIS.html">F_pfpr_by_rdt(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
@@ -1154,29 +852,21 @@
         </td>
         <td><p>Compute the NI</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SEIS.html">F_b(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SEIS.html">F_infectivity(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SEIS.html">parse_Xorbits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SEIS.html">parse_XH_orbits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SEIS model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SEIS model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SEIS.html">get_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SEIS.html">set_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SEIS.html">change_XH_inits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SEIS.html">set_Xpars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SEIS.html">change_XH_pars(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SEIS.html">update_Xinits(<i>&lt;SEIS&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SEIS xde human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SEIS.html">HTC(<i>&lt;SEIS&gt;</i>)</a></code> </p>
         </td>
@@ -1190,11 +880,11 @@
         </td>
         <td><p>Add lines for the density of infected individuals for the SEIS model</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SEIS.html">xde_steady_state_X(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SEIS_ode.html">steady_state_X(<i>&lt;SEIS_ode&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the SEIS model as a function of the daily EIR</p></td>
       </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SEIS.html">dts_steady_state_X(<i>&lt;SEIS&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SEIS_dts.html">steady_state_X(<i>&lt;SEIS_dts&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the steady states for the dts SEIS model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -1202,49 +892,45 @@
           <p class="section-desc"></p><p>Specialized methods for the SEISd (Susceptible-Infected-Susceptible) model of human dynamics.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SEISd.html">dXdt(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="check_XH.SEISd.html">check_XH(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>\(\cal X\) Component Derivatives for the <code>SEISd</code> Model</p></td>
+        <td><p>Check / update before solving</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_Xt.SEISd.html">Update_Xt(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>DTS updating for the SEISd model for human / vertebrate host infections</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xpar.SEISd.html">setup_Xpar(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xpar.SEISd</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SEISd.html">make_Xpar_SEISd()</a></code> </p>
-        </td>
-        <td><p>Make parameters for SEISd xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SEISd.html">xde_steady_state_X(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SEISd model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SEISd.html">setup_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SEISd</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SEISd.html">make_Xinits_SEISd()</a></code> </p>
-        </td>
-        <td><p>Make initial values for the SEISd xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SEISd.html">setup_Xix(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SEISd.html">list_Xvars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="get_XH_vars.SEISd.html">get_XH_vars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SEISd.html">set_Xpars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="skill_set_XH.SEISd.html">skill_set_XH(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dXHdt.SEISd.html">dXHdt(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute derivatives for the <strong>XH</strong> module <code>SEISd</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_obj.SEISd.html">setup_XH_obj(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup XH_obj.SEISd</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_obj_SEISd.html">make_XH_obj_SEISd()</a></code> </p>
+        </td>
+        <td><p>Make parameters for SEISd Update_XHt human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_inits.SEISd.html">setup_XH_inits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup initial values for <code>SEISd</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_inits_SEISd.html">make_XH_inits_SEISd()</a></code> </p>
+        </td>
+        <td><p>Make initial values for the SEISd Update_XHt human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_ix.SEISd.html">setup_XH_ix(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for human population to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="change_XH_pars.SEISd.html">change_XH_pars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="put_Xvars.SEISd.html">put_Xvars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the SEISd model variables as a list, returned from Update_Xt.SISd</p></td>
       </tr><tr><td>
           <p><code><a href="F_X.SEISd.html">F_X(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
@@ -1254,29 +940,21 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SEISd.html">F_b(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SEISd.html">F_infectivity(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SEISd.html">parse_Xorbits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SEISd.html">parse_XH_orbits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SEISd model</p></td>
+        <td><p>parse the output of deSolve and return variables for the SEISd model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SEISd.html">get_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SEISd.html">set_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SEISd.html">change_XH_inits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xpars.SEISd.html">get_Xpars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+          <p><code><a href="get_XH_pars.SEISd.html">get_XH_pars(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SEISd.html">update_Xinits(<i>&lt;SEISd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SEISd xde human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SEISd.html">HTC(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
@@ -1286,15 +964,15 @@
         </td>
         <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_by_lm.SEISd.html">F_prevalence_by_lm.SEISd()</a></code> </p>
+          <p><code><a href="F_pfpr_by_lm.SEISd.html">F_pfpr_by_lm(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by light microscopy</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_by_pcr.SEISd.html">F_prevalence_by_pcr.SEISd()</a></code> </p>
+          <p><code><a href="F_pfpr_by_pcr.SEISd.html">F_pfpr_by_pcr(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by pcr</p></td>
       </tr><tr><td>
-          <p><code><a href="F_prevalence_by_rdt.SEISd.html">F_prevalence_by_rdt.SEISd()</a></code> </p>
+          <p><code><a href="F_pfpr_by_rdt.SEISd.html">F_pfpr_by_rdt(<i>&lt;SEISd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute the prevalence of infection by RDT</p></td>
       </tr><tr><td>
@@ -1309,56 +987,68 @@
           <p><code><a href="add_lines_X_SEISd.html">add_lines_X_SEISd()</a></code> </p>
         </td>
         <td><p>Add lines for the density of infected individuals for the SEISd model</p></td>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SEISd.html">steady_state_X(<i>&lt;SEISd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SEISd model as a function of the daily EIR</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="sip">SIP <a href="#sip" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p><p>Specialized methods for the SIP (Susceptible-Infected-Prophylaxis) model of human dynamics.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SIP.html">dXdt(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="check_XH.SIP.html">check_XH(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Check / update before solving</p></td>
+      </tr><tr><td>
+          <p><code><a href="skill_set_XH.SIP.html">skill_set_XH(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dXHdt.SIP.html">dXHdt(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Derivatives for the <code>SIP</code> Module (<strong>X</strong> Component)</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_Xt.SIP.html">Update_Xt(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="Update_XHt.SIP.html">Update_XHt(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Derivatives for human population</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIP.html">setup_Xpar(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_obj.SIP.html">setup_XH_obj(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup <code>Xpar</code> for an <code>SIP</code></p></td>
+        <td><p>Setup <code>XH_obj</code> for an <code>SIP</code></p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xpar_SIP.html">make_Xpar_SIP()</a></code> </p>
+          <p><code><a href="make_XH_obj_SIP.html">make_XH_obj_SIP()</a></code> </p>
         </td>
         <td><p>Make parameters for SIP human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIP.html">xde_steady_state_X(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIP model as a function of the daily foi</p></td>
-      </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SIP.html">dts_steady_state_X(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the dts SIP model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIP.html">setup_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SIP</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SIP.html">make_Xinits_SIP()</a></code> </p>
-        </td>
-        <td><p>Make initial values for the SIP human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SIP.html">setup_Xix(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SIP.html">list_Xvars(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="get_XH_vars.SIP.html">get_XH_vars(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xpars.SIP.html">get_Xpars(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="steady_state_X.SIP_ode.html">steady_state_X(<i>&lt;SIP_ode&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the SIP model as a function of the daily foi</p></td>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SIP_dts.html">steady_state_X(<i>&lt;SIP_dts&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the dts SIP model as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_inits.SIP.html">setup_XH_inits(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Xinits.SIP</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_inits_SIP.html">make_XH_inits_SIP()</a></code> </p>
+        </td>
+        <td><p>Make initial values for the SIP human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_ix.SIP.html">setup_XH_ix(<i>&lt;SIP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for human population to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_pars.SIP.html">get_XH_pars(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SIP.html">set_Xpars(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SIP.html">change_XH_pars(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
@@ -1370,25 +1060,17 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SIP.html">F_b(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SIP.html">F_infectivity(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIP.html">parse_Xorbits(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SIP.html">parse_XH_orbits(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SIP model</p></td>
+        <td><p>Parse Solutions Matrix for the SIP model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SIP.html">get_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SIP.html">set_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SIP.html">change_XH_inits(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIP.html">update_Xinits(<i>&lt;SIP&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SIP human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SIP.html">HTC(<i>&lt;SIP&gt;</i>)</a></code> </p>
         </td>
@@ -1426,51 +1108,47 @@
           <p class="section-desc"></p><p>Specialized methods for the SIPd (Susceptible-Infected-Prophylaxis) model of human dynamics.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SIPd.html">dXdt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="check_XH.SIPd.html">check_XH(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>\(\cal X\) Component Derivatives for the <code>SIPd</code> Model</p></td>
+        <td><p>Check / update before solving</p></td>
       </tr><tr><td>
-          <p><code><a href="Update_Xt.SIPd.html">Update_Xt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="skill_set_XH.SIPd.html">skill_set_XH(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Derivatives for human population</p></td>
+        <td><p>The <strong>XH</strong> Module Skill Set</p></td>
       </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIPd.html">setup_Xpar(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="dXHdt.SIPd.html">dXHdt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Setup <code>Xpar</code> for an <code>SIPd</code></p></td>
+        <td><p>Compute derivatives for the <strong>XH</strong> module <code>SIPd</code></p></td>
       </tr><tr><td>
-          <p><code><a href="make_Xpar_SIPd.html">make_Xpar_SIPd()</a></code> </p>
+          <p><code><a href="setup_XH_obj.SIPd.html">setup_XH_obj(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup <code>XH_obj</code> for an <code>SIPd</code></p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_obj_SIPd.html">make_XH_obj_SIPd()</a></code> </p>
         </td>
         <td><p>Make parameters for SIPd human model, with defaults</p></td>
       </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIPd.html">xde_steady_state_X(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIPd model as a function of the daily foi</p></td>
-      </tr><tr><td>
-          <p><code><a href="dts_steady_state_X.SIPd.html">dts_steady_state_X(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the dts SIPd model as a function of the daily EIR</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIPd.html">setup_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SIPd</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SIPd.html">make_Xinits_SIPd()</a></code> </p>
-        </td>
-        <td><p>Make initial values for the SIPd human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SIPd.html">setup_Xix(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SIPd.html">list_Xvars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="get_XH_vars.SIPd.html">get_XH_vars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the variables as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xpars.SIPd.html">get_Xpars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="setup_XH_inits.SIPd.html">setup_XH_inits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Setup Initial Values</p></td>
+      </tr><tr><td>
+          <p><code><a href="make_XH_inits_SIPd.html">make_XH_inits_SIPd()</a></code> </p>
+        </td>
+        <td><p>Make initial values for the SIPd human model, with defaults</p></td>
+      </tr><tr><td>
+          <p><code><a href="setup_XH_ix.SIPd.html">setup_XH_ix(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add indices for human population to parameter list</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_XH_pars.SIPd.html">get_XH_pars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
-          <p><code><a href="set_Xpars.SIPd.html">set_Xpars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_pars.SIPd.html">change_XH_pars(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
       </tr><tr><td>
@@ -1482,25 +1160,17 @@
         </td>
         <td><p>Size of effective infectious human population</p></td>
       </tr><tr><td>
-          <p><code><a href="F_b.SIPd.html">F_b(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="F_infectivity.SIPd.html">F_infectivity(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Infection blocking pre-erythrocytic immunity</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIPd.html">parse_Xorbits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="parse_XH_orbits.SIPd.html">parse_XH_orbits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Parse the output of deSolve and return variables for the SIPd model</p></td>
+        <td><p>Parse Solutions Matrix for the SIPd model</p></td>
       </tr><tr><td>
-          <p><code><a href="get_Xinits.SIPd.html">get_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector</p></td>
-      </tr><tr><td>
-          <p><code><a href="set_Xinits.SIPd.html">set_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+          <p><code><a href="change_XH_inits.SIPd.html">change_XH_inits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Return the parameters as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIPd.html">update_Xinits(<i>&lt;SIPd&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for the SIPd human model from a vector of states</p></td>
       </tr><tr><td>
           <p><code><a href="HTC.SIPd.html">HTC(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
@@ -1533,366 +1203,14 @@
           <p><code><a href="add_lines_X_SIPd.html">add_lines_X_SIPd()</a></code> </p>
         </td>
         <td><p>Add lines for the density of infected individuals for the SIPd model</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="the-sipmav-model">The SIPmav3 model <a href="#the-sipmav-model" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dXdt.SIPmav3.html">dXdt(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
+      </tr><tr><td>
+          <p><code><a href="steady_state_X.SIPd.html">steady_state_X(<i>&lt;SIPd&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Compute the steady states for the dts SIPd model as a function of the daily EIR</p></td>
+      </tr><tr><td>
+          <p><code><a href="Update_XHt.SIPd.html">Update_XHt(<i>&lt;SIPd&gt;</i>)</a></code> </p>
         </td>
         <td><p>Derivatives for human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xpar.SIPmav3.html">setup_Xpar(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup the Xpar for the SIPmav3_xde model</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xpar_SIPmav3.html">make_Xpar_SIPmav3()</a></code> </p>
-        </td>
-        <td><p>Make parameters for SIPmav3_xde human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_X.SIPmav3.html">F_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute Infectious Density, \(X\), for <code>SIPmav3</code></p></td>
-      </tr><tr><td>
-          <p><code><a href="F_H.SIPmav3.html">F_H(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Size of effective infectious human population</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_prevalence.SIPmav3.html">F_prevalence(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the "true" prevalence of infection / parasite rate</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_b.SIPmav3.html">F_b(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xinits.SIPmav3.html">setup_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Xinits.SIPmav3</p></td>
-      </tr><tr><td>
-          <p><code><a href="make_Xinits_SIPmav3.html">make_Xinits_SIPmav3()</a></code> </p>
-        </td>
-        <td><p>Make initial values for a SIPmav3 human model, with defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="list_Xvars.SIPmav3.html">list_Xvars(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return the SIPmav3 model variables as a list</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_Xix.SIPmav3.html">setup_Xix(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add indices for human population to parameter list</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_Xorbits.SIPmav3.html">parse_Xorbits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Parse the output of deSolve and return variables for SIPmav3 models</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_Xinits.SIPmav3.html">get_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Return initial values as a vector from a SIPmav3 model</p></td>
-      </tr><tr><td>
-          <p><code><a href="update_Xinits.SIPmav3.html">update_Xinits(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Update inits for SIPmav3 models from a vector of states</p></td>
-      </tr><tr><td>
-          <p><code><a href="HTC.SIPmav3.html">HTC(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the HTC for the SIPmav3_xde model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_plot_X.SIPmav3.html">xds_plot_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot the density of infected individuals for the SIPmav3 model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xds_lines_X_SIPmav3.html">xds_lines_X_SIPmav3()</a></code> </p>
-        </td>
-        <td><p>Add lines for the density of infected individuals for the SIP model</p></td>
-      </tr><tr><td>
-          <p><code><a href="xde_steady_state_X.SIPmav3.html">xde_steady_state_X(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute the steady states for the SIP model as a function of the daily foi</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="new-sipmav-model">New SIPmav3 model <a href="#new-sipmav-model" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="F_clear.html">F_clear()</a></code> </p>
-        </td>
-        <td><p>Natural Parasite Clearance</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_clear.r.html">F_clear(<i>&lt;r&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Natural Parasite Clearance</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_mav.html">F_detect_mav()</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_vars.html">F_detect_vars()</a></code> </p>
-        </td>
-        <td><p>Set up a model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_vars.d.html">F_detect_vars(<i>&lt;d&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_vars.mav.html">F_detect_vars(<i>&lt;mav&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_y.html">F_detect_y()</a></code> </p>
-        </td>
-        <td><p>Set up a model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_y.d.html">F_detect_y(<i>&lt;d&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_detect_y.mav.html">F_detect_y(<i>&lt;mav&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infection blocking pre-erythrocytic immunity</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_force_malaria.html">F_force_malaria()</a></code> </p>
-        </td>
-        <td><p>Mass Treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_force_malaria.func.html">F_force_malaria(<i>&lt;func&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Mass Treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_force_malaria.val.html">F_force_malaria(<i>&lt;val&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Mass Treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_h.html">F_incidence_h()</a></code> </p>
-        </td>
-        <td><p>Malaria Incidence from Exposure</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_h.p.html">F_incidence_h(<i>&lt;p&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Malaria from Exposure</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_h.protect.html">F_incidence_h(<i>&lt;protect&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Malaria Incidents, per infection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_x.html">F_incidence_x()</a></code> </p>
-        </td>
-        <td><p>Malaria Incidence from Infection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_x.protect.html">F_incidence_x(<i>&lt;protect&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Malaria Incidents, per infection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_incidence_x.rate.html">F_incidence_x(<i>&lt;rate&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Basic model for</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_x.rate.html">setup_incidence_x(<i>&lt;rate&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Malaria from Infection, Basic</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_x_protect.html">setup_incidence_x_protect()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_im.html">F_infect_im()</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_vars.html">F_infect_vars()</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_vars.b.html">F_infect_vars(<i>&lt;b&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_vars.im.html">F_infect_vars(<i>&lt;im&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_y.html">F_infect_y()</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_y.b.html">F_infect_y(<i>&lt;b&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_infect_y.im.html">F_infect_y(<i>&lt;im&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infections per Infectious Bite</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pfpr_by_lm.SIPmav3.html">F_pfpr_by_lm(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute PR by light microscopy</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pfpr_by_pcr.SIPmav3.html">F_pfpr_by_pcr(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute PR by PCR</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_pfpr_by_rdt.SIPmav3.html">F_pfpr_by_rdt(<i>&lt;SIPmav3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Compute PR by RDT</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_take_drugs.html">F_take_drugs()</a></code> </p>
-        </td>
-        <td><p>Mass Treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_take_drugs.func.html">F_take_drugs(<i>&lt;func&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Mass Treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_dim.html">F_transmit_dim()</a></code> </p>
-        </td>
-        <td><p>A model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_vars.html">F_transmit_vars()</a></code> </p>
-        </td>
-        <td><p>Compute Infectiousness with Named Variables</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_vars.c.html">F_transmit_vars(<i>&lt;c&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infectiousness, basic</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_vars.dim.html">F_transmit_vars(<i>&lt;dim&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>A model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_y.html">F_transmit_y()</a></code> </p>
-        </td>
-        <td><p>Compute Infectiousness from the State Variables</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_y.c.html">F_transmit_y(<i>&lt;c&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Infectiousness, basic</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_transmit_y.dim.html">F_transmit_y(<i>&lt;dim&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>A model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_treat.html">F_treat()</a></code> </p>
-        </td>
-        <td><p>Treat and Cure</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_treat.p.html">F_treat(<i>&lt;p&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Basic Treat and Cure</p></td>
-      </tr><tr><td>
-          <p><code><a href="F_treat.p3.html">F_treat(<i>&lt;p3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Basic Treat and Cure</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_clear.html">setup_F_clear()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_clear</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_clear.r.html">setup_F_clear(<i>&lt;r&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up default F_clear</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_detect.html">setup_F_detect()</a></code> </p>
-        </td>
-        <td><p>Set up default detect</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_detect.d.html">setup_F_detect(<i>&lt;d&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up a basic model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_detect.mav.html">setup_F_detect(<i>&lt;mav&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up a basic model for detection</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_infect.html">setup_F_infect()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_infect</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_infect.b.html">setup_F_infect(<i>&lt;b&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_infect.im.html">setup_F_infect(<i>&lt;im&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_x.html">setup_incidence_x()</a></code> </p>
-        </td>
-        <td><p>Setup Malaria from Infection</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_x.protect.html">setup_incidence_x(<i>&lt;protect&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_incidence_x.protect</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_infect_im.html">setup_F_infect_im()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_infect.b</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_transmit.html">setup_F_transmit()</a></code> </p>
-        </td>
-        <td><p>Setup Infectiousness</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_transmit.c.html">setup_F_transmit(<i>&lt;c&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up default F_transmit</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_transmit.dim.html">setup_F_transmit(<i>&lt;dim&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_transmit.dim</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_transmit_dim.html">setup_F_transmit_dim()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_transmit.dim</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_treat.html">setup_F_treat()</a></code> </p>
-        </td>
-        <td><p>Set up F_treat</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_treat.p.html">setup_F_treat(<i>&lt;p&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up a basic F_treat</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_F_treat.p3.html">setup_F_treat(<i>&lt;p3&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Set up a basic F_treat</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_drug_taking_function.html">setup_drug_taking_function()</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_force_malaria.html">setup_force_malaria()</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_force_malaria.func.html">setup_force_malaria(<i>&lt;func&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_force_malaria.val.html">setup_force_malaria(<i>&lt;val&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_force_malaria_func.html">setup_force_malaria_func()</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_force_malaria_val.html">setup_force_malaria_val()</a></code> </p>
-        </td>
-        <td><p>Make a function to simulate mass treatment</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_h.html">setup_incidence_h()</a></code> </p>
-        </td>
-        <td><p>Setup Incidence from Exposure</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_h.p.html">setup_incidence_h(<i>&lt;p&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup Malaria from Exposure, Basic</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_h.protect.html">setup_incidence_h(<i>&lt;protect&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
-      </tr><tr><td>
-          <p><code><a href="setup_incidence_h_protect.html">setup_incidence_h_protect()</a></code> </p>
-        </td>
-        <td><p>Setup an <code>F_incidence_h.protect</code> model object</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

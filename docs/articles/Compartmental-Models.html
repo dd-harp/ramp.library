@@ -33,60 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0-1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/Adding_Models.html">Adding Models</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Adult
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/MYZ-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-macdonald.html">Macdonald's Model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Aquatic
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/L-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
-    </li>
-  </ul>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Human / Host
@@ -117,6 +69,42 @@
     </li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/MY-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/MY-How_To_Add_Model.html">How to add a new MY model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-macdonald.html">Macdonald's Model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../reference/index.html">Functions</a>
 </li>
@@ -143,7 +131,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Compartmental Models</h1>
             
-            <h4 data-toc-skip class="date">July 14, 2025</h4>
+            <h4 data-toc-skip class="date">September 20, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/HEAD/vignettes/Compartmental-Models.Rmd" class="external-link"><code>vignettes/Compartmental-Models.Rmd</code></a></small>
       <div class="hidden name"><code>Compartmental-Models.Rmd</code></div>
@@ -306,37 +294,39 @@ given above</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SIR"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
-<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf</span> </span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="co">#devtools::load_all()</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SIRS</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SIRS"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIRS</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIRS</span></span>
-<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIRS</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SIRS</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIRS</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SIRS</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_SIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SIR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIR</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">orbits</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">foi</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf</span> </span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIR</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIR</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SEIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SEIR"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SEIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIR</span></span>
-<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIR</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIR</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIR</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_SIRS</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SIRS"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIRS</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIRS</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">orbits</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">foi</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SIRS</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SIRS</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SIRS</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SIRS</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SIRS</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_SEIRV</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYZname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SEIRV"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SEIRV</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIRV</span></span>
-<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="va">test_SEIRV</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">b</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">EIR</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIRV</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIRV</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIRV</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIRV</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_SEIR</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SEIR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SEIR</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIR</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">orbits</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">foi</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIR</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIR</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIR</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIR</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIR</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_SEIRV</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"macdonald"</span>, Xname<span class="op">=</span><span class="st">"SEIRV"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SEIRV</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">5</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SEIRV</span></span>
+<span><span class="va">foi_eq</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">orbits</span><span class="op">$</span><span class="va">XH</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">foi</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">test_SEIRV</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">inf_SEIRV</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">foi_eq</span>, <span class="fl">1000</span>, <span class="va">test_SEIRV</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss_SEIRV</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_X.html" class="external-link">xds_plot_X</a></span><span class="op">(</span><span class="va">test_SEIRV</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Compartmental-Models_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

@@ -4,10 +4,10 @@
 \alias{HTC.garki}
 \title{Compute the HTC for the garki model}
 \usage{
-\method{HTC}{garki}(pars, i)
+\method{HTC}{garki}(xds_obj, i)
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }

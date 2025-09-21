@@ -4,10 +4,10 @@
 \alias{HTC.SEIRV}
 \title{Compute the HTC for the SEIRV model}
 \usage{
-\method{HTC}{SEIRV}(pars, i)
+\method{HTC}{SEIRV}(xds_obj, i)
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }

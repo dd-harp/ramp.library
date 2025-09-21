@@ -2,25 +2,19 @@ pandoc: '3.4'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  Adding_Models: Adding_Models.html
   Compartmental-Models: Compartmental-Models.html
   human_seis: human_seis.html
   human_sip: human_sip.html
-  human_SIPmav3: human_SIPmav3.html
-  human_SIPtrack: human_SIPtrack.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   L-Overview: L-Overview.html
   Malaria-Overview: Malaria-Overview.html
-  MYZ-How_To_Add_Model: MYZ-How_To_Add_Model.html
-  MYZ-macdonald: MYZ-macdonald.html
-  MYZ-Overview: MYZ-Overview.html
+  MY-How_To_Add_Model: MY-How_To_Add_Model.html
+  MY-Overview: MY-Overview.html
   MYZ-xde-RMG: MYZ-xde-RMG.html
-  MYZ-xde-SBRQ: MYZ-xde-SBRQ.html
   X-garki: X-garki.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
-  X-xde-workhorse: X-xde-workhorse.html
-last_built: 2025-07-14T20:25Z
+last_built: 2025-09-21T04:45Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

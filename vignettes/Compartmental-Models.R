@@ -16,34 +16,37 @@ library(data.table)
 library(ggplot2)
 
 ## -----------------------------------------------------------------------------
-test_SIR<- xds_setup(MYZname="macdonald", Xname="SIR")
+#devtools::load_all()
+
+## -----------------------------------------------------------------------------
+test_SIR<- xds_setup(MYname="macdonald", Xname="SIR")
 xds_solve(test_SIR, 365*5) -> test_SIR
-foi_eq = test_SIR$Xpar[[1]]$b*tail(test_SIR$outputs$terms$EIR,1)
-unlist(list_Xvars(test_SIR$outputs$last_y, test_SIR, 1)) -> inf 
-xde_steady_state_X(foi_eq, 1000, test_SIR$Xpar[[1]]) -> ss
+foi_eq = tail(test_SIR$outputs$orbits$XH[[1]]$foi,1)
+unlist(get_XH_vars(test_SIR$outputs$last_y, test_SIR, 1)) -> inf 
+steady_state_X(foi_eq, 1000, test_SIR, 1) -> ss
 xds_plot_X(test_SIR)
 
 ## -----------------------------------------------------------------------------
-test_SIRS<- xds_setup(MYZname="macdonald", Xname="SIRS")
+test_SIRS<- xds_setup(MYname="macdonald", Xname="SIRS")
 xds_solve(test_SIRS, 365*3) -> test_SIRS
-foi_eq = test_SIRS$Xpar[[1]]$b*tail(test_SIRS$outputs$terms$EIR,1)
-unlist(list_Xvars(test_SIRS$outputs$last_y, test_SIRS, 1)) -> inf_SIRS
-xde_steady_state_X(foi_eq, 1000, test_SIRS$Xpar[[1]]) -> ss_SIRS
+foi_eq = tail(test_SIRS$outputs$orbits$XH[[1]]$foi,1)
+unlist(get_XH_vars(test_SIRS$outputs$last_y, test_SIRS, 1)) -> inf_SIRS
+steady_state_X(foi_eq, 1000, test_SIRS, 1) -> ss_SIRS
 xds_plot_X(test_SIRS)
 
 ## -----------------------------------------------------------------------------
-test_SEIR<- xds_setup(MYZname="macdonald", Xname="SEIR")
+test_SEIR<- xds_setup(MYname="macdonald", Xname="SEIR")
 xds_solve(test_SEIR, 365*5) -> test_SEIR
-foi_eq = test_SEIR$Xpar[[1]]$b*tail(test_SEIR$outputs$terms$EIR,1)
-unlist(list_Xvars(test_SEIR$outputs$last_y, test_SEIR, 1)) -> inf_SEIR
-xde_steady_state_X(foi_eq, 1000, test_SEIR$Xpar[[1]]) -> ss_SEIR
+foi_eq = tail(test_SEIR$outputs$orbits$XH[[1]]$foi,1)
+unlist(get_XH_vars(test_SEIR$outputs$last_y, test_SEIR, 1)) -> inf_SEIR
+steady_state_X(foi_eq, 1000, test_SEIR, 1) -> ss_SEIR
 xds_plot_X(test_SEIR)
 
 ## -----------------------------------------------------------------------------
-test_SEIRV<- xds_setup(MYZname="macdonald", Xname="SEIRV")
+test_SEIRV<- xds_setup(MYname="macdonald", Xname="SEIRV")
 xds_solve(test_SEIRV, 365*5) -> test_SEIRV
-foi_eq = test_SEIRV$Xpar[[1]]$b*tail(test_SEIRV$outputs$terms$EIR,1)
-unlist(list_Xvars(test_SEIRV$outputs$last_y, test_SEIRV, 1)) -> inf_SEIRV
-xde_steady_state_X(foi_eq, 1000, test_SEIRV$Xpar[[1]]) -> ss_SEIRV
+foi_eq = tail(test_SEIRV$outputs$orbits$XH[[1]]$foi,1)
+unlist(get_XH_vars(test_SEIRV$outputs$last_y, test_SEIRV, 1)) -> inf_SEIRV
+steady_state_X(foi_eq, 1000, test_SEIRV, 1) -> ss_SEIRV
 xds_plot_X(test_SEIRV)
 

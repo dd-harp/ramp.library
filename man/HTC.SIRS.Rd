@@ -4,10 +4,10 @@
 \alias{HTC.SIRS}
 \title{Compute the HTC for the SIRS model}
 \usage{
-\method{HTC}{SIRS}(pars, i)
+\method{HTC}{SIRS}(xds_obj, i)
 }
 \arguments{
-\item{pars}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} object}
 
 \item{i}{the host species index}
 }
