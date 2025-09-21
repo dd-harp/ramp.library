@@ -32,60 +32,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0-1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/Adding_Models.html">Adding Models</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Adult
-
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/MYZ-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-How_To_Add_Model.html">How to add a new MYZ model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-macdonald.html">Macdonald's Model</a>
-    </li>
-    <li>
-      <a href="../articles/MYZ-xde-RMG.html">A Behavioral State Model</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Mosquito - Aquatic
-
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/L-Overview.html">Overview</a>
-    </li>
-    <li>
-      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
-    </li>
-  </ul>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Human / Host
@@ -113,6 +65,42 @@
     </li>
     <li>
       <a href="../articles/X-xde-workhorse.html">Workhorse</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Adult
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/MY-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/MY-How_To_Add_Model.html">How to add a new MY model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-macdonald.html">Macdonald's Model</a>
+    </li>
+    <li>
+      <a href="../articles/MY-xde-RMG.html">A Behavioral State Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Mosquito - Aquatic
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/L-Overview.html">Overview</a>
+    </li>
+    <li>
+      <a href="../articles/L-How_To_Add_Model.html">How to add a new L model</a>
     </li>
   </ul>
 </li>
@@ -219,7 +207,7 @@ constant for all time).</p>
 <span><span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span>, <span class="fl">250</span><span class="op">)</span></span>
 <span><span class="va">nPatches</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
 <span><span class="va">residence</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span> </span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_xds_template.html" class="external-link">make_xds_template</a></span><span class="op">(</span><span class="st">"ode"</span>, <span class="st">"human"</span>, <span class="va">nPatches</span>, <span class="fl">1</span>, <span class="va">residence</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_xds_object_template.html" class="external-link">make_xds_object_template</a></span><span class="op">(</span><span class="st">"ode"</span>, <span class="st">"human"</span>, <span class="va">nPatches</span>, <span class="fl">1</span>, <span class="va">residence</span><span class="op">)</span> </span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">c</span> <span class="op">&lt;-</span> <span class="fl">0.15</span></span>
@@ -231,36 +219,29 @@ constant for all time).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Xo</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"SIP"</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">/</span><span class="fl">365</span></span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">eir</span><span class="op">*</span><span class="va">b</span>, <span class="va">H</span>, <span class="va">Xo</span><span class="op">)</span> <span class="op">-&gt;</span><span class="va">ss</span></span>
-<span><span class="va">ss</span></span>
-<span><span class="co">#&gt; $H</span></span>
-<span><span class="co">#&gt; [1] 100 500 250</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $I</span></span>
-<span><span class="co">#&gt; [1]  20.61856 163.93443 101.53295</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $P</span></span>
-<span><span class="co">#&gt; [1] 0.1627781 3.6429872 3.1355763</span></span></code></pre></div>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_obj.html" class="external-link">setup_XH_obj</a></span><span class="op">(</span><span class="st">"SIP"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span> </span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_inits.html" class="external-link">setup_XH_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="va">H</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">eir</span><span class="op">*</span><span class="va">b</span>, <span class="va">H</span>, <span class="va">params</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/change_XH_inits.html" class="external-link">change_XH_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span>, <span class="va">ss</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Xo</span><span class="op">$</span><span class="va">I</span> <span class="op">&lt;-</span> <span class="va">ss</span><span class="op">$</span><span class="va">I</span></span>
 <span><span class="va">Xo</span><span class="op">$</span><span class="va">P</span> <span class="op">&lt;-</span> <span class="va">ss</span><span class="op">$</span><span class="va">P</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_Xpar.html" class="external-link">setup_Xpar</a></span><span class="op">(</span><span class="st">"SIP"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span> </span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_Xinits.html" class="external-link">setup_Xinits</a></span><span class="op">(</span><span class="va">params</span>, <span class="va">H</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_obj.html" class="external-link">setup_XH_obj</a></span><span class="op">(</span><span class="st">"SIP"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span> </span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_inits.html" class="external-link">setup_XH_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="va">H</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MYZo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  Z <span class="op">=</span> <span class="va">eir</span><span class="op">*</span><span class="va">H</span>, f<span class="op">=</span><span class="fl">1</span>, q<span class="op">=</span><span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MYZpar.html" class="external-link">setup_MYZpar</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">MYZo</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MYZinits.html" class="external-link">setup_MYZinits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_Hpar_static.html" class="external-link">setup_Hpar_static</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_Lpar.html" class="external-link">setup_Lpar</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_Linits.html" class="external-link">setup_Linits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_obj.html" class="external-link">setup_MY_obj</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">MYZo</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_inits.html" class="external-link">setup_MY_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_L_obj.html" class="external-link">setup_L_obj</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_L_inits.html" class="external-link">setup_L_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_indices.html" class="external-link">make_indices</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">eir</span><span class="op">*</span><span class="va">b</span>, <span class="va">H</span>, <span class="va">params</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">eir</span><span class="op">*</span><span class="va">b</span>, <span class="va">H</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $H</span></span>
 <span><span class="co">#&gt; [1] 100 500 250</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -273,7 +254,7 @@ constant for all time).</p>
 <code class="sourceCode R"><span><span class="va">y0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_inits.html" class="external-link">get_inits</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">deSolve</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y0</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">730</span><span class="op">)</span>, <span class="va">xde_derivatives</span>, parms<span class="op">=</span> <span class="va">params</span>, method <span class="op">=</span> <span class="st">'lsoda'</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/list_Xvars.html" class="external-link">list_Xvars</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $S</span></span>
 <span><span class="co">#&gt; [1] -350.0000  -20.0000 -420.6186</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -286,9 +267,9 @@ constant for all time).</p>
 <span><span class="co">#&gt; $H</span></span>
 <span><span class="co">#&gt; [1]   0 730 100</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">H_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'H_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">I_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'I_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">X</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">P_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'P_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">H_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'H_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">I_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'I_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">[</span><span class="va">params</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span><span class="op">$</span><span class="va">P_ix</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'P_'</span>, <span class="fl">1</span><span class="op">:</span><span class="va">params</span><span class="op">$</span><span class="va">nStrata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">out</span>, id.vars <span class="op">=</span> <span class="st">'time'</span><span class="op">)</span></span>
@@ -305,14 +286,14 @@ constant for all time).</p>
 <h3 id="using-setup">Using Setup<a class="anchor" aria-label="anchor" href="#using-setup"></a>
 </h3>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup_human.html" class="external-link">xds_setup_human</a></span><span class="op">(</span>Xname<span class="op">=</span><span class="st">"SIP"</span>, nPatches<span class="op">=</span><span class="fl">3</span>, residence <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, HPop<span class="op">=</span><span class="va">H</span>, Xopts <span class="op">=</span> <span class="va">Xo</span>, MYZopts <span class="op">=</span> <span class="va">MYZo</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIP_xde</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup_human.html" class="external-link">xds_setup_human</a></span><span class="op">(</span>Xname<span class="op">=</span><span class="st">"SIP"</span>, nPatches<span class="op">=</span><span class="fl">3</span>, residence <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, HPop<span class="op">=</span><span class="va">H</span>, XHoptions<span class="op">=</span> <span class="va">Xo</span>, MYoptions <span class="op">=</span> <span class="va">MYZo</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">test_SIP_xde</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xde_steady_state_X.html" class="external-link">xde_steady_state_X</a></span><span class="op">(</span><span class="va">b</span><span class="op">*</span><span class="va">eir</span>, <span class="va">H</span>, <span class="va">test_SIP_xde</span><span class="op">$</span><span class="va">Xpar</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">out1</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">b</span><span class="op">*</span><span class="va">eir</span>, <span class="va">H</span>, <span class="va">test_SIP_xde</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">out1</span></span>
 <span><span class="va">out1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">out1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">test_SIP_xde</span>, <span class="fl">365</span>, <span class="fl">365</span><span class="op">)</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span> <span class="op">-&gt;</span> <span class="va">out2</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/approx_equal.html" class="external-link">approx_equal</a></span><span class="op">(</span><span class="va">out2</span>,<span class="va">out1</span><span class="op">)</span> </span>
-<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]</span></span>
+<span><span class="co">#&gt;         1    2    3    4    5    6    7    8    9</span></span>
 <span><span class="co">#&gt; [2,] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</span></span></code></pre></div>
 </div>
 </div>
