@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{dXHdt.SIP}
 \alias{dXHdt.SIP}
-\title{Derivatives for the \code{SIP} Module (\strong{X} Component)}
+\title{Derivatives for the \code{SIP} Module (\strong{XH} Component)}
 \usage{
 \method{dXHdt}{SIP}(t, y, xds_obj, i)
 }
@@ -21,17 +21,22 @@ a \link{numeric} vector
 \description{
 Compute the derivatives for SIP compartmental model:
 \deqn{
-\begin{array}{rrrrcc}
-dS/dt =& - (h +\xi) S &+ r I & + \eta P & + d{\cal H}(S) &+ B(t, H) \\
-dI/dt =& (1-\rho) h S & - (r+\xi) I &&+ d{\cal H}(I) \\
-dP/dt =& (\rho h +\xi)S & +\xi I & - \eta P &+ d{\cal H}(P)
+\begin{array}{rl}
+dH/dt =& B(t,H) + D \cdot H \\
+dI/dt =& (1-\rho) h S  - (r+\xi+\sigma ) I + D \cdot I \\
+dP/dt =& \rho h S + \xi (S+I)  + \sigma I - \eta P + D \cdot P
 \end{array}
 }
-where \eqn{H = S+I+P}; \eqn{B(t, H)} is the
-time-dependent birth rate; and the \eqn{d{\cal H}}
-operator computes derivatives for the demographic model \eqn{\cal H}.
-The parameter \eqn{\xi} can be modified by setting \code{mass_treat} to a
-non-zero function of time.
+where \eqn{S = H-I-P}; \eqn{B(t, H)} is the
+time-dependent birth rate; and \eqn{D} the demographic matrix.
+
+The model sets up ports for mass treatment:
+\itemize{
+\item the parameter \code{xi_t} is computed as \eqn{\xi'(t) = \xi + \mbox{mda}(t)}
+\item the parameter \code{sigma_t} is computed as \eqn{\sigma'(t) = \sigma + \mbox{msat}(t)}
+}
+
+The functions \code{mda} and \code{msat} are set to zero. To configure mass treatment, see \code{ramp.control}
 }
 \seealso{
 The parameters are defined in \link{make_XH_obj_SIP}

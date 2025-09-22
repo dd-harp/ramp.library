@@ -31,20 +31,26 @@ check_XH.SIP = function(xds_obj, i){
   return(xds_obj)
 }
 
-#' @title Derivatives for the `SIP` Module (**X** Component)
+#' @title Derivatives for the `SIP` Module (**XH** Component)
 #' @description Compute the derivatives for SIP compartmental model:
 #' \deqn{
-#' \begin{array}{rrrrcc}
-#' dS/dt =& - (h +\xi) S &+ r I & + \eta P & + d{\cal H}(S) &+ B(t, H) \\
-#' dI/dt =& (1-\rho) h S & - (r+\xi) I &&+ d{\cal H}(I) \\
-#' dP/dt =& (\rho h +\xi)S & +\xi I & - \eta P &+ d{\cal H}(P)
+#' \begin{array}{rl}
+#' dH/dt =& B(t,H) + D \cdot H \\
+#' dI/dt =& (1-\rho) h S  - (r+\xi+\sigma ) I + D \cdot I \\
+#' dP/dt =& \rho h S + \xi (S+I)  + \sigma I - \eta P + D \cdot P
 #' \end{array}
 #' }
-#' where \eqn{H = S+I+P}; \eqn{B(t, H)} is the
-#' time-dependent birth rate; and the \eqn{d{\cal H}}
-#' operator computes derivatives for the demographic model \eqn{\cal H}.
-#' The parameter \eqn{\xi} can be modified by setting `mass_treat` to a
-#' non-zero function of time.
+#' where \eqn{S = H-I-P}; \eqn{B(t, H)} is the
+#' time-dependent birth rate; and \eqn{D} the demographic matrix.
+#'
+#' The model sets up ports for mass treatment:
+#'
+#' + the parameter `xi_t` is computed as \eqn{\xi'(t) = \xi + \mbox{mda}(t)}
+#'
+#' + the parameter `sigma_t` is computed as \eqn{\sigma'(t) = \sigma + \mbox{msat}(t)}
+#'
+#' The functions `mda` and `msat` are set to zero. To configure mass treatment, see `ramp.control`
+#'
 #' @seealso The parameters are defined in [make_XH_obj_SIP]
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
@@ -57,12 +63,11 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
     with(xds_obj$XH_obj[[i]], {
 
       xi_t = xi + mda(t)
+      sigma_t = sigma + msat(t)
 
       dH <- Births(t, H, births) + D_matrix %*% H
-      dI <- (1-rho)*foi*S - (r+xi_t)*I + D_matrix %*% H
-      dP <- rho*foi*S + xi_t*(S+I) - eta*P + D_matrix %*% P
-      dI <- dI - msat(t)*I
-      dP <- dP + msat(t)*I
+      dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I + D_matrix %*% H
+      dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P + D_matrix %*% P
 
       return(c(dH, dI, dP))
     })
@@ -91,13 +96,15 @@ setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
 #' @param rho probability of successful treatment upon infection
 #' @param eta prophylaxis waning rate
 #' @param xi background treatment rate
+#' @param sigma increased treatment rate while infected
 #' @param F_mass_treat mass treatment rates as a function of time
 #' @importFrom ramp.xds F_zero
 #' @return a [list]
 #' @export
 make_XH_obj_SIP = function(nStrata, options=list(),
                            b=0.55, r=1/180, c=0.15,
-                           rho=.1, eta=1/25, xi=1/365,
+                           rho =.1, eta=1/25,
+                           xi =1/365, sigma = 0,
                            F_mass_treat = F_zero){
   with(options,{
     XH_obj = list()
@@ -109,6 +116,7 @@ make_XH_obj_SIP = function(nStrata, options=list(),
     XH_obj$rho = checkIt(rho, nStrata)
     XH_obj$eta = checkIt(eta, nStrata)
     XH_obj$xi = checkIt(xi, nStrata)
+    XH_obj$sigma = checkIt(sigma, nStrata)
 
     # Ports for demographic models
     XH_obj$D_matrix = diag(0, nStrata)
@@ -433,6 +441,7 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
 #' @export
 steady_state_X.SIP_ode = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
+    stopifnot(sigma == 0)
     Ieq = (foi*H*eta*(1-rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
     Peq  = (H*xi*(foi+r+xi) + (foi*H*r*rho))/((foi+r+xi)*(eta+xi) +foi*(r-eta)*rho)
     return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))

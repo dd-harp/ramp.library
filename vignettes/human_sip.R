@@ -29,30 +29,23 @@ eta <- c(1/30, 1/40, 1/35)
 rho <- c(0.05, 0.1, 0.15)
 xi <- rep(0, 3)
 Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,xi=xi)
-class(Xo) <- "SIP"
+params = setup_XH_obj("SIP", params, 1, Xo) 
 
 ## -----------------------------------------------------------------------------
 eir <- c(1,2,3)/365
-params = setup_XH_obj("SIP", params, 1, Xo) 
-params = setup_XH_inits(params, H, 1, Xo)
 steady_state_X(eir*b, H, params) -> ss
-params = change_XH_inits(params, 1, ss)
+params = setup_XH_inits(params, H, 1, ss)
 
 ## -----------------------------------------------------------------------------
-Xo$I <- ss$I
-Xo$P <- ss$P
+Xo <- c(Xo, ss) 
 
 ## -----------------------------------------------------------------------------
-params = setup_XH_obj("SIP", params, 1, Xo) 
-params = setup_XH_inits(params, H, 1, Xo)
-
-## -----------------------------------------------------------------------------
-MYZo = list(
+MYo = list(
   Z = eir*H, f=1, q=1
 )
 
 ## -----------------------------------------------------------------------------
-params = setup_MY_obj("trivial", params, 1, MYZo)
+params = setup_MY_obj("trivial", params, 1, MYo)
 params = setup_MY_inits(params, 1)
 params = setup_L_obj("trivial", params, 1)
 params = setup_L_inits(params, 1)
@@ -68,7 +61,7 @@ y0 <- as.vector(unlist(get_inits(params)))
 
 ## -----------------------------------------------------------------------------
 out <- deSolve::ode(y = y0, times = c(0, 730), xde_derivatives, parms= params, method = 'lsoda') 
-get_XH_vars(out, params, 1)
+get_XH_vars(out[2,-1], params, 1)
 
 ## ----out.width = "100%"-------------------------------------------------------
 colnames(out)[params$XH_obj[[1]]$ix$H_ix+1] <- paste0('H_', 1:params$nStrata)
@@ -86,7 +79,7 @@ ggplot(data = out, mapping = aes(x = time, y = value, color = Strata)) +
   theme_bw()
 
 ## -----------------------------------------------------------------------------
-xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, XHoptions= Xo, MYoptions = MYZo) -> test_SIP_xde
+xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, XHoptions= Xo, MYoptions = MYo) -> test_SIP_xde
 
 ## -----------------------------------------------------------------------------
 steady_state_X(b*eir, H, test_SIP_xde, 1) -> out1

@@ -1,4 +1,4 @@
-# **`ramp.library`** - A Code Library for [**`ramp.xds`**](https://dd-harp.github.io/ramp.xds/) 
+# **`ramp.library`** - A Library for [**`ramp.xds`**](https://dd-harp.github.io/ramp.xds/) 
 ## *Dynamical Systems for the Epidemiology, Spatial Transmission Dynamics, and Control of Malaria and Other Mosquito-borne Pathogens*
 
 <!-- badges: start -->

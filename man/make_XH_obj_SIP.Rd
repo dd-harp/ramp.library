@@ -13,6 +13,7 @@ make_XH_obj_SIP(
   rho = 0.1,
   eta = 1/25,
   xi = 1/365,
+  sigma = 0,
   F_mass_treat = F_zero
 )
 }
@@ -32,6 +33,8 @@ make_XH_obj_SIP(
 \item{eta}{prophylaxis waning rate}
 
 \item{xi}{background treatment rate}
+
+\item{sigma}{increased treatment rate while infected}
 
 \item{F_mass_treat}{mass treatment rates as a function of time}
 }

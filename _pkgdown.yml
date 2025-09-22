@@ -9,14 +9,12 @@ navbar:
       href: articles/Compartmental-Models.html
     - text: How to add a new X model
       href: articles/X-How_To_Add_Model.html
-    - text: SIP xde model
+    - text: SIP (Susceptible-Infected-Protected)
       href: articles/human_sip.html
-    - text: SEIS model
+    - text: SEIS
       href: articles/human_seis.html
     - text: The Garki Model
       href: articles/X-garki.html
-    - text: Workhorse
-      href: articles/X-xde-workhorse.html
   - text: Mosquito - Adult
     menu:
     - text: Overview
