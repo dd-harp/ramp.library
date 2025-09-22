@@ -42,12 +42,12 @@ In the model $$X = c I/ H.$$
 We can compute the steady states as a function of the FoI, $h$: 
 
 $$
-\bar I = H \frac{h  \eta (1-\rho)}{(h+r+\xi)(\eta+\xi) +h(r-\eta)\rho}
+\bar I = H \frac{h  \eta (1-\rho)}{(h+r+\xi+\sigma)(\eta+\xi) +h((r-\eta)\rho+\sigma)}
 $$
 and 
 
 $$
-\bar P = H\frac{\xi(h+r+\xi) + hr\rho}{(h+r+\xi)(\eta+\xi) +h(r-\eta)\rho}
+\bar P = H\frac{\xi(h+r+\xi+\sigma) + h(r\rho+\sigma)}{(h+r+\xi+\sigma)(\eta+\xi) +h((r-\eta)\rho+\sigma)}
 $$
 and 
 $$\bar S = H - \bar I - \bar P$$ 
