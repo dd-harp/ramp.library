@@ -104,7 +104,7 @@ setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
 make_XH_obj_SIP = function(nStrata, options=list(),
                            b=0.55, r=1/180, c=0.15,
                            rho =.1, eta=1/25,
-                           xi =1/365, sigma = 0,
+                           xi =1/365, sigma = 0.5,
                            F_mass_treat = F_zero){
   with(options,{
     XH_obj = list()
@@ -441,9 +441,8 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
 #' @export
 steady_state_X.SIP_ode = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
-    stopifnot(sigma == 0)
-    Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma)
-    Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma)
+    Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
+    Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
     return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))
 })}
 
