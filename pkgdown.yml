@@ -10,11 +10,11 @@ articles:
   Malaria-Overview: Malaria-Overview.html
   MY-How_To_Add_Model: MY-How_To_Add_Model.html
   MY-Overview: MY-Overview.html
-  MYZ-xde-RMG: MYZ-xde-RMG.html
+  MY-xde-RMG: MY-xde-RMG.html
   X-garki: X-garki.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
-last_built: 2025-09-21T05:17Z
+last_built: 2025-09-26T05:40Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

@@ -38,16 +38,13 @@
       <a href="../articles/X-How_To_Add_Model.html">How to add a new X model</a>
     </li>
     <li>
-      <a href="../articles/human_sip.html">SIP xde model</a>
+      <a href="../articles/human_sip.html">SIP (Susceptible-Infected-Protected)</a>
     </li>
     <li>
-      <a href="../articles/human_seis.html">SEIS model</a>
+      <a href="../articles/human_seis.html">SEIS</a>
     </li>
     <li>
       <a href="../articles/X-garki.html">The Garki Model</a>
-    </li>
-    <li>
-      <a href="../articles/X-xde-workhorse.html">Workhorse</a>
     </li>
   </ul></li>
 <li class="dropdown">
@@ -119,6 +116,7 @@
 <span>  rho <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  eta <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">25</span>,</span>
 <span>  xi <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">365</span>,</span>
+<span>  sigma <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  F_mass_treat <span class="op">=</span> <span class="va">F_zero</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -157,6 +155,10 @@
 
 <dt id="arg-xi">xi<a class="anchor" aria-label="anchor" href="#arg-xi"></a></dt>
 <dd><p>background treatment rate</p></dd>
+
+
+<dt id="arg-sigma">sigma<a class="anchor" aria-label="anchor" href="#arg-sigma"></a></dt>
+<dd><p>increased treatment rate while infected</p></dd>
 
 
 <dt id="arg-f-mass-treat">F_mass_treat<a class="anchor" aria-label="anchor" href="#arg-f-mass-treat"></a></dt>
