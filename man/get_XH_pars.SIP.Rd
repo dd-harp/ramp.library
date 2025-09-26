@@ -7,7 +7,7 @@
 \method{get_XH_pars}{SIP}(xds_obj, i = 1)
 }
 \arguments{
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }

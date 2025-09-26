@@ -7,7 +7,7 @@
 \method{setup_XH_inits}{SEIRV}(xds_obj, H, i = 1, options = list())
 }
 \arguments{
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{H}{initial host population density}
 

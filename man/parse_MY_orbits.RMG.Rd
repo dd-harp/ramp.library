@@ -9,7 +9,7 @@
 \arguments{
 \item{outputs}{a \link{matrix} of outputs from deSolve}
 
-\item{xds_obj}{a \link{list} that defines a model}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{s}{the species index}
 }

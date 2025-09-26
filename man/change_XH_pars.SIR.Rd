@@ -7,7 +7,7 @@
 \method{change_XH_pars}{SIR}(xds_obj, i = 1, options = list())
 }
 \arguments{
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the vector species index}
 
