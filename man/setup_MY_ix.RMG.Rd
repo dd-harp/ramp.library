@@ -7,7 +7,7 @@
 \method{setup_MY_ix}{RMG}(xds_obj, s)
 }
 \arguments{
-\item{xds_obj}{a \link{list}}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{s}{the species index}
 }

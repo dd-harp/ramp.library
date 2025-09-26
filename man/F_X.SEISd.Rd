@@ -11,7 +11,7 @@
 
 \item{y}{state vector}
 
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }

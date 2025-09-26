@@ -7,7 +7,7 @@
 \method{setup_XH_ix}{SEIRV}(xds_obj, i)
 }
 \arguments{
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }

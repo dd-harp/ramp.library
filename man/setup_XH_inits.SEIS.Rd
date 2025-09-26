@@ -7,7 +7,7 @@
 \method{setup_XH_inits}{SEIS}(xds_obj, H, i, options = list())
 }
 \arguments{
-\item{xds_obj}{an \strong{\code{xds}} object}
+\item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{H}{initial host population density}
 
