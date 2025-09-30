@@ -17,5 +17,5 @@
 a \link{list}
 }
 \description{
-Implements \link{setup_MY_inits} for the SEI model
+Implements \link[ramp.xds:setup_MY_inits]{ramp.xds::setup_MY_inits} for the SEI model
 }

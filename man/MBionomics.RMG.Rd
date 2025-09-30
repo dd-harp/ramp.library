@@ -19,5 +19,5 @@
 a named \link{list}
 }
 \description{
-Implements \link{MBionomics} for the RMG model
+Implements \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} for the RMG model
 }

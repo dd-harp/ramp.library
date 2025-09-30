@@ -17,5 +17,5 @@
 a \link{list}
 }
 \description{
-Implements \link{parse_MY_orbits} for the SEI model
+Implements \link[ramp.xds:parse_MY_orbits]{ramp.xds::parse_MY_orbits} for the SEI model
 }

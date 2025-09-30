@@ -19,5 +19,5 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link{F_fqM} for the RMG model.
+Implements \link[ramp.xds:F_fqM]{ramp.xds::F_fqM} for the RMG model.
 }

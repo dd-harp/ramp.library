@@ -19,5 +19,5 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link{dXHdt} for the SEIRV model
+Implements \link[ramp.xds:dXHdt]{ramp.xds::dXHdt} for the SEIRV model
 }

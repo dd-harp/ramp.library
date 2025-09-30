@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements \link{setup_MY_ix} for the RMG model.
+Implements \link[ramp.xds:setup_MY_ix]{ramp.xds::setup_MY_ix} for the RMG model.
 }

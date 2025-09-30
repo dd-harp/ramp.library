@@ -19,5 +19,5 @@
 the model as a \link{list}
 }
 \description{
-Implements \link{MBaseline} for models with no forcing on the baseline
+Implements \link[ramp.xds:MBaseline]{ramp.xds::MBaseline} for models with no forcing on the baseline
 }

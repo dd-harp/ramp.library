@@ -19,5 +19,5 @@
 a named \link{list}
 }
 \description{
-Implements \link{MBaseline} for the RMG model
+Implements \link[ramp.xds:MBaseline]{ramp.xds::MBaseline} for the RMG model
 }

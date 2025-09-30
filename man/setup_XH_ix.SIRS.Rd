@@ -15,5 +15,5 @@
 none
 }
 \description{
-Implements \link{setup_XH_ix} for the SIRS model.
+Implements \link[ramp.xds:setup_XH_ix]{ramp.xds::setup_XH_ix} for the SIRS model.
 }
