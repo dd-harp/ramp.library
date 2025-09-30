@@ -7,7 +7,7 @@
 \method{parse_XH_orbits}{SIP}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link{deSolve}}
+\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve::deSolve}}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
@@ -19,7 +19,7 @@ SIP module variables as a named list
 \description{
 Parse Solutions Matrix for the SIP model
 
-In \link{xds_solve}, after solving a system of equations,
+In \link[ramp.xds:xds_solve]{ramp.xds::xds_solve}, after solving a system of equations,
 the orbits for \eqn{H}, \eqn{I} and \eqn{P} are
 pulled from the solutions matrix, and the model
 also computes \eqn{S=H-I-P}. The variables are returned

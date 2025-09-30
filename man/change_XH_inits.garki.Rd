@@ -17,5 +17,5 @@
 a \link{list} vector
 }
 \description{
-Implements \link{change_XH_inits} for the garki model
+Implements \link[ramp.xds:change_XH_inits]{ramp.xds::change_XH_inits} for the garki model
 }

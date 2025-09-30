@@ -19,5 +19,5 @@
 the model as a \link{list}
 }
 \description{
-Implements \link{MBionomics} for models with no forcing on the baseline
+Implements \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} for models with no forcing on the baseline
 }

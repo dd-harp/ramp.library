@@ -7,7 +7,7 @@
 \method{parse_XH_orbits}{SEISd}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link{deSolve}}
+\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve::deSolve}}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements \link{parse_XH_orbits} for the SEISd model
+Implements \link[ramp.xds:parse_XH_orbits]{ramp.xds::parse_XH_orbits} for the SEISd model
 }

@@ -19,5 +19,5 @@
 a \link{list} vector
 }
 \description{
-Implements \link{setup_XH_inits} for the SIR model
+Implements \link[ramp.xds:setup_XH_inits]{ramp.xds::setup_XH_inits} for the SIR model
 }

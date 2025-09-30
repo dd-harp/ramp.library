@@ -19,5 +19,5 @@
 a \link{list} vector
 }
 \description{
-Implements \link{setup_MY_obj} for the RM model
+Implements \link[ramp.xds:setup_MY_obj]{ramp.xds::setup_MY_obj} for the RM model
 }

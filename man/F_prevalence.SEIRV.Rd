@@ -15,5 +15,5 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link{F_prevalence} for the SEIRV model.
+Implements \link[ramp.xds:F_prevalence]{ramp.xds::F_prevalence} for the SEIRV model.
 }

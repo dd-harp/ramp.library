@@ -15,5 +15,5 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link{HTC} for the SEIS model with demography.
+Implements \link[ramp.xds:HTC]{ramp.xds::HTC} for the SEIS model with demography.
 }

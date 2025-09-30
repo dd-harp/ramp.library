@@ -19,5 +19,5 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link{F_eggs} for the SEI model.
+Implements \link[ramp.xds:F_eggs]{ramp.xds::F_eggs} for the SEI model.
 }

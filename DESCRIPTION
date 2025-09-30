@@ -13,7 +13,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://dd-harp.github.io/ramp.xds/
 BugReports: https://github.com/dd-harp/ramp.xds/issues
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown=TRUE) 
 Remotes: 
   github::dd-harp/ramp.xds

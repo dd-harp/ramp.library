@@ -17,5 +17,5 @@
 none
 }
 \description{
-Implements \link{parse_MY_orbits} for the RMG model
+Implements \link[ramp.xds:parse_MY_orbits]{ramp.xds::parse_MY_orbits} for the RMG model
 }

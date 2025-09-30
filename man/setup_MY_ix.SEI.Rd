@@ -15,5 +15,5 @@
 a \link{list}
 }
 \description{
-Implements \link{setup_MY_ix} for the SEI model.
+Implements \link[ramp.xds:setup_MY_ix]{ramp.xds::setup_MY_ix} for the SEI model.
 }

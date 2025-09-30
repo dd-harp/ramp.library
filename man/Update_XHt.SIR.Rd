@@ -19,5 +19,5 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link{Update_XHt} for the SIS model
+Implements \link[ramp.xds:Update_XHt]{ramp.xds::Update_XHt} for the SIS model
 }

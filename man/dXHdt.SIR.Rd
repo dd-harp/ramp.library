@@ -19,5 +19,5 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link{dXHdt} for the SIR model
+Implements \link[ramp.xds:dXHdt]{ramp.xds::dXHdt} for the SIR model
 }
