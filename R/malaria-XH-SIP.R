@@ -104,7 +104,7 @@ setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
 make_XH_obj_SIP = function(nStrata, options=list(),
                            b=0.55, r=1/180, c=0.15,
                            rho =.1, eta=1/25,
-                           xi =1/365, sigma = 0.5,
+                           xi =1/365, sigma = 1/365,
                            F_mass_treat = F_zero){
   with(options,{
     XH_obj = list()
@@ -146,6 +146,7 @@ change_XH_pars.SIP <- function(xds_obj, i=1, options=list()) {
     xds_obj$XH_obj[[i]]$rho <- rho
     xds_obj$XH_obj[[i]]$eta <- eta
     xds_obj$XH_obj[[i]]$xi <- xi
+    xds_obj$XH_obj[[i]]$sigma <- sigma
     xds_obj$XH_obj[[i]]$mda <- mda
     xds_obj$XH_obj[[i]]$msat <- msat
     return(xds_obj)
@@ -174,7 +175,7 @@ change_XH_inits.SIP <- function(xds_obj, i=1, options=list()) {
 #' @seealso [make_XH_obj_SIP]
 #' @export
 get_XH_pars.SIP <- function(xds_obj, i=1) {
-  with(xds_obj$XH_obj[[i]],list(b=b, c=c, r=r, rho=rho, eta=eta, xi=xi))
+  with(xds_obj$XH_obj[[i]],list(b=b, c=c, r=r, rho=rho, eta=eta, xi=xi, sigma=sigma))
 }
 
 #' @title Derivatives for human population
