@@ -13,7 +13,7 @@ make_XH_obj_SIP(
   rho = 0.1,
   eta = 1/25,
   xi = 1/365,
-  sigma = 0.5,
+  sigma = 1/365,
   F_mass_treat = F_zero
 )
 }
