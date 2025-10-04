@@ -209,11 +209,11 @@ change_XH_inits.SIS <- function(xds_obj, i=1, options=list()) {
 
 ## -----------------------------------------------------------------------------
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIS model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIS model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.newXname <- function(y, xds_obj, i) {
+F_I.newXname <- function(y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i), 
     with(xds_obj$XH_obj[[i]], {
       X = ...  

@@ -10,7 +10,7 @@
 \item{Xname}{the \strong{XH} module name}
 }
 \value{
-the skill set, as a list
+the \code{SIR} \emph{XH} module skill set, a list
 }
 \description{
 The \strong{XH} skill set is a list of

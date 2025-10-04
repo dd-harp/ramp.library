@@ -10,17 +10,19 @@
 #'
 #' @inheritParams ramp.xds::skill_set_XH
 #'
-#' @return the skill set, as a list
+#' @return the `SEIRd` *XH* module skill set, a list
 #'
 #' @export
 skill_set_XH.SEISd = function(Xname = "SIP"){
   return(list(
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = FALSE,
-    mda = FALSE,
-    msat = FALSE
+    H_dynamics = TRUE,
+    mda        = FALSE,
+    msat       = FALSE,
+    malaria    = FALSE,
+    pr_obs     = TRUE,
+    pf_lm      = FALSE,
+    pf_rdt     = FALSE,
+    pf_pcr     = FALSE
   ))
 }
 
@@ -153,11 +155,11 @@ get_XH_pars.SEISd <- function(xds_obj, i=1) {
 # specialized methods for the human SEISd model
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SEISd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SEISd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEISd <- function(t, y, xds_obj, i) {
+F_I.SEISd <- function(t, y, xds_obj, i) {
   I = y[xds_obj$ix$X[[i]]$I_ix]
   X = with(xds_obj$XH_obj[[i]], c*I)
   return(X)

@@ -183,7 +183,7 @@ reference:
     Models for parasites infecting human / vertebrate hosts
 - subtitle: The Garki model
   contents:
-  - F_X.garki
+  - F_I.garki
   - F_H.garki
   - F_prevalence.garki
   - F_b.garki
@@ -207,7 +207,7 @@ reference:
     Models for parasites infecting human / vertebrate hosts
 - subtitle: The workhorse model
   contents:
-  - F_X.workhorse
+  - F_I.workhorse
   - F_H.workhorse
   - F_prevalence.workhorse
   - F_b.workhorse
@@ -229,7 +229,7 @@ reference:
   - dXdt.SIR
   - setup_Xpar.SIR
   - make_Xpar_SIR
-  - F_X.SIR
+  - F_I.SIR
   - F_H.SIR
   - F_prevalence.SIR
   - F_b.SIR
@@ -250,7 +250,7 @@ reference:
   - dts_steady_state_X.SIR
 - subtitle: The SIRS Model
   contents:
-  - F_X.SIRS
+  - F_I.SIRS
   - F_H.SIRS
   - F_prevalence.SIRS
   - F_b.SIRS
@@ -274,7 +274,7 @@ reference:
   - dts_steady_state_X.SIRS
 - subtitle: The SEIR model
   contents:
-  - F_X.SEIR
+  - F_I.SEIR
   - F_H.SEIR
   - F_prevalence.SEIR
   - F_b.SEIR
@@ -298,7 +298,7 @@ reference:
   - dts_steady_state_X.SEIR
 - subtitle: The SEIRV model
   contents:
-  - F_X.SEIRV
+  - F_I.SEIRV
   - F_H.SEIRV
   - F_prevalence.SEIRV
   - F_b.SEIRV
@@ -334,7 +334,7 @@ reference:
   - list_Xvars.SEIS
   - get_Xpars.SEIS
   - put_Xvars.SEIS
-  - F_X.SEIS
+  - F_I.SEIS
   - F_H.SEIS
   - F_prevalence.SEIS
   - F_prevalence_lm.SEIS
@@ -367,7 +367,7 @@ reference:
   - list_Xvars.SEISd
   - set_Xpars.SEISd
   - put_Xvars.SEISd
-  - F_X.SEISd
+  - F_I.SEISd
   - F_H.SEISd
   - F_b.SEISd
   - parse_Xorbits.SEISd
@@ -400,7 +400,7 @@ reference:
   - list_Xvars.SIP
   - get_Xpars.SIP
   - set_Xpars.SIP
-  - F_X.SIP
+  - F_I.SIP
   - F_H.SIP
   - F_b.SIP
   - parse_Xorbits.SIP
@@ -431,7 +431,7 @@ reference:
   - list_Xvars.SIPd
   - get_Xpars.SIPd
   - set_Xpars.SIPd
-  - F_X.SIPd
+  - F_I.SIPd
   - F_H.SIPd
   - F_b.SIPd
   - parse_Xorbits.SIPd
@@ -451,7 +451,7 @@ reference:
   - dXdt.SIPmav3
   - setup_Xpar.SIPmav3
   - make_Xpar_SIPmav3
-  - F_X.SIPmav3
+  - F_I.SIPmav3
   - F_H.SIPmav3
   - F_prevalence.SIPmav3
   - F_b.SIPmav3
