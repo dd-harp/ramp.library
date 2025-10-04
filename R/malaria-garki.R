@@ -15,10 +15,14 @@
 #' @export
 skill_set_XH.garki = function(Xname = "garki"){
   return(list(
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = FALSE
+    H_dynamics = TRUE,
+    mda        = FALSE,
+    msat       = FALSE,
+    malaria    = TRUE,
+    pr_obs     = TRUE,
+    pf_lm      = TRUE,
+    pf_rdt     = FALSE,
+    pf_pcr     = FALSE
   ))
 }
 
@@ -146,11 +150,11 @@ change_XH_pars.garki <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the garki model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the garki model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.garki <- function(t, y, xds_obj, i){
+F_I.garki <- function(t, y, xds_obj, i){
   y1 <- y[xds_obj$XH_obj[[i]]$ix$y1_ix]
   return(y1)
 }

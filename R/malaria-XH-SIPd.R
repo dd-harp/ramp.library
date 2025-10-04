@@ -14,10 +14,14 @@
 #' @export
 skill_set_XH.SIPd = function(Xname = "SIP"){
   return(list(
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = FALSE
+    H_dynamics = TRUE,
+    mda        = FALSE,
+    msat       = FALSE,
+    malaria    = TRUE,
+    pr_obs     = TRUE,
+    pf_lm      = TRUE,
+    pf_rdt     = FALSE,
+    pf_pcr     = FALSE
   ))
 }
 
@@ -202,19 +206,19 @@ steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
 })}
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIPd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIPd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SIPd <- function(t, y, xds_obj, i) {
+F_I.SIPd <- function(t, y, xds_obj, i) {
   I = y[xds_obj$ix$X[[i]]$I_ix]
   X = with(xds_obj$XH_obj[[i]], c*I)
   return(X)
 }
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIPd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIPd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_H.SIPd <- function(t, y, xds_obj, i){

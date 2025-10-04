@@ -19,5 +19,5 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_X]{ramp.xds::F_X} for the SIPd model.
+Implements \link[ramp.xds:F_I]{ramp.xds::F_I} for the SIPd model.
 }

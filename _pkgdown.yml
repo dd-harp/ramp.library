@@ -112,7 +112,7 @@ reference:
   - skill_set_XH.garki
   - check_XH.garki
   - get_XH_vars.garki
-  - F_X.garki
+  - F_I.garki
   - F_H.garki
   - F_prevalence.garki
   - F_infectivity.garki
@@ -141,7 +141,7 @@ reference:
   - setup_XH_obj.SIR
   - make_XH_obj_SIR
   - get_XH_vars.SIR
-  - F_X.SIR
+  - F_I.SIR
   - F_H.SIR
   - F_prevalence.SIR
   - F_infectivity.SIR
@@ -158,7 +158,7 @@ reference:
   - steady_state_X.SIR_dts
 - subtitle: The SIRS Model
   contents:
-  - F_X.SIRS
+  - F_I.SIRS
   - F_ni.SIRS
   - check_XH.SIRS
   - skill_set_XH.SIRS
@@ -187,7 +187,7 @@ reference:
   - check_XH.SEIR
   - get_XH_vars.SEIR
   - skill_set_XH.SEIR
-  - F_X.SEIR
+  - F_I.SEIR
   - F_H.SEIR
   - F_prevalence.SEIR
   - F_infectivity.SEIR
@@ -212,7 +212,7 @@ reference:
   - check_XH.SEIRV
   - get_XH_vars.SEIRV
   - skill_set_XH.SEIRV
-  - F_X.SEIRV
+  - F_I.SEIRV
   - F_H.SEIRV
   - F_prevalence.SEIRV
   - F_infectivity.SEIRV
@@ -246,7 +246,7 @@ reference:
   - make_XH_inits_SEIS
   - setup_XH_ix.SEIS
   - get_XH_pars.SEIS
-  - F_X.SEIS
+  - F_I.SEIS
   - F_H.SEIS
   - F_prevalence.SEIS
   - F_pfpr_by_lm.SEIS
@@ -276,7 +276,7 @@ reference:
   - make_XH_inits_SEISd
   - setup_XH_ix.SEISd
   - change_XH_pars.SEISd
-  - F_X.SEISd
+  - F_I.SEISd
   - F_H.SEISd
   - F_infectivity.SEISd
   - parse_XH_orbits.SEISd
@@ -310,7 +310,7 @@ reference:
   - setup_XH_ix.SIP
   - get_XH_pars.SIP
   - change_XH_pars.SIP
-  - F_X.SIP
+  - F_I.SIP
   - F_H.SIP
   - F_infectivity.SIP
   - parse_XH_orbits.SIP
@@ -338,7 +338,7 @@ reference:
   - setup_XH_ix.SIPd
   - get_XH_pars.SIPd
   - change_XH_pars.SIPd
-  - F_X.SIPd
+  - F_I.SIPd
   - F_H.SIPd
   - F_infectivity.SIPd
   - parse_XH_orbits.SIPd

@@ -7,15 +7,19 @@
 #'
 #' @inheritParams ramp.xds::skill_set_XH
 #'
-#' @return the skill set, as a list
+#' @return the `SEIR` *XH* module skill set, a list
 #'
 #' @export
 skill_set_XH.SEIR = function(Xname = "SEIR"){
   return(list(
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = FALSE
+    H_dynamics = TRUE,
+    mda        = FALSE,
+    msat       = FALSE,
+    malaria    = FALSE,
+    pr_obs     = TRUE,
+    pf_lm      = FALSE,
+    pf_rdt     = FALSE,
+    pf_pcr     = FALSE
   ))
 }
 
@@ -261,11 +265,11 @@ setup_XH_obj.SEIR = function(Xname, xds_obj, i, options=list()){
 
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIS model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIS model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.SEIR <- function(t,y, xds_obj, i) {
+F_I.SEIR <- function(t,y, xds_obj, i) {
   I = y[xds_obj$XH_obj[[i]]$ix$I_ix]
   Y = with(xds_obj$XH_obj[[i]], c*I)
   return(Y)
