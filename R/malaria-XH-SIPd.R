@@ -61,10 +61,10 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
       if (t <= eta) {
         treated_eta = 0
       } else {
-        treated_eta = lagderiv(t=t-eta, nr=xds_obj$ix$X[[i]]$treated_ix)
+        treated_eta = lagderiv(t=t-eta, nr=ix$treated_ix)
       }
 
-      dH <- Births(t, H, Hpar) + D_matrix %*% H
+      dH <- Births(t, H,births) + D_matrix %*% H
       dI <- (1-rho)*foi*S - (r+xi)*I +  D_matrix %*% I
       dP <- rho*foi*S + xi*(S+I) - treated_eta + D_matrix %*% P
       dtreated <- (rho*foi+xi)*S + xi*I
@@ -149,9 +149,9 @@ change_XH_pars.SIPd <- function(xds_obj, i=1, options=list()) {
 #' @export
 change_XH_inits.SIPd <- function(xds_obj, i=1, options=list()) {
   with(get_XH_inits(xds_obj, i), with(options,{
-    xds_obj$XH_obj[[i]]$inits[[i]]$S = get_H(xds_obj,i)-I-P
-    xds_obj$XH_obj[[i]]$inits[[i]]$I = I
-    xds_obj$XH_obj[[i]]$inits[[i]]$P = P
+    xds_obj$XH_obj[[i]]$inits$S = get_H(xds_obj,i)-I-P
+    xds_obj$XH_obj[[i]]$inits$I = I
+    xds_obj$XH_obj[[i]]$inits$P = P
     return(xds_obj)
   }))}
 
@@ -211,7 +211,7 @@ steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_I.SIPd <- function(t, y, xds_obj, i) {
-  I = y[xds_obj$ix$X[[i]]$I_ix]
+  I = y[xds_obj$XH_obj[[i]]$ix$I_ix]
   X = with(xds_obj$XH_obj[[i]], c*I)
   return(X)
 }
@@ -243,7 +243,7 @@ F_infectivity.SIPd <- function(y, xds_obj,i) {
 #' @return a [list]
 #' @export
 get_XH_vars.SIPd <- function(y, xds_obj, i) {
-  with(xds_obj$ix$X[[i]],{
+  with(xds_obj$XH_obj[[i]]$ix,{
     S = y[S_ix]
     I = y[I_ix]
     P = y[P_ix]
@@ -299,7 +299,7 @@ make_XH_inits_SIPd = function(nStrata, H,
 #' @return none
 #' @export
 parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
-  with(xds_obj$X_obj[[i]]$ix,{
+  with(xds_obj$XH_obj[[i]]$ix,{
     S = outputs[,S_ix]
     I = outputs[,I_ix]
     P = outputs[,P_ix]
@@ -331,7 +331,7 @@ setup_XH_ix.SIPd <- function(xds_obj, i) {with(xds_obj,{
   max_ix <- tail(treated_ix, 1)
 
   xds_obj$max_ix = max_ix
-  xds_obj$ix$X[[i]] = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix, treated_ix=treated_ix)
+  xds_obj$XH_obj[[i]]$ix = list(S_ix=S_ix, I_ix=I_ix, P_ix=P_ix, treated_ix=treated_ix)
   return(xds_obj)
 })}
 
