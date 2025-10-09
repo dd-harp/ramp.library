@@ -11,8 +11,8 @@ Description: Reusable algorithms, encoded and rigorously tested, to implement dy
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-URL: https://dd-harp.github.io/ramp.xds/
-BugReports: https://github.com/dd-harp/ramp.xds/issues
+URL: https://dd-harp.github.io/ramp.library/
+BugReports: https://github.com/dd-harp/ramp.library/issues
 RoxygenNote: 7.3.3
 Roxygen: list(markdown=TRUE) 
 Remotes: 

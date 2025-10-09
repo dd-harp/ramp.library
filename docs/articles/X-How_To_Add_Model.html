@@ -513,18 +513,18 @@ this function.</p>
 <h2 id="dynamical-terms">Dynamical Terms<a class="anchor" aria-label="anchor" href="#dynamical-terms"></a>
 </h2>
 <div class="section level3">
-<h3 id="f_x">F_X<a class="anchor" aria-label="anchor" href="#f_x"></a>
+<h3 id="f_i">F_I<a class="anchor" aria-label="anchor" href="#f_i"></a>
 </h3>
 <p>In the following, replace … with a formula to compute the effective
 density of infectious humans: it is population density by strata
 weighted by the probability of transmitting.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
-<span><span class="co">#' @description Implements [F_X] for the SIS model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::F_X</span></span>
+<span><span class="co">#' @description Implements [F_I] for the SIS model.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_I</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_X.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">F_I.newXname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
 <span>      <span class="va">X</span> <span class="op">=</span> <span class="va">...</span>  </span>
