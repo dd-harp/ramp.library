@@ -1,21 +1,44 @@
 ---
-title: "SBRQ"
+title: "The BRQS Module"
 subtitle: "A Four-State Behavioral State Model"
+author: "David L Smith, "
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{SBRQ}
+  %\VignetteIndexEntry{The BRQS Module}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## Base Model
+```
+MYname = "BRQS"
+``` 
 
-We present the following behavioral state model for mosquito ecology with four behavioral states: 
+For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces: 
 
-### Variables
++ The *behavioral states* are blood feeding ($B$), post-prandial resting ($R$), egg laying ($Q$) and sugar feeding ($S$);
 
-+ $S$ the density of sugar feeding mosquitoes; 
++ The *infection states* are uninfected ($u$), infected ($y$), and infectious ($z$); 
+
++ The full model thus has 12 variables per patch: 3 for blood feeding, ($B_u,$ $B_y,$ and $B_z$); 3 for resting ($R_u$, $R_y,$ and $R_z$); 3 for egg laying ($Q_u,$ $Q_y,$ and $Q_z$); and 3 for sugar feeding ($S_u$, $S_y$, and $S_z$).
+
++ Mosquitoes move from $B_u$ to $R_y$  when they blood feed on an infectious human (at the rate $fq\kappa$, see below)  
+
++ Mosquitoes in all $y$ states move to $z$ states at the rate $\phi,$ where $\phi^{-1}$ is the EIP.
+
+This vignette describes the model and its implementation in `ramp.library.` 
+
+***
+
+![Figure 1: Flow Diagram for mosquito ecology part of the BRQS Model for surviving mosquitoes. The figure does not include arrows for mosquito mortality or emigration-related loss from the system.](BQRS.png)
+
+*** 
+
+# Basic Dynamics  
+
+## Behavioral State Dynamics: A Compartment Model
+
+In the basic compartmental model, there are four behavioral states: 
 
 + $B$ the density of blood feeding mosquitoes; 
 
@@ -23,17 +46,17 @@ We present the following behavioral state model for mosquito ecology with four b
 
 + $Q$ the density of egg laying mosquitoes.
 
-### Terms
++ $S$ the density of sugar feeding mosquitoes; 
 
-$\Lambda$ is the emergence rate of adult mosquitoes. 
+Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and  
 
-### Parameters
+## Parameters
 
 + $f$ is the overall blood feeding rate; the inverse $f^{-1}$ describes the average time to blood feed after entering the blood feeding state
 
 + $\nu$ is the egg laying rate; 
 
-+ $p$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $1-p$ transition into a blood feeding state. 
++ $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
 
 + $\zeta$ is rate that blood feeding mosquitoes switch to sugar feeding 
 
@@ -56,14 +79,13 @@ $\Lambda$ is the emergence rate of adult mosquitoes.
 
 + $\eta^{-1}$ is the duration of the post-prandial resting period 
 
-### Dynamics 
 
 $$
 \begin{array}{rl}
-\dot S &= \Lambda + \nu (1-p) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
-\dot B &= \rho S + (\nu p + \theta) Q + \xi R - (f + \zeta_B) B - \Omega_B \cdot B \\
+\dot B &= \Lambda + \rho S + (\nu \delta + \theta) Q + \xi R - (f + \zeta_B) B - \Omega_B \cdot B \\
+\dot S &= \Lambda + \nu (1-\delta) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
 \dot R &= f B - (\xi + \eta + g) R \\ 
-\dot Q &= \eta R - (\nu + \theta) Q - \Omega_Q \cdot Q
+\dot Q &= \eta R - (\nu + \theta) Q - \Omega_Q \cdot Q \\
 \end{array}
 $$
 
@@ -102,8 +124,8 @@ We present the following behavioral state model:
 
 $$
 \begin{array}{rl}
-\dot S_u &= \Lambda + \zeta B_u + \nu (1-p) Q_u - \rho S_u - \Omega_S \cdot S_u \\  
-\dot B_u &= \rho S_u + (\nu p+ \theta) Q_u + \xi R - (f + \zeta) B_u - \Omega_B \cdot B_u \\
+\dot S_u &= \Lambda + \zeta B_u + \nu (1-\delta) Q_u - \rho S_u - \Omega_S \cdot S_u \\  
+\dot B_u &= \rho S_u + (\nu \delta+ \theta) Q_u + \xi R - (f + \zeta) B_u - \Omega_B \cdot B_u \\
 \dot R_u &= f (1-q\kappa) B_u - (\xi + \eta + g) R_u \\ 
 \dot Q_u &= \eta R_u - (\nu + \theta) Q_u- \Omega_Q \cdot Q_u
 \end{array}
@@ -112,8 +134,8 @@ $$
 
 $$
 \begin{array}{rl}
-\dot S_y &= \zeta B_y + \nu (1-p) Q_y - \rho S_y - \Omega_S \cdot S_y -\phi S_y\\  
-\dot B_y &= \rho S_y + (\nu p + \theta) Q_y + \xi R - (f + \zeta) B_y - \Omega_B \cdot B_y -\phi B_y\\
+\dot S_y &= \zeta B_y + \nu (1-\delta) Q_y - \rho S_y - \Omega_S \cdot S_y -\phi S_y\\  
+\dot B_y &= \rho S_y + (\nu \delta + \theta) Q_y + \xi R - (f + \zeta) B_y - \Omega_B \cdot B_y -\phi B_y\\
 \dot R_y &= f q \kappa B_u + f B_y- (\xi + \eta + g) R_y - \phi R_y\\ 
 \dot Q_y &= \eta R_y - (\nu + \zeta) Q_y- \Omega_Q \cdot Q_y - \phi Q_y
 \end{array}
@@ -123,8 +145,8 @@ $$
 
 $$
 \begin{array}{rl}
-\dot S_z &= \phi S_y + \zeta B_z + \nu (1-p) Q_z  - \rho S_z - \Omega_S \cdot S_z \\  
-\dot B_z &= \phi B_y + (\nu p + \theta) Q_z + \rho S_z + \xi R - (f + \zeta) B_z - \Omega_B \cdot B_z \\
+\dot S_z &= \phi S_y + \zeta B_z + \nu (1-\delta) Q_z  - \rho S_z - \Omega_S \cdot S_z \\  
+\dot B_z &= \phi B_y + (\nu \delta + \theta) Q_z + \rho S_z + \xi R - (f + \zeta) B_z - \Omega_B \cdot B_z \\
 \dot R_z &= \phi R_y + f B_z - (\xi + \eta + g) R_z \\ 
 \dot Q_z &= \phi Q_y + \eta R_z - (\nu + \theta) Q_z- \Omega_Q \cdot Q_z
 \end{array}

@@ -1,12 +1,12 @@
-# specialized methods for the adult mosquito SBRQ model
+# specialized methods for the adult mosquito BRQS model
 
 
 #' @title Derivatives for adult mosquitoes
-#' @description Implements [dMYZdt] for the SBRQ ODE model.
+#' @description Implements [dMYZdt] for the BRQS ODE model.
 #' @inheritParams ramp.xds::dMYZdt
 #' @return a [numeric] vector
 #' @export
-dMYZdt.SBRQ <- function(t, y, pars, s){
+dMYZdt.BRQS <- function(t, y, pars, s){
 
   Lambda = as.vector(pars$Lambda[[s]])
   kappa = as.vector(pars$kappa[[s]])
@@ -50,11 +50,11 @@ dMYZdt.SBRQ <- function(t, y, pars, s){
 }
 
 #' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBaseline] for the SBRQ model
+#' @description Implements [MBaseline] for the BRQS model
 #' @inheritParams ramp.xds::MBaseline
 #' @return a named [list]
 #' @export
-MBaseline.SBRQ <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
+MBaseline.BRQS <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
   pars$MYZpar[[s]]$es_f       <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_q       <- rep(1, nPatches)
   pars$MYZpar[[s]]$es_nu      <- rep(1, nPatches)
@@ -74,11 +74,11 @@ MBaseline.SBRQ <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
 
 
 #' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBionomics] for the SBRQ model
+#' @description Implements [MBionomics] for the BRQS model
 #' @inheritParams ramp.xds::MBionomics
 #' @return a named [list]
 #' @export
-MBionomics.SBRQ <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
+MBionomics.BRQS <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
   pars$MYZpar[[s]]$f <- es_f*f_t
   pars$MYZpar[[s]]$q <- es_q*q_t
   g <- es_g*g_t
@@ -93,11 +93,11 @@ MBionomics.SBRQ <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
 })}
 
 #' @title Blood feeding rate of the infective mosquito population
-#' @description Implements [F_fqZ] for the SBRQ model.
+#' @description Implements [F_fqZ] for the BRQS model.
 #' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
 #' @export
-F_fqZ.SBRQ <- function(t, y, pars, s) {
+F_fqZ.BRQS <- function(t, y, pars, s) {
   f = get_f(pars, s)
   q = get_f(pars, s)
   fqZ = f*q*y[pars$ix$MYZ[[s]]$Z_b_ix]
@@ -105,11 +105,11 @@ F_fqZ.SBRQ <- function(t, y, pars, s) {
 }
 
 #' @title Blood feeding rate of the infective mosquito population
-#' @description Implements [F_fqM] for the SBRQ model.
+#' @description Implements [F_fqM] for the BRQS model.
 #' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
 #' @export
-F_fqM.SBRQ <- function(t, y, pars, s) {
+F_fqM.BRQS <- function(t, y, pars, s) {
   f = get_f(pars, s)
   q = get_f(pars, s)
   M = with(pars$ix$MYZ[[s]], y[Bu_ix] + y[By_ix] + y[Bz_ix])
@@ -118,11 +118,11 @@ F_fqM.SBRQ <- function(t, y, pars, s) {
 }
 
 #' @title Number of eggs laid by adult mosquitoes
-#' @description Implements [F_eggs] for the SBRQ model.
+#' @description Implements [F_eggs] for the BRQS model.
 #' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
 #' @export
-F_eggs.SBRQ <- function(t, y, pars, s) {
+F_eggs.BRQS <- function(t, y, pars, s) {
 
   G <- with(pars$ix$MYZ[[s]], y[Qu_ix] + y[Qy_ix] + y[Qz_ix])
   eggs = with(pars$MYZpar[[s]], {
@@ -132,13 +132,13 @@ F_eggs.SBRQ <- function(t, y, pars, s) {
 }
 
 
-#' @title Setup MYZpar for the SBRQ model
+#' @title Setup MYZpar for the BRQS model
 #' @description Implements [setup_MYZpar] for the RM model
 #' @inheritParams ramp.xds::setup_MYZpar
 #' @return a [list] vector
 #' @export
-setup_MYZpar.SBRQ = function(MYZname, pars, s, MYZopts=list()){
-  pars$MYZpar[[s]] = make_MYZpar_SBRQ(pars$nPatches, MYZopts)
+setup_MYZpar.BRQS = function(MYZname, pars, s, MYZopts=list()){
+  pars$MYZpar[[s]] = make_MYZpar_BRQS(pars$nPatches, MYZopts)
   return(pars)
 }
 
@@ -156,13 +156,13 @@ setup_MYZpar.SBRQ = function(MYZname, pars, s, MYZopts=list()){
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
 #' @export
-make_MYZpar_SBRQ = function(nPatches, MYZopts=list(), eip=12,
+make_MYZpar_BRQS = function(nPatches, MYZopts=list(), eip=12,
                           g=1/12, sigma_b=1/8, sigma_q=1/8, mu=0, f=0.5, q=0.95,
                           nu=1, eggsPerBatch=60){
 
   with(MYZopts,{
     MYZpar <- list()
-    class(MYZpar) <- "SBRQ"
+    class(MYZpar) <- "BRQS"
 
     MYZpar$nPatches <- nPatches
 
@@ -238,8 +238,8 @@ make_MYZpar_SBRQ = function(nPatches, MYZopts=list(), eip=12,
     MYZpar$Omega_b <- with(MYZpar, compute_Omega_xde(g, sigma_b, mu, calK))
     MYZpar$Omega_q <- with(MYZpar, compute_Omega_xde(g, sigma_q, mu, calK))
     MYZpar$Omega_s <- with(MYZpar, compute_Omega_xde(g, sigma_s, mu, calK))
-    base <- 'SBRQ'
-    class(base) <- 'SBRQ'
+    base <- 'BRQS'
+    class(base) <- 'BRQS'
     MYZpar$baseline <- base
 
     return(MYZpar)
@@ -251,7 +251,7 @@ make_MYZpar_SBRQ = function(nPatches, MYZopts=list(), eip=12,
 #' @param s the vector species index
 #' @return a [list]
 #' @export
-get_MYZpars.SBRQ <- function(pars, s=1) {
+get_MYZpars.BRQS <- function(pars, s=1) {
   with(pars$MYZpar[[s]], list(
     f=f_t, q=q_t, g=g_t, sigma_b=sigma_b_t, sigma_q = sigma_q_t, eip=eip, mu=mu_t,
     nu=nu_t, eggsPerBatch=eggsPerBatch, calK=calK
@@ -263,7 +263,7 @@ get_MYZpars.SBRQ <- function(pars, s=1) {
 #' @inheritParams ramp.xds::set_MYZpars
 #' @return an **`xds`** object
 #' @export
-set_MYZpars.SBRQ <- function(pars, s=1, MYZopts=list()) {
+set_MYZpars.BRQS <- function(pars, s=1, MYZopts=list()) {
   nHabitats <- pars$nHabitats
   with(pars$MYZpar[[s]], with(MYZopts,{
     pars$MYZpar[[s]]$f_t = f
@@ -284,17 +284,17 @@ set_MYZpars.SBRQ <- function(pars, s=1, MYZopts=list()) {
     return(pars)
   }))}
 
-#' @title Setup initial values for the SBRQ model
+#' @title Setup initial values for the BRQS model
 #' @description Implements [setup_MYZinits] for the RM model
 #' @inheritParams ramp.xds::setup_MYZinits
 #' @return a [list]
 #' @export
-setup_MYZinits.SBRQ = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_SBRQ(nPatches, MYZopts))
+setup_MYZinits.BRQS = function(pars, s, MYZopts=list()){
+  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_BRQS(nPatches, MYZopts))
   return(pars)
 }
 
-#' @title Make inits for SBRQ adult mosquito model
+#' @title Make inits for BRQS adult mosquito model
 #' @param nPatches the number of patches in the model
 #' @param MYZopts a [list] of values that overwrites the defaults
 #' @param Su uninfected, sugar feeding mosquitoes
@@ -311,7 +311,7 @@ setup_MYZinits.SBRQ = function(pars, s, MYZopts=list()){
 #' @param Qz infectious, gravid mosqutioes
 #' @return a [list]
 #' @export
-make_MYZinits_SBRQ = function(nPatches, MYZopts = list(),
+make_MYZinits_BRQS = function(nPatches, MYZopts = list(),
                               Su=100, Bu=100, Ru=1, Qu=10,
                               Sy=0, By=0, Ry=0, Qy=0,
                               Sz=0, Bz=0, Rz=0, Qz=0){
@@ -337,12 +337,12 @@ make_MYZinits_SBRQ = function(nPatches, MYZopts = list(),
 
 
 #' @title Add indices for adult mosquitoes to parameter list
-#' @description Implements [setup_MYZix] for the SBRQ model.
+#' @description Implements [setup_MYZix] for the BRQS model.
 #' @inheritParams ramp.xds::setup_MYZix
 #' @return none
 #' @importFrom utils tail
 #' @export
-setup_MYZix.SBRQ <- function(pars, s) {with(pars,{
+setup_MYZix.BRQS <- function(pars, s) {with(pars,{
 
 
   Su_ix <- seq(from = max_ix+1, length.out=nPatches)
@@ -392,12 +392,12 @@ setup_MYZix.SBRQ <- function(pars, s) {with(pars,{
 })}
 
 
-#' @title Parse the output of deSolve and return variables for the SBRQ model
-#' @description Implements [parse_MYZorbits] for the SBRQ model
+#' @title Parse the output of deSolve and return variables for the BRQS model
+#' @description Implements [parse_MYZorbits] for the BRQS model
 #' @inheritParams ramp.xds::parse_MYZorbits
 #' @return none
 #' @export
-parse_MYZorbits.SBRQ <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
+parse_MYZorbits.BRQS <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
   Su = outputs[,Su_ix]
   Bu = outputs[,Bu_ix]
   Ru = outputs[,Ru_ix]
@@ -421,11 +421,11 @@ parse_MYZorbits.SBRQ <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
     Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz, M=M, Y=Y, Z=Z, y=y, z=z))
 })}
 
-#' @title Make inits for SBRQ adult mosquito model
+#' @title Make inits for BRQS adult mosquito model
 #' @inheritParams ramp.xds::update_MYZinits
 #' @return none
 #' @export
-update_MYZinits.SBRQ <- function(pars, y0, s) {
+update_MYZinits.BRQS <- function(pars, y0, s) {
   with(pars$ix$MYZ[[s]],{
     Su = y[Su_ix]
     Bu = y[Bu_ix]
@@ -439,7 +439,7 @@ update_MYZinits.SBRQ <- function(pars, y0, s) {
     Bz = y[Bz_ix]
     Rz = y[Rz_ix]
     Qz = y[Qz_ix]
-    pars = setup_MYZinits_SBRQ(pars$nPatches,
+    pars = setup_MYZinits_BRQS(pars$nPatches,
                                Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
                                Sy=Sy, By=By, Ry=Ry, Qy=Qy,
                                Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz)
@@ -452,7 +452,7 @@ update_MYZinits.SBRQ <- function(pars, y0, s) {
 #' @inheritParams ramp.xds::set_MYZinits
 #' @return an `xds` object
 #' @export
-set_MYZinits.SBRQ <- function(pars, s=1, MYZopts=list()) {
+set_MYZinits.BRQS <- function(pars, s=1, MYZopts=list()) {
   with(pars$MYZpar[[s]], with(MYZopts,{
     pars$MYZinits[[s]]$Su = Su
     pars$MYZinits[[s]]$Bu = Bu
@@ -470,18 +470,18 @@ set_MYZinits.SBRQ <- function(pars, s=1, MYZopts=list()) {
   }))}
 
 #' @title Return initial values as a vector
-#' @description Implements [get_MYZinits] for the SBRQ model.
+#' @description Implements [get_MYZinits] for the BRQS model.
 #' @inheritParams ramp.xds::get_MYZinits
 #' @return none
 #' @export
-get_MYZinits.SBRQ <- function(pars, s) {pars$MYZinits[[s]]}
+get_MYZinits.BRQS <- function(pars, s) {pars$MYZinits[[s]]}
 
 #' @title Get the feeding rate
 #' @param pars an **`xds`** object
 #' @param s the vector species index
 #' @return a [numeric] vector
 #' @export
-get_f.SBRQ = function(pars, s=1){
+get_f.BRQS = function(pars, s=1){
   with(pars$MYZpar[[s]], f_t*es_f)
 }
 
@@ -490,7 +490,7 @@ get_f.SBRQ = function(pars, s=1){
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @export
-get_q.SBRQ = function(pars, s=1){
+get_q.BRQS = function(pars, s=1){
   with(pars$MYZpar[[s]], q_t*es_q)
 }
 
@@ -499,7 +499,7 @@ get_q.SBRQ = function(pars, s=1){
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @export
-get_g.SBRQ = function(pars, s=1){
+get_g.BRQS = function(pars, s=1){
   with(pars$MYZpar[[s]], g_t*es_g)
 }
 
@@ -508,6 +508,6 @@ get_g.SBRQ = function(pars, s=1){
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @export
-get_sigma.SBRQ = function(pars, s=1){
+get_sigma.BRQS = function(pars, s=1){
   with(pars$MYZpar[[s]], sigma_b_t*es_sigma_b)
 }
