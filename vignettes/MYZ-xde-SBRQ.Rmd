@@ -1,7 +1,7 @@
 ---
 title: "The BRQS Module"
 subtitle: "A Four-State Behavioral State Model"
-author: "David L Smith, "
+author: "David L Smith, Doreen Mbabazi Ssebuliba, Juliet Nakakawa Nsumba"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -14,7 +14,7 @@ vignette: >
 MYname = "BRQS"
 ``` 
 
-For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces: 
+For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces. The following concise summary is eplained in greater length below: 
 
 + The *behavioral states* are blood feeding ($B$), post-prandial resting ($R$), egg laying ($Q$) and sugar feeding ($S$);
 
