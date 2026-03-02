@@ -1,6 +1,6 @@
 ---
 title: "The BRQS Module"
-subtitle: "A Four-State Behavioral State Model"
+subtitle: "A Four Behavioral State Model with Infection Dynamics"
 author: "David L Smith, Doreen Mbabazi Ssebuliba, Juliet Nakakawa Nsumba"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
@@ -14,17 +14,41 @@ vignette: >
 MYname = "BRQS"
 ``` 
 
-For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces. The following concise summary is eplained in greater length below: 
+For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces. It is a system of ordinary differential equations. The following concise summary is eplained in greater length below: 
 
-+ The *behavioral states* are blood feeding ($B$), post-prandial resting ($R$), egg laying ($Q$) and sugar feeding ($S$);
++ The *behavioral states* are: 
 
-+ The *infection states* are uninfected ($u$), infected ($y$), and infectious ($z$); 
+    - blood feeding ($B$); 
+    
+    - post-prandial resting ($R$); 
+    
+    - egg laying ($Q$); and  
+    
+    - sugar feeding ($S$)
 
-+ The full model thus has 12 variables per patch: 3 for blood feeding, ($B_u,$ $B_y,$ and $B_z$); 3 for resting ($R_u$, $R_y,$ and $R_z$); 3 for egg laying ($Q_u,$ $Q_y,$ and $Q_z$); and 3 for sugar feeding ($S_u$, $S_y$, and $S_z$).
++ The *infection states* are 
 
-+ Mosquitoes move from $B_u$ to $R_y$  when they blood feed on an infectious human (at the rate $fq\kappa$, see below)  
+    - uninfected ($u$); 
+    
+    - infected ($y$); and
+    
+    - infectious ($z$); 
 
-+ Mosquitoes in all $y$ states move to $z$ states at the rate $\phi,$ where $\phi^{-1}$ is the EIP.
++ The full model thus has 12 variables per patch: 
+
+    - 3 variables describe blood feeding mosquitoes: $B_u,$ $B_y,$ and $B_z$; 
+    
+    - 3 variables describe resting mosquitoes: $R_u$, $R_y,$ and $R_z$; 
+    
+    - 3 variables describe egg laying mosquitoes: $Q_u,$ $Q_y,$ and $Q_z$; 
+    
+    - 3 variables describe sugar feeding mosquitoes: $S_u$, $S_y$, and $S_z.$
+
++ Two important details about infection dynamics are that: 
+
+    - Mosquitoes move from $B_u$ to $R_y$  when they blood feed on an infectious human and get infected: in this model, that occurs at the *per-capita* rate  $fq\kappa$; and
+
+    + Mosquitoes in all infected states ($y$) move to infectious states ($z$) at the rate $\phi,$ where $\phi^{-1}$ is the EIP.
 
 This vignette describes the model and its implementation in `ramp.library.` 
 
@@ -50,13 +74,13 @@ In the basic compartmental model, there are four behavioral states:
 
 Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and  
 
-## Parameters
+## Behavioral Parameters 
 
-+ $f$ is the overall blood feeding rate; the inverse $f^{-1}$ describes the average time to blood feed after entering the blood feeding state
++ $f$ is the overall blood feeding rate; 
 
 + $\nu$ is the egg laying rate; 
 
-+ $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
++ $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $\hat \delta = 1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
 
 + $\zeta$ is rate that blood feeding mosquitoes switch to sugar feeding 
 
@@ -79,11 +103,12 @@ Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and
 
 + $\eta^{-1}$ is the duration of the post-prandial resting period 
 
+## Behavioral Dynamics 
 
 $$
 \begin{array}{rl}
-\dot B &= \Lambda + \rho S + (\nu \delta + \theta) Q + \xi R - (f + \zeta_B) B - \Omega_B \cdot B \\
-\dot S &= \Lambda + \nu (1-\delta) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
+\dot B &= \Lambda \omega + \rho S + (\nu + \theta) \delta Q + \xi R - (f + \zeta_B) B - \Omega_B \cdot B \\
+\dot S &= \Lambda (1-\omega)+ (\nu + \theta)(1-\delta) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
 \dot R &= f B - (\xi + \eta + g) R \\ 
 \dot Q &= \eta R - (\nu + \theta) Q - \Omega_Q \cdot Q \\
 \end{array}
@@ -124,8 +149,8 @@ We present the following behavioral state model:
 
 $$
 \begin{array}{rl}
-\dot S_u &= \Lambda + \zeta B_u + \nu (1-\delta) Q_u - \rho S_u - \Omega_S \cdot S_u \\  
-\dot B_u &= \rho S_u + (\nu \delta+ \theta) Q_u + \xi R - (f + \zeta) B_u - \Omega_B \cdot B_u \\
+\dot B_u &= \Lambda \omega + \rho S_u + (\nu +\theta) \delta Q_u + \xi R - (f + \zeta) B_u - \Omega_B \cdot B_u \\
+\dot S_u &= \Lambda (1-\omega) + \zeta B_u + (\nu + \theta) (1-\delta) Q_u - \rho S_u - \Omega_S \cdot S_u \\  
 \dot R_u &= f (1-q\kappa) B_u - (\xi + \eta + g) R_u \\ 
 \dot Q_u &= \eta R_u - (\nu + \theta) Q_u- \Omega_Q \cdot Q_u
 \end{array}
