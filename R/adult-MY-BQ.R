@@ -1,5 +1,33 @@
 # specialized methods for the adult mosquito BQ model
 
+
+#' @title Derivatives for adult mosquitoes
+#' @description Implements [dMYdt] for the BQ ODE model.
+#' @inheritParams ramp.xds::dMYdt
+#' @return a [numeric] vector
+#' @export
+dMYdt.BQ <- function(t, y, xds_obj, s){
+
+  Lambda = xds_obj$terms$Lambda[[s]]
+  kappa = xds_obj$terms$kappa[[s]]
+
+  with(get_MY_vars(y, xds_obj, s),{
+    with(xds_obj$MY_obj[[s]],{
+
+      dBu <- Lambda + nu*Qu - f*Bu - Omega_b %*% Bu
+      dQu <- f*(1-q*kappa)*Bu - nu*Qu - Omega_q %*% Qu
+
+      dBy <- nu*Qy - (f+phi)*By - Omega_b %*% By
+      dQy <- f*q*kappa*Bu + f*By - (nu+phi)*Qy - Omega_q %*% Qy
+
+      dBz <- phi*By + nu*Qz - f*Bz - Omega_b %*% Bz
+      dQz <- phi*Qy + f*Bz - nu*Qz - Omega_q %*% Qz
+
+      return(c(dBu, dQu, dBy, dQy, dBz, dQz))
+    })
+  })
+}
+
 #' @title The **BQ** Module Skill Set
 #'
 #' @description The **MY** skill set is a list of
@@ -99,32 +127,6 @@ F_eggs.BQ <- function(t, y, xds_obj, s) {
   return(eggs)
 }
 
-#' @title Derivatives for adult mosquitoes
-#' @description Implements [dMYdt] for the BQ ODE model.
-#' @inheritParams ramp.xds::dMYdt
-#' @return a [numeric] vector
-#' @export
-dMYdt.BQ <- function(t, y, xds_obj, s){
-
-  Lambda = xds_obj$terms$Lambda[[s]]
-  kappa = xds_obj$terms$kappa[[s]]
-
-  with(get_MY_vars(y, xds_obj, s),{
-    with(xds_obj$MY_obj[[s]],{
-
-      dBu <- Lambda + nu*Qu - f*Bu - Omega_b %*% Bu
-      dQu <- f*(1-q*kappa)*Bu - nu*Qu - Omega_q %*% Qu
-
-      dBy <- nu*Qy - (f+phi)*By - Omega_b %*% By
-      dQy <- f*q*kappa*Bu + f*By - (nu+phi)*Qy - Omega_q %*% Qy
-
-      dBz <- phi*By + nu*Qz - f*Bz - Omega_b %*% Bz
-      dQz <- phi*Qy + f*Bz - nu*Qz - Omega_q %*% Qz
-
-      return(c(dBu, dQu, dBy, dQy, dBz, dQz))
-    })
-  })
-}
 
 #' @title Setup MY_obj for the BQ model
 #' @description Implements [setup_MY_obj] for the RM model
