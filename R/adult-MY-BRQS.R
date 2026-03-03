@@ -27,20 +27,20 @@ dMYZdt.BRQS <- function(t, y, pars, s){
 
     with(pars$MYZpar[[s]],{
 
-      dSudt <- Lambda + zeta*Bu + nu*(1-p)*Qu-rho*Su-Omega_s %*% Su
-      dBudt <- rho*Su + (nu*p + theta)*Qu + xi*R - (f+zeta)*Bu - Omega_b %*% Bu
+      dBudt <- (1-omega)*Lambda + rho*Su + (nu+theta)*delta*Qu + xi*R - (f+zeta)*Bu - Omega_b %*% Bu
       dRudt <- f*(1-q*kappa)*Bu - (xi + eta + g)*Ru
       dQudt <- eta*Ru - (nu + theta)*Qu - Omega_q %*% Qu
+      dSudt <- omega*Lambda + zeta*Bu + (nu+theta)*(1-delta)*Qu - rho*Su - Omega_s %*% Su
 
-      dSydt <- zeta*By + nu*(1-p)*Qy-rho*Sy-Omega_s %*% Sy - tau*Sy
-      dBydt <- rho*Sy + (nu*p + theta)*Qy + xi*R - (f+zeta)*By - Omega_b %*% By - tau*By
+      dBydt <- rho*Sy + (nu + theta)*delta*Qy + xi*R - (f+zeta)*By - Omega_b %*% By - tau*By
       dRydt <- f*q*kappa*Bu + f*By - (xi + eta + g)*Ry - tau*Ry
       dQydt <- eta*Ry - (nu + theta)*Qy - Omega_q %*% Qy - tau*Qy
+      dSydt <- zeta*By + (nu+theta)*(1-delta)*Qy - rho*Sy - Omega_s%*%Sy - tau*Sy
 
-      dSzdt <- zeta*Bz + nu*(1-p)*Qz-rho*Sz-Omega_s %*% Sz + tau*Sy
-      dBzdt <- rho*Sz + (nu*p + theta)*Qz + xi*R - (f+zeta)*Bz - Omega_b %*% Bz + tau*By
+      dBzdt <- rho*Sz + (nu + theta)*delta*Qz + xi*R - (f+zeta)*Bz - Omega_b %*% Bz + tau*By
       dRzdt <- f*Bz - (xi + eta + g)*Rz + tau*Ry
       dQzdt <- eta*Rz - (nu + theta)*Qz - Omega_q %*% Qz + tau*Qy
+      dSzdt <- zeta*Bz + (nu+theta)*(1-delta)*Qz -rho*Sz -Omega_s %*% Sz + tau*Sy
 
       return(c(dSudt, dBudt, dRudt, dQudt,
                dSydt, dBydt, dRydt, dQydt,

@@ -14,7 +14,7 @@ vignette: >
 MYname = "BRQS"
 ``` 
 
-For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orgthogonal state spaces. It is a system of ordinary differential equations. The following concise summary is eplained in greater length below: 
+For the **MY** component, the **BRQS** module implements a behavioral state model for mosquito ecology and infection dynamics with two orthogonal state spaces: behavioral states & infected states. It is a system of ordinary differential equations. The following concise summary is eplained in greater length below: 
 
 + The *behavioral states* are: 
 
@@ -76,15 +76,29 @@ Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and
 
 ## Behavioral Parameters 
 
-+ $f$ is the overall blood feeding rate; 
++ *Blood Feeding Parameters*
 
-+ $\nu$ is the egg laying rate; 
+    + $f$ is the blood feeding rate
 
-+ $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $\hat \delta = 1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
+    + $\zeta$ is rate that blood feeding mosquitoes switch to sugar feeding 
+    
++ *Egg Laying Parameters* 
 
-+ $\zeta$ is rate that blood feeding mosquitoes switch to sugar feeding 
+    + $\nu$ is the egg laying rate; 
 
-+ $\theta$ is rate gravid mosquitoes resorb their eggs, reverting to a blood feeding state; while we do not explicitly model opportunistic sugar feeding while laying eggs, we assume mosquitoes would remain in the egg laying state if sugar was readily available, so $\theta$ could be described using a functional response to available sugar 
+    + $\theta$ is rate gravid mosquitoes resorb their eggs, reverting to a blood feeding state; while we do not explicitly model opportunistic sugar feeding while laying eggs, we assume mosquitoes would remain in the egg laying state if sugar was readily available, so $\theta$ could be described using a functional response to available sugar 
+
+    + $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $\hat \delta = 1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
+
++ *Sugar Feeding Parameters* 
+
+    + $\rho$ is the rate mosquitoes sugar feed; 
+
++ *Resting Parameters* 
+
+    + $\eta^{-1}$ is the EIP  
+    
+    + $\xi$ is the refeeding rate, the rate that mosquitoes revert to blood feeding (rather than lay eggs) 
 
 + $\Omega_x$ is a state-specific dispersal matrix: 
 
@@ -107,9 +121,9 @@ Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and
 
 $$
 \begin{array}{rl}
-\dot B &= \Lambda \omega + \rho S + (\nu + \theta) \delta Q + \xi R - (f + \zeta_B) B - \Omega_B \cdot B \\
-\dot S &= \Lambda (1-\omega)+ (\nu + \theta)(1-\delta) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
-\dot R &= f B - (\xi + \eta + g) R \\ 
+\dot B &= \Lambda (1-\omega) + \rho S + (\nu + \theta) \delta Q + \xi R - (f + \zeta) B - \Omega_B \cdot B \\
+\dot S &= \Lambda \omega + (\nu + \theta)(1-\delta) Q + \zeta B  - \rho S - \Omega_S \cdot S \\  
+\dot R &= K_f \cdot f B - (\xi + \eta ) R - \Omega_R \cdot R \\ 
 \dot Q &= \eta R - (\nu + \theta) Q - \Omega_Q \cdot Q \\
 \end{array}
 $$
@@ -149,30 +163,32 @@ We present the following behavioral state model:
 
 $$
 \begin{array}{rl}
-\dot B_u &= \Lambda \omega + \rho S_u + (\nu +\theta) \delta Q_u + \xi R - (f + \zeta) B_u - \Omega_B \cdot B_u \\
-\dot S_u &= \Lambda (1-\omega) + \zeta B_u + (\nu + \theta) (1-\delta) Q_u - \rho S_u - \Omega_S \cdot S_u \\  
-\dot R_u &= f (1-q\kappa) B_u - (\xi + \eta + g) R_u \\ 
-\dot Q_u &= \eta R_u - (\nu + \theta) Q_u- \Omega_Q \cdot Q_u
+\dot B_u &= \Lambda (1-\omega) + \rho S_u + (\nu + \theta) \delta Q_u + \xi R_u - (f + \zeta) B_u - \Omega_B \cdot B_u \\
+\dot S_u &= \Lambda \omega + (\nu + \theta)(1-\delta) Q_u + \zeta B_u  - \rho S_u - \Omega_S \cdot S_u \\  
+\dot R_u &= f (1-q \kappa) B_u - (\xi + \eta ) R_u - \Omega_R \cdot R_u \\ 
+\dot Q_u &= \eta R_u - (\nu + \theta) Q_u - \Omega_Q \cdot Q_u \\
 \end{array}
 $$
+
 **infected** 
 
 $$
 \begin{array}{rl}
-\dot S_y &= \zeta B_y + \nu (1-\delta) Q_y - \rho S_y - \Omega_S \cdot S_y -\phi S_y\\  
-\dot B_y &= \rho S_y + (\nu \delta + \theta) Q_y + \xi R - (f + \zeta) B_y - \Omega_B \cdot B_y -\phi B_y\\
-\dot R_y &= f q \kappa B_u + f B_y- (\xi + \eta + g) R_y - \phi R_y\\ 
-\dot Q_y &= \eta R_y - (\nu + \zeta) Q_y- \Omega_Q \cdot Q_y - \phi Q_y
+\dot B_y &=  \rho S_y + (\nu + \theta) \delta Q_y + \xi R_y - (f + \zeta) B_y - \Omega_B \cdot B_y - \eta B_y\\
+\dot S_y &=  (\nu + \theta)(1-\delta) Q_y + \zeta B_y  - \rho S_y - \Omega_S \cdot S_y -\eta S_y\\  
+\dot R_y &= f B_y + fq\kappa B_u - (\xi + \eta ) R_y - \Omega_R \cdot R_y -\eta R_y\\ 
+\dot Q_y &= \eta R_y - (\nu + \theta) Q_y - \Omega_Q \cdot Q_y - \eta Q_y \\
 \end{array}
 $$
+
 
 **infectious** 
 
 $$
 \begin{array}{rl}
-\dot S_z &= \phi S_y + \zeta B_z + \nu (1-\delta) Q_z  - \rho S_z - \Omega_S \cdot S_z \\  
-\dot B_z &= \phi B_y + (\nu \delta + \theta) Q_z + \rho S_z + \xi R - (f + \zeta) B_z - \Omega_B \cdot B_z \\
-\dot R_z &= \phi R_y + f B_z - (\xi + \eta + g) R_z \\ 
-\dot Q_z &= \phi Q_y + \eta R_z - (\nu + \theta) Q_z- \Omega_Q \cdot Q_z
+\dot B_z &=  \rho S_z + (\nu + \theta) \delta Q_z + \xi R_z - (f + \zeta) B_z - \Omega_B \cdot B_z + \eta B_y\\
+\dot S_z &=  (\nu + \theta)(1-\delta) Q_z + \zeta B_z  - \rho S_z - \Omega_S \cdot S_z +\eta S_y\\  
+\dot R_z &= f B_z - (\xi + \eta ) R_z - \Omega_R \cdot R_z +\eta R_y\\ 
+\dot Q_z &= \eta R_z - (\nu + \theta) Q_z - \Omega_Q \cdot Q_z + \eta Q_y \\
 \end{array}
 $$
