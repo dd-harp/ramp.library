@@ -112,14 +112,14 @@ dMYdt.BQ <- function(t, y, xds_obj, s){
   with(get_MY_vars(y, xds_obj, s),{
     with(xds_obj$MY_obj[[s]],{
 
-      dBu <- Lambda + nu*Qu - f*Bu - (Omega_b %*% Bu)
-      dQu <- f*(1-q*kappa)*Bu - nu*Qu - (Omega_q %*% Qu)
+      dBu <- Lambda + nu*Qu - f*Bu - Omega_b %*% Bu
+      dQu <- f*(1-q*kappa)*Bu - nu*Qu - Omega_q %*% Qu
 
-      dBy <- nu*Qy - f*By - phi*By - (Omega_b %*% By)
-      dQy <- f*q*kappa*Bu + f*By - nu*Qy - phi*Qy - (Omega_q %*% Qy)
+      dBy <- nu*Qy - (f+phi)*By - Omega_b %*% By
+      dQy <- f*q*kappa*Bu + f*By - (nu+phi)*Qy - Omega_q %*% Qy
 
-      dBz <- phi*By + nu*Qz - f*Bz - (Omega_b %*% Bz)
-      dQz <- phi*Qy + f*Bz - nu*Qz - (Omega_q %*% Qz)
+      dBz <- phi*By + nu*Qz - f*Bz - Omega_b %*% Bz
+      dQz <- phi*Qy + f*Bz - nu*Qz - Omega_q %*% Qz
 
       return(c(dBu, dQu, dBy, dQy, dBz, dQz))
     })
