@@ -23,3 +23,4 @@ a \link{list}
 \description{
 Make initial values for the SEISd Update_XHt human model, with defaults
 }
+\keyword{internal}

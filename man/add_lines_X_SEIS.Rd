@@ -20,3 +20,4 @@ add_lines_X_SEIS(time, XH, nStrata, clrs = c("darkblue", "darkred"), llty = 1)
 \description{
 Add lines for the density of infected individuals for the SEIS model
 }
+\keyword{internal}

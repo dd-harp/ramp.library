@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{skill_set_MY.SEI}
 \alias{skill_set_MY.SEI}
-\title{The \strong{SEI} Module Skill Set}
+\title{The \strong{SEI} module skill set}
 \usage{
 \method{skill_set_MY}{SEI}(MYname)
 }
@@ -14,5 +14,9 @@
 }
 \description{
 The \strong{MY} skill set is a list of
-an module's capabilities
+a module's capabilities:
+\itemize{
+\item \code{demography} is
 }
+}
+\keyword{internal}

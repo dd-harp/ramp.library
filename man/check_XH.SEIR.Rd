@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{check_XH.SEIR}
 \alias{check_XH.SEIR}
-\title{Check / update before solving}
+\title{Run checks before solving (\strong{XH})}
 \usage{
 \method{check_XH}{SEIR}(xds_obj, i)
 }
@@ -12,8 +12,9 @@
 \item{i}{host species index}
 }
 \value{
-an \strong{\code{xds}} model object
+an \strong{\code{xds}} object
 }
 \description{
-Check / update before solving
+Run checks before solving (\strong{XH})
 }
+\keyword{internal}

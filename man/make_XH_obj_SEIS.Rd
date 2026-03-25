@@ -32,3 +32,4 @@ a \link{list}
 \description{
 Make parameters for SEIS xde human model, with defaults
 }
+\keyword{internal}

@@ -23,3 +23,4 @@ a \link{list}
 \description{
 Make initial values for the SEIS xde human model, with defaults
 }
+\keyword{internal}

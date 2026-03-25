@@ -17,3 +17,4 @@ a \link{numeric} vector of length \code{nStrata}
 \description{
 Compute the true pr for the garki model.
 }
+\keyword{internal}

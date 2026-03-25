@@ -22,3 +22,4 @@ values as a list.
 \seealso{
 \link{make_XH_obj_SEISd}
 }
+\keyword{internal}

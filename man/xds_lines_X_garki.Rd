@@ -20,3 +20,4 @@ xds_lines_X_garki(times, XH, xds_obj, clrs = viridisLite::turbo(8), llty = 1)
 \description{
 Add lines for the density of infected individuals for the garki model
 }
+\keyword{internal}

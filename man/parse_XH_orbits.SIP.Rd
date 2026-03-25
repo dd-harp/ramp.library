@@ -25,3 +25,4 @@ pulled from the solutions matrix, and the model
 also computes \eqn{S=H-I-P}. The variables are returned
 as a named list.
 }
+\keyword{internal}

@@ -38,3 +38,4 @@ a \link{list}
 \description{
 Make parameters for SIPd human model, with defaults
 }
+\keyword{internal}

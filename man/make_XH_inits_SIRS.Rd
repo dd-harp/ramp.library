@@ -23,3 +23,4 @@ a \link{list}
 \description{
 Make initial values for the SIRS human model, with defaults
 }
+\keyword{internal}

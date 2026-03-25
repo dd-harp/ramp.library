@@ -19,3 +19,4 @@ a \link{numeric} vector of length \code{nStrata}
 \description{
 Implements \link[ramp.xds:F_infectivity]{ramp.xds::F_infectivity} for the SEIS model.
 }
+\keyword{internal}

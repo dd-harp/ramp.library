@@ -21,3 +21,4 @@ a \link{list} vector
 \description{
 Implements \link[ramp.xds:setup_XH_inits]{ramp.xds::setup_XH_inits} for the SEIS model
 }
+\keyword{internal}

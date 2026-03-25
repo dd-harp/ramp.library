@@ -26,3 +26,4 @@
 \description{
 Plot the density of infected individuals for the SEIRV model
 }
+\keyword{internal}

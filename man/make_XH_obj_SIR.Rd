@@ -23,3 +23,4 @@ a \link{list}
 \description{
 Make parameters for SIR human model, with defaults
 }
+\keyword{internal}

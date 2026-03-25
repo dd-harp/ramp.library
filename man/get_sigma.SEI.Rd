@@ -17,3 +17,4 @@ y a \link{numeric} vector assigned the class "dynamic"
 \description{
 Get the feeding rate
 }
+\keyword{internal}

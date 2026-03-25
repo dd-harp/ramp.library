@@ -21,3 +21,4 @@ a \link{list} vector
 \description{
 Implements \link[ramp.xds:setup_XH_obj]{ramp.xds::setup_XH_obj} for the garki model
 }
+\keyword{internal}

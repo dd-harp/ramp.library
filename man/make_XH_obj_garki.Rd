@@ -50,3 +50,4 @@ a \link{list}
 \description{
 Make parameters for garki human model
 }
+\keyword{internal}

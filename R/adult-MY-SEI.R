@@ -1,14 +1,56 @@
 # specialized methods for the adult mosquito SEI model
 
-#' @title The **SEI** Module Skill Set
+#' @title The `SEI` module for the MY component
+#' @description
+#' Implements the **MY** component using a Susceptible-Exposed-Infectious
+#' (SEI) compartmental model of adult mosquito infection dynamics.
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`M`}{density of adult mosquitoes}
+#'   \item{`Y`}{density of infected (exposed) adult mosquitoes}
+#'   \item{`Z`}{density of infectious adult mosquitoes}
+#' }
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`f`}{blood feeding rate}
+#'   \item{`q`}{human blood fraction}
+#'   \item{`g`}{mosquito mortality rate}
+#'   \item{`sigma`}{patch emigration rate}
+#'   \item{`mu`}{emigration-related loss}
+#'   \item{`eip`}{extrinsic incubation period (\eqn{\tau})}
+#'   \item{`nu`}{oviposition rate (per mosquito)}
+#'   \item{`eggsPerBatch`}{eggs laid per oviposition bout}
+#' }
+#'
+#' @section Dynamics:
+#' \deqn{
+#' \begin{array}{rl}
+#' dM/dt &= \Lambda - \Omega \cdot M \\
+#' dY/dt &= fq\kappa(M-Y) - \Omega \cdot Y \\
+#' dZ/dt &= (Y-Z)/\tau - \Omega \cdot Z \\
+#' \end{array}
+#' }
+#' where \eqn{\Omega} is the demographic matrix encoding mortality and dispersal,
+#' and \eqn{\kappa} is the net infectiousness of humans.
+#'
+#' @name SEI
+#' @rdname SEI
+NULL
+
+#' @title The **SEI** module skill set
 #'
 #' @description The **MY** skill set is a list of
-#' an module's capabilities
+#' a module's capabilities:
+#'
+#' + `demography` is
 #'
 #' @inheritParams ramp.xds::skill_set_MY
 #'
 #' @return *MY* module skill set, as a list
 #'
+#' @keywords internal
 #' @export
 skill_set_MY.SEI = function(MYname){
   return(list())
@@ -18,28 +60,28 @@ skill_set_MY.SEI = function(MYname){
 #'
 #' @inheritParams ramp.xds::check_MY
 #'
-#' @returns an **`xds`** model object
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
 check_MY.SEI = function(xds_obj, s){
   return(xds_obj)
 }
 
-#' @title \eqn{\cal MY} Component Derivatives for the `SEI` Mosquito Model
+#' @title Compute derivatives for `SEI` (**MY**)
 #' @description Implements [dMYdt] for the SEI ODE model.
 #'
-#' @details
-#'
 #' The dynamics of adult mosquitoes:
-#' \deqn{\frac{dM}{dt} = \Lambda - \Omega \cdot M}
+#' \deqn{dM/dt = \Lambda - \Omega \cdot M}
 #'
 #' The density of infected but not infectious mosquitoes:
-#' \deqn{\frac{dY}{dt} = fq\kappa(M-Y) - \Omega \cdot Y}
+#' \deqn{dY/dt = fq\kappa(M-Y) - \Omega \cdot Y}
 #'
 #' The density of infectious mosquitoes:
-#' \deqn{\frac{dZ}{dt} = (Y-Z)/\tau - \Omega \cdot Z}
+#' \deqn{dZ/dt = (Y-Z)/\tau - \Omega \cdot Z}
 #'
 #' @inheritParams ramp.xds::dMYdt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 dMYdt.SEI <- function(t, y, xds_obj, s) {
   Lambda = xds_obj$terms$Lambda[[s]]
@@ -62,6 +104,7 @@ dMYdt.SEI <- function(t, y, xds_obj, s) {
 #' @description Implements [Update_MYt] for the SEI model.
 #' @inheritParams ramp.xds::Update_MYt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 Update_MYt.SEI <- function(t, y, xds_obj, s) {
   Lambda = xds_obj$Lambda[[s]]
@@ -82,6 +125,7 @@ Update_MYt.SEI <- function(t, y, xds_obj, s) {
 #' @description Implements [setup_MY_obj] for the SEI model
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
@@ -95,6 +139,7 @@ setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
@@ -117,6 +162,7 @@ change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
 #' @inheritParams ramp.xds::get_MY_pars
 #'
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_MY_pars.SEI <- function(xds_obj, s=1) {
   with(xds_obj$MY_obj[[s]], list(
@@ -129,6 +175,7 @@ get_MY_pars.SEI <- function(xds_obj, s=1) {
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return an `xds` object
+#' @keywords internal
 #' @export
 change_MY_inits.SEI <- function(xds_obj, s=1, options=list()) {
   with(xds_obj$MY_obj[[s]]$inits,
@@ -143,6 +190,7 @@ change_MY_inits.SEI <- function(xds_obj, s=1, options=list()) {
 #' @description Implements [F_fqZ] for the SEI model.
 #' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_fqZ.SEI <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
@@ -155,6 +203,7 @@ F_fqZ.SEI <- function(t, y, xds_obj, s) {
 #' @description Implements [F_fqM] for the SEI model.
 #' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_fqM.SEI <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
@@ -167,6 +216,7 @@ F_fqM.SEI <- function(t, y, xds_obj, s) {
 #' @description Implements [F_eggs] for the SEI model.
 #' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_eggs.SEI <- function(t, y, xds_obj, s) {
   M <- y[xds_obj$MY_obj[[s]]$ix$M_ix]
@@ -179,6 +229,7 @@ F_eggs.SEI <- function(t, y, xds_obj, s) {
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
 #' @inheritParams ramp.xds::get_MY_vars
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_MY_vars.SEI <- function(y, xds_obj, s){
   with(xds_obj$MY_obj[[s]]$ix,
@@ -194,6 +245,7 @@ get_MY_vars.SEI <- function(y, xds_obj, s){
 #' @description Implements [setup_MY_inits] for the SEI model
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
+#' @keywords internal
 #' @export
 setup_MY_inits.SEI = function(xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]]$inits = make_MY_inits_SEI(xds_obj$nPatches, options)
@@ -208,6 +260,7 @@ setup_MY_inits.SEI = function(xds_obj, s, options=list()){
 #' @param Y total infected mosquito density at each patch
 #' @param Z infectious mosquito density at each patch
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_MY_inits_SEI = function(nPatches, options = list(),
                                M=5, Y=1, Z=0){
@@ -226,6 +279,7 @@ make_MY_inits_SEI = function(nPatches, options = list(),
 #' @inheritParams ramp.xds::setup_MY_ix
 #' @return a [list]
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
 setup_MY_ix.SEI <- function(xds_obj, s) {with(xds_obj,{
 
@@ -248,6 +302,7 @@ setup_MY_ix.SEI <- function(xds_obj, s) {with(xds_obj,{
 #' @description Implements [parse_MY_orbits] for the SEI model
 #' @inheritParams ramp.xds::parse_MY_orbits
 #' @return a [list]
+#' @keywords internal
 #' @export
 parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$ix,{
   M = outputs[,M_ix]
@@ -264,6 +319,7 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritParams change_MY_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
@@ -292,6 +348,7 @@ change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
                              g=1/12,  sigma=1/8,  mu=0,
@@ -374,12 +431,13 @@ make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
 })}
 
 
-#' @title Set mosquito bionomics to baseline
-#' @description Implements [MBaseline] for models with no forcing on the baseline
-#' @inheritParams ramp.xds::MBaseline
-#' @return the model as a [list]
+#' @title Mosquito bionomics for `SEI` (**MY**)
+#' @description Implements [MBionomics] for the SEI model
+#' @inheritParams ramp.xds::MBionomics
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
-MBaseline.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
+MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
   # Baseline parameters
   xds_obj$MY_obj[[s]]$f_t      <- F_feeding_rate(t, xds_obj, s)
   xds_obj$MY_obj[[s]]$q_t      <- F_human_frac(t, xds_obj, s)
@@ -398,12 +456,13 @@ MBaseline.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
   return(xds_obj)
 })}
 
-#' @title Set mosquito bionomics to baseline
-#' @description Implements [MBionomics] for models with no forcing on the baseline
-#' @inheritParams ramp.xds::MBionomics
-#' @return the model as a [list]
+#' @title Apply effect sizes for `SEI` (**MY**)
+#' @description Implements [MEffectSizes] for the SEI model
+#' @inheritParams ramp.xds::MEffectSizes
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
-MBionomics.SEI <- function(t, y, xds_obj, s) {
+MEffectSizes.SEI <- function(t, y, xds_obj, s) {
   with(xds_obj$MY_obj[[s]],{
     xds_obj$MY_obj[[s]]$f <- es_f*f_t
     xds_obj$MY_obj[[s]]$q <- es_q*q_t
@@ -418,6 +477,7 @@ MBionomics.SEI <- function(t, y, xds_obj, s) {
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_f.SEI = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], f_t*es_f)
@@ -427,6 +487,7 @@ get_f.SEI = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_q.SEI = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], q_t*es_q)
@@ -436,6 +497,7 @@ get_q.SEI = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_g.SEI = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], g_t*es_g)
@@ -445,6 +507,7 @@ get_g.SEI = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_sigma.SEI = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], sigma_t*es_sigma)
@@ -454,6 +517,7 @@ get_sigma.SEI = function(xds_obj, s=1){
 #' @description This method dispatches on the type of `MY_obj`.
 #' @inheritParams ramp.xds::steady_state_MY
 #' @return none
+#' @keywords internal
 #' @export
 steady_state_MY.SEI = function(Lambda, kappa, xds_obj, s=1){
   with(xds_obj$MY_obj[[s]],{

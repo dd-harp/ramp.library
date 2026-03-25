@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{MBionomics.SEI}
 \alias{MBionomics.SEI}
-\title{Set mosquito bionomics to baseline}
+\title{Mosquito bionomics for \code{SEI} (\strong{MY})}
 \usage{
 \method{MBionomics}{SEI}(t, y, xds_obj, s)
 }
@@ -13,11 +13,12 @@
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the species index}
+\item{s}{the vector species index}
 }
 \value{
-the model as a \link{list}
+an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} for models with no forcing on the baseline
+Implements \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} for the SEI model
 }
+\keyword{internal}

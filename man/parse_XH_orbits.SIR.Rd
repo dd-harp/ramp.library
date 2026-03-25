@@ -19,3 +19,4 @@ none
 \description{
 Implements \link[ramp.xds:parse_XH_orbits]{ramp.xds::parse_XH_orbits} for the SIR model
 }
+\keyword{internal}

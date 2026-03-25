@@ -26,3 +26,4 @@ Implements a continuous time version of the Garki model
 developed for the Garki Project
 \insertRef{DietzK1974GarkiModel}{ramp.library}}
 }
+\keyword{internal}

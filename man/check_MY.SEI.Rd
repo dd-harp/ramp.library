@@ -12,8 +12,9 @@
 \item{s}{the vector species index}
 }
 \value{
-an \strong{\code{xds}} model object
+an \strong{\code{xds}} object
 }
 \description{
 Run a check before solving
 }
+\keyword{internal}

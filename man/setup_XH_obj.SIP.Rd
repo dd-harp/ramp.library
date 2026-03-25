@@ -21,3 +21,4 @@ a \link{list} vector
 \description{
 Set up the \code{SIP} model with parameters
 }
+\keyword{internal}

@@ -27,3 +27,4 @@ Compute the steady state of the  dts SIPd model as a function of the daily eir.
 
 Compute the steady state of the SIPd model as a function of the daily eir.
 }
+\keyword{internal}

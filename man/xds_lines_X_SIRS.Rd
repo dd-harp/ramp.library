@@ -26,3 +26,4 @@ xds_lines_X_SIRS(
 \description{
 Add lines for the density of infected individuals for the SIRS model
 }
+\keyword{internal}

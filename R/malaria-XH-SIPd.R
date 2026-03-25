@@ -1,9 +1,50 @@
 # specialized methods for the human SIPd model
 
-#' @title The **XH** Module Skill Set
+#' @title The `SIPd` module for the XH component
+#' @description
+#' Implements the **XH** component using a delay Susceptible-Infectious-Prophylaxis
+#' (SIPd) model of malaria infection dynamics. This is the delay differential
+#' equation version of the SIP model, in which the duration of prophylaxis
+#' \eqn{\eta} is modelled as a fixed delay.
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`H`}{total human (or host) population density}
+#'   \item{`I`}{density of infectious humans}
+#'   \item{`P`}{density of humans under chemoprophylaxis}
+#' }
+#' Note: susceptible density \eqn{S = H - I - P}.
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`b`}{transmission probability from mosquito to human}
+#'   \item{`c`}{transmission probability from human to mosquito}
+#'   \item{`r`}{clearance rate for infections}
+#'   \item{`rho`}{fraction of new infections immediately treated / entering \eqn{P}}
+#'   \item{`xi`}{rate of mass drug administration (\eqn{\xi})}
+#'   \item{`eta`}{prophylaxis duration (fixed delay, in days)}
+#'   \item{`B`}{time-dependent birth rate function \eqn{B(t, H)}}
+#'   \item{`D`}{linear operator (matrix) for mortality, migration, aging, and transfers}
+#' }
+#'
+#' @section Dynamics:
+#' \deqn{
+#' \begin{array}{rl}
+#' dH/dt &= B(t,H) + D \cdot H \\
+#' dI/dt &= (1-\rho)hS - (r + \xi)I + D \cdot I \\
+#' dP/dt &= (\rho h + \xi)S + \xi I - \dot{\mathcal{H}}(P) + D \cdot P \\
+#' \end{array}}
+#' where \eqn{\dot{\mathcal{H}}(P)} is the delayed outflow from \eqn{P},
+#' computed via [deSolve::lagderiv].
+#'
+#' @name SIPd
+#' @rdname SIPd
+NULL
+
+#' @title The **XH** module skill set for `SIPd`
 #'
 #' @description The **XH** skill set is a list of
-#' an module's capabilities.
+#' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
@@ -11,6 +52,7 @@
 #'
 #' @return the skill set, as a list
 #'
+#' @keywords internal
 #' @export
 skill_set_XH.SIPd = function(Xname = "SIP"){
   return(list(
@@ -21,11 +63,12 @@ skill_set_XH.SIPd = function(Xname = "SIP"){
   ))
 }
 
-#' Check / update before solving
+#' Run checks before solving (**XH**)
 #'
-#' @inheritParams  ramp.xds::check_XH
+#' @inheritParams ramp.xds::check_XH
 #'
-#' @returns an **`xds`** model object
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
 check_XH.SIPd = function(xds_obj, i){
   return(xds_obj)
@@ -47,6 +90,7 @@ check_XH.SIPd = function(xds_obj, i){
 #' @seealso The parameters are defined in [make_XH_obj_SIPd]
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 dXHdt.SIPd <- function(t, y, xds_obj, i){
 
@@ -74,6 +118,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
 #' @description Implements [setup_XH_obj] for the SIPd model
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_obj.SIPd = function(Xname, xds_obj, i, options=list()){
   xds_obj = ramp.xds::ode_to_dde(xds_obj)
@@ -92,6 +137,7 @@ setup_XH_obj.SIPd = function(Xname, xds_obj, i, options=list()){
 #' @param eta duration of chemo-protection
 #' @param xi background treatment rate
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_XH_obj_SIPd = function(nStrata, options=list(),
                             b=0.55, r=1/180, c=0.15,
@@ -124,6 +170,7 @@ make_XH_obj_SIPd = function(nStrata, options=list(),
 #' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_XH_pars.SIPd <- function(xds_obj, i=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
@@ -142,6 +189,7 @@ change_XH_pars.SIPd <- function(xds_obj, i=1, options=list()) {
 #' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_XH_inits.SIPd <- function(xds_obj, i=1, options=list()) {
   with(get_XH_inits(xds_obj, i), with(options,{
@@ -159,6 +207,7 @@ change_XH_inits.SIPd <- function(xds_obj, i=1, options=list()) {
 #' @inheritParams ramp.xds::get_XH_pars
 #' @return a [list]
 #' @seealso [make_XH_obj_SIPd]
+#' @keywords internal
 #' @export
 get_XH_pars.SIPd <- function(xds_obj, i=1) {
   with(xds_obj$XH_obj[[i]],list(b=b, c=c, r=r, rho=rho, eta=eta, xi=xi))
@@ -168,6 +217,7 @@ get_XH_pars.SIPd <- function(xds_obj, i=1) {
 #' @description Implements [Update_XHt] for the SIPd model.
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 Update_XHt.SIPd <- function(t, y, xds_obj, i){
 
@@ -193,6 +243,7 @@ Update_XHt.SIPd <- function(t, y, xds_obj, i){
 #' @description Compute the steady state of the  dts SIPd model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
+#' @keywords internal
 #' @export
 steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
   Iteq =(ar*H*eta*(1-rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
@@ -202,20 +253,22 @@ steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
 })}
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIPd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIPd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
-F_X.SIPd <- function(t, y, xds_obj, i) {
+F_I.SIPd <- function(t, y, xds_obj, i) {
   I = y[xds_obj$ix$X[[i]]$I_ix]
   X = with(xds_obj$XH_obj[[i]], c*I)
   return(X)
 }
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SIPd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SIPd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_H.SIPd <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj, i), return(H))
@@ -226,6 +279,7 @@ F_H.SIPd <- function(t, y, xds_obj, i){
 #' @description Implements [F_infectivity] for the SIPd model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_infectivity.SIPd <- function(y, xds_obj,i) {
   with(xds_obj$XH_obj[[i]], b)
@@ -237,6 +291,7 @@ F_infectivity.SIPd <- function(y, xds_obj,i) {
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_XH_vars.SIPd <- function(y, xds_obj, i) {
   with(xds_obj$ix$X[[i]],{
@@ -249,11 +304,12 @@ get_XH_vars.SIPd <- function(y, xds_obj, i) {
 
 
 #' @title Compute the HTC for the SIPd model
-#' @description Implements [HTC] for the SIPd model with demography.
-#' @inheritParams ramp.xds::HTC
+#' @description Implements [get_HTC] for the SIPd model with demography.
+#' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
-HTC.SIPd <- function(xds_obj, i) {
+get_HTC.SIPd <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
        return((1-rho)*b/(r+xi)*xi/(eta+xi))
   )
@@ -263,6 +319,7 @@ HTC.SIPd <- function(xds_obj, i) {
 #' @title Setup Initial Values
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_inits.SIPd = function(xds_obj, H, i, options=list()){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIPd(xds_obj$nStrata[i], H, options)
@@ -276,6 +333,7 @@ setup_XH_inits.SIPd = function(xds_obj, H, i, options=list()){
 #' @param I the initial values of the parameter I
 #' @param P the initial values of the parameter P
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_XH_inits_SIPd = function(nStrata, H,
                               options = list(),
@@ -293,6 +351,7 @@ make_XH_inits_SIPd = function(nStrata, H,
 #'
 #' @inheritParams ramp.xds::parse_XH_orbits
 #' @return none
+#' @keywords internal
 #' @export
 parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
   with(xds_obj$X_obj[[i]]$ix,{
@@ -311,6 +370,7 @@ parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
 #' @inheritParams ramp.xds::setup_XH_ix
 #' @return none
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
 setup_XH_ix.SIPd <- function(xds_obj, i) {with(xds_obj,{
 
@@ -336,6 +396,7 @@ setup_XH_ix.SIPd <- function(xds_obj, i) {with(xds_obj,{
 #' @description Implements [F_ni] for the SIPd model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_ni.SIPd <- function(vars, XH_obj) {
   ni = with(vars, XH_obj$c*I/H)
@@ -346,6 +407,7 @@ F_ni.SIPd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SIPd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_prevalence.SIPd <- function(vars, XH_obj){
   pr = with(vars, I/H)
@@ -356,6 +418,7 @@ F_prevalence.SIPd <- function(vars, XH_obj){
 #' @description Implements [F_prevalence] for the SIPd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_lm.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -366,6 +429,7 @@ F_pfpr_by_lm.SIPd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SIPd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_rdt.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -376,6 +440,7 @@ F_pfpr_by_rdt.SIPd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SIPd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_pcr.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -385,6 +450,7 @@ F_pfpr_by_pcr.SIPd <- function(vars, XH_obj) {
 #' Plot the density of infected individuals for the SIPd model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
+#' @keywords internal
 #' @export
 xds_plot_X.SIPd = function(xds_obj, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]
@@ -406,6 +472,7 @@ xds_plot_X.SIPd = function(xds_obj, i=1, clrs=c("darkblue", "darkred", "darkgree
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
+#' @keywords internal
 #' @export
 add_lines_X_SIPd = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
@@ -426,6 +493,7 @@ add_lines_X_SIPd = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "da
 #' @description Compute the steady state of the SIPd model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
+#' @keywords internal
 #' @export
 steady_state_X.SIPd = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{

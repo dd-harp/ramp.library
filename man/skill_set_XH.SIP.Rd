@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{skill_set_XH.SIP}
 \alias{skill_set_XH.SIP}
-\title{The \strong{XH} Module Skill Set}
+\title{The \strong{XH} module skill set for \code{SIP}}
 \usage{
 \method{skill_set_XH}{SIP}(Xname = "SIP")
 }
@@ -14,8 +14,9 @@ the skill set, as a list
 }
 \description{
 The \strong{XH} skill set is a list of
-an module's capabilities.
+a module's capabilities.
 }
 \note{
 This method dispatches on \code{class(xds_obj$XH_obj)}
 }
+\keyword{internal}

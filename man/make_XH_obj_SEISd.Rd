@@ -32,3 +32,4 @@ a \link{list}
 \description{
 Make parameters for SEISd Update_XHt human model, with defaults
 }
+\keyword{internal}

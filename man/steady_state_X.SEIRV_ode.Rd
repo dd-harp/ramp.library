@@ -21,3 +21,4 @@ the steady states as a named vector
 \description{
 Compute the steady state of the SIS model as a function of the daily eir.
 }
+\keyword{internal}

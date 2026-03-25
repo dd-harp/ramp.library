@@ -21,3 +21,4 @@ a \link{numeric} vector
 \description{
 Implements \link[ramp.xds:dXHdt]{ramp.xds::dXHdt} for the SIRS model
 }
+\keyword{internal}

@@ -32,3 +32,4 @@ a \link{list}
 \description{
 Make parameters for SEIR human model, with defaults
 }
+\keyword{internal}

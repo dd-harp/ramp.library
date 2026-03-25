@@ -26,3 +26,4 @@ xds_lines_X_SEIRV(
 \description{
 Add lines for the density of infected individuals for the SEIRV model
 }
+\keyword{internal}

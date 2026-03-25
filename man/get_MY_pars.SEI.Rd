@@ -17,3 +17,4 @@ a \link{list}
 \description{
 This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
 }
+\keyword{internal}

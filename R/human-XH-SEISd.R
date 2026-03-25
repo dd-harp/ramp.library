@@ -1,10 +1,49 @@
-# The delay SEIS model as a delay differential equation and delay difference equation
+# specialized methods for the human SEISd model (delay SEIS)
 
+#' @title The `SEISd` module for the XH component
+#' @description
+#' Implements the **XH** component using a delay Susceptible-Exposed-Infectious-Susceptible
+#' (SEISd) model of human infection dynamics. This is a delay differential equation
+#' (or delay difference equation) version of the SEIS model, in which the exposed
+#' period is modelled as a fixed delay \eqn{\nu} rather than an exponential rate.
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`H`}{total human (or host) population density}
+#'   \item{`E`}{density of exposed (infected but not yet infectious) humans}
+#'   \item{`I`}{density of infectious humans}
+#' }
+#' Note: susceptible density \eqn{S = H - E - I}.
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`b`}{transmission probability from mosquito to human}
+#'   \item{`c`}{transmission probability from human to mosquito}
+#'   \item{`nu`}{intrinsic incubation period (fixed delay, in days)}
+#'   \item{`r`}{clearance rate for infections}
+#'   \item{`B`}{time-dependent birth rate function \eqn{B(t, H)}}
+#'   \item{`D`}{linear operator (matrix) for mortality, migration, aging, and transfers}
+#' }
+#'
+#' @section Dynamics:
+#' \deqn{
+#' \begin{array}{rl}
+#' dH/dt &= B(t,H) + D \cdot H \\
+#' dE/dt &= hS - \dot{E}(t-\nu) + D \cdot E \\
+#' dI/dt &= \dot{E}(t-\nu) - rI + D \cdot I \\
+#' \end{array}}
+#' where \eqn{h} is the force of infection, \eqn{S = H - E - I}, and
+#' \eqn{\dot{E}(t-\nu)} is the rate cases were exposed \eqn{\nu} days ago
+#' (computed via [deSolve::lagderiv]).
+#'
+#' @name SEISd
+#' @rdname SEISd
+NULL
 
-#' @title The **XH** Module Skill Set
+#' @title The **XH** module skill set for `SEISd`
 #'
 #' @description The **XH** skill set is a list of
-#' an module's capabilities.
+#' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
@@ -12,6 +51,7 @@
 #'
 #' @return the skill set, as a list
 #'
+#' @keywords internal
 #' @export
 skill_set_XH.SEISd = function(Xname = "SIP"){
   return(list(
@@ -24,11 +64,12 @@ skill_set_XH.SEISd = function(Xname = "SIP"){
   ))
 }
 
-#' Check / update before solving
+#' Run checks before solving (**XH**)
 #'
-#' @inheritParams  ramp.xds::check_XH
+#' @inheritParams ramp.xds::check_XH
 #'
-#' @returns an **`xds`** model object
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
 check_XH.SEISd = function(xds_obj, i){
   return(xds_obj)
@@ -41,6 +82,7 @@ check_XH.SEISd = function(xds_obj, i){
 #' @return a [numeric] vector
 #' @importFrom deSolve lagvalue
 #' @importFrom deSolve lagderiv
+#' @keywords internal
 #' @export
 dXHdt.SEISd <- function(t, y, xds_obj, i) {
 
@@ -69,6 +111,7 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
 #' @description Implements [setup_XH_obj] for the SEISd model
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_obj.SEISd = function(Xname, xds_obj, i, options=list()){
   xds_obj = ode_to_dde(xds_obj)
@@ -85,6 +128,7 @@ setup_XH_obj.SEISd = function(Xname, xds_obj, i, options=list()){
 #' @param nu 1/latent period
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_XH_obj_SEISd = function(nStrata, options=list(),
                              b=0.55, r=1/180, nu=14, c=0.15){
@@ -111,6 +155,7 @@ make_XH_obj_SEISd = function(nStrata, options=list(),
 #' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_XH_pars.SEISd <- function(xds_obj, i=1, options=list()) {
   with(xds_obj$XH_obj[[i]], with(options,{
@@ -126,6 +171,7 @@ change_XH_pars.SEISd <- function(xds_obj, i=1, options=list()) {
 #' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_XH_inits.SEISd <- function(xds_obj, i=1, options=list()) {
   with(xds_obj$XH_obj[[i]]$inits,
@@ -145,6 +191,7 @@ change_XH_inits.SEISd <- function(xds_obj, i=1, options=list()) {
 #' @inheritParams ramp.xds::get_XH_pars
 #' @return a [list]
 #' @seealso [make_XH_obj_SEISd]
+#' @keywords internal
 #' @export
 get_XH_pars.SEISd <- function(xds_obj, i=1) {
   with(xds_obj$XH_obj[[i]],list(b=b, c=c, r=r, nu=nu))
@@ -153,11 +200,12 @@ get_XH_pars.SEISd <- function(xds_obj, i=1) {
 # specialized methods for the human SEISd model
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the SEISd model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the SEISd model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
-F_X.SEISd <- function(t, y, xds_obj, i) {
+F_I.SEISd <- function(t, y, xds_obj, i) {
   I = y[xds_obj$ix$X[[i]]$I_ix]
   X = with(xds_obj$XH_obj[[i]], c*I)
   return(X)
@@ -167,6 +215,7 @@ F_X.SEISd <- function(t, y, xds_obj, i) {
 #' @description Implements [F_H] for the SEISd model.
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_H.SEISd <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj, i), return(H))
@@ -177,6 +226,7 @@ F_H.SEISd <- function(t, y, xds_obj, i){
 #' @description Implements [F_infectivity] for the SEISd model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_infectivity.SEISd <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]], b)
@@ -189,6 +239,7 @@ F_infectivity.SEISd <- function(y, xds_obj, i) {
 #' @param E the initial values of the parameter E
 #' @param I the initial values of the parameter I
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_XH_inits_SEISd = function(nStrata, H, options = list(), E=0, I=1){
   with(options,{
@@ -206,6 +257,7 @@ make_XH_inits_SEISd = function(nStrata, H, options = list(), E=0, I=1){
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_XH_vars.SEISd <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -221,6 +273,7 @@ get_XH_vars.SEISd <- function(y, xds_obj, i) {
 #' @description Implements [setup_XH_inits] for the SEISd model
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_inits.SEISd = function(xds_obj, H, i=1, options=list()){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEISd(xds_obj$nStrata[i], H, options)
@@ -232,6 +285,7 @@ setup_XH_inits.SEISd = function(xds_obj, H, i=1, options=list()){
 #' @inheritParams ramp.xds::setup_XH_ix
 #' @return none
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
 setup_XH_ix.SEISd <- function(xds_obj, i) {with(xds_obj,{
 
@@ -258,6 +312,7 @@ setup_XH_ix.SEISd <- function(xds_obj, i) {with(xds_obj,{
 #' @description Implements [parse_XH_orbits] for the SEISd model
 #' @inheritParams ramp.xds::parse_XH_orbits
 #' @return none
+#' @keywords internal
 #' @export
 parse_XH_orbits.SEISd <- function(outputs, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix, {
@@ -272,11 +327,12 @@ parse_XH_orbits.SEISd <- function(outputs, xds_obj, i) {
 })}
 
 #' @title Compute the HTC for the SEISd model
-#' @description Implements [HTC] for the SEISd model with demography.
-#' @inheritParams ramp.xds::HTC
+#' @description Implements [get_HTC] for the SEISd model with demography.
+#' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
-HTC.SEISd <- function(xds_obj, i) {
+get_HTC.SEISd <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
        return(c/r)
   )
@@ -286,6 +342,7 @@ HTC.SEISd <- function(xds_obj, i) {
 #' @description Implements [F_ni] for the SEISd model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_ni.SEISd <- function(vars, XH_obj) {
   ni = with(vars, XH_obj$c*I/H)
@@ -296,6 +353,7 @@ F_ni.SEISd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SEISd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_prevalence.SEISd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -306,6 +364,7 @@ F_prevalence.SEISd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SEISd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_lm.SEISd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -316,6 +375,7 @@ F_pfpr_by_lm.SEISd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SEISd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_rdt.SEISd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -326,6 +386,7 @@ F_pfpr_by_rdt.SEISd <- function(vars, XH_obj) {
 #' @description Implements [F_prevalence] for the SEISd model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_pfpr_by_pcr.SEISd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -335,6 +396,7 @@ F_pfpr_by_pcr.SEISd <- function(vars, XH_obj) {
 #' Plot the density of infected individuals for the SEISd model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
+#' @keywords internal
 #' @export
 xds_plot_X.SEISd = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]
@@ -355,6 +417,7 @@ xds_plot_X.SEISd = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, 
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
+#' @keywords internal
 #' @export
 add_lines_X_SEISd = function(time, XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
@@ -374,6 +437,7 @@ add_lines_X_SEISd = function(time, XH, nStrata, clrs=c("darkblue","darkred"), ll
 #' @description Compute the steady state of the SEISd model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
+#' @keywords internal
 #' @export
 steady_state_X.SEISd = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{

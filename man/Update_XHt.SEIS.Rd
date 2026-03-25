@@ -21,3 +21,4 @@ a \link{numeric} vector
 \description{
 Implements \link[ramp.xds:Update_XHt]{ramp.xds::Update_XHt} for the SEIS model
 }
+\keyword{internal}

@@ -37,6 +37,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   K_matrix[upper.tri(K_matrix)] <- rexp(sum(1:(nPatches-1)))
   K_matrix[lower.tri(K_matrix)] <- rexp(sum(1:(nPatches-1)))
   K_matrix <- K_matrix/rowSums(K_matrix)
+  diag(K_matrix) <- -1
   K_matrix <- t(K_matrix)
 
   # omega matrix
@@ -45,7 +46,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
 
   MYo <- list(nPatches=nPatches,
                f=f, q=q, g=g, sigma=sigma, mu=mu, nu=nu, eggsPerBatch=eggsPerBatch,
-               eip=eip, K_matrix=K_matrix)
+               eip=eip, Koptions=K_matrix)
 
 
   # human PfPR and H
@@ -60,7 +61,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   params <- xds_setup(MYname = "macdonald", MYoptions = MYo,
                       Lname = "trivial", XHoptions = Xo,
                       Xname = "SIP",
-                      TimeSpent = TaR, K_matrix=K_matrix,
+                      TimeSpent = TaR, Koptions=K_matrix,
                       HPop=H, membership=membership,
                       nPatches=nPatches, residence=residence)
   params <- check_MY(params, 1)

@@ -17,3 +17,4 @@ a \link{numeric} vector of length \code{nStrata}
 \description{
 Implements \link[ramp.xds:F_ni]{ramp.xds::F_ni} for the SIPd model.
 }
+\keyword{internal}

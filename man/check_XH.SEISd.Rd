@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{check_XH.SEISd}
 \alias{check_XH.SEISd}
-\title{Check / update before solving}
+\title{Run checks before solving (\strong{XH})}
 \usage{
 \method{check_XH}{SEISd}(xds_obj, i)
 }
@@ -12,8 +12,9 @@
 \item{i}{host species index}
 }
 \value{
-an \strong{\code{xds}} model object
+an \strong{\code{xds}} object
 }
 \description{
-Check / update before solving
+Run checks before solving (\strong{XH})
 }
+\keyword{internal}

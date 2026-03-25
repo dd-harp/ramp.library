@@ -9,7 +9,7 @@
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the species index}
+\item{s}{the vector species index}
 }
 \value{
 a \link{list}
@@ -17,3 +17,4 @@ a \link{list}
 \description{
 Implements \link[ramp.xds:setup_MY_ix]{ramp.xds::setup_MY_ix} for the SEI model.
 }
+\keyword{internal}

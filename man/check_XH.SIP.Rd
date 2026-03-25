@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{check_XH.SIP}
 \alias{check_XH.SIP}
-\title{Check / update before solving}
+\title{Run checks before solving (\strong{XH})}
 \usage{
 \method{check_XH}{SIP}(xds_obj, i)
 }
@@ -12,8 +12,9 @@
 \item{i}{host species index}
 }
 \value{
-an \strong{\code{xds}} model object
+an \strong{\code{xds}} object
 }
 \description{
-Check / update before solving
+Run checks before solving (\strong{XH})
 }
+\keyword{internal}

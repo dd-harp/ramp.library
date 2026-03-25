@@ -1,10 +1,46 @@
 
 # specialized methods for the human garki model
 
-#' @title The **XH** Module Skill Set
+#' @title The `garki` module for the XH component
+#' @description
+#' Implements the **XH** component using a continuous-time version of the
+#' Garki model of malaria infection dynamics \insertRef{DietzK1974GarkiModel}{ramp.library}.
+#' The model tracks multiple stages of infection and immunity, originally
+#' designed to capture the dynamics of *P. falciparum* malaria in the Garki
+#' district of Nigeria.
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`H`}{total human (or host) population density}
+#'   \item{`x1`}{density of susceptible non-immune humans}
+#'   \item{`x2`}{density of newly infected humans}
+#'   \item{`y1`}{density of individuals with patent infections (stage 1)}
+#'   \item{`y2`}{density of individuals with patent infections (stage 2)}
+#'   \item{`y3`}{density of individuals with patent infections (stage 3, semi-immune)}
+#'   \item{`x3`}{density of non-immune individuals who cleared infection}
+#'   \item{`x4`}{density of semi-immune susceptibles}
+#' }
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`r1`, `r2`}{recovery rates for the two classes of infected individuals}
+#'   \item{`alpha1`, `alpha2`}{progression rates between patent infection stages}
+#'   \item{`nu`}{rate of progression from newly infected to patent infection}
+#'   \item{`b`}{transmission probability from mosquito to human}
+#'   \item{`c`}{transmission probability from human to mosquito}
+#' }
+#'
+#' @references
+#' \insertRef{DietzK1974GarkiModel}{ramp.library}
+#'
+#' @name garki
+#' @rdname garki
+NULL
+
+#' @title The **XH** module skill set for `garki`
 #'
 #' @description The **XH** skill set is a list of
-#' an module's capabilities.
+#' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
@@ -12,6 +48,7 @@
 #'
 #' @return the skill set, as a list
 #'
+#' @keywords internal
 #' @export
 skill_set_XH.garki = function(Xname = "garki"){
   return(list(
@@ -22,11 +59,12 @@ skill_set_XH.garki = function(Xname = "garki"){
   ))
 }
 
-#' Check / update before solving
+#' Run checks before solving (**XH**)
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @returns an **`xds`** model object
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
 check_XH.garki = function(xds_obj, i){
   return(xds_obj)
@@ -41,6 +79,7 @@ check_XH.garki = function(xds_obj, i){
 #' @references{This implements a version of the model
 #' developed for the Garki Project
 #' \insertRef{DietzK1974GarkiModel}{ramp.library}}
+#' @keywords internal
 #' @export
 dXHdt.garki = function(t, y, xds_obj, i){
 
@@ -69,6 +108,7 @@ dXHdt.garki = function(t, y, xds_obj, i){
 #' @description Implements [setup_XH_obj] for the garki model
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_obj.garki = function(Xname, xds_obj, i, options=list()){
   xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata, options)
@@ -89,6 +129,7 @@ setup_XH_obj.garki = function(Xname, xds_obj, i, options=list()){
 #' @param q3 a [numeric] detection of y3
 #' @param mu a [numeric] the death rate
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_XH_obj_garki = function(nStrata, options=list(), b=0.55,
                              r1=.0023, r2=.023, nu=1/15,
@@ -127,6 +168,7 @@ make_XH_obj_garki = function(nStrata, options=list(), b=0.55,
 #' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_XH_pars.garki <- function(xds_obj, i=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
@@ -146,11 +188,12 @@ change_XH_pars.garki <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_X] for the garki model.
-#' @inheritParams ramp.xds::F_X
+#' @description Implements [F_I] for the garki model.
+#' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
-F_X.garki <- function(t, y, xds_obj, i){
+F_I.garki <- function(t, y, xds_obj, i){
   y1 <- y[xds_obj$XH_obj[[i]]$ix$y1_ix]
   return(y1)
 }
@@ -159,6 +202,7 @@ F_X.garki <- function(t, y, xds_obj, i){
 #' @description Implements [F_H] for the SIS model.
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_H.garki <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj,i),{
@@ -170,6 +214,7 @@ F_H.garki <- function(t, y, xds_obj, i){
 #' @description Implements [F_infectivity] for the garki model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_infectivity.garki <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]], b)
@@ -180,6 +225,7 @@ F_infectivity.garki <- function(y, xds_obj, i) {
 #' @description Compute the true pr for the garki model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_prevalence.garki <- function(vars, XH_obj) {
   pr = with(XH_obj, with(vars, (y1+y2+y3)/H))
@@ -190,6 +236,7 @@ F_prevalence.garki <- function(vars, XH_obj) {
 #' @description Implements [F_ni] for the SIR model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
 #' @export
 F_ni.garki <- function(vars, XH_obj) {
   with(vars, with(XH_obj, (q1*y1+q2*y2+q3*y3)/H))
@@ -199,6 +246,7 @@ F_ni.garki <- function(vars, XH_obj) {
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_XH_vars.garki <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -226,6 +274,7 @@ get_XH_vars.garki <- function(y, xds_obj, i) {
 #' @param x3 a [numeric] initial value for the variable x3
 #' @param x4 a [numeric] initial value for the variable x4
 #' @return none
+#' @keywords internal
 #' @export
 make_XH_inits_garki <- function(nStrata, H, options = list(), x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
   stopifnot(is.numeric(x2))
@@ -250,6 +299,7 @@ make_XH_inits_garki <- function(nStrata, H, options = list(), x2=0, y1=0, y2=0, 
 #' @description Implements [change_XH_inits] for the garki model
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 change_XH_inits.garki = function(xds_obj, i, options=list()){
   with(xds_obj$XH_obj[[i]]$inits,
@@ -268,6 +318,7 @@ change_XH_inits.garki = function(xds_obj, i, options=list()){
 #' @description Implements [setup_XH_inits] for the garki model
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_XH_inits.garki = function(xds_obj, H, i, options=list()){
   xds_obj$XH_obj[[i]]$inits = with(xds_obj, make_XH_inits_garki(xds_obj$nStrata[i], H, options))
@@ -280,6 +331,7 @@ setup_XH_inits.garki = function(xds_obj, H, i, options=list()){
 #' @inheritParams ramp.xds::setup_XH_ix
 #' @return none
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
 setup_XH_ix.garki <- function(xds_obj, i) {with(xds_obj,{
 
@@ -317,6 +369,7 @@ setup_XH_ix.garki <- function(xds_obj, i) {with(xds_obj,{
 #' @description Implements [parse_XH_orbits] for the garki model
 #' @inheritParams ramp.xds::parse_XH_orbits
 #' @return none
+#' @keywords internal
 #' @export
 parse_XH_orbits.garki <- function(outputs, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -335,6 +388,7 @@ parse_XH_orbits.garki <- function(outputs, xds_obj, i) {
 #' Plot the density of infected individuals for the garki model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
+#' @keywords internal
 #' @export
 xds_plot_X.garki = function(xds_obj, i=1, clrs=viridisLite::turbo(7), llty=1, add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]
@@ -356,6 +410,7 @@ xds_plot_X.garki = function(xds_obj, i=1, clrs=viridisLite::turbo(7), llty=1, ad
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
+#' @keywords internal
 #' @export
 xds_lines_X_garki= function(times, XH, xds_obj, clrs=viridisLite::turbo(8), llty=1){
   with(XH,{
@@ -387,11 +442,12 @@ xds_lines_X_garki= function(times, XH, xds_obj, clrs=viridisLite::turbo(8), llty
 
 
 #' @title Compute the HTC for the garki model
-#' @description Implements [HTC] for the garki model
-#' @inheritParams ramp.xds::HTC
+#' @description Implements [get_HTC] for the garki model
+#' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
-HTC.garki <- function(xds_obj, i) {
+get_HTC.garki <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
        return(1/r1)
   )

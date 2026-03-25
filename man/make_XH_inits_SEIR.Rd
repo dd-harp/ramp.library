@@ -25,3 +25,4 @@ a \link{list}
 \description{
 Make initial values for the SEIR human model, with defaults
 }
+\keyword{internal}

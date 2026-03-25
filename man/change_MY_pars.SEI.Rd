@@ -25,3 +25,4 @@ This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
 
 This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
 }
+\keyword{internal}

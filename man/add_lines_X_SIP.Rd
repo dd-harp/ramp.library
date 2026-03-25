@@ -26,3 +26,4 @@ add_lines_X_SIP(
 \description{
 Add lines for the density of infected individuals for the SIP model
 }
+\keyword{internal}

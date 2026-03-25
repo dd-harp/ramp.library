@@ -21,3 +21,4 @@ none
 \description{
 This method dispatches on the type of \code{MY_obj}.
 }
+\keyword{internal}

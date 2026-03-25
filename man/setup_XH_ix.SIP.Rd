@@ -17,3 +17,4 @@ none
 \description{
 Implements \link[ramp.xds:setup_XH_ix]{ramp.xds::setup_XH_ix} for the SIP model.
 }
+\keyword{internal}

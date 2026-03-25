@@ -33,3 +33,4 @@ time-dependent birth rate; and the demographic matrix is \eqn{D}
 \seealso{
 The parameters are defined in \link{make_XH_obj_SIPd}
 }
+\keyword{internal}

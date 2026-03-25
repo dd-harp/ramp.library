@@ -1,11 +1,11 @@
 ---
-title: "The BRQS Module"
+title: "The BRQS Module (JNN)"
 subtitle: "A Four Behavioral State Model with Infection Dynamics"
 author: "David L Smith, Doreen Mbabazi Ssebuliba, Juliet Nakakawa Nsumba"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The BRQS Module}
+  %\VignetteIndexEntry{The BRQS Module (JNN)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

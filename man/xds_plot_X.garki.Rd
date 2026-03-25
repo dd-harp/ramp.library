@@ -20,3 +20,4 @@
 \description{
 Plot the density of infected individuals for the garki model
 }
+\keyword{internal}

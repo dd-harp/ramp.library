@@ -44,3 +44,4 @@ a \link{list}
 \description{
 Make parameters for SIP human model, with defaults
 }
+\keyword{internal}

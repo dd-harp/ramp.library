@@ -1,31 +1,65 @@
 # specialized methods for the adult mosquito BRQS model
 
+#' @title The `BRQS` module for the MY component
+#' @description
+#' Implements the **MY** component using a BRQS (Blood-feeding / Resting /
+#' gravid Queue / Sugar-feeding) model of adult mosquito ecology and infection
+#' dynamics. Mosquitoes cycle through four behavioural states, and infection
+#' is tracked across all states with rate \eqn{\tau} governing progression from
+#' exposed (**y**) to infectious (**z**).
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`Su`, `Bu`, `Ru`, `Qu`}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
+#'   \item{`Sy`, `By`, `Ry`, `Qy`}{infected (exposed) mosquitoes in each behavioural state}
+#'   \item{`Sz`, `Bz`, `Rz`, `Qz`}{infectious mosquitoes in each behavioural state}
+#' }
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`f`}{blood feeding rate}
+#'   \item{`q`}{human blood fraction}
+#'   \item{`g`}{background mortality rate}
+#'   \item{`rho`}{rate of leaving the sugar-feeding state to blood-feed}
+#'   \item{`zeta`}{rate at which blood-feeding mosquitoes take a sugar meal}
+#'   \item{`xi`}{rate of leaving the resting state}
+#'   \item{`eta`}{rate of transition from resting to gravid}
+#'   \item{`nu`, `theta`}{parameters governing the egg-laying / gravid state}
+#'   \item{`delta`}{fraction of gravid mosquitoes returning to blood feeding}
+#'   \item{`omega`}{fraction of emerging mosquitoes entering the sugar-feeding state}
+#'   \item{`tau`}{rate of progression from exposed to infectious (\eqn{1/\tau} = EIP)}
+#'   \item{`sigma_b`, `sigma_q`, `sigma_s`}{emigration rates in each state}
+#' }
+#'
+#' @section Dynamics:
+#' \deqn{
+#' \begin{array}{rl}
+#' dB_u/dt &= (1-\omega)\Lambda + \rho S_u + (\nu+\theta)\delta Q_u + \xi R - (f+\zeta) B_u - \Omega_b \cdot B_u \\
+#' dR_u/dt &= f(1-q\kappa) B_u - (\xi + \eta + g) R_u \\
+#' dQ_u/dt &= \eta R_u - (\nu + \theta) Q_u - \Omega_q \cdot Q_u \\
+#' dS_u/dt &= \omega\Lambda + \zeta B_u + (\nu+\theta)(1-\delta) Q_u - \rho S_u - \Omega_s \cdot S_u \\
+#' \end{array}
+#' }
+#' with analogous equations for the infected (**y**) and infectious (**z**) classes,
+#' where the term \eqn{\tau} governs progression between infection stages.
+#'
+#' @name BRQS
+#' @rdname BRQS
+NULL
 
-#' @title Derivatives for adult mosquitoes
-#' @description Implements [dMYZdt] for the BRQS ODE model.
-#' @inheritParams ramp.xds::dMYZdt
+#' @title Compute derivatives for `BRQS` (**MY**)
+#' @description Implements [dMYdt] for the BRQS ODE model.
+#' @inheritParams ramp.xds::dMYdt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
-dMYZdt.BRQS <- function(t, y, pars, s){
+dMYdt.BRQS <- function(t, y, xds_obj, s){
 
-  Lambda = as.vector(pars$Lambda[[s]])
-  kappa = as.vector(pars$kappa[[s]])
+  Lambda = as.vector(xds_obj$Lambda[[s]])
+  kappa = as.vector(xds_obj$kappa[[s]])
 
-  with(pars$ix$MYZ[[s]],{
-    Su <- y[Su_ix]
-    Bu <- y[Bu_ix]
-    Ru <- y[Ru_ix]
-    Qu <- y[Qu_ix]
-    Sy <- y[Sy_ix]
-    By <- y[By_ix]
-    Ry <- y[Ry_ix]
-    Qy <- y[Qy_ix]
-    Sz <- y[Sz_ix]
-    Bz <- y[Bz_ix]
-    Rz <- y[Rz_ix]
-    Qz <- y[Qz_ix]
-
-    with(pars$MYZpar[[s]],{
+  with(get_MY_vars(y, xds_obj, s),{
+    with(xds_obj$MY_obj[[s]],{
 
       dBudt <- (1-omega)*Lambda + rho*Su + (nu+theta)*delta*Qu + xi*R - (f+zeta)*Bu - Omega_b %*% Bu
       dRudt <- f*(1-q*kappa)*Bu - (xi + eta + g)*Ru
@@ -49,46 +83,75 @@ dMYZdt.BRQS <- function(t, y, pars, s){
   })
 }
 
-#' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBaseline] for the BRQS model
-#' @inheritParams ramp.xds::MBaseline
-#' @return a named [list]
+#' @title Return the variables as a list
+#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
+#' @inheritParams ramp.xds::get_MY_vars
+#' @return a [list]
+#' @keywords internal
 #' @export
-MBaseline.BRQS <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
-  pars$MYZpar[[s]]$es_f       <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_q       <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_nu      <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_g_s     <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_g_b     <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_g_r     <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_g_q     <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_sigma_b <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_sigma_q <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_sigma_s <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_mu_b    <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_mu_q    <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_mu_s    <- rep(1, nPatches)
-  pars$MYZpar[[s]]$es_theta   <- rep(1, nPatches)
+get_MY_vars.BRQS<- function(y, xds_obj, s){
+  with(xds_obj$MY_obj[[s]]$ix, return(list(
+    Su <- y[Su_ix],
+    Bu <- y[Bu_ix],
+    Ru <- y[Ru_ix],
+    Qu <- y[Qu_ix],
+    Sy <- y[Sy_ix],
+    By <- y[By_ix],
+    Ry <- y[Ry_ix],
+    Qy <- y[Qy_ix],
+    Sz <- y[Sz_ix],
+    Bz <- y[Bz_ix],
+    Rz <- y[Rz_ix],
+    Qz <- y[Qz_ix],
+    B = Bu+By+Bz,
+    R = Ru+Ry+Rz,
+    Q = Qu+Qy+Qz,
+    S = Su+Sy+Sz,
+    M = B+R+Q+S
+)))}
+
+#' @title Mosquito bionomics for `BRQS` (**MY**)
+#' @description Implements [MBionomics] for the BRQS model
+#' @inheritParams ramp.xds::MBionomics
+#' @return an **`xds`** object
+#' @keywords internal
+#' @export
+MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
+  xds_obj$MY_obj[[s]]$es_f       <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_q       <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_nu      <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_g_s     <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_g_b     <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_g_r     <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_g_q     <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_sigma_b <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_sigma_q <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_sigma_s <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_mu_b    <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_mu_q    <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_mu_s    <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$es_theta   <- rep(1, nPatches)
   return(pars)
 })}
 
 
-#' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBionomics] for the BRQS model
-#' @inheritParams ramp.xds::MBionomics
-#' @return a named [list]
+#' @title Apply effect sizes for `BRQS` (**MY**)
+#' @description Implements [MEffectSizes] for the BRQS model
+#' @inheritParams ramp.xds::MEffectSizes
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
-MBionomics.BRQS <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
-  pars$MYZpar[[s]]$f <- es_f*f_t
-  pars$MYZpar[[s]]$q <- es_q*q_t
+MEffectSizes.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
+  xds_obj$MY_obj[[s]]$f <- es_f*f_t
+  xds_obj$MY_obj[[s]]$q <- es_q*q_t
   g <- es_g*g_t
   sigma_b <- es_sigma_b*sigma_b_t
   sigma_q <- es_sigma_q*sigma_q_t
-  pars$MYZpar[[s]]$g <- g
-  pars$MYZpar[[s]]$sigma_b <- sigma_b
-  pars$MYZpar[[s]]$sigma_q <- sigma_q
-  pars$MYZpar[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
-  pars$MYZpar[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
+  xds_obj$MY_obj[[s]]$g <- g
+  xds_obj$MY_obj[[s]]$sigma_b <- sigma_b
+  xds_obj$MY_obj[[s]]$sigma_q <- sigma_q
+  xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
+  xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
   return(pars)
 })}
 
@@ -96,11 +159,12 @@ MBionomics.BRQS <- function(t, y, pars, s) {with(pars$MYZpar[[s]],{
 #' @description Implements [F_fqZ] for the BRQS model.
 #' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
-F_fqZ.BRQS <- function(t, y, pars, s) {
-  f = get_f(pars, s)
-  q = get_f(pars, s)
-  fqZ = f*q*y[pars$ix$MYZ[[s]]$Z_b_ix]
+F_fqZ.BRQS <- function(t, y, xds_obj, s) {
+  f = get_f(xds_obj, s)
+  q = get_f(xds_obj, s)
+  fqZ = f*q*y[xds_obj$ix$MY[[s]]$Z_b_ix]
   return(fqZ)
 }
 
@@ -108,11 +172,12 @@ F_fqZ.BRQS <- function(t, y, pars, s) {
 #' @description Implements [F_fqM] for the BRQS model.
 #' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
-F_fqM.BRQS <- function(t, y, pars, s) {
-  f = get_f(pars, s)
-  q = get_f(pars, s)
-  M = with(pars$ix$MYZ[[s]], y[Bu_ix] + y[By_ix] + y[Bz_ix])
+F_fqM.BRQS <- function(t, y, xds_obj, s) {
+  f = get_f(xds_obj, s)
+  q = get_f(xds_obj, s)
+  M = with(xds_obj$ix$MY[[s]], y[Bu_ix] + y[By_ix] + y[Bz_ix])
   fqM = f*q*M
   return(fqM)
 }
@@ -121,30 +186,32 @@ F_fqM.BRQS <- function(t, y, pars, s) {
 #' @description Implements [F_eggs] for the BRQS model.
 #' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
-F_eggs.BRQS <- function(t, y, pars, s) {
+F_eggs.BRQS <- function(t, y, xds_obj, s) {
 
-  G <- with(pars$ix$MYZ[[s]], y[Qu_ix] + y[Qy_ix] + y[Qz_ix])
-  eggs = with(pars$MYZpar[[s]], {
+  G <- with(xds_obj$ix$MY[[s]], y[Qu_ix] + y[Qy_ix] + y[Qz_ix])
+  eggs = with(xds_obj$MY_obj[[s]], {
     return(G*nu*eggsPerBatch)
   })
   return(eggs)
 }
 
 
-#' @title Setup MYZpar for the BRQS model
-#' @description Implements [setup_MYZpar] for the RM model
-#' @inheritParams ramp.xds::setup_MYZpar
+#' @title Setup MY_obj for the BRQS model
+#' @description Implements [setup_MY_obj] for the RM model
+#' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
-setup_MYZpar.BRQS = function(MYZname, pars, s, MYZopts=list()){
-  pars$MYZpar[[s]] = make_MYZpar_BRQS(pars$nPatches, MYZopts)
-  return(pars)
+setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
+  xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
+  return(xds_obj)
 }
 
 #' @title Make parameters for RM ODE adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param MYZopts a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overwrites the defaults
 #' @param eip extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
@@ -155,148 +222,152 @@ setup_MYZpar.BRQS = function(MYZname, pars, s, MYZopts=list()){
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @keywords internal
 #' @export
-make_MYZpar_BRQS = function(nPatches, MYZopts=list(), eip=12,
+make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
                           g=1/12, sigma_b=1/8, sigma_q=1/8, mu=0, f=0.5, q=0.95,
                           nu=1, eggsPerBatch=60){
 
-  with(MYZopts,{
-    MYZpar <- list()
-    class(MYZpar) <- "BRQS"
+  with(options,{
+    MY_obj <- list()
+    class(MY_obj) <- "BRQS"
 
-    MYZpar$nPatches <- nPatches
+    MY_obj$nPatches <- nPatches
 
     eip_par <- list()
     class(eip_par) <- 'static'
-    MYZpar$eip_par <- eip_par
-    MYZpar$eip     <- eip
+    MY_obj$eip_par <- eip_par
+    MY_obj$eip     <- eip
 
-    MYZpar$f_t          <- checkIt(f, nPatches)
-    MYZpar$es_f         <- rep(1, nPatches)
+    MY_obj$f_t          <- checkIt(f, nPatches)
+    MY_obj$es_f         <- rep(1, nPatches)
 
-    MYZpar$nu_t         <- checkIt(nu, nPatches)
-    MYZpar$es_nu        <- rep(1, nPatches)
+    MY_obj$nu_t         <- checkIt(nu, nPatches)
+    MY_obj$es_nu        <- rep(1, nPatches)
 
-    MYZpar$p            <- checkIt(p, nPatches)
-    MYZpar$zeta         <- checkIt(zeta, nPatches)
+    MY_obj$p            <- checkIt(p, nPatches)
+    MY_obj$zeta         <- checkIt(zeta, nPatches)
 
-    MYZpar$theta_t        <- checkIt(theta, nPatches)
-    MYZpar$es_theta        <- rep(1, nPatches)
+    MY_obj$theta_t        <- checkIt(theta, nPatches)
+    MY_obj$es_theta        <- rep(1, nPatches)
 
-    MYZpar$g_b_t         <- checkIt(g_b, nPatches)
-    MYZpar$es_g_b        <- rep(1, nPatches)
+    MY_obj$g_b_t         <- checkIt(g_b, nPatches)
+    MY_obj$es_g_b        <- rep(1, nPatches)
 
-    MYZpar$g_q_t          <- checkIt(g_q, nPatches)
-    MYZpar$es_g_q         <- rep(1, nPatches)
+    MY_obj$g_q_t          <- checkIt(g_q, nPatches)
+    MY_obj$es_g_q         <- rep(1, nPatches)
 
-    MYZpar$g_s_t          <- checkIt(g_s, nPatches)
-    MYZpar$es_g_s         <- rep(1, nPatches)
+    MY_obj$g_s_t          <- checkIt(g_s, nPatches)
+    MY_obj$es_g_s         <- rep(1, nPatches)
 
-    MYZpar$g_r_t          <- checkIt(g_r, nPatches)
-    MYZpar$es_g_r         <- rep(1, nPatches)
+    MY_obj$g_r_t          <- checkIt(g_r, nPatches)
+    MY_obj$es_g_r         <- rep(1, nPatches)
 
-    MYZpar$sigma_b_t    <- checkIt(sigma_b, nPatches)
-    MYZpar$es_sigma_b   <- rep(1, nPatches)
+    MY_obj$sigma_b_t    <- checkIt(sigma_b, nPatches)
+    MY_obj$es_sigma_b   <- rep(1, nPatches)
 
-    MYZpar$sigma_q_t    <- checkIt(sigma_q, nPatches)
-    MYZpar$es_sigma_q   <- rep(1, nPatches)
+    MY_obj$sigma_q_t    <- checkIt(sigma_q, nPatches)
+    MY_obj$es_sigma_q   <- rep(1, nPatches)
 
-    MYZpar$sigma_s_t    <- checkIt(sigma_q, nPatches)
-    MYZpar$es_sigma_s   <- rep(1, nPatches)
+    MY_obj$sigma_s_t    <- checkIt(sigma_q, nPatches)
+    MY_obj$es_sigma_s   <- rep(1, nPatches)
 
-    MYZpar$mu_b_t    <- checkIt(mu_b, nPatches)
-    MYZpar$es_mu_b   <- rep(1, nPatches)
+    MY_obj$mu_b_t    <- checkIt(mu_b, nPatches)
+    MY_obj$es_mu_b   <- rep(1, nPatches)
 
-    MYZpar$mu_q_t    <- checkIt(mu_q, nPatches)
-    MYZpar$es_mu_q   <- rep(1, nPatches)
+    MY_obj$mu_q_t    <- checkIt(mu_q, nPatches)
+    MY_obj$es_mu_q   <- rep(1, nPatches)
 
-    MYZpar$mu_s_t    <- checkIt(mu_q, nPatches)
-    MYZpar$es_mu_s   <- rep(1, nPatches)
+    MY_obj$mu_s_t    <- checkIt(mu_q, nPatches)
+    MY_obj$es_mu_s   <- rep(1, nPatches)
 
-    MYZpar$xi_t           <- checkIt(xi, nPatches)
-    MYZpar$es_xi         <- rep(1, nPatches)
+    MY_obj$xi_t           <- checkIt(xi, nPatches)
+    MY_obj$es_xi         <- rep(1, nPatches)
 
-    MYZpar$eta_t           <- checkIt(eta, nPatches)
-    MYZpar$es_eta         <- rep(1, nPatches)
+    MY_obj$eta_t           <- checkIt(eta, nPatches)
+    MY_obj$es_eta         <- rep(1, nPatches)
 
-    MYZpar$q_t          <- checkIt(q, nPatches)
-    MYZpar$es_q         <- rep(1, nPatches)
+    MY_obj$q_t          <- checkIt(q, nPatches)
+    MY_obj$es_q         <- rep(1, nPatches)
 
-    MYZpar$eggsPerBatch <- eggsPerBatch
+    MY_obj$eggsPerBatch <- eggsPerBatch
 
-    MYZpar$phi <- 1/MYZpar$eip
+    MY_obj$phi <- 1/MY_obj$eip
 
     calK <- diag(nPatches)
 
-    MYZpar$calKb <- calK
-    MYZpar$calKq <- calK
-    MYZpar$calKs <- calK
+    MY_obj$calKb <- calK
+    MY_obj$calKq <- calK
+    MY_obj$calKs <- calK
 
     Omega_par <- list()
     class(Omega_par) <- "static"
-    MYZpar$Omega_par <- Omega_par
-    MYZpar$Omega_b <- with(MYZpar, compute_Omega_xde(g, sigma_b, mu, calK))
-    MYZpar$Omega_q <- with(MYZpar, compute_Omega_xde(g, sigma_q, mu, calK))
-    MYZpar$Omega_s <- with(MYZpar, compute_Omega_xde(g, sigma_s, mu, calK))
+    MY_obj$Omega_par <- Omega_par
+    MY_obj$Omega_b <- with(MY_obj, compute_Omega_xde(g, sigma_b, mu, calK))
+    MY_obj$Omega_q <- with(MY_obj, compute_Omega_xde(g, sigma_q, mu, calK))
+    MY_obj$Omega_s <- with(MY_obj, compute_Omega_xde(g, sigma_s, mu, calK))
     base <- 'BRQS'
     class(base) <- 'BRQS'
-    MYZpar$baseline <- base
+    MY_obj$baseline <- base
 
-    return(MYZpar)
+    return(MY_obj)
 })}
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
-#' @param pars an **`xds`** object
+#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return a [list]
+#' @keywords internal
 #' @export
-get_MYZpars.BRQS <- function(pars, s=1) {
-  with(pars$MYZpar[[s]], list(
+get_MY_pars.BRQS <- function(xds_obj, s=1) {
+  with(xds_obj$MY_obj[[s]], list(
     f=f_t, q=q_t, g=g_t, sigma_b=sigma_b_t, sigma_q = sigma_q_t, eip=eip, mu=mu_t,
     nu=nu_t, eggsPerBatch=eggsPerBatch, calK=calK
   ))
 }
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
-#' @inheritParams ramp.xds::set_MYZpars
+#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
-set_MYZpars.BRQS <- function(pars, s=1, MYZopts=list()) {
-  nHabitats <- pars$nHabitats
-  with(pars$MYZpar[[s]], with(MYZopts,{
-    pars$MYZpar[[s]]$f_t = f
-    pars$MYZpar[[s]]$q_t = q
-    pars$MYZpar[[s]]$nu_t = nu
-    pars$MYZpar[[s]]$g_s_t = g_s
-    pars$MYZpar[[s]]$g_b_t = g_b
-    pars$MYZpar[[s]]$g_r_t = g_r
-    pars$MYZpar[[s]]$g_q_t = g_q
-    pars$MYZpar[[s]]$mu_s_t = mu_s
-    pars$MYZpar[[s]]$mu_b_t = mu_b
-    pars$MYZpar[[s]]$mu_q_t = mu_q
-    pars$MYZpar[[s]]$sigma_b_t = sigma_b
-    pars$MYZpar[[s]]$sigma_q_t = sigma_q
-    pars$MYZpar[[s]]$sigma_s_t = sigma_s
-    pars$MYZpar[[s]]$eip = eip
-    pars$MYZpar[[s]]$eggsPerBatch = eggsPerBatch
+change_MY_pars.BRQS <- function(xds_obj, s=1, options=list()) {
+  nHabitats <- xds_obj$nHabitats
+  with(xds_obj$MY_obj[[s]], with(options,{
+    xds_obj$MY_obj[[s]]$f_t = f
+    xds_obj$MY_obj[[s]]$q_t = q
+    xds_obj$MY_obj[[s]]$nu_t = nu
+    xds_obj$MY_obj[[s]]$g_s_t = g_s
+    xds_obj$MY_obj[[s]]$g_b_t = g_b
+    xds_obj$MY_obj[[s]]$g_r_t = g_r
+    xds_obj$MY_obj[[s]]$g_q_t = g_q
+    xds_obj$MY_obj[[s]]$mu_s_t = mu_s
+    xds_obj$MY_obj[[s]]$mu_b_t = mu_b
+    xds_obj$MY_obj[[s]]$mu_q_t = mu_q
+    xds_obj$MY_obj[[s]]$sigma_b_t = sigma_b
+    xds_obj$MY_obj[[s]]$sigma_q_t = sigma_q
+    xds_obj$MY_obj[[s]]$sigma_s_t = sigma_s
+    xds_obj$MY_obj[[s]]$eip = eip
+    xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
     return(pars)
   }))}
 
 #' @title Setup initial values for the BRQS model
-#' @description Implements [setup_MYZinits] for the RM model
-#' @inheritParams ramp.xds::setup_MYZinits
+#' @description Implements [setup_MY_inits] for the RM model
+#' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
+#' @keywords internal
 #' @export
-setup_MYZinits.BRQS = function(pars, s, MYZopts=list()){
-  pars$MYZinits[[s]] = with(pars$MYZpar[[s]], make_MYZinits_BRQS(nPatches, MYZopts))
-  return(pars)
+setup_MY_inits.BRQS = function(xds_obj, s, options=list()){
+  xds_obj$MYinits[[s]] = with(xds_obj$MY_obj[[s]], make_MY_inits_BRQS(nPatches, options))
+  return(xds_obj)
 }
 
 #' @title Make inits for BRQS adult mosquito model
 #' @param nPatches the number of patches in the model
-#' @param MYZopts a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overwrites the defaults
 #' @param Su uninfected, sugar feeding mosquitoes
 #' @param Bu uninfected, blood feeding mosquitoes
 #' @param Ru uninfected, resting mosquitoes
@@ -310,13 +381,14 @@ setup_MYZinits.BRQS = function(pars, s, MYZopts=list()){
 #' @param Rz infectious, resting mosquitoes
 #' @param Qz infectious, gravid mosqutioes
 #' @return a [list]
+#' @keywords internal
 #' @export
-make_MYZinits_BRQS = function(nPatches, MYZopts = list(),
+make_MY_inits_BRQS = function(nPatches, options = list(),
                               Su=100, Bu=100, Ru=1, Qu=10,
                               Sy=0, By=0, Ry=0, Qy=0,
                               Sz=0, Bz=0, Rz=0, Qz=0){
 
-  with(MYZopts,{
+  with(options,{
     Su = checkit(Su, nPatches)
     Bu = checkit(Bu, nPatches)
     Ru = checkit(Ru, nPatches)
@@ -337,13 +409,13 @@ make_MYZinits_BRQS = function(nPatches, MYZopts = list(),
 
 
 #' @title Add indices for adult mosquitoes to parameter list
-#' @description Implements [setup_MYZix] for the BRQS model.
-#' @inheritParams ramp.xds::setup_MYZix
+#' @description Implements [setup_MY_ix] for the BRQS model.
+#' @inheritParams ramp.xds::setup_MY_ix
 #' @return none
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
-setup_MYZix.BRQS <- function(pars, s) {with(pars,{
-
+setup_MY_ix.BRQS <- function(xds_obj, s) {with(xds_obj,{
 
   Su_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Su_ix, 1)
@@ -381,8 +453,8 @@ setup_MYZix.BRQS <- function(pars, s) {with(pars,{
   Qz_ix <- seq(from = max_ix+1, length.out=nPatches)
   max_ix <- tail(Qz_ix, 1)
 
-  pars$max_ix = max_ix
-  pars$ix$MYZ[[s]] = list(
+  xds_obj$max_ix = max_ix
+  xds_obj$MY[[s]]$ix = list(
     Su_ix = Su_ix, Bu_ix = Bu_ix, Ru_ix=Ru_ix, Qu_ix = Qu_ix,
     Sy_ix = Sy_ix, By_ix = By_ix, Ry_ix=Ry_ix, Qy_ix = Qy_ix,
     Sz_ix = Sz_ix, Bz_ix = Bz_ix, Rz_ix=Rz_ix, Qz_ix = Qz_ix)
@@ -393,11 +465,12 @@ setup_MYZix.BRQS <- function(pars, s) {with(pars,{
 
 
 #' @title Parse the output of deSolve and return variables for the BRQS model
-#' @description Implements [parse_MYZorbits] for the BRQS model
-#' @inheritParams ramp.xds::parse_MYZorbits
+#' @description Implements [parse_MY_orbits] for the BRQS model
+#' @inheritParams ramp.xds::parse_MY_orbits
 #' @return none
+#' @keywords internal
 #' @export
-parse_MYZorbits.BRQS <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
+parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$ix$MY[[s]],{
   Su = outputs[,Su_ix]
   Bu = outputs[,Bu_ix]
   Ru = outputs[,Ru_ix]
@@ -422,92 +495,57 @@ parse_MYZorbits.BRQS <- function(outputs, pars, s) {with(pars$ix$MYZ[[s]],{
 })}
 
 #' @title Make inits for BRQS adult mosquito model
-#' @inheritParams ramp.xds::update_MYZinits
+#' @inheritParams ramp.xds::change_MY_inits
 #' @return none
+#' @keywords internal
 #' @export
-update_MYZinits.BRQS <- function(pars, y0, s) {
-  with(pars$ix$MYZ[[s]],{
-    Su = y[Su_ix]
-    Bu = y[Bu_ix]
-    Ru = y[Ru_ix]
-    Qu = y[Qu_ix]
-    Sy = y[Sy_ix]
-    By = y[By_ix]
-    Ry = y[Ry_ix]
-    Qy = y[Qy_ix]
-    Sz = y[Sz_ix]
-    Bz = y[Bz_ix]
-    Rz = y[Rz_ix]
-    Qz = y[Qz_ix]
-    pars = setup_MYZinits_BRQS(pars$nPatches,
-                               Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
-                               Sy=Sy, By=By, Ry=Ry, Qy=Qy,
-                               Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz)
-    return(pars)
-  })}
+change_MY_inits.BRQS <- function(xds_obj, s, options = list()) {
+  inits = with(get_MY_inits(xds_obj, s), with(options,
+    list(Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
+         Sy=Sy, By=By, Ry=Ry, Qy=Qy,
+         Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz)))
 
+  xds_obj$MY_obj[[s]]$inits=inits
+  return(xds_obj)
+}
 
-#' @title Set new MYZ parameter values
-#' @description This method dispatches on the type of `pars$MYZpar[[s]]`.
-#' @inheritParams ramp.xds::set_MYZinits
-#' @return an `xds` object
-#' @export
-set_MYZinits.BRQS <- function(pars, s=1, MYZopts=list()) {
-  with(pars$MYZpar[[s]], with(MYZopts,{
-    pars$MYZinits[[s]]$Su = Su
-    pars$MYZinits[[s]]$Bu = Bu
-    pars$MYZinits[[s]]$Ru = Ru
-    pars$MYZinits[[s]]$Qu = Qu
-    pars$MYZinits[[s]]$Sy = Sy
-    pars$MYZinits[[s]]$By = By
-    pars$MYZinits[[s]]$Ry = Ry
-    pars$MYZinits[[s]]$Qy = Qy
-    pars$MYZinits[[s]]$Sz = Sz
-    pars$MYZinits[[s]]$Bz = Bz
-    pars$MYZinits[[s]]$Rz = Rz
-    pars$MYZinits[[s]]$Qz = Qz
-    return(pars)
-  }))}
-
-#' @title Return initial values as a vector
-#' @description Implements [get_MYZinits] for the BRQS model.
-#' @inheritParams ramp.xds::get_MYZinits
-#' @return none
-#' @export
-get_MYZinits.BRQS <- function(pars, s) {pars$MYZinits[[s]]}
 
 #' @title Get the feeding rate
-#' @param pars an **`xds`** object
+#' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
-get_f.BRQS = function(pars, s=1){
-  with(pars$MYZpar[[s]], f_t*es_f)
+get_f.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], f_t*es_f)
 }
 
 #' @title Get the feeding rate
-#' @param pars an **`xds`** object
+#' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
-get_q.BRQS = function(pars, s=1){
-  with(pars$MYZpar[[s]], q_t*es_q)
+get_q.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], q_t*es_q)
 }
 
 #' @title Get the feeding rate
-#' @param pars an **`xds`** object
+#' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
-get_g.BRQS = function(pars, s=1){
-  with(pars$MYZpar[[s]], g_t*es_g)
+get_g.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], g_t*es_g)
 }
 
 #' @title Get the feeding rate
-#' @param pars an **`xds`** object
+#' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
-get_sigma.BRQS = function(pars, s=1){
-  with(pars$MYZpar[[s]], sigma_b_t*es_sigma_b)
+get_sigma.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], sigma_b_t*es_sigma_b)
 }

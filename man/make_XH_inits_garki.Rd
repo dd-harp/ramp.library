@@ -44,3 +44,4 @@ Make inits for garki human model.
 \note{
 We use H instead of x, but other variables are passed in the same order as they are presented in the original paper.
 }
+\keyword{internal}

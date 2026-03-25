@@ -1,10 +1,56 @@
 # specialized methods for the adult mosquito BQ model
 
+#' @title The `BQ` module for the MY component
+#' @description
+#' Implements the **MY** component using a BQ (Blood-feeding / egg-laying Queue)
+#' model of adult mosquito ecology and infection dynamics. Mosquitoes alternate
+#' between a blood-feeding state (**B**) and a gravid / egg-laying state (**Q**),
+#' and infection is tracked across both states.
+#'
+#' @section State Variables:
+#' \describe{
+#'   \item{`Bu`}{density of uninfected, blood-feeding mosquitoes}
+#'   \item{`Qu`}{density of uninfected, gravid (egg-laying) mosquitoes}
+#'   \item{`By`}{density of infected (exposed), blood-feeding mosquitoes}
+#'   \item{`Qy`}{density of infected (exposed), gravid mosquitoes}
+#'   \item{`Bz`}{density of infectious, blood-feeding mosquitoes}
+#'   \item{`Qz`}{density of infectious, gravid mosquitoes}
+#' }
+#'
+#' @section Parameters:
+#' \describe{
+#'   \item{`f`}{blood feeding rate}
+#'   \item{`q`}{human blood fraction}
+#'   \item{`g`}{mosquito mortality rate}
+#'   \item{`sigma_b`}{emigration rate during blood feeding}
+#'   \item{`sigma_q`}{emigration rate during egg laying}
+#'   \item{`mu`}{fraction lost during emigration}
+#'   \item{`nu`}{oviposition rate (per mosquito)}
+#'   \item{`eip`}{extrinsic incubation period (\eqn{\tau}); \eqn{\phi = 1/\tau}}
+#'   \item{`eggsPerBatch`}{eggs laid per oviposition bout}
+#' }
+#'
+#' @section Dynamics:
+#' \deqn{
+#' \begin{array}{rl}
+#' dB_u/dt &= \Lambda + \nu Q_u - f B_u - \Omega_b \cdot B_u \\
+#' dQ_u/dt &= f(1 - q\kappa) B_u - \nu Q_u - \Omega_q \cdot Q_u \\
+#' dB_y/dt &= \nu Q_y - (f + \phi) B_y - \Omega_b \cdot B_y \\
+#' dQ_y/dt &= fq\kappa B_u + f B_y - (\nu + \phi) Q_y - \Omega_q \cdot Q_y \\
+#' dB_z/dt &= \phi B_y + \nu Q_z - f B_z - \Omega_b \cdot B_z \\
+#' dQ_z/dt &= \phi Q_y + f B_z - \nu Q_z - \Omega_q \cdot Q_z \\
+#' \end{array}
+#' }
+#'
+#' @name BQ
+#' @rdname BQ
+NULL
 
-#' @title Derivatives for adult mosquitoes
+#' @title Compute derivatives for `BQ` (**MY**)
 #' @description Implements [dMYdt] for the BQ ODE model.
 #' @inheritParams ramp.xds::dMYdt
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 dMYdt.BQ <- function(t, y, xds_obj, s){
 
@@ -28,10 +74,10 @@ dMYdt.BQ <- function(t, y, xds_obj, s){
   })
 }
 
-#' @title The **BQ** Module Skill Set
+#' @title The **BQ** module skill set
 #'
 #' @description The **MY** skill set is a list of
-#' an module's capabilities:
+#' a module's capabilities:
 #'
 #' + `demography` is
 #'
@@ -39,6 +85,7 @@ dMYdt.BQ <- function(t, y, xds_obj, s){
 #'
 #' @return *MY* module skill set, as a list
 #'
+#' @keywords internal
 #' @export
 skill_set_MY.BQ = function(MYname){
   return(list())
@@ -48,18 +95,20 @@ skill_set_MY.BQ = function(MYname){
 #'
 #' @inheritParams ramp.xds::check_MY
 #'
-#' @returns an **`xds`** model object
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
 check_MY.BQ = function(xds_obj, s){
   return(xds_obj)
 }
 
-#' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBaseline] for the BQ model
-#' @inheritParams ramp.xds::MBaseline
-#' @return a named [list]
+#' @title Mosquito bionomics for `BQ` (**MY**)
+#' @description Implements [MBionomics] for the BQ model
+#' @inheritParams ramp.xds::MBionomics
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
-MBaseline.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
+MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$es_g       <- rep(1, nPatches)
   xds_obj$MY_obj[[s]]$es_sigma_b <- rep(1, nPatches)
   xds_obj$MY_obj[[s]]$es_sigma_q <- rep(1, nPatches)
@@ -69,12 +118,13 @@ MBaseline.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 })}
 
 
-#' @title Reset bloodfeeding and mortality rates to baseline
-#' @description Implements [MBionomics] for the BQ model
-#' @inheritParams ramp.xds::MBionomics
-#' @return a named [list]
+#' @title Apply effect sizes for `BQ` (**MY**)
+#' @description Implements [MEffectSizes] for the BQ model
+#' @inheritParams ramp.xds::MEffectSizes
+#' @return an **`xds`** object
+#' @keywords internal
 #' @export
-MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
+MEffectSizes.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$f <- es_f*f_t
   xds_obj$MY_obj[[s]]$q <- es_q*q_t
   g <- es_g*g_t
@@ -92,6 +142,7 @@ MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 #' @description Implements [F_fqZ] for the BQ model.
 #' @inheritParams ramp.xds::F_fqZ
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_fqZ.BQ <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
@@ -104,6 +155,7 @@ F_fqZ.BQ <- function(t, y, xds_obj, s) {
 #' @description Implements [F_fqM] for the BQ model.
 #' @inheritParams ramp.xds::F_fqM
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_fqM.BQ <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
@@ -117,6 +169,7 @@ F_fqM.BQ <- function(t, y, xds_obj, s) {
 #' @description Implements [F_eggs] for the BQ model.
 #' @inheritParams ramp.xds::F_eggs
 #' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
 #' @export
 F_eggs.BQ <- function(t, y, xds_obj, s) {
 
@@ -132,6 +185,7 @@ F_eggs.BQ <- function(t, y, xds_obj, s) {
 #' @description Implements [setup_MY_obj] for the RM model
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
+#' @keywords internal
 #' @export
 setup_MY_obj.BQ = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BQ(xds_obj$nPatches, options)
@@ -151,6 +205,7 @@ setup_MY_obj.BQ = function(MYname, xds_obj, s, options=list()){
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
                           g=1/12, sigma_b=1/8, sigma_q=1/8, mu=0, f=0.5, q=0.95,
@@ -207,6 +262,7 @@ make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
 #' @inheritParams ramp.xds::get_MY_pars
 #'
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_MY_pars.BQ <- function(xds_obj, s=1) {
   with(xds_obj$MY_obj[[s]], list(
@@ -220,6 +276,7 @@ get_MY_pars.BQ <- function(xds_obj, s=1) {
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
+#' @keywords internal
 #' @export
 change_MY_pars.BQ <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
@@ -240,6 +297,7 @@ change_MY_pars.BQ <- function(xds_obj, s=1, options=list()) {
 #' @description Implements [setup_MY_inits] for the RM model
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
+#' @keywords internal
 #' @export
 setup_MY_inits.BQ = function(xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]]$inits = make_MY_inits_BQ(xds_obj$nPatches, options)
@@ -256,6 +314,7 @@ setup_MY_inits.BQ = function(xds_obj, s, options=list()){
 #' @param Bz0 infectious, not gravid mosquito density at each patch
 #' @param Qz0 infectious, gravid mosquito density at each patch
 #' @return a [list]
+#' @keywords internal
 #' @export
 make_MY_inits_BQ = function(nPatches, options = list(),
                              Bu0=5, Qu0=1, By0=1, Qy0=1, Bz0=1, Qz0=1){
@@ -275,6 +334,7 @@ make_MY_inits_BQ = function(nPatches, options = list(),
 #' @inheritParams ramp.xds::setup_MY_ix
 #' @return none
 #' @importFrom utils tail
+#' @keywords internal
 #' @export
 setup_MY_ix.BQ <- function(xds_obj, s) {with(xds_obj,{
 
@@ -307,6 +367,7 @@ setup_MY_ix.BQ <- function(xds_obj, s) {with(xds_obj,{
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
 #' @inheritParams ramp.xds::get_MY_vars
 #' @return a [list]
+#' @keywords internal
 #' @export
 get_MY_vars.BQ <- function(y, xds_obj, s){
   with(xds_obj$MY_obj[[s]]$ix,
@@ -323,6 +384,7 @@ get_MY_vars.BQ <- function(y, xds_obj, s){
 #' @description Implements [parse_MY_orbits] for the BQ model
 #' @inheritParams ramp.xds::parse_MY_orbits
 #' @return none
+#' @keywords internal
 #' @export
 parse_MY_orbits.BQ <- function(outputs, xds_obj, s) {
   with(xds_obj$MY_obj[[s]]$ix,{
@@ -348,6 +410,7 @@ parse_MY_orbits.BQ <- function(outputs, xds_obj, s) {
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return an `xds` object
+#' @keywords internal
 #' @export
 change_MY_inits.BQ <- function(xds_obj, s=1, options=list()) {
   with(xds_obj$MY_obj[[s]],
@@ -365,6 +428,7 @@ change_MY_inits.BQ <- function(xds_obj, s=1, options=list()) {
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return a [numeric] vector
+#' @keywords internal
 #' @export
 get_f.BQ = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], f_t*es_f)
@@ -374,6 +438,7 @@ get_f.BQ = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_q.BQ = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], q_t*es_q)
@@ -383,6 +448,7 @@ get_q.BQ = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_g.BQ = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], g_t*es_g)
@@ -392,6 +458,7 @@ get_g.BQ = function(xds_obj, s=1){
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
+#' @keywords internal
 #' @export
 get_sigma.BQ = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], sigma_b_t*es_sigma_b)

@@ -26,3 +26,4 @@ add_lines_X_SIPd(
 \description{
 Add lines for the density of infected individuals for the SIPd model
 }
+\keyword{internal}

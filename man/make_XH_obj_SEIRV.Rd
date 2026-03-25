@@ -41,3 +41,4 @@ a \link{list}
 \description{
 Make parameters for SEIRV human model, with defaults
 }
+\keyword{internal}

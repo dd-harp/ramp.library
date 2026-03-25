@@ -26,3 +26,4 @@ xds_lines_X_SEIR(
 \description{
 Add lines for the density of infected individuals for the SEIR model
 }
+\keyword{internal}

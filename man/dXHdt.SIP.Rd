@@ -41,3 +41,4 @@ The functions \code{mda} and \code{msat} are set to zero. To configure mass trea
 \seealso{
 The parameters are defined in \link{make_XH_obj_SIP}
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{dMYdt.SEI}
 \alias{dMYdt.SEI}
-\title{\eqn{\cal MY} Component Derivatives for the \code{SEI} Mosquito Model}
+\title{Compute derivatives for \code{SEI} (\strong{MY})}
 \usage{
 \method{dMYdt}{SEI}(t, y, xds_obj, s)
 }
@@ -13,21 +13,21 @@
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the species index}
+\item{s}{the vector species index}
 }
 \value{
 a \link{numeric} vector
 }
 \description{
 Implements \link[ramp.xds:dMYdt]{ramp.xds::dMYdt} for the SEI ODE model.
-}
-\details{
+
 The dynamics of adult mosquitoes:
-\deqn{\frac{dM}{dt} = \Lambda - \Omega \cdot M}
+\deqn{dM/dt = \Lambda - \Omega \cdot M}
 
 The density of infected but not infectious mosquitoes:
-\deqn{\frac{dY}{dt} = fq\kappa(M-Y) - \Omega \cdot Y}
+\deqn{dY/dt = fq\kappa(M-Y) - \Omega \cdot Y}
 
 The density of infectious mosquitoes:
-\deqn{\frac{dZ}{dt} = (Y-Z)/\tau - \Omega \cdot Z}
+\deqn{dZ/dt = (Y-Z)/\tau - \Omega \cdot Z}
 }
+\keyword{internal}
