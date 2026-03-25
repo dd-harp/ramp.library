@@ -6,5 +6,6 @@
 *.Rproj
 inst/.*.bkp
 docs/
+man/
 vignettes/*.html
 repair_shop/*.html
