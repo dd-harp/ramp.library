@@ -141,6 +141,7 @@ setup_XH_obj.SEIS = function(Xname, xds_obj, i, options=list()){
   XH_obj <- make_XH_obj_SEIS(xds_obj$nStrata[i], options)
   class(XH_obj) <- c("SEIS", paste("SEIS_", xds_obj$xds, sep=""))
   xds_obj$XH_obj[[i]] = XH_obj
+  xds_obj <- setup_XH_ports(xds_obj, i)
   return(xds_obj)
 }
 

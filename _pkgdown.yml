@@ -46,14 +46,6 @@ home:
     - authors
     - dev
 reference:
-- title: Adult Mosquito
-  desc: |
-     Modules for adult mosquito ecology and infection dynamics
-  contents:
-  - [BQ]
-  - [BQm]
-  - [BRQS]
-  - [SEI]
 - title: Malaria
   desc: |
     Models for parasites infecting human / vertebrate hosts
@@ -72,3 +64,16 @@ reference:
   - [SIRS]
   - [SEIR]
   - [SEIRV]
+- title: Adult Mosquito
+  desc: |
+     Modules for adult mosquito ecology and infection dynamics
+  contents:
+  - [BQ]
+  - [BQm]
+  - [BRQS]
+  - [SEI]
+- title: Aquatic Mosquito
+  desc: |
+     Modules for aquatic mosquito ecology
+  contents:
+  - [stages]

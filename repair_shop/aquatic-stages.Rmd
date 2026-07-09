@@ -1,0 +1,55 @@
+---
+title: "aquatic-stages"
+output: html_document
+---
+
+## Variables
+
+Density by stage:
+
++ $E$ - density of eggs
+
++ $L_1$ - density of first instar larvae
+
++ $L_2$ - density of second instar larvae
+
++ $L_3$ - density of third instar larvae
+
++ $L_4$ - density of fourth instar larvae
+
++ $P$ - density of pupae 
+
+Let $L$ denote our index of mean crowding:
+
+$$L = w_1 L_1 + w_2 L_2 + w_3 L_3 + L_4$$ 
+## Parameters
+
+The parameters describe:
+
++ $\psi_i$ -- maturation, by stage
+
++ $\xi_i$ -- larval instar maturation delay in response to mean crowding
+
++ $\phi_i$ -- density independent mortality, by stage
+
++ $\theta_i$ -- increased mortality in response to mean crowding
+
++ $w_i$ contribution by stage to mean crowding, relative to $L_4$ 
+
+The derivatives are: 
+
+$$
+\begin{array}{rl}
+dE/dt & = \eta -  \psi_E E - \phi_E E  \\
+dL_1/dt  &=  \psi_E E - \psi_1 L e^{-\xi_1 L} - (\phi_1 + \theta_1 L) L_1 \\
+dL_2/dt &=  \psi_1 L_1 e^{-\xi_1 L} - \psi_2 L e^{-\xi_2 L} - (\phi_2 + \theta_2 L) L_2 \\
+dL_3/dt  &=  \psi_2 L_2 e^{-\xi_2 L}- \psi_3 L e^{-\xi_3 L} - (\phi_3 + \theta_3 L) L_3 \\
+dL_4/dt  &=  \psi_3 L_3 e^{-\xi_3 L}- \psi_4 L e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4 \\
+dP/dt  &= \psi_4 L_4 e^{-\xi_4 L}- \phi_P P - \psi_P P \\ 
+\end{array}
+$$
+
+$$
+F_\alpha = \psi_P P
+$$
+

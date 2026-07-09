@@ -342,6 +342,7 @@ setup_XH_obj.SEIRV = function(Xname, xds_obj, i, options=list()){
   XH_obj <- make_XH_obj_SEIRV(xds_obj$nStrata[i], options)
   class(XH_obj) <- c("SEIRV", paste("SEIRV_", xds_obj$xds, sep=""))
   xds_obj$XH_obj[[i]] = XH_obj
+  xds_obj <- setup_XH_ports(xds_obj, i)
   return(xds_obj)
 }
 

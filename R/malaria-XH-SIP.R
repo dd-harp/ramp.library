@@ -128,6 +128,7 @@ setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
   XH_obj <- make_XH_obj_SIP(xds_obj$nStrata[i], options)
   class(XH_obj) <- c("SIP", paste("SIP_", xds_obj$xds, sep=""))
   xds_obj$XH_obj[[i]] = XH_obj
+  xds_obj <- setup_XH_ports(xds_obj, i)
   return(xds_obj)
 }
 
