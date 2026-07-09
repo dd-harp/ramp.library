@@ -126,8 +126,8 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Developing L Modules</h1>
-            <h3 data-toc-skip class="subtitle">Models for Aquatic
-Mosquito Ecology</h3>
+            <h3 data-toc-skip class="subtitle">Developing New Modules
+for Aquatic Mosquito Ecology</h3>
             
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/HEAD/vignettes/L-How_To_Add_Model.Rmd" class="external-link"><code>vignettes/L-How_To_Add_Model.Rmd</code></a></small>
@@ -271,6 +271,73 @@ the derivative equations you just wrote.</p></li>
 </div>
 </div>
 <div class="section level2">
+<h2 id="bionomics">Bionomics<a class="anchor" aria-label="anchor" href="#bionomics"></a>
+</h2>
+<p>Two functions update bionomic parameter values at each time step,
+called in sequence before the dynamics are computed.</p>
+<div class="section level3">
+<h3 id="lbionomics">LBionomics<a class="anchor" aria-label="anchor" href="#lbionomics"></a>
+</h3>
+<p><code>LBionomics.newLname</code> computes the current bionomic
+parameter values by calling the forcing function for each parameter. It
+also resets all effect sizes to 1.</p>
+<ul>
+<li><p>Replace <code>p1</code>, <code>p2</code>, … with the names of the
+bionomic parameters in your model. Add a call to a forcing function for
+each one.</p></li>
+<li><p>For each parameter <code>p1</code>, add a matching effect size
+reset: <code>es_p1 &lt;- rep(1, nHabitats)</code>.</p></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Mosquito bionomics for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Implements [LBionomics] for the newLname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::LBionomics</span></span>
+<span><span class="co">#' @return an **`xds`** object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LBionomics.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
+<span></span>
+<span>    <span class="co"># Change this: call the forcing function for each bionomic parameter</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_t</span> <span class="op">&lt;-</span> <span class="fu">F_p1</span><span class="op">(</span><span class="va">t</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2_t</span> <span class="op">&lt;-</span> <span class="fu">F_p2</span><span class="op">(</span><span class="va">t</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># Change this: reset one effect size for each bionomic parameter</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">es_p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">es_p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="leffectsizes">LEffectSizes<a class="anchor" aria-label="anchor" href="#leffectsizes"></a>
+</h3>
+<p><code>LEffectSizes.newLname</code> applies vector control effect
+sizes to the bionomic parameters set by <code>LBionomics</code>. For
+each parameter, the effective value is the baseline times the effect
+size.</p>
+<ul>
+<li>For each parameter <code>p1</code> with baseline <code>p1_t</code>
+and effect size <code>es_p1</code>, add a line:
+<code>xds_obj$L_obj[[s]]$p1 &lt;- p1_t * es_p1</code>.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Apply effect sizes for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Implements [LEffectSizes] for the newLname model</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::LEffectSizes</span></span>
+<span><span class="co">#' @return an **`xds`** object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LEffectSizes.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
+<span></span>
+<span>    <span class="co"># Change this: multiply each baseline parameter by its effect size</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p1_t</span> <span class="op">*</span> <span class="va">es_p1</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p2_t</span> <span class="op">*</span> <span class="va">es_p2</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
 <h2 id="l-lodel-object">L Lodel Object<a class="anchor" aria-label="anchor" href="#l-lodel-object"></a>
 </h2>
 <div class="section level3">
@@ -290,7 +357,7 @@ that define state transitions in <code>dLdt</code> or
 <code>Update_Lt</code> and set <code>mda=TRUE</code> and
 <code>msat=TRUE</code> in the skill set.</p></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Lake parameters for newLname human model, with defaults</span></span>
 <span><span class="co">#' @param nPatches is the number of population strata</span></span>
 <span><span class="co">#' @param options a [list] that could overwrite defaults</span></span>
@@ -321,7 +388,7 @@ that define state transitions in <code>dLdt</code> or
 </h3>
 <p>If you did a global search and replace on <code>newLname,</code> this
 function will not need to be modified</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup L_obj.newLname</span></span>
 <span><span class="co">#' @description Implements [setup_L_obj] for the newLname model</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::setup_L_obj</span></span>
@@ -349,7 +416,7 @@ variable name, <code>Y</code> in <code>Y_ix</code> with the second, and
 add lines for each variable by copying and pasting and editing the pair
 of lines. Be sure the replacement gets applied to all four
 instances.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Add indices for human population to parameter list</span></span>
 <span><span class="co">#' @description Implements [setup_L_ix] for the newLname model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::setup_L_ix</span></span>
@@ -387,7 +454,7 @@ with the second variable name.</p></li>
 you use it or if you want to have it available, compute it and add it to
 the returned list.</p></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return the variables as a list</span></span>
 <span><span class="co">#' @description This method dispatches on the type of `xds_obj$L_obj`</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::get_L_vars</span></span>
@@ -419,7 +486,7 @@ with the second variable name.</p></li>
 you use it or if you want to have it available, compute it and add it to
 the returned list.</p></li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title parse the output of deSolve and return variables for the newLname model</span></span>
 <span><span class="co">#' @description Implements [parse_L_orbits] for the newLname model</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::parse_L_orbits</span></span>
@@ -444,7 +511,7 @@ the returned list.</p></li>
 </h3>
 <p>If you did the global search and replace, you won’t need to change
 this function.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Setup initial values for *newLname*</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @inheritParams ramp.xds::setup_L_inits</span></span>
@@ -460,7 +527,7 @@ this function.</p>
 <div class="section level3">
 <h3 id="make_l_inits">make_L_inits<a class="anchor" aria-label="anchor" href="#make_l_inits"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Lake initial values for the Xname human model, with defaults</span></span>
 <span><span class="co">#' @param nPatches the number of strata in the model</span></span>
 <span><span class="co">#' @param options a [list] to overwrite defaults</span></span>
@@ -479,7 +546,7 @@ this function.</p>
 <div class="section level3">
 <h3 id="change_l_inits">change_L_inits<a class="anchor" aria-label="anchor" href="#change_l_inits"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Return the parameters as a list</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' @inheritParams ramp.xds::change_L_inits </span></span>
@@ -505,7 +572,7 @@ this function.</p>
 <p>In the following, replace … with a formula to compute the effective
 density of infectious humans: it is population density by strata
 weighted by the probability of transmitting.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_emerge] for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_emerge</span></span>
@@ -524,7 +591,7 @@ weighted by the probability of transmitting.</p>
 <p>In the following, replace … with a formula to compute the effective
 density of infectious humans: it is population density by strata
 weighted by the probability of transmitting.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_L] for the SIS model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_L</span></span>
@@ -547,7 +614,7 @@ that parse the outputs and compute some standard metrics.</p>
 <h3 id="f_capacity">F_capacity<a class="anchor" aria-label="anchor" href="#f_capacity"></a>
 </h3>
 <p>Replace <code>L/H</code> with the formula to compute prevalence.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute the true prevalence of infection / parasite rate</span></span>
 <span><span class="co">#' @description Implements F_pr for the newLname model.</span></span>
 <span><span class="co">#' @inheritParams F_pr</span></span>
@@ -578,7 +645,7 @@ that parse the outputs and compute some standard metrics.</p>
 <div class="section level4">
 <h4 id="xds_lines_x_sis">xds_lines_X_SIS<a class="anchor" aria-label="anchor" href="#xds_lines_x_sis"></a>
 </h4>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add lines for the density of infected individuals for the SIS model</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @param L a list with the outputs of parse_deout_X_SIS</span></span>
@@ -607,7 +674,7 @@ that parse the outputs and compute some standard metrics.</p>
 <div class="section level4">
 <h4 id="xds_lines_x_newlname">xds_lines_X_newLname<a class="anchor" aria-label="anchor" href="#xds_lines_x_newlname"></a>
 </h4>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add lines for the density of infected individuals for the newLname model</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @param L a list with the outputs of parse_deout_X_newLname</span></span>
@@ -644,7 +711,7 @@ Instead, it is called by the <code>S3</code> function
 <div class="section level4">
 <h4 id="generic">Generic<a class="anchor" aria-label="anchor" href="#generic"></a>
 </h4>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Basic plotting for epidemiological models</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @param xds_obj a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)</span></span>
@@ -662,7 +729,7 @@ Instead, it is called by the <code>S3</code> function
 <div class="section level4">
 <h4 id="xds_plot_x-sis">xds_plot_X.SIS<a class="anchor" aria-label="anchor" href="#xds_plot_x-sis"></a>
 </h4>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the newLname model</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::xds_plot_X</span></span>
@@ -682,7 +749,7 @@ Instead, it is called by the <code>S3</code> function
 <div class="section level4">
 <h4 id="xds_plot_x-newlname">xds_plot_X.newLname<a class="anchor" aria-label="anchor" href="#xds_plot_x-newlname"></a>
 </h4>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Plot the density of infected individuals for the newLname model</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::xds_plot_X</span></span>
