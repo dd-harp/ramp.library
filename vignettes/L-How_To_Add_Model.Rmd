@@ -7,15 +7,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
----
-title: "Developing L Modules" 
-subtitle: "Models for Aquatic Mosquito Ecology" 
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Developing L Modules}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
 
 
 This vignette discusses how to add a new **L** module to [`ramp.library`](https://github.com/dd-harp/ramp.library). As background, 
@@ -140,7 +131,63 @@ Update_Lt.newLname<- function(t, y, xds_obj, s) {
 ```
 
 
-## L Lodel Object 
+## Bionomics
+
+Two functions update bionomic parameter values at each time step, called in sequence before the dynamics are computed.
+
+### LBionomics
+
+`LBionomics.newLname` computes the current bionomic parameter values by calling the forcing function for each parameter. It also resets all effect sizes to 1.
+
++ Replace `p1`, `p2`, ... with the names of the bionomic parameters in your model. Add a call to a forcing function for each one.
+
++ For each parameter `p1`, add a matching effect size reset: `es_p1 <- rep(1, nHabitats)`.
+
+```{r}
+#' @title Mosquito bionomics for `newLname` (**L**)
+#' @description Implements [LBionomics] for the newLname model
+#' @inheritParams ramp.xds::LBionomics
+#' @return an **`xds`** object
+#' @export
+LBionomics.newLname <- function(t, y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]], {
+
+    # Change this: call the forcing function for each bionomic parameter
+    xds_obj$L_obj[[s]]$p1_t <- F_p1(t, xds_obj, s)
+    xds_obj$L_obj[[s]]$p2_t <- F_p2(t, xds_obj, s)
+
+    # Change this: reset one effect size for each bionomic parameter
+    xds_obj$L_obj[[s]]$es_p1 <- rep(1, nHabitats)
+    xds_obj$L_obj[[s]]$es_p2 <- rep(1, nHabitats)
+
+    return(xds_obj)
+  })}
+```
+
+### LEffectSizes
+
+`LEffectSizes.newLname` applies vector control effect sizes to the bionomic parameters set by `LBionomics`. For each parameter, the effective value is the baseline times the effect size.
+
++ For each parameter `p1` with baseline `p1_t` and effect size `es_p1`, add a line: `xds_obj$L_obj[[s]]$p1 <- p1_t * es_p1`.
+
+```{r}
+#' @title Apply effect sizes for `newLname` (**L**)
+#' @description Implements [LEffectSizes] for the newLname model
+#' @inheritParams ramp.xds::LEffectSizes
+#' @return an **`xds`** object
+#' @export
+LEffectSizes.newLname <- function(t, y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]], {
+
+    # Change this: multiply each baseline parameter by its effect size
+    xds_obj$L_obj[[s]]$p1 <- p1_t * es_p1
+    xds_obj$L_obj[[s]]$p2 <- p2_t * es_p2
+
+    return(xds_obj)
+  })}
+```
+
+## L Lodel Object
 
 ### make_L_obj
 

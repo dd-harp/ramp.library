@@ -112,6 +112,7 @@ dXHdt.garki = function(t, y, xds_obj, i){
 #' @export
 setup_XH_obj.garki = function(Xname, xds_obj, i, options=list()){
   xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata, options)
+  xds_obj <- setup_XH_ports(xds_obj, i)
   return(xds_obj)
 }
 

@@ -1,0 +1,61 @@
+---
+title: "Staged L"
+subtitle: "A Staged Development Model for Immature Mosquitoes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Staged L}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The **stages** model of aquatic mosquito ecology tracks development through six compartments: eggs ($E$), four larval instars ($L_1$–$L_4$), and pupae ($P$). Each larval instar has its own maturation rate, density-dependent maturation delay, density-independent mortality, and density-dependent mortality. All density-dependent effects act through a weighted mean crowding index.
+
+# Differential Equations
+
+Let $\eta$ denote the egg laying rate from the adult mosquito component and let
+
+$$L = w_1 L_1 + w_2 L_2 + w_3 L_3 + L_4$$
+
+be the weighted mean crowding index. The fourth instar serves as the reference ($w_4 = 1$); setting all $w_i = 1$ recovers unweighted total larval density.
+
+The dynamical system is:
+
+$$
+\begin{array}{rl}
+dE/dt & = \eta - (\psi_E + \phi_E)\, E \\[4pt]
+dL_1/dt & = \psi_E E \;-\; \psi_1 L_1\, e^{-\xi_1 L} \;-\; (\phi_1 + \theta_1 L)\, L_1 \\[4pt]
+dL_2/dt & = \psi_1 L_1\, e^{-\xi_1 L} \;-\; \psi_2 L_2\, e^{-\xi_2 L} \;-\; (\phi_2 + \theta_2 L)\, L_2 \\[4pt]
+dL_3/dt & = \psi_2 L_2\, e^{-\xi_2 L} \;-\; \psi_3 L_3\, e^{-\xi_3 L} \;-\; (\phi_3 + \theta_3 L)\, L_3 \\[4pt]
+dL_4/dt & = \psi_3 L_3\, e^{-\xi_3 L} \;-\; \psi_4 L_4\, e^{-\xi_4 L} \;-\; (\phi_4 + \theta_4 L)\, L_4 \\[4pt]
+dP/dt & = \psi_4 L_4\, e^{-\xi_4 L} \;-\; (\phi_P + \psi_P)\, P
+\end{array}
+$$
+
+The maturation flow leaving instar $i$ is $\psi_i L_i e^{-\xi_i L}$; it feeds directly into the next compartment. Density-dependent delays reduce maturation through the exponential term; density-dependent mortality increases linearly with $L$.
+
+The emergence rate of adult female mosquitoes is:
+
+$$\alpha = \psi_P P$$
+
+# Equilibrium Solutions
+
+Equilibrium values can be computed numerically given an egg deposition rate $\eta$ using `steady_state_L.stages`. With $\xi_i = 0$ for all instars, the system is quasi-linear and the solver converges reliably from the starting guess $\eta \mathbf{1}_6$.
+
+In the common case where all four instars share the same parameters ($\psi_i = \psi$, $\phi_i = \phi$, $\theta_i = \theta$, $w_i = 1$), the instar densities are equal at equilibrium ($L_1^* = L_2^* = L_3^* = L_4^*$) and the flow through the system is set by the egg hatching rate and the target emergence rate. The density-dependent mortality slope $\theta$ can then be treated as the parameter that calibrates the steady-state emergence rate to a desired value.
+
+# Example
+
+```{r, message=FALSE, warning=FALSE}
+library(ramp.xds)
+library(ramp.library)
+library(deSolve)
+library(data.table)
+library(ggplot2)
+```
+
+## The long way
+
+We run a single-habitat example. We use `steady_state_L.stages` to find equilibrium densities consistent with a target egg-laying rate, then confirm that the model stays at that equilibrium.
+
+First, choose parameter values and target egg-laying rate.
+

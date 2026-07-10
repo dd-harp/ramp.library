@@ -5,6 +5,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/articles/Compartmental-Models.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/articles/L-How_To_Add_Model.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/articles/L-Overview.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/articles/L-stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/articles/MY-BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/articles/MY-How_To_Add_Model.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/articles/MY-Overview.html</loc></url>
@@ -44,6 +45,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.BRQS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_eggs.SEI.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/F_emerge.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_fqM.BRQS.html</loc></url>
@@ -93,17 +95,11 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.garki.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIRV.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIS.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEISd.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIP.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIPd.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.garki.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.BQ.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.BQm.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.BRQS.html</loc></url>
-<url><loc>https://dd-harp.github.io/ramp.library/reference/MBaseline.SEI.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/LBionomics.stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/LEffectSizes.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/MBionomics.BRQS.html</loc></url>
@@ -133,6 +129,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SEISd.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIP.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIPd.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_L_inits.stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_L_pars.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_MY_inits.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_MY_inits.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_MY_inits.BRQS.html</loc></url>
@@ -159,6 +157,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_XH_pars.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_XH_pars.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_XH_pars.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/check_L.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_MY.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_MY.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_MY.SEI.html</loc></url>
@@ -171,6 +170,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_XH.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_XH.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/check_XH.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/dLdt.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/dMYdt.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/dMYdt.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/dMYdt.BRQS.html</loc></url>
@@ -194,6 +194,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_L_pars.stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_L_vars.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_MY_pars.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_MY_pars.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_MY_pars.BRQS.html</loc></url>
@@ -232,6 +234,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.BRQS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_sigma.SEI.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/index.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/make_L_inits_stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/make_L_obj_stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_MY_inits_BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_MY_inits_BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_MY_inits_BRQS.html</loc></url>
@@ -258,6 +262,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_XH_obj_SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_XH_obj_SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/make_XH_obj_garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/parse_L_orbits.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_MY_orbits.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_MY_orbits.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_MY_orbits.BRQS.html</loc></url>
@@ -271,6 +276,9 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_XH_orbits.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_XH_orbits.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/parse_XH_orbits.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/setup_L_inits.stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/setup_L_ix.stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/setup_L_obj.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_MY_inits.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_MY_inits.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_MY_inits.BRQS.html</loc></url>
@@ -310,6 +318,7 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_L.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_MY.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_MY.BQm.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_MY.SEI.html</loc></url>
@@ -322,6 +331,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_XH.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_XH.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_XH.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/stages.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/steady_state_L.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/steady_state_MY.SEI.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/steady_state_X.SEIRV_dts.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/steady_state_X.SEIRV_ode.html</loc></url>

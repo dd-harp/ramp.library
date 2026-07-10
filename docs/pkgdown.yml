@@ -7,6 +7,7 @@ articles:
   human_sip: human_sip.html
   L-How_To_Add_Model: L-How_To_Add_Model.html
   L-Overview: L-Overview.html
+  L-stages: L-stages.html
   Malaria-Overview: Malaria-Overview.html
   MY-BQ: MY-BQ.html
   MY-How_To_Add_Model: MY-How_To_Add_Model.html
@@ -16,7 +17,7 @@ articles:
   X-garki: X-garki.html
   X-How_To_Add_Model: X-How_To_Add_Model.html
   X-SIR: X-SIR.html
-last_built: 2026-03-25T20:16Z
+last_built: 2026-07-10T02:58Z
 urls:
   reference: https://dd-harp.github.io/ramp.library/reference
   article: https://dd-harp.github.io/ramp.library/articles

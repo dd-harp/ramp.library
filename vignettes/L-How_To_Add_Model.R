@@ -59,6 +59,42 @@ Update_Lt.newLname<- function(t, y, xds_obj, s) {
 }
 
 ## -----------------------------------------------------------------------------
+#' @title Mosquito bionomics for `newLname` (**L**)
+#' @description Implements [LBionomics] for the newLname model
+#' @inheritParams ramp.xds::LBionomics
+#' @return an **`xds`** object
+#' @export
+LBionomics.newLname <- function(t, y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]], {
+
+    # Change this: call the forcing function for each bionomic parameter
+    xds_obj$L_obj[[s]]$p1_t <- F_p1(t, xds_obj, s)
+    xds_obj$L_obj[[s]]$p2_t <- F_p2(t, xds_obj, s)
+
+    # Change this: reset one effect size for each bionomic parameter
+    xds_obj$L_obj[[s]]$es_p1 <- rep(1, nHabitats)
+    xds_obj$L_obj[[s]]$es_p2 <- rep(1, nHabitats)
+
+    return(xds_obj)
+  })}
+
+## -----------------------------------------------------------------------------
+#' @title Apply effect sizes for `newLname` (**L**)
+#' @description Implements [LEffectSizes] for the newLname model
+#' @inheritParams ramp.xds::LEffectSizes
+#' @return an **`xds`** object
+#' @export
+LEffectSizes.newLname <- function(t, y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]], {
+
+    # Change this: multiply each baseline parameter by its effect size
+    xds_obj$L_obj[[s]]$p1 <- p1_t * es_p1
+    xds_obj$L_obj[[s]]$p2 <- p2_t * es_p2
+
+    return(xds_obj)
+  })}
+
+## -----------------------------------------------------------------------------
 #' @title Lake parameters for newLname human model, with defaults
 #' @param nPatches is the number of population strata
 #' @param options a [list] that could overwrite defaults

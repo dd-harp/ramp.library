@@ -41,7 +41,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   K_matrix <- t(K_matrix)
 
   # omega matrix
-  Omega <- make_Omega_xde(g, sigma, mu, K_matrix)
+  Omega <- compute_Omega_xde(g, sigma, mu, K_matrix)
   Upsilon <- expm::expm(-Omega * eip)
 
   MYo <- list(nPatches=nPatches,
@@ -61,7 +61,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   params <- xds_setup(MYname = "macdonald", MYoptions = MYo,
                       Lname = "trivial", XHoptions = Xo,
                       Xname = "SIP",
-                      TimeSpent = TaR, Koptions=K_matrix,
+                      TSoptions = list(name = TaR), Koptions=K_matrix,
                       HPop=H, membership=membership,
                       nPatches=nPatches, residence=residence)
   params <- check_MY(params, 1)

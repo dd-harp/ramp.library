@@ -123,6 +123,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
 setup_XH_obj.SIPd = function(Xname, xds_obj, i, options=list()){
   xds_obj = ramp.xds::ode_to_dde(xds_obj)
   xds_obj$XH_obj[[i]] = make_XH_obj_SIPd(xds_obj$nStrata[i], options)
+  xds_obj <- setup_XH_ports(xds_obj, i)
   return(xds_obj)
 }
 

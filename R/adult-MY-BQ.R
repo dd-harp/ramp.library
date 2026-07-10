@@ -133,8 +133,8 @@ MEffectSizes.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$g <- g
   xds_obj$MY_obj[[s]]$sigma_b <- sigma_b
   xds_obj$MY_obj[[s]]$sigma_q <- sigma_q
-  xds_obj$MY_obj[[s]]$Omega_b = make_Omega_xde(g, sigma_b, mu, calKb)
-  xds_obj$MY_obj[[s]]$Omega_q = make_Omega_xde(g, sigma_q, mu, calKq)
+  xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
+  xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
   return(xds_obj)
 })}
 
@@ -245,8 +245,8 @@ make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
     Omega_par <- list()
     class(Omega_par) <- "static"
     MY_obj$Omega_par <- Omega_par
-    MY_obj$Omega_b <- with(MY_obj, make_Omega_xde(g, sigma_b, mu, calK))
-    MY_obj$Omega_q <- with(MY_obj, make_Omega_xde(g, sigma_q, mu, calK))
+    MY_obj$Omega_b <- with(MY_obj, compute_Omega_xde(g, sigma_b, mu, calK))
+    MY_obj$Omega_q <- with(MY_obj, compute_Omega_xde(g, sigma_q, mu, calK))
     base <- 'BQ'
     class(base) <- 'BQ'
     MY_obj$baseline <- base
