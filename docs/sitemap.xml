@@ -129,6 +129,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SEISd.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIP.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIPd.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.b.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.q.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_L_inits.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_L_pars.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_MY_inits.BQ.html</loc></url>
@@ -194,6 +196,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.b.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.q.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_L_pars.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_L_vars.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_MY_pars.BQ.html</loc></url>
