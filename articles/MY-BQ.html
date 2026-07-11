@@ -129,7 +129,7 @@
             <h3 data-toc-skip class="subtitle">Adult Mosquito Behavioral
 State Models with Blood Feeding and Egg Laying</h3>
             
-            <h4 data-toc-skip class="date">July 10, 2026</h4>
+            <h4 data-toc-skip class="date">July 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/main/vignettes/MY-BQ.Rmd" class="external-link"><code>vignettes/MY-BQ.Rmd</code></a></small>
       <div class="hidden name"><code>MY-BQ.Rmd</code></div>
@@ -382,14 +382,14 @@ implements behavioral state and infection state dynamics</div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>The <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code> utilities allow the user to pass a
-single version of the dispersal matrix <code>K_matrix.</code> During
-<code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code>, <code>Omega_b</code> and <code>Omega_q</code>
-are identical.</p>
+<p>The <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code> utilities does not allow the user to set
+up two different dispersal matrices. pass a single version of the
+dispersal matrix <code>K_matrix.</code> During <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code>,
+<code>Omega_b</code> and <code>Omega_q</code> are identical.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">HPop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">residence</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> </span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"BQ"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>,  residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"BQ"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>, residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
