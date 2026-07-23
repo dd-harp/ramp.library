@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2025-10-06" />
+
+<title>The adult mosquito model RMG</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">The adult mosquito model RMG</h1>
+<h3 class="subtitle">A Behavioral State Model</h3>
+<h4 class="date">October 06, 2025</h4>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ramp.xds)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(deSolve) </span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ramp.library)</span></code></pre></div>
+<p>Most of the models developed to model malaria parasite infections in
+mosquitoes look at the <em>infection states:</em> uninfected; infected;
+or infected and infectious. A few models have been developed that track
+also track <em>parity.</em> A different class of models tracks the
+behavioral / physiological state of mosquitoes, so we call them
+<em>behavioral state models.</em> A model with both <em>infection
+states</em> and <em>behavioral states</em> was first published by Le
+Menach, <em>et al.</em> (2005)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<div id="the-model" class="section level2">
+<h2>The Model</h2>
+<p>This is a patch-based model with <span class="math inline">\(p\)</span> patches, and we assume that all the
+parameters, variables, and terms are of length <span class="math inline">\(p\)</span> except for <span class="math inline">\(\Omega_b\)</span> and <span class="math inline">\(\Omega_q\)</span>, which are <span class="math inline">\(p \times p\)</span> matrices.</p>
+<div id="variables" class="section level3">
+<h3>Variables</h3>
+<ul>
+<li><p><span class="math inline">\(U_b\)</span> - uninfected, blood
+feeding mosquitoes</p></li>
+<li><p><span class="math inline">\(U_q\)</span> - uninfected, egg laying
+mosquitoes</p></li>
+<li><p><span class="math inline">\(Y_b\)</span> - infected but not
+infective, blood feeding mosquitoes</p></li>
+<li><p><span class="math inline">\(Y_q\)</span> - infected but not
+infective, egg laying mosquitoes</p></li>
+<li><p><span class="math inline">\(Z_b\)</span> - infective, blood
+feeding mosquitoes</p></li>
+<li><p><span class="math inline">\(Z_q\)</span> - infective, egg laying
+mosquitoes</p></li>
+</ul>
+</div>
+<div id="terms" class="section level3">
+<h3>Terms</h3>
+<p>Two terms are passed from another component of the model.</p>
+<ul>
+<li><p><span class="math inline">\(\Lambda\)</span> - the emergence rate
+of adult mosquitoes from aquatic habitats in each patch</p></li>
+<li><p><span class="math inline">\(\kappa\)</span> - the net
+infectiousness of humans, the probability a mosquito becomes infected
+after blood feeding on a human</p></li>
+</ul>
+</div>
+<div id="parameters" class="section level3">
+<h3>Parameters</h3>
+<p><strong>Bionomics</strong> - Each one of the following parameters can
+take on a unique value in each patch.</p>
+<ul>
+<li><p><span class="math inline">\(f\)</span> - the blood feeding
+rate</p></li>
+<li><p><span class="math inline">\(q\)</span> - the human blood feeding
+fraction</p></li>
+<li><p><span class="math inline">\(\nu\)</span> - the egg laying
+rate</p></li>
+<li><p><span class="math inline">\(g\)</span> - the mosquito death rate,
+per mosquito</p></li>
+<li><p><span class="math inline">\(\varphi\)</span> - the rate that
+infected mosquitoes become infective, the inverse of the EIP</p></li>
+<li><p><span class="math inline">\(\sigma_b\)</span> - the patch
+emigration rate for blood-feeding mosquitoes</p></li>
+<li><p><span class="math inline">\(\sigma_q\)</span> - the patch
+emigration rate for egg-laying mosquitoes</p></li>
+<li><p><span class="math inline">\(\mu\)</span> - the emigration loss
+rate: excess mortality associated with migration</p></li>
+</ul>
+<p><strong>Dipsersal Matrices</strong> - Each one of the following
+parameters can take on a unique value in each patch.</p>
+<ul>
+<li><p><span class="math inline">\({\cal K}_b\)</span> - the dispersal
+matrix for blood-feeding mosquitoes, which has the form: <span class="math display">\[{\cal K} = \left[
+\begin{array}{ccccl}
+0 &amp; k_{1,2} &amp; k_{1,3} &amp; \ldots &amp; k_{1,p} \\
+k_{2,1} &amp; 0 &amp; k_{2,3} &amp;  \ldots &amp; k_{2,p} \\
+k_{3,1} &amp; k_{3,2} &amp; 0 &amp;  \ldots &amp; k_{3,p} \\
+\vdots&amp; \vdots &amp;\vdots &amp; \ddots &amp; k_{p-1, p} \\
+k_{p,1} &amp; k_{p,2} &amp; k_{p,3} &amp;  \ldots &amp; 0 \\
+\end{array}
+\right].\]</span> The diagonal elements are all <span class="math inline">\(0\)</span>, and other elements, <span class="math inline">\(k_{i,j} \in {\cal K}\)</span>, are the fraction of
+blood feeding mosquitoes leaving patch <span class="math inline">\(j\)</span> that end up in patch <span class="math inline">\(i\)</span>; the notation should be read as <span class="math inline">\(i \leftarrow j\)</span>, or <em>to <span class="math inline">\(i\)</span> from <span class="math inline">\(j\)</span></em>. Notably, the form of <span class="math inline">\(\cal K\)</span> is constrained such that <span class="math display">\[\sum_i k_{i,j} = 1.\]</span></p></li>
+<li><p><span class="math inline">\({\cal K}_q\)</span> - the dispersal
+matrix for egg-laying mosquitoes, which has the same form as <span class="math inline">\({\cal K}_b\)</span></p></li>
+</ul>
+<p><strong>The Demographic Matrices</strong></p>
+<ul>
+<li><p><span class="math inline">\(\Omega_b\)</span> - the demographic
+matrix for blood feeding mosquitoes; letting <span class="math inline">\(I\)</span> denote the identity matrix, <span class="math display">\[\Omega_b = \mbox{diag}\left(g\right) -
+\mbox{diag}\left(\sigma_b\right) \left(\mbox{diag}\left(1-\mu\right) -
+\cal K_b \right)\]</span></p></li>
+<li><p><span class="math inline">\(\Omega_q\)</span> - the demographic
+matrix for egg laying mosquitoes; which has the same form as <span class="math inline">\(\Omega_b\)</span>.</p></li>
+</ul>
+</div>
+<div id="dynamics" class="section level3">
+<h3>Dynamics</h3>
+<p>The following equations track adult mosquito behavioral and infection
+dynamics. A key assumption is that a fraction <span class="math inline">\(q\kappa\)</span> of blood feeding, uninfected
+mosquitoes become infected, thus transition from <span class="math inline">\(U_b\)</span> to <span class="math inline">\(Y_g.\)</span></p>
+<p><span class="math display">\[
+\begin{array}{rl}
+\dfrac{dU_b}{dt} &amp;= \Lambda  + \nu U_g - f U_b - \Omega_b \cdot U_b
+\\
+\dfrac{dU_g}{dt} &amp;= f (1- q \kappa) U_b - \nu U_g  - \Omega_g \cdot
+U_g \\
+\dfrac{dY_b}{dt} &amp;= \nu Y_g + \phi Y_g - (f+\varphi) Y_g - \Omega_b
+\cdot Y_b \\
+\dfrac{dY_g}{dt} &amp;= f q \kappa U_b + f Y_b - (\nu + \varphi) Y_g -
+\Omega_g \cdot Y_g  \\
+\dfrac{dZ_b}{dt} &amp;= \varphi Y_b + \nu Z_g - f Z - \Omega_b \cdot Z_b
+\\
+\dfrac{dZ_g}{dt} &amp;= \varphi Y_g + f Z  - \nu Z  - \Omega_q \cdot Z_q
+\end{array}
+\]</span></p>
+</div>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+<p>The <code>xds_setup()</code> utilities allow the user to pass a
+single version of the dispersal matrix <code>K_matrix.</code> During
+<code>xds_setup()</code>, <code>Omega_b</code> and <code>Omega_q</code>
+are identical.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>HPop <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1000</span>, <span class="dv">3</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>residence <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">xds_setup</span>(<span class="at">MYname=</span><span class="st">&quot;RMG&quot;</span>, <span class="at">Lname=</span><span class="st">&quot;trivial&quot;</span>, <span class="at">Xname =</span> <span class="st">&quot;trivial&quot;</span>,  <span class="at">residence=</span>residence, <span class="at">HPop =</span>HPop, <span class="at">nPatches=</span><span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">xds_solve</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">xds_plot_M</span>(model)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">xds_plot_Y</span>(model, <span class="at">add =</span> T)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">xds_plot_Z</span>(model, <span class="at">add =</span> T)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">xds_plot_Y_fracs</span>(model)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">xds_plot_Z_fracs</span>(model, <span class="at">add=</span>T)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Menach AL, <em>et al.</em> The unexpected importance of
+mosquito oviposition behaviour for malaria: non-productive larval
+habitats can be sources for malaria transmission. Malar J 4, 23 (2005).
+<a href="https://doi.org/10.1186/1475-2875-4-23" class="uri">https://doi.org/10.1186/1475-2875-4-23</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

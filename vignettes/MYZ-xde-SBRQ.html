@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2025-06-02" />
+
+<title>SBRQ</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">SBRQ</h1>
+<h3 class="subtitle">A Four-State Behavioral State Model</h3>
+<h4 class="date">June 02, 2025</h4>
+
+
+
+<div id="base-model" class="section level2">
+<h2>Base Model</h2>
+<p>We present the following behavioral state model for mosquito ecology
+with four behavioral states:</p>
+<div id="variables" class="section level3">
+<h3>Variables</h3>
+<ul>
+<li><p><span class="math inline">\(S\)</span> the density of sugar
+feeding mosquitoes;</p></li>
+<li><p><span class="math inline">\(B\)</span> the density of blood
+feeding mosquitoes;</p></li>
+<li><p><span class="math inline">\(R\)</span> the density of resting
+mosquitoes;</p></li>
+<li><p><span class="math inline">\(Q\)</span> the density of egg laying
+mosquitoes.</p></li>
+</ul>
+</div>
+<div id="terms" class="section level3">
+<h3>Terms</h3>
+<p><span class="math inline">\(\Lambda\)</span> is the emergence rate of
+adult mosquitoes.</p>
+</div>
+<div id="parameters" class="section level3">
+<h3>Parameters</h3>
+<ul>
+<li><p><span class="math inline">\(f\)</span> is the overall blood
+feeding rate; the inverse <span class="math inline">\(f^{-1}\)</span>
+describes the average time to blood feed after entering the blood
+feeding state</p></li>
+<li><p><span class="math inline">\(\nu\)</span> is the egg laying
+rate;</p></li>
+<li><p><span class="math inline">\(p\)</span> is the fraction of
+mosquitoes that transition into a sugar feeding state after laying eggs;
+the remaining <span class="math inline">\(1-p\)</span> transition into a
+blood feeding state.</p></li>
+<li><p><span class="math inline">\(\zeta\)</span> is rate that blood
+feeding mosquitoes switch to sugar feeding</p></li>
+<li><p><span class="math inline">\(\theta\)</span> is rate gravid
+mosquitoes resorb their eggs, reverting to a blood feeding state; while
+we do not explicitly model opportunistic sugar feeding while laying
+eggs, we assume mosquitoes would remain in the egg laying state if sugar
+was readily available, so <span class="math inline">\(\theta\)</span>
+could be described using a functional response to available
+sugar</p></li>
+<li><p><span class="math inline">\(\Omega_x\)</span> is a state-specific
+dispersal matrix:</p>
+<ul>
+<li><p><span class="math inline">\(g_x\)</span> is the state-specific
+mortality rate</p></li>
+<li><p><span class="math inline">\(\sigma_x\)</span> is the
+state-specific emigration rate,</p></li>
+<li><p><span class="math inline">\(\mu_x\)</span> is state-specific
+survival associated with</p></li>
+<li><p><span class="math inline">\(K_x\)</span> the state-specific
+dispersal matrix;</p></li>
+<li><p>The demographic matrix is <span class="math display">\[\Omega_x =
+g_x + \sigma_x(\mu_x- K_x)\]</span></p></li>
+</ul></li>
+<li><p><span class="math inline">\(\xi\)</span> is the refeeding
+rate</p></li>
+<li><p><span class="math inline">\(\eta^{-1}\)</span> is the duration of
+the post-prandial resting period</p></li>
+</ul>
+</div>
+<div id="dynamics" class="section level3">
+<h3>Dynamics</h3>
+<p><span class="math display">\[
+\begin{array}{rl}
+\dot S &amp;= \Lambda + \nu (1-p) Q + \zeta B  - \rho S - \Omega_S \cdot
+S \\  
+\dot B &amp;= \rho S + (\nu p + \theta) Q + \xi R - (f + \zeta_B) B -
+\Omega_B \cdot B \\
+\dot R &amp;= f B - (\xi + \eta + g) R \\
+\dot Q &amp;= \eta R - (\nu + \theta) Q - \Omega_Q \cdot Q
+\end{array}
+\]</span></p>
+<p>In this version, mosquitoes switch back into a blood feeding state
+after laying eggs. A parameter <span class="math inline">\(\zeta\)</span> determines whether the mosquitoes
+would switch into a sugar feeding state from either a blood feeding or
+egg laying state.</p>
+<p>Note that since all sugar feeding mosquitoes transition into a blood
+feeding state, the transition into sugar feeding from egg laying implies
+the eggs have been reabsorbed.</p>
+</div>
+</div>
+<div id="infection-dynamics" class="section level2">
+<h2>Infection Dynamics</h2>
+<p><strong>Variables</strong></p>
+<ul>
+<li><p>Each one of the behavioral states is replicated for each one of
+the infection states. The variable names add a subscript <span class="math inline">\(u\)</span> for uninfected; <span class="math inline">\(y\)</span> for infected but not yet infectious;
+and <span class="math inline">\(z\)</span> for infectious:</p></li>
+<li><p><span class="math inline">\(S_u\)</span>, <span class="math inline">\(S_y\)</span>, and <span class="math inline">\(S_z\)</span> are the density of uninfected,
+infected but not infectious, and infectious sugar feeding
+mosquitoes.</p></li>
+<li><p><span class="math inline">\(B_u\)</span>, <span class="math inline">\(B_y\)</span>, and <span class="math inline">\(B_z\)</span> are the density of uninfected,
+infected but not infectious, and infectious blood feeding
+mosquitoes.</p></li>
+<li><p><span class="math inline">\(R_u\)</span>, <span class="math inline">\(R_y\)</span>, and <span class="math inline">\(R_z\)</span> are the density of uninfected,
+infected but not infectious, and infectious resting mosquitoes.</p></li>
+<li><p><span class="math inline">\(Q_u\)</span>, <span class="math inline">\(Q_y\)</span>, and <span class="math inline">\(Q_z\)</span> are the density of uninfected,
+infected but not infectious, and infectious egg laying
+mosquitoes.</p></li>
+</ul>
+<p><strong>Terms</strong></p>
+<p><span class="math inline">\(\kappa\)</span> is the NI, the
+probability of becoming infected after blood feeding on a human</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p><span class="math inline">\(\phi^{-1}\)</span> is the
+EIP</p></li>
+<li><p><span class="math inline">\(q\)</span> is the human fraction for
+blood feeding</p></li>
+</ul>
+<p>We present the following behavioral state model:</p>
+<p><strong>uninfected</strong></p>
+<p><span class="math display">\[
+\begin{array}{rl}
+\dot S_u &amp;= \Lambda + \zeta B_u + \nu (1-p) Q_u - \rho S_u -
+\Omega_S \cdot S_u \\  
+\dot B_u &amp;= \rho S_u + (\nu p+ \theta) Q_u + \xi R - (f + \zeta) B_u
+- \Omega_B \cdot B_u \\
+\dot R_u &amp;= f (1-q\kappa) B_u - (\xi + \eta + g) R_u \\
+\dot Q_u &amp;= \eta R_u - (\nu + \theta) Q_u- \Omega_Q \cdot Q_u
+\end{array}
+\]</span> <strong>infected</strong></p>
+<p><span class="math display">\[
+\begin{array}{rl}
+\dot S_y &amp;= \zeta B_y + \nu (1-p) Q_y - \rho S_y - \Omega_S \cdot
+S_y -\phi S_y\\  
+\dot B_y &amp;= \rho S_y + (\nu p + \theta) Q_y + \xi R - (f + \zeta)
+B_y - \Omega_B \cdot B_y -\phi B_y\\
+\dot R_y &amp;= f q \kappa B_u + f B_y- (\xi + \eta + g) R_y - \phi
+R_y\\
+\dot Q_y &amp;= \eta R_y - (\nu + \zeta) Q_y- \Omega_Q \cdot Q_y - \phi
+Q_y
+\end{array}
+\]</span></p>
+<p><strong>infectious</strong></p>
+<p><span class="math display">\[
+\begin{array}{rl}
+\dot S_z &amp;= \phi S_y + \zeta B_z + \nu (1-p) Q_z  - \rho S_z -
+\Omega_S \cdot S_z \\  
+\dot B_z &amp;= \phi B_y + (\nu p + \theta) Q_z + \rho S_z + \xi R - (f
++ \zeta) B_z - \Omega_B \cdot B_z \\
+\dot R_z &amp;= \phi R_y + f B_z - (\xi + \eta + g) R_z \\
+\dot Q_z &amp;= \phi Q_y + \eta R_z - (\nu + \theta) Q_z- \Omega_Q \cdot
+Q_z
+\end{array}
+\]</span></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
