@@ -3,13 +3,25 @@ library(knitr)
 library(ramp.xds)
 library(deSolve) 
 library(ramp.library)
-#devtools::load_all("~/git/ramp.xds")
-#devtools::load_all()
+
+## -----------------------------------------------------------------------------
+devtools::load_all()
 
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 
-model <- xds_setup(MYname="BQ", Lname="trivial", Xname = "trivial", residence=residence, HPop =HPop, nPatches=3)
+model <- xds_setup(MYname="BQ", Lname="trivial", Xname = "trivial", residence=residence, HPop=HPop, nPatches=3)
+
+## -----------------------------------------------------------------------------
+get_K_matrix(model, "Kb")
+
+## -----------------------------------------------------------------------------
+model <- setup_K_matrix("herethere", model, options=list(which_K = "Kb"))
+get_K_matrix(model, "Kb")
+
+## -----------------------------------------------------------------------------
+model <- setup_K_matrix("herethere", model, options=list(which_K = "Kq"))
+get_K_matrix(model, "Kq")
 
 ## -----------------------------------------------------------------------------
 model <- xds_solve(model)
