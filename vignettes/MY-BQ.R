@@ -5,9 +5,6 @@ library(deSolve)
 library(ramp.library)
 
 ## -----------------------------------------------------------------------------
-devtools::load_all()
-
-## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 
 model <- xds_setup(MYname="BQ", Lname="trivial", Xname = "trivial", residence=residence, HPop=HPop, nPatches=3)

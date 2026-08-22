@@ -15,9 +15,8 @@ library(ramp.xds)
 library(deSolve) 
 library(ramp.library)
 ```
-```{r}
-devtools::load_all()
-```
+
+
 
 Here, we describe two closely-related modules for the adult mosquito component, called **BQm** (Figure 1) and **BQ** (Figure 2). Both are implemented as systems of ordinary differential equations.  
 
