@@ -93,6 +93,10 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/F_prevalence.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/F_sigma_b.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/F_sigma_b.static.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/F_sigma_q.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/F_sigma_q.static.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SEIRV.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/HTC.SIR.html</loc></url>
@@ -129,6 +133,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SEISd.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIP.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/add_lines_X_SIPd.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.Kb.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.Kq.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.b.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_K_matrix.q.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/change_L_inits.stages.html</loc></url>
@@ -196,6 +202,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_HTC.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.Kb.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.Kq.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.b.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_K_matrix.q.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/get_L_pars.stages.html</loc></url>
@@ -322,6 +330,8 @@
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.SIR.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.SIRS.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/setup_XH_obj.garki.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/setup_sigma_b_obj.html</loc></url>
+<url><loc>https://dd-harp.github.io/ramp.library/reference/setup_sigma_q_obj.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_L.stages.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_MY.BQ.html</loc></url>
 <url><loc>https://dd-harp.github.io/ramp.library/reference/skill_set_MY.BQm.html</loc></url>

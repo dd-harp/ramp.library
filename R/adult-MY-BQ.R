@@ -109,11 +109,20 @@ check_MY.BQ = function(xds_obj, s){
 #' @keywords internal
 #' @export
 MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
-  xds_obj$MY_obj[[s]]$es_g       <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_sigma_b <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_sigma_q <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_f       <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_q       <- rep(1, nPatches)
+  xds_obj$MY_obj[[s]]$f_t        <- F_f(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$q_t        <- F_q(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$g_t        <- F_g(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$sigma_b_t  <- F_sigma_b(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$sigma_q_t  <- F_sigma_q(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$mu         <- F_mu(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$nu         <- F_nu(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$eip        <- F_eip(t, xds_obj, s)
+
+  xds_obj$MY_obj[[s]]$es_f     <- rep(1, xds_obj$nPatches)
+  xds_obj$MY_obj[[s]]$es_q     <- rep(1, xds_obj$nPatches)
+  xds_obj$MY_obj[[s]]$es_g     <- rep(1, xds_obj$nPatches)
+  xds_obj$MY_obj[[s]]$es_sigma_b <- rep(1, xds_obj$nPatches)
+  xds_obj$MY_obj[[s]]$es_sigma_q <- rep(1, xds_obj$nPatches)
   return(xds_obj)
 })}
 
@@ -127,12 +136,10 @@ MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 MEffectSizes.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$f <- es_f*f_t
   xds_obj$MY_obj[[s]]$q <- es_q*q_t
-  g <- es_g*g_t
-  sigma_b <- es_sigma_b*sigma_b_t
-  sigma_q <- es_sigma_q*sigma_q_t
-  xds_obj$MY_obj[[s]]$g <- g
-  xds_obj$MY_obj[[s]]$sigma_b <- sigma_b
-  xds_obj$MY_obj[[s]]$sigma_q <- sigma_q
+  xds_obj$MY_obj[[s]]$g <- es_g*g_t
+  xds_obj$MY_obj[[s]]$sigma_b <- es_sigma_b*sigma_b_t
+  xds_obj$MY_obj[[s]]$sigma_q <- es_sigma_q*sigma_q_t
+
   xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, Kb_matrix)
   xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, Kq_matrix)
   return(xds_obj)
@@ -205,6 +212,7 @@ setup_MY_obj.BQ = function(MYname, xds_obj, s, options=list()){
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @importFrom ramp.xds checkIt
 #' @keywords internal
 #' @export
 make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
@@ -222,18 +230,15 @@ make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
     MY_obj$eip_par <- eip_par
     MY_obj$eip     <- eip
 
-    MY_obj$g_t          <- checkIt(g, nPatches)
-    MY_obj$es_g         <- rep(1, nPatches)
-    MY_obj$sigma_b_t    <- checkIt(sigma_b, nPatches)
-    MY_obj$es_sigma_b   <- rep(1, nPatches)
-    MY_obj$sigma_q_t    <- checkIt(sigma_q, nPatches)
-    MY_obj$es_sigma_q   <- rep(1, nPatches)
-    MY_obj$mu           <- checkIt(mu, nPatches)
-    MY_obj$f_t          <- checkIt(f, nPatches)
-    MY_obj$es_f         <- rep(1, nPatches)
-    MY_obj$q_t          <- checkIt(q, nPatches)
-    MY_obj$es_q         <- rep(1, nPatches)
-    MY_obj$nu           <- checkIt(nu, nPatches)
+
+    MY_obj <- setup_eip_obj(checkIt(eip, nPatches), MY_obj)
+    MY_obj <- setup_f_obj(checkIt(f, nPatches), MY_obj)
+    MY_obj <- setup_q_obj(checkIt(q, nPatches), MY_obj)
+    MY_obj <- setup_g_obj(checkIt(g, nPatches), MY_obj)
+    MY_obj <- setup_mu_obj(checkIt(mu, nPatches), MY_obj)
+    MY_obj <- setup_nu_obj(checkIt(nu, nPatches), MY_obj)
+    MY_obj <- setup_sigma_q_obj(checkIt(sigma_q, nPatches), MY_obj)
+    MY_obj <- setup_sigma_b_obj(checkIt(sigma_b, nPatches), MY_obj)
     MY_obj$eggsPerBatch <- eggsPerBatch
     MY_obj$phi <- 1/MY_obj$eip
 
