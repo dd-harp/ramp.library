@@ -129,7 +129,7 @@
             <h3 data-toc-skip class="subtitle">Adult Mosquito Behavioral
 State Models with Blood Feeding and Egg Laying</h3>
             
-            <h4 data-toc-skip class="date">July 11, 2026</h4>
+            <h4 data-toc-skip class="date">August 24, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/main/vignettes/MY-BQ.Rmd" class="external-link"><code>vignettes/MY-BQ.Rmd</code></a></small>
       <div class="hidden name"><code>MY-BQ.Rmd</code></div>
@@ -378,10 +378,9 @@ implements behavioral state and infection state dynamics</div>
 </div>
 <hr>
 </div>
-</div>
-<div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
-</h2>
+<div class="section level3">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h3>
 <p>The <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code> utilities does not allow the user to set
 up two different dispersal matrices. pass a single version of the
 dispersal matrix <code>K_matrix.</code> During <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup()</a></code>,
@@ -389,18 +388,39 @@ dispersal matrix <code>K_matrix.</code> During <code><a href="https://dd-harp.gi
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">HPop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">residence</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> </span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"BQ"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>, residence<span class="op">=</span><span class="va">residence</span>, HPop <span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>MYname<span class="op">=</span><span class="st">"BQ"</span>, Lname<span class="op">=</span><span class="st">"trivial"</span>, Xname <span class="op">=</span> <span class="st">"trivial"</span>, residence<span class="op">=</span><span class="va">residence</span>, HPop<span class="op">=</span><span class="va">HPop</span>, nPatches<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_K_matrix.html" class="external-link">get_K_matrix</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Kb"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3]</span></span>
+<span><span class="co">## [1,]    0    0    0</span></span>
+<span><span class="co">## [2,]    0    0    0</span></span>
+<span><span class="co">## [3,]    0    0    0</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_K_matrix.html" class="external-link">setup_K_matrix</a></span><span class="op">(</span><span class="st">"herethere"</span>, <span class="va">model</span>, options<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>which_K <span class="op">=</span> <span class="st">"Kb"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_K_matrix.html" class="external-link">get_K_matrix</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Kb"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3]</span></span>
+<span><span class="co">## [1,] -1.0  0.5  0.5</span></span>
+<span><span class="co">## [2,]  0.5 -1.0  0.5</span></span>
+<span><span class="co">## [3,]  0.5  0.5 -1.0</span></span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_K_matrix.html" class="external-link">setup_K_matrix</a></span><span class="op">(</span><span class="st">"herethere"</span>, <span class="va">model</span>, options<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>which_K <span class="op">=</span> <span class="st">"Kq"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_K_matrix.html" class="external-link">get_K_matrix</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Kq"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3]</span></span>
+<span><span class="co">## [1,] -1.0  0.5  0.5</span></span>
+<span><span class="co">## [2,]  0.5 -1.0  0.5</span></span>
+<span><span class="co">## [3,]  0.5  0.5 -1.0</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_M.html" class="external-link">xds_plot_M</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Y.html" class="external-link">xds_plot_Y</a></span><span class="op">(</span><span class="va">model</span>, add <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Z.html" class="external-link">xds_plot_Z</a></span><span class="op">(</span><span class="va">model</span>, add <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MY-BQ_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="528"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p><img src="MY-BQ_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="528"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Y_fracs.html" class="external-link">xds_plot_Y_fracs</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Z_fracs.html" class="external-link">xds_plot_Z_fracs</a></span><span class="op">(</span><span class="va">model</span>, add<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MY-BQ_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="528"></p>
+<p><img src="MY-BQ_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="528"></p>
+</div>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>
