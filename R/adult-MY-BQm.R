@@ -215,8 +215,8 @@ make_MY_obj_BQm = function(nPatches, options=list(), eip=12,
     MY_obj <- setup_g_obj(checkIt(g, nPatches), MY_obj)
     MY_obj <- setup_mu_obj(checkIt(mu, nPatches), MY_obj)
     MY_obj <- setup_nu_obj(checkIt(nu, nPatches), MY_obj)
-    MY_obj <- setup_sigma_q_obj(checkIt(sigma, nPatches), MY_obj)
-    MY_obj <- setup_sigma_b_obj(checkIt(sigma, nPatches), MY_obj)
+    MY_obj <- setup_sigma_q_obj(checkIt(sigma_q, nPatches), MY_obj)
+    MY_obj <- setup_sigma_b_obj(checkIt(sigma_b, nPatches), MY_obj)
 
     MY_obj$eggsPerBatch <- eggsPerBatch
 
