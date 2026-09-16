@@ -39,21 +39,20 @@
 #' @rdname SEI
 NULL
 
-#' @title The **SEI** module skill set
+#' @title The skill set
 #'
-#' @description The **MY** skill set is a list of
-#' a module's capabilities:
+#' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' + `demography` is
-#'
-#' @inheritParams ramp.xds::skill_set_MY
-#'
-#' @return *MY* module skill set, as a list
+#' @return the **`xds`** object
 #'
 #' @keywords internal
 #' @export
-skill_set_MY.SEI = function(MYname){
-  return(list())
+setup_skillset_MY.SEI = function(xds_obj, s){
+  skills = list(
+    not_implemented = TRUE
+  )
+  xds_obj$MY_obj[[s]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run a check before solving
@@ -131,6 +130,10 @@ setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
+  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
+  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 

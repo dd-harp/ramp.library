@@ -74,21 +74,20 @@ dMYdt.BQ <- function(t, y, xds_obj, s){
   })
 }
 
-#' @title The **BQ** module skill set
+#' @title The skill set
 #'
-#' @description The **MY** skill set is a list of
-#' a module's capabilities:
+#' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' + `demography` is
-#'
-#' @inheritParams ramp.xds::skill_set_MY
-#'
-#' @return *MY* module skill set, as a list
+#' @return the **`xds`** object
 #'
 #' @keywords internal
 #' @export
-skill_set_MY.BQ = function(MYname){
-  return(list())
+setup_skillset_MY.BQ = function(xds_obj, s){
+  skills = list(
+    not_implemented = TRUE
+  )
+  xds_obj$MY_obj[[s]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run a check before solving
@@ -196,6 +195,10 @@ F_eggs.BQ <- function(t, y, xds_obj, s) {
 #' @export
 setup_MY_obj.BQ = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BQ(xds_obj$nPatches, options)
+  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
+  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 

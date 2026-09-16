@@ -37,26 +37,30 @@
 #' @rdname garki
 NULL
 
-#' @title The **XH** module skill set for `garki`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.garki = function(Xname = "garki"){
-  return(list(
+setup_skillset_XH.garki = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = TRUE,
+    msat        = TRUE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run checks before solving (**XH**)
@@ -110,9 +114,17 @@ dXHdt.garki = function(t, y, xds_obj, i){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.garki = function(Xname, xds_obj, i, options=list()){
-  xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata, options)
-  xds_obj <- setup_XH_ports(xds_obj, i)
+setup_XH_obj.garki = function(Xname, residence, HPop, xds_obj, i, options=list()){
+  xds_obj$Xname = "garki"
+  xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 
@@ -153,13 +165,6 @@ make_XH_obj_garki = function(nStrata, options=list(), b=0.55,
     garki$q1=checkIt(q1, nStrata)
     garki$q2=checkIt(q2, nStrata)
     garki$q3=checkIt(q3, nStrata)
-
-    garki$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    garki$births = births
-    garki$mda = F_zero
-    garki$msat = F_zero
 
     return(garki)
   })}

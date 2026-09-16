@@ -47,6 +47,22 @@
 #' @rdname BRQS
 NULL
 
+#' @title The skill set
+#'
+#' @inheritParams ramp.xds::setup_skillset_MY
+#'
+#' @return the **`xds`** object
+#'
+#' @keywords internal
+#' @export
+setup_skillset_MY.BRQS = function(xds_obj, s){
+  skills = list(
+    not_implemented = TRUE
+  )
+  xds_obj$MY_obj[[s]]$skill_set = skills
+  return(xds_obj)
+}
+
 #' @title Compute derivatives for `BRQS` (**MY**)
 #' @description Implements [dMYdt] for the BRQS ODE model.
 #' @inheritParams ramp.xds::dMYdt
@@ -206,6 +222,10 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 #' @export
 setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
+  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
+  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 

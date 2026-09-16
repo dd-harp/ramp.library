@@ -34,26 +34,30 @@
 #' @rdname SIR
 NULL
 
-#' @title The **XH** module skill set for `SIR`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.SIR = function(Xname = "SIR"){
-  return(list(
+setup_skillset_XH.SIR = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run checks before solving (**XH**)
@@ -218,11 +222,6 @@ make_XH_obj_SIR = function(nStrata, options=list(),
     XH_obj$c = checkIt(c, nStrata)
     XH_obj$r = checkIt(r, nStrata)
 
-    # Ports for demographic models
-    XH_obj$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    XH_obj$births = births
 
     return(XH_obj)
 })}
@@ -234,11 +233,17 @@ make_XH_obj_SIR = function(nStrata, options=list(),
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIR = function(Xname, xds_obj, i, options=list()){
-  XH_obj <- make_XH_obj_SIR(xds_obj$nStrata[i], options)
-  class(XH_obj) <- c("SIR", paste("SIR_", xds_obj$xds, sep=""))
-  xds_obj$XH_obj[[i]] = XH_obj
-  xds_obj <- setup_XH_ports(xds_obj, i)
+setup_XH_obj.SIR = function(Xname, residence, HPop, xds_obj, i, options=list()){
+  xds_obj$Xname = "SIR"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SIR(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 

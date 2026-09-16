@@ -4,10 +4,14 @@
 \alias{setup_XH_obj.SEIS}
 \title{Setup XH_obj.SEIS}
 \usage{
-\method{setup_XH_obj}{SEIS}(Xname, xds_obj, i, options = list())
+\method{setup_XH_obj}{SEIS}(Xname, residence, HPop, xds_obj, i, options = list())
 }
 \arguments{
 \item{Xname}{the model name}
+
+\item{residence}{the residence vector}
+
+\item{HPop}{the initial human population size}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
