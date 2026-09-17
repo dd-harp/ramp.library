@@ -41,26 +41,30 @@
 #' @rdname SIPd
 NULL
 
-#' @title The **XH** module skill set for `SIPd`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.SIPd = function(Xname = "SIP"){
-  return(list(
+setup_skillset_XH.SIPd = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run checks before solving (**XH**)
@@ -104,7 +108,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
         treated_eta = lagderiv(t=t-eta, nr=xds_obj$ix$X[[i]]$treated_ix)
       }
 
-      dH <- Births(t, H, Hpar) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- (1-rho)*foi*S - (r+xi)*I +  D_matrix %*% I
       dP <- rho*foi*S + xi*(S+I) - treated_eta + D_matrix %*% P
       dtreated <- (rho*foi+xi)*S + xi*I
@@ -120,10 +124,18 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIPd = function(Xname, xds_obj, i, options=list()){
+setup_XH_obj.SIPd = function(Xname, residence, HPop, xds_obj, i, options=list()){
   xds_obj = ramp.xds::ode_to_dde(xds_obj)
-  xds_obj$XH_obj[[i]] = make_XH_obj_SIPd(xds_obj$nStrata[i], options)
-  xds_obj <- setup_XH_ports(xds_obj, i)
+  xds_obj$Xname = "SIPd"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SIPd(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 
@@ -155,13 +167,6 @@ make_XH_obj_SIPd = function(nStrata, options=list(),
     XH_obj$xi = checkIt(xi, nStrata)
 
 
-    # Ports for demographic models
-    XH_obj$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    XH_obj$births = births
-    XH_obj$mda = F_zero
-    XH_obj$msat = F_zero
 
     return(XH_obj)
   })}
@@ -231,7 +236,7 @@ Update_XHt.SIPd <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, H, xds_obj$Hpar[[i]])
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 

@@ -58,21 +58,20 @@ dMYdt.BQm <- function(t, y, xds_obj, s){
   })
 }
 
-#' @title The **BQm** module skill set
+#' @title The skill set
 #'
-#' @description The **MY** skill set is a list of
-#' a module's capabilities:
+#' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' + `demography` is
-#'
-#' @inheritParams ramp.xds::skill_set_MY
-#'
-#' @return *MY* module skill set, as a list
+#' @return the **`xds`** object
 #'
 #' @keywords internal
 #' @export
-skill_set_MY.BQm = function(MYname){
-  return(list())
+setup_skillset_MY.BQm = function(xds_obj, s){
+  skills = list(
+    not_implemented = TRUE
+  )
+  xds_obj$MY_obj[[s]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run a check before solving
@@ -124,8 +123,9 @@ MEffectSizes.BQm <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$sigma_b <- es_sigma_b*sigma_b_t
   xds_obj$MY_obj[[s]]$sigma_q <- es_sigma_q*sigma_q_t
 
-  xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, Kb_matrix)
-  xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, Kq_matrix)
+  xds_obj <- change_Omega_b(xds_obj, s)
+  xds_obj <- change_Omega_q(xds_obj, s)
+
   return(xds_obj)
 })}
 
@@ -180,6 +180,11 @@ F_eggs.BQm <- function(t, y, xds_obj, s) {
 #' @export
 setup_MY_obj.BQm = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BQm(xds_obj$nPatches, options)
+  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_skillset_MY(xds_obj, s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
+  xds_obj <- setup_MY_inits(xds_obj, s, options)
   return(xds_obj)
 }
 
@@ -220,17 +225,6 @@ make_MY_obj_BQm = function(nPatches, options=list(), eip=12,
 
     MY_obj$eggsPerBatch <- eggsPerBatch
 
-    MY_obj$Kb_matrix <- matrix(0, nPatches, nPatches)
-    MY_obj$Kq_matrix <- matrix(0, nPatches, nPatches)
-
-    Omega_par <- list()
-    class(Omega_par) <- "static"
-    MY_obj$Omega_par <- Omega_par
-    MY_obj$Omega_b <- with(MY_obj, compute_Omega_xde(g, sigma_b, mu, Kb_matrix))
-    MY_obj$Omega_q <- with(MY_obj, compute_Omega_xde(g, sigma_q, mu, Kq_matrix))
-    base <- 'BQm'
-    class(base) <- 'BQm'
-    MY_obj$baseline <- base
 
     return(MY_obj)
 })}

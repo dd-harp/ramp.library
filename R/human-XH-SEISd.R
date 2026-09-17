@@ -40,28 +40,30 @@
 #' @rdname SEISd
 NULL
 
-#' @title The **XH** module skill set for `SEISd`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.SEISd = function(Xname = "SIP"){
-  return(list(
+setup_skillset_XH.SEISd = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE,
-    mda = FALSE,
-    msat = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run checks before solving (**XH**)
@@ -97,7 +99,7 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
         cases = lagderiv(t=t-nu, nr=ix$cases_ix)
       }
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - cases + D_matrix %*% E
       dI <- cases - r*I + D_matrix %*% I
       dcases <- foi*S
@@ -113,11 +115,18 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEISd = function(Xname, xds_obj, i, options=list()){
+setup_XH_obj.SEISd = function(Xname, residence, HPop, xds_obj, i, options=list()){
   xds_obj = ode_to_dde(xds_obj)
-  XH_obj <- make_XH_obj_SEISd(xds_obj$nStrata[i], options)
-  xds_obj$XH_obj[[i]] = XH_obj
-  xds_obj <- setup_XH_ports(xds_obj, i)
+  xds_obj$Xname = "SEISd"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SEISd(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 
@@ -142,11 +151,6 @@ make_XH_obj_SEISd = function(nStrata, options=list(),
     XH_obj$r = checkIt(r, nStrata)
     XH_obj$nu = checkIt(nu, nStrata)
 
-    # Ports for demographic models
-    XH_obj$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    XH_obj$births = births
 
     return(XH_obj)
   })}

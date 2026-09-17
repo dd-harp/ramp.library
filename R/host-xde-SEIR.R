@@ -38,27 +38,32 @@
 #' @rdname SEIR
 NULL
 
-#' @title The **XH** module skill set for `SEIR`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.SEIR = function(Xname = "SEIR"){
-  return(list(
+setup_skillset_XH.SEIR = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
+
 
 #' Run checks before solving (**XH**)
 #'
@@ -85,7 +90,7 @@ dXHdt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - tau*E + D_matrix %*% E
       dI <- tau*E - r*I + D_matrix %*% I
       dR <- r*I + D_matrix %*% R
@@ -112,7 +117,7 @@ Update_XHt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, xds_obj, i)
       Et <- a*S +(1-tau)*E + D_matrix %*% E
       It <- (1-r)*I + tau*E + D_matrix %*% I
       Rt <- R + r*I + D_matrix %*% R
@@ -145,7 +150,7 @@ steady_state_X.SEIR_dts = function(foi, H, xds_obj, i=1){
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SEIR_ode = function(foi, H,  xds_obj, i=1){
+steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Eeq = 0
     Ieq = 0
@@ -287,11 +292,6 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
     XH_obj$c = checkIt(c, nStrata)
     XH_obj$r = checkIt(r, nStrata)
 
-    # Ports for demographic models
-    XH_obj$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    XH_obj$births = births
 
     return(XH_obj)
   })}
@@ -306,11 +306,17 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIR = function(Xname, xds_obj, i, options=list()){
-  XH_obj <- make_XH_obj_SEIR(xds_obj$nStrata[i], options)
-  class(XH_obj) <- c("SEIR", paste("SEIR_", xds_obj$xds, sep=""))
-  xds_obj$XH_obj[[i]] = XH_obj
-  xds_obj <- setup_XH_ports(xds_obj, i)
+setup_XH_obj.SEIR = function(Xname, residence, HPop, xds_obj, i, options=list()){
+  xds_obj$Xname = "SEIR"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SEIR(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 

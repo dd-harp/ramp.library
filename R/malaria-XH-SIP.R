@@ -41,26 +41,30 @@
 #' @rdname SIP
 NULL
 
-#' @title The **XH** module skill set for `SIP`
+#' @title The **XH** module skill set
 #'
 #' @description The **XH** skill set is a list of
 #' a module's capabilities.
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::skill_set_XH
+#' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the skill set, as a list
-#'
+#' @return the **`xds`** object
 #' @keywords internal
+#'
 #' @export
-skill_set_XH.SIP = function(Xname = "SIP"){
-  return(list(
+setup_skillset_XH.SIP = function(xds_obj,i){
+  skills =   list(
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
-    diagnostics = FALSE
-  ))
+    diagnostics = "linear",
+    mda         = TRUE,
+    msat        = TRUE
+  )
+  xds_obj$XH_obj[[i]]$skill_set = skills
+  return(xds_obj)
 }
 
 #' Run checks before solving (**XH**)
@@ -109,7 +113,7 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
       xi_t = xi + mda(t)
       sigma_t = sigma + msat(t)
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I + D_matrix %*% H
       dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P + D_matrix %*% P
 
@@ -124,11 +128,18 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
-  XH_obj <- make_XH_obj_SIP(xds_obj$nStrata[i], options)
-  class(XH_obj) <- c("SIP", paste("SIP_", xds_obj$xds, sep=""))
-  xds_obj$XH_obj[[i]] = XH_obj
-  xds_obj <- setup_XH_ports(xds_obj, i)
+setup_XH_obj.SIP = function(Xname, residence, HPop, xds_obj, i, options=list()){
+  xds_obj$Xname = "SIP"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SIP(xds_obj$nStrata[1], options)
+  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_mass_treatment(xds_obj, i=i)
+  xds_obj <- setup_births("zero", xds_obj, i)
+  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
+  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }
 
@@ -143,16 +154,14 @@ setup_XH_obj.SIP = function(Xname, xds_obj, i, options=list()){
 #' @param eta prophylaxis waning rate
 #' @param xi background treatment rate
 #' @param sigma increased treatment rate while infected
-#' @param F_mass_treat mass treatment rates as a function of time
-#' @importFrom ramp.xds F_zero
+#' @importFrom ramp.xds F_zero checkIt
 #' @return a [list]
 #' @keywords internal
 #' @export
 make_XH_obj_SIP = function(nStrata, options=list(),
                            b=0.55, r=1/180, c=0.15,
                            rho =.1, eta=1/25,
-                           xi =1/365, sigma = 1/365,
-                           F_mass_treat = F_zero){
+                           xi =1/365, sigma = 1/365){
   with(options,{
     XH_obj = list()
     class(XH_obj) <- c("SIP")
@@ -165,14 +174,6 @@ make_XH_obj_SIP = function(nStrata, options=list(),
     XH_obj$xi = checkIt(xi, nStrata)
     XH_obj$sigma = checkIt(sigma, nStrata)
 
-    # Ports for demographic models
-    XH_obj$D_matrix = diag(0, nStrata)
-    births = "zero"
-    class(births) = births
-    XH_obj$births = births
-
-    XH_obj$mda = F_zero
-    XH_obj$msat = F_zero
 
     return(XH_obj)
   })}
@@ -245,7 +246,7 @@ Update_XHt.SIP <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, H, xds_obj$Hpar[[i]])
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 
@@ -509,7 +510,7 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SIP_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SIP = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
     Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))

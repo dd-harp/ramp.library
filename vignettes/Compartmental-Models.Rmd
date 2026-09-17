@@ -7,18 +7,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
-```{r, message=FALSE, warning=FALSE}
-library(knitr)
-library(ramp.xds)
-library(ramp.library)
-library(deSolve)
-library(ramp.library)
-```
-
-```{r, echo=F}
-#devtools::load_all()
-```
 
 In this vignette, we describe four basic compartmental models for mosquito-borne pathogens commonly used for humans in `ramp.library`. The models are named by their states: susceptible (S) - exposed (E) infected (I) - recovered and immune (R), and vaccinated (V). According to their setup, not all models include all of the states. There are four compartmental models: SIR, SIRS, SEIR, and SEIRV. The other models including SIS, SEI and SIP and SEIS are described in the `ramp.xds`.
   

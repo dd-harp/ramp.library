@@ -2,7 +2,7 @@
 % Please edit documentation in R/mosquito_dispersal.R
 \name{change_K_matrix.Kb}
 \alias{change_K_matrix.Kb}
-\title{Change Mosquito Dispersal Matrix}
+\title{Change mosquito dispersal matrix}
 \usage{
 \method{change_K_matrix}{Kb}(K_matrix, xds_obj, which_K = "Kb", s = 1)
 }
@@ -19,12 +19,8 @@
 an \strong{\code{xds}} object
 }
 \description{
-Run \link[ramp.xds:check_K_matrix]{ramp.xds::check_K_matrix} then
-
-After passing checks, \code{xds_obj} is updated.
-
-In models with multiple species, use \code{s} to
-specify the species to update.
+Change the dispersal
+matrix for blood feeding, called the \code{Kb_matrix}
 }
 \seealso{
 \link[ramp.xds:xds_info_mosquito_dispersal]{ramp.xds::xds_info_mosquito_dispersal}; \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}
