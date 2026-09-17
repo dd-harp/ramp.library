@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -215,7 +215,8 @@ constant for all time).</p>
 <span><span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span>, <span class="fl">250</span><span class="op">)</span></span>
 <span><span class="va">nPatches</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
 <span><span class="va">residence</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span> </span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_xds_object_template.html" class="external-link">make_xds_object_template</a></span><span class="op">(</span><span class="st">"ode"</span>, <span class="st">"human"</span>, <span class="va">nPatches</span>, <span class="fl">1</span>, <span class="va">residence</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">membership</span><span class="op">=</span><span class="fl">1</span></span>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_xds_object_template.html" class="external-link">make_xds_object_template</a></span><span class="op">(</span><span class="st">"ode"</span>, <span class="st">"human"</span>, <span class="va">nPatches</span>, <span class="va">membership</span>, <span class="va">residence</span><span class="op">)</span> </span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">c</span> <span class="op">&lt;-</span> <span class="fl">0.15</span></span>
@@ -225,7 +226,7 @@ constant for all time).</p>
 <span><span class="va">xi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">sigma</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">Xo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>b<span class="op">=</span><span class="va">b</span>,c<span class="op">=</span><span class="va">c</span>,r<span class="op">=</span><span class="va">r</span>,eta<span class="op">=</span><span class="va">eta</span>,rho<span class="op">=</span><span class="va">rho</span>,sigma<span class="op">=</span><span class="va">sigma</span>,xi<span class="op">=</span><span class="va">xi</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_obj.html" class="external-link">setup_XH_obj</a></span><span class="op">(</span><span class="st">"SIP"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_obj.html" class="external-link">setup_XH_obj</a></span><span class="op">(</span><span class="st">"SIP"</span>, <span class="va">residence</span>, <span class="va">H</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">Xo</span><span class="op">)</span> </span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">/</span><span class="fl">365</span></span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="va">eir</span><span class="op">*</span><span class="va">b</span>, <span class="va">H</span>, <span class="va">params</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">ss</span></span>
@@ -238,9 +239,7 @@ constant for all time).</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_obj.html" class="external-link">setup_MY_obj</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span>, <span class="va">MYo</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_inits.html" class="external-link">setup_MY_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_L_obj.html" class="external-link">setup_L_obj</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_L_inits.html" class="external-link">setup_L_inits</a></span><span class="op">(</span><span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_L_obj.html" class="external-link">setup_L_obj</a></span><span class="op">(</span><span class="st">"trivial"</span>, <span class="va">membership</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/make_indices.html" class="external-link">make_indices</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -260,15 +259,15 @@ constant for all time).</p>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">out</span><span class="op">[</span><span class="fl">2</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $S</span></span>
 <span><span class="co">#&gt;         1         2         3 </span></span>
-<span><span class="co">#&gt;  95.85096 449.03652 217.47787 </span></span>
+<span><span class="co">#&gt; 18.766544  8.658370  6.512865 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $I</span></span>
 <span><span class="co">#&gt;         4         5         6 </span></span>
-<span><span class="co">#&gt; 0.2470051 2.1925016 1.5043227 </span></span>
+<span><span class="co">#&gt;  4.836082 21.138024 11.262584 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $P</span></span>
-<span><span class="co">#&gt;        7        8        9 </span></span>
-<span><span class="co">#&gt;  3.90203 48.77098 31.01781 </span></span>
+<span><span class="co">#&gt;         7         8         9 </span></span>
+<span><span class="co">#&gt;  76.39737 470.20361 232.22455 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $H</span></span>
 <span><span class="co">#&gt;   1   2   3 </span></span>
