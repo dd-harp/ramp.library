@@ -99,7 +99,7 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
         cases = lagderiv(t=t-nu, nr=ix$cases_ix)
       }
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - cases + D_matrix %*% E
       dI <- cases - r*I + D_matrix %*% I
       dcases <- foi*S

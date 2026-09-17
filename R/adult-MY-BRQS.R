@@ -223,9 +223,11 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
-  xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
+  xds_obj <- setup_skillset_MY(xds_obj, s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Ks"), s=s)
   xds_obj <- setup_MY_inits(xds_obj, s, options)
-  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 
@@ -264,9 +266,6 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
 
     MY_obj$nu_t         <- checkIt(nu, nPatches)
     MY_obj$es_nu        <- rep(1, nPatches)
-
-    MY_obj$p            <- checkIt(p, nPatches)
-    MY_obj$zeta         <- checkIt(zeta, nPatches)
 
     MY_obj$theta_t        <- checkIt(theta, nPatches)
     MY_obj$es_theta        <- rep(1, nPatches)
@@ -314,11 +313,6 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
 
     MY_obj$phi <- 1/MY_obj$eip
 
-    calK <- diag(nPatches)
-
-    MY_obj$calKb <- calK
-    MY_obj$calKq <- calK
-    MY_obj$calKs <- calK
 
     Omega_par <- list()
     class(Omega_par) <- "static"

@@ -250,7 +250,7 @@ LEffectSizes.stages <- function(t, y, xds_obj, s) {
 #' @seealso [make_L_obj_stages]
 #' @keywords internal
 #' @export
-setup_L_obj.stages = function(Lname, xds_obj, s, options=list()){
+setup_L_obj.stages = function(Lname, membership, xds_obj, s, options=list()){
   L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
   class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
   xds_obj$L_obj[[s]] = L_obj

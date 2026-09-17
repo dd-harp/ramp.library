@@ -87,7 +87,7 @@ dXHdt.SEIS <- function(t, y, xds_obj, i) {
 
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - nu*E +  D_matrix %*% E
       dI <- nu*E - r*I + D_matrix %*% I
       return(c(dH, dE, dI))
@@ -108,7 +108,7 @@ Update_XHt.SEIS <- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      Ht <- Births(t, H, births) +
+      Ht <- Births(t, xds_obj, i) +
       Et <- ar*S + (1-nr)*ar*I + nu*E + dHdt(t, E, Hpar)
       It <- nr*I + (1-nu)*E + dHdt(t, I, Hpar)
 
@@ -454,7 +454,7 @@ add_lines_X_SEIS = function(time, XH, nStrata, clrs=c("darkblue","darkred"), llt
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SEIS_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SEIS = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = (foi*H*nu)/(foi*(r+nu) +r*nu)
     Eeq = (foi*H*r)/(foi*(r+nu) +r*nu)

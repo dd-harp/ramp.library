@@ -41,7 +41,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   K_matrix <- t(K_matrix)
 
   # omega matrix
-  Omega <- compute_Omega_xde(g, sigma, mu, K_matrix)
+  Omega <- F_Omega_xde(g, sigma, mu, K_matrix)
   Upsilon <- expm::expm(-Omega * eip)
 
   MYo <- list(nPatches=nPatches,

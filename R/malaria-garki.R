@@ -94,7 +94,7 @@ dXHdt.garki = function(t, y, xds_obj, i){
       R1 = foi/(exp(foi/r1) - 1)
       R2 = foi/(exp(foi/r2) - 1)
 
-      dH = Births(t, H, births) + D_matrix %*% H
+      dH = Births(t, xds_obj, i) + D_matrix %*% H
 #     dx1 = Births(t, H, Hpar) -foi*x1 + R1*y2 + dHdt(t, H, Hpar)
       dx2 = foi*x1 - nu*x2 + D_matrix %*% x2
       dy1 = nu*x2 - alpha1*y1  + D_matrix %*% y1

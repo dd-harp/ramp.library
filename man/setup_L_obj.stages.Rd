@@ -4,10 +4,12 @@
 \alias{setup_L_obj.stages}
 \title{Set up \code{stages} (\strong{L})}
 \usage{
-\method{setup_L_obj}{stages}(Lname, xds_obj, s, options = list())
+\method{setup_L_obj}{stages}(Lname, membership, xds_obj, s, options = list())
 }
 \arguments{
 \item{Lname}{the class name of the \strong{L} module}
+
+\item{membership}{the habitats' patch membership vector}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 

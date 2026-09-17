@@ -85,7 +85,7 @@ dXHdt.SIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- foi*S - r*I + D_matrix %*% I
       dR <- r*I + D_matrix %*% R
 
@@ -107,7 +107,7 @@ Update_XHt.SIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      Ht <- Births(t, H, births) + D_matrix %*% H
+      Ht <- Births(t, xds_obj, i) + D_matrix %*% H
       It <- (1-r)*I + ar*S + D_matrix %*% I
       Rt <- R + r*I + D_matrix %*% R
 
@@ -414,7 +414,7 @@ steady_state_X.SIR_dts = function(foi, H, xds_obj, i=1){
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SIR_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SIR = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = 0
     Req = H

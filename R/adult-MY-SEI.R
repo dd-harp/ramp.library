@@ -131,6 +131,8 @@ setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
   xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)
+  xds_obj <- setup_Upsilon_obj(FALSE, xds_obj, s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
   xds_obj <- setup_MY_inits(xds_obj, s, options)
   xds_obj <- F_Omega_xde(xds_obj, s)

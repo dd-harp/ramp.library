@@ -4,6 +4,10 @@ library(ramp.xds)
 library(deSolve) 
 library(ramp.library)
 
+## ----echo=FALSE---------------------------------------------------------------
+#devtools::load_all("~/git/ramp.xds")
+#devtools::load_all()
+
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 

@@ -95,11 +95,11 @@ dXHdt.SEIRV<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - tau*E + D_matrix %*% E
       dI <- tau*E - r*I + D_matrix %*% I
       dR <- (1-varepsilon)*r*I - gamma*R + D_matrix %*% R
-      dV <- alpha*Births(t, H, births) + varepsilon*r*I + D_matrix %*% V
+      dV <- alpha*Births(t, xds_obj, i) + varepsilon*r*I + D_matrix %*% V
 
       derivs = c(dH, dE, dI, dR, dV)
 
@@ -120,7 +120,7 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, xds_obj, i)
       Et <- a*S +(1-tau)*E
       It <- (1-r)*I + tau*E + dHdt(t, I, Hpar)
       Rt <- (1-gamma)*R + (1-varepsilon)*r*I + dHdt(t, R, Hpar)
@@ -317,7 +317,7 @@ make_XH_obj_SEIRV = function(nStrata, options=list(),
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SEIRV_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = 0
     Seq = 0

@@ -1,13 +1,3 @@
-## ----message=FALSE, warning=FALSE---------------------------------------------
-library(knitr)
-library(ramp.xds)
-library(ramp.library)
-library(deSolve)
-library(ramp.library)
-
-## ----echo=F-------------------------------------------------------------------
-#devtools::load_all()
-
 ## -----------------------------------------------------------------------------
 library(ramp.xds)
 library(ramp.library)

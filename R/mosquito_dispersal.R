@@ -37,9 +37,7 @@ get_K_matrix.Kq = function(xds_obj, which_K="Kq", s=1){
 change_K_matrix.Kb = function(K_matrix, xds_obj, which_K="Kb", s=1){
   check_K_matrix(K_matrix, xds_obj$nPatches)
   xds_obj$MY_obj[[s]]$Kb_matrix <- K_matrix
-  xds_obj$MY_obj[[s]]$Kb_obj <- make_static_obj()
-  xds_obj$MY_obj[[s]]$Omega_b_obj <- make_static_obj()
-  xds_obj$MY_obj[[s]]$Omega_b <- F_Omega_xde(xds_obj, s)
+  xds_obj <- change_Omega_b(xds_obj, s)
   return(xds_obj)
 }
 
@@ -58,8 +56,7 @@ change_K_matrix.Kb = function(K_matrix, xds_obj, which_K="Kb", s=1){
 change_K_matrix.Kq = function(K_matrix, xds_obj, which_K="Kq", s=1){
   check_K_matrix(K_matrix, xds_obj$nPatches)
   xds_obj$MY_obj[[s]]$Kq_matrix <- K_matrix
-  xds_obj$MY_obj[[s]]$Kq_obj <- make_static_obj()
-  xds_obj$MY_obj[[s]]$Omega_q_obj <- make_static_obj()
+  xds_obj <- change_Omega_q(xds_obj, s)
   return(xds_obj)
 }
 
@@ -77,8 +74,7 @@ change_K_matrix.Kq = function(K_matrix, xds_obj, which_K="Kq", s=1){
 change_K_matrix.Ks = function(K_matrix, xds_obj, which_K="Ks", s=1){
   check_K_matrix(K_matrix, xds_obj$nPatches)
   xds_obj$MY_obj[[s]]$Ks_matrix <- K_matrix
-  xds_obj$MY_obj[[s]]$Ks_obj <- make_static_obj()
-  xds_obj$MY_obj[[s]]$Omega_s_obj <- make_static_obj()
+  xds_obj <- change_Omega_s(xds_obj, s)
   return(xds_obj)
 }
 

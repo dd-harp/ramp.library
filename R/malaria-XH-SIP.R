@@ -113,7 +113,7 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
       xi_t = xi + mda(t)
       sigma_t = sigma + msat(t)
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I + D_matrix %*% H
       dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P + D_matrix %*% P
 
@@ -154,16 +154,14 @@ setup_XH_obj.SIP = function(Xname, residence, HPop, xds_obj, i, options=list()){
 #' @param eta prophylaxis waning rate
 #' @param xi background treatment rate
 #' @param sigma increased treatment rate while infected
-#' @param F_mass_treat mass treatment rates as a function of time
-#' @importFrom ramp.xds F_zero
+#' @importFrom ramp.xds F_zero checkIt
 #' @return a [list]
 #' @keywords internal
 #' @export
 make_XH_obj_SIP = function(nStrata, options=list(),
                            b=0.55, r=1/180, c=0.15,
                            rho =.1, eta=1/25,
-                           xi =1/365, sigma = 1/365,
-                           F_mass_treat = F_zero){
+                           xi =1/365, sigma = 1/365){
   with(options,{
     XH_obj = list()
     class(XH_obj) <- c("SIP")
@@ -248,7 +246,7 @@ Update_XHt.SIP <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, H, xds_obj$Hpar[[i]])
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 
@@ -512,7 +510,7 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SIP_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SIP = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
     Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))

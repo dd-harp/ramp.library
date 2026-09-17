@@ -12,6 +12,7 @@ library(data.table)
 library(ggplot2)
 
 ## ----echo=FALSE---------------------------------------------------------------
+#devtools::load_all("~/git/ramp.xds")
 #devtools::load_all()
 
 ## -----------------------------------------------------------------------------
@@ -19,7 +20,8 @@ nStrata <- 3
 H <- c(100, 500, 250)
 nPatches <- 3
 residence <- 1:3 
-params <- make_xds_object_template("ode", "human", nPatches, 1, residence) 
+membership=1
+params <- make_xds_object_template("ode", "human", nPatches, membership, residence) 
 
 ## -----------------------------------------------------------------------------
 b <- 0.5
@@ -30,7 +32,7 @@ rho <- c(0.05, 0.1, 0.15)
 xi <- rep(0, 3)
 sigma <-rep(0.5,3)
 Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,sigma=sigma,xi=xi)
-params = setup_XH_obj("SIP", params, 1, Xo) 
+params = setup_XH_obj("SIP", residence, H, params, 1, Xo) 
 
 ## -----------------------------------------------------------------------------
 eir <- c(1,2,3)/365
@@ -47,9 +49,7 @@ MYo = list(
 
 ## -----------------------------------------------------------------------------
 params = setup_MY_obj("trivial", params, 1, MYo)
-params = setup_MY_inits(params, 1)
-params = setup_L_obj("trivial", params, 1)
-params = setup_L_inits(params, 1)
+params = setup_L_obj("trivial", membership, params, 1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)

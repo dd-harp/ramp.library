@@ -139,8 +139,8 @@ MEffectSizes.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$sigma_b <- es_sigma_b*sigma_b_t
   xds_obj$MY_obj[[s]]$sigma_q <- es_sigma_q*sigma_q_t
 
-  xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, Kb_matrix)
-  xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, Kq_matrix)
+  xds_obj <- change_Omega_b(xds_obj, s)
+  xds_obj <- change_Omega_q(xds_obj, s)
   return(xds_obj)
 })}
 
@@ -196,9 +196,10 @@ F_eggs.BQ <- function(t, y, xds_obj, s) {
 setup_MY_obj.BQ = function(MYname, xds_obj, s, options=list()){
   xds_obj$MY_obj[[s]] = make_MY_obj_BQ(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
-  xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
+  xds_obj <- setup_skillset_MY(xds_obj, s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
   xds_obj <- setup_MY_inits(xds_obj, s, options)
-  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 
@@ -233,7 +234,6 @@ make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
     MY_obj$eip_par <- eip_par
     MY_obj$eip     <- eip
 
-
     MY_obj <- setup_eip_obj(checkIt(eip, nPatches), MY_obj)
     MY_obj <- setup_f_obj(checkIt(f, nPatches), MY_obj)
     MY_obj <- setup_q_obj(checkIt(q, nPatches), MY_obj)
@@ -244,19 +244,6 @@ make_MY_obj_BQ = function(nPatches, options=list(), eip=12,
     MY_obj <- setup_sigma_b_obj(checkIt(sigma_b, nPatches), MY_obj)
     MY_obj$eggsPerBatch <- eggsPerBatch
     MY_obj$phi <- 1/MY_obj$eip
-
-    MY_obj$Kb_matrix <- matrix(0, nPatches, nPatches)
-    MY_obj$Kq_matrix <- matrix(0, nPatches, nPatches)
-
-    Omega_par <- list()
-    class(Omega_par) <- "static"
-    MY_obj$Omega_par <- Omega_par
-    MY_obj$Omega_b <- with(MY_obj, compute_Omega_xde(g, sigma_b, mu, Kb_matrix))
-    MY_obj$Omega_q <- with(MY_obj, compute_Omega_xde(g, sigma_q, mu, Kq_matrix))
-
-    base <- 'BQ'
-    class(base) <- 'BQ'
-    MY_obj$baseline <- base
 
     return(MY_obj)
 })}

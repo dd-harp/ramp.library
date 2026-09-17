@@ -108,7 +108,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
         treated_eta = lagderiv(t=t-eta, nr=xds_obj$ix$X[[i]]$treated_ix)
       }
 
-      dH <- Births(t, H, Hpar) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- (1-rho)*foi*S - (r+xi)*I +  D_matrix %*% I
       dP <- rho*foi*S + xi*(S+I) - treated_eta + D_matrix %*% P
       dtreated <- (rho*foi+xi)*S + xi*I
@@ -236,7 +236,7 @@ Update_XHt.SIPd <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, H, xds_obj$Hpar[[i]])
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 

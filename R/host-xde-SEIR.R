@@ -90,7 +90,7 @@ dXHdt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dE <- foi*S - tau*E + D_matrix %*% E
       dI <- tau*E - r*I + D_matrix %*% I
       dR <- r*I + D_matrix %*% R
@@ -117,7 +117,7 @@ Update_XHt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, H, Hpar)
+      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, xds_obj, i)
       Et <- a*S +(1-tau)*E + D_matrix %*% E
       It <- (1-r)*I + tau*E + D_matrix %*% I
       Rt <- R + r*I + D_matrix %*% R
@@ -150,7 +150,7 @@ steady_state_X.SEIR_dts = function(foi, H, xds_obj, i=1){
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SEIR_ode = function(foi, H,  xds_obj, i=1){
+steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Eeq = 0
     Ieq = 0

@@ -88,7 +88,7 @@ dXHdt.SIRS <- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, H, births) + D_matrix %*% H
+      dH <- Births(t, xds_obj, i) + D_matrix %*% H
       dI <- foi*S - r*I + D_matrix %*% I
       dR <- r*I - gamma*R + D_matrix %*% R
 
@@ -110,7 +110,7 @@ Update_XHt.SIRS<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      Ht <- Births(t, H, births) + D_matrix %*% H
+      Ht <- Births(t, xds_obj, i) + D_matrix %*% H
       It <- (1-r)*I + ar*S + D_matrix %*% I
       Rt <- (1-gamma)*R + r*I + D_matrix %*% R
 
@@ -173,7 +173,7 @@ change_XH_inits.SIRS <- function(xds_obj, i=1, options=list()) {
 #' @return the steady states as a named vector
 #' @keywords internal
 #' @export
-steady_state_X.SIRS_ode = function(foi, H, xds_obj, i=1){
+steady_state_X.SIRS = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
     Ieq = foi*H*gamma/((r*gamma) + foi*(gamma+r))
     Req = foi*r*H/((r*gamma) +foi*(gamma+r))
