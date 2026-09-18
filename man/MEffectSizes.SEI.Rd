@@ -19,6 +19,6 @@
 an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:MEffectSizes]{ramp.xds::MEffectSizes} for the SEI model
+Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the SEI model
 }
 \keyword{internal}

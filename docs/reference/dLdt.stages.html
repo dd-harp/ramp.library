@@ -9,7 +9,7 @@ Variables:
 
 
 Input Term:
-\(\eta\) or eta: egg deposition rate (from ramp.xds::F_eggs)
+\(\eta\) or eta: egg deposition rate (from F_eggs)
 
 
 Dynamical System:
@@ -20,7 +20,7 @@ $$dL_3/dt = \psi_2 L_2 e^{-\xi_2 L} - \psi_3 L_3 e^{-\xi_3 L} - (\phi_3 + \theta
 $$dL_4/dt = \psi_3 L_3 e^{-\xi_3 L} - \psi_4 L_4 e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4$$
 $$dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P$$
 Output Term:
-The function ramp.xds::F_emerge computes the net emergence rate (\(\alpha\)):
+The function F_emerge computes the net emergence rate (\(\alpha\)):
 
 
 $$\alpha = \psi_P P$$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -41,7 +41,7 @@ $$\alpha = \psi_P P$$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@ $$\alpha = \psi_P P$$"><!-- mathjax --><script src="https://cdnjs.cloudflare.com
     </li>
   </ul></li>
 <li>
-  <a href="../reference/index.html">Functions</a>
+  <a href="../reference/index.html">Modules</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/dd-harp/ramp.library/" class="external-link">
@@ -133,7 +133,7 @@ Density-dependent effects act through the weighted mean crowding index
 <p><strong>Variables:</strong></p><ul><li><p>\(E\): egg density per habitat</p></li>
 <li><p>\(L_1, L_2, L_3, L_4\): larval instar densities per habitat</p></li>
 <li><p>\(P\): pupal density per habitat</p></li>
-</ul><p><strong>Input Term:</strong></p><ul><li><p>\(\eta\) or <code>eta</code>: egg deposition rate (from <a href="https://dd-harp.github.io/ramp.xds/reference/F_eggs.html" class="external-link">ramp.xds::F_eggs</a>)</p></li>
+</ul><p><strong>Input Term:</strong></p><ul><li><p>\(\eta\) or <code>eta</code>: egg deposition rate (from <a href="https://dd-harp.github.io/ramp.xds/reference/F_eggs.html" class="external-link">F_eggs</a>)</p></li>
 </ul><p><strong>Dynamical System:</strong></p>
 <p>$$dE/dt = \eta - (\psi_E + \phi_E) E$$
 $$dL_1/dt = \psi_E E - \psi_1 L_1 e^{-\xi_1 L} - (\phi_1 + \theta_1 L) L_1$$
@@ -141,7 +141,7 @@ $$dL_2/dt = \psi_1 L_1 e^{-\xi_1 L} - \psi_2 L_2 e^{-\xi_2 L} - (\phi_2 + \theta
 $$dL_3/dt = \psi_2 L_2 e^{-\xi_2 L} - \psi_3 L_3 e^{-\xi_3 L} - (\phi_3 + \theta_3 L) L_3$$
 $$dL_4/dt = \psi_3 L_3 e^{-\xi_3 L} - \psi_4 L_4 e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4$$
 $$dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P$$</p>
-<p><strong>Output Term:</strong></p><ul><li><p>The function <a href="https://dd-harp.github.io/ramp.xds/reference/F_emerge.html" class="external-link">ramp.xds::F_emerge</a> computes the net emergence rate (\(\alpha\)):</p></li>
+<p><strong>Output Term:</strong></p><ul><li><p>The function <a href="https://dd-harp.github.io/ramp.xds/reference/F_emerge.html" class="external-link">F_emerge</a> computes the net emergence rate (\(\alpha\)):</p></li>
 </ul><p>$$\alpha = \psi_P P$$</p>
     </div>
 
@@ -191,7 +191,7 @@ $$dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P$$</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

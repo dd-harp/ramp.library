@@ -221,8 +221,9 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 #' @keywords internal
 #' @export
 setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
+  xds_obj$MYname <- "BRQS"
   xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
-  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_skillset_MY(xds_obj, s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)

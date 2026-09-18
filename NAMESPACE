@@ -339,9 +339,13 @@ export(xds_lines_X_SIRS)
 export(xds_lines_X_garki)
 import(ramp.xds)
 importFrom(Rdpack,reprompt)
-importFrom(deSolve,lagderiv)
-importFrom(deSolve,lagvalue)
-importFrom(ramp.xds,F_zero)
-importFrom(ramp.xds,checkIt)
+importFrom(deSolve,
+  lagderiv,
+  lagvalue
+)
+importFrom(ramp.xds,
+  F_zero,
+  checkIt
+)
 importFrom(stats,nlm)
 importFrom(utils,tail)

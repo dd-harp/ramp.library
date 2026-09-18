@@ -23,6 +23,6 @@
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_XH_obj]{ramp.xds::setup_XH_obj} for the SIPd model
+Implements \link[ramp.xds:setup_XH_obj]{setup_XH_obj} for the SIPd model
 }
 \keyword{internal}

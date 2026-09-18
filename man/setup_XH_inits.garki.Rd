@@ -19,6 +19,6 @@
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_XH_inits]{ramp.xds::setup_XH_inits} for the garki model
+Implements \link[ramp.xds:setup_XH_inits]{setup_XH_inits} for the garki model
 }
 \keyword{internal}

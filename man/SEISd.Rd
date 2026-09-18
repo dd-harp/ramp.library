@@ -41,6 +41,6 @@ dI/dt &= \dot{E}(t-\nu) - rI + D \cdot I \\
 \end{array}}
 where \eqn{h} is the force of infection, \eqn{S = H - E - I}, and
 \eqn{\dot{E}(t-\nu)} is the rate cases were exposed \eqn{\nu} days ago
-(computed via \link[deSolve:timelags]{deSolve::lagderiv}).
+(computed via \link[deSolve:lagderiv]{deSolve::lagderiv}).
 }
 

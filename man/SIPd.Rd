@@ -42,6 +42,6 @@ dI/dt &= (1-\rho)hS - (r + \xi)I + D \cdot I \\
 dP/dt &= (\rho h + \xi)S + \xi I - \dot{\mathcal{H}}(P) + D \cdot P \\
 \end{array}}
 where \eqn{\dot{\mathcal{H}}(P)} is the delayed outflow from \eqn{P},
-computed via \link[deSolve:timelags]{deSolve::lagderiv}.
+computed via \link[deSolve:lagderiv]{deSolve::lagderiv}.
 }
 

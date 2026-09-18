@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
   </ul>
 </li>
 <li>
-  <a href="../reference/index.html">Functions</a>
+  <a href="../reference/index.html">Modules</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -258,16 +258,16 @@ constant for all time).</p>
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">deSolve</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y0</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">730</span><span class="op">)</span>, <span class="va">xde_derivatives</span>, parms<span class="op">=</span> <span class="va">params</span>, method <span class="op">=</span> <span class="st">'lsoda'</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">out</span><span class="op">[</span><span class="fl">2</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">params</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $S</span></span>
-<span><span class="co">#&gt;         1         2         3 </span></span>
-<span><span class="co">#&gt; 18.766544  8.658370  6.512865 </span></span>
+<span><span class="co">#&gt;   1   2   3 </span></span>
+<span><span class="co">#&gt; 100 500 250 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $I</span></span>
-<span><span class="co">#&gt;         4         5         6 </span></span>
-<span><span class="co">#&gt;  4.836082 21.138024 11.262584 </span></span>
+<span><span class="co">#&gt;             4             5             6 </span></span>
+<span><span class="co">#&gt; -1.401371e-13 -1.243903e-12 -8.534689e-13 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $P</span></span>
-<span><span class="co">#&gt;         7         8         9 </span></span>
-<span><span class="co">#&gt;  76.39737 470.20361 232.22455 </span></span>
+<span><span class="co">#&gt;             7             8             9 </span></span>
+<span><span class="co">#&gt; -6.398106e-12  4.944201e-07  1.676270e-08 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $H</span></span>
 <span><span class="co">#&gt;   1   2   3 </span></span>
@@ -320,7 +320,7 @@ constant for all time).</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer>

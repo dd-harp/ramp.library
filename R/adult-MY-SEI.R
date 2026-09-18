@@ -127,10 +127,11 @@ Update_MYt.SEI <- function(t, y, xds_obj, s) {
 #' @keywords internal
 #' @export
 setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
+  xds_obj$MYname <- "SEI"
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
-  xds_obj <- setup_F_circadian(F_one, xds_obj, s=s)
+  xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)
   xds_obj <- setup_Upsilon_obj(FALSE, xds_obj, s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, s=s)

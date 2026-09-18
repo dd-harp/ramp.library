@@ -19,6 +19,6 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:Update_XHt]{ramp.xds::Update_XHt} for the SIPd model.
+Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the SIPd model.
 }
 \keyword{internal}

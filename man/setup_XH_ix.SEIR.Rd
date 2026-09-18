@@ -15,6 +15,6 @@
 none
 }
 \description{
-Implements \link[ramp.xds:setup_XH_ix]{ramp.xds::setup_XH_ix} for the SEIR model.
+Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the SEIR model.
 }
 \keyword{internal}

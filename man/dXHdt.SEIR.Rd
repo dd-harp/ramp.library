@@ -19,6 +19,6 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{ramp.xds::dXHdt} for the SEIR model
+Implements \link[ramp.xds:dXHdt]{dXHdt} for the SEIR model
 }
 \keyword{internal}

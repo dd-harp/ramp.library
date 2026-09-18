@@ -19,7 +19,7 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dMYdt]{ramp.xds::dMYdt} for the SEI ODE model.
+Implements \link[ramp.xds:dMYdt]{dMYdt} for the SEI ODE model.
 
 The dynamics of adult mosquitoes:
 \deqn{dM/dt = \Lambda - \Omega \cdot M}

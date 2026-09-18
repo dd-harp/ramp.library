@@ -15,6 +15,6 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{ramp.xds::F_prevalence} for the SIP model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SIP model.
 }
 \keyword{internal}

@@ -17,6 +17,6 @@
 none
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{ramp.xds::parse_XH_orbits} for the SEIS model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SEIS model
 }
 \keyword{internal}

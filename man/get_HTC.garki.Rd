@@ -15,6 +15,6 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{ramp.xds::get_HTC} for the garki model
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the garki model
 }
 \keyword{internal}

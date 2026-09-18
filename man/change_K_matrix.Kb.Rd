@@ -23,6 +23,6 @@ Change the dispersal
 matrix for blood feeding, called the \code{Kb_matrix}
 }
 \seealso{
-\link[ramp.xds:xds_info_mosquito_dispersal]{ramp.xds::xds_info_mosquito_dispersal}; \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}
+\link[ramp.xds:xds_info_mosquito_dispersal]{xds_info_mosquito_dispersal}; \link[ramp.xds:setup_K_matrix]{setup_K_matrix}
 }
 \keyword{internal}

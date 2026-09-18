@@ -1,7 +1,7 @@
 Package: ramp.library
 Type: Package
 Title: A code library for ramp.xds
-Version: 1.1.0 
+Version: 1.1.1 
 Authors@R: c(
       person("David L.", "Smith", email = "smitdave@uw.edu", role = c("aut","cre"), comment = c(ORCID = "0000-0003-4367-3849")),
       person("Juliet Nsumba", "Nakakawa", email = "juliet.nakakawa@mak.ac.ug", role = c("aut"), comment = c(ORCID = "0009-0006-3247-9230")),
@@ -13,7 +13,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://dd-harp.github.io/ramp.xds/
 BugReports: https://github.com/dd-harp/ramp.xds/issues
-RoxygenNote: 7.3.3
 Roxygen: list(markdown=TRUE) 
 Remotes: 
   github::dd-harp/ramp.xds
@@ -36,3 +35,4 @@ Suggests:
   testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0
