@@ -19,6 +19,6 @@
 an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} for the SEI model
+Implements \link[ramp.xds:MBionomics]{MBionomics} for the SEI model
 }
 \keyword{internal}

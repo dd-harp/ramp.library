@@ -19,6 +19,6 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_fqM]{ramp.xds::F_fqM} for the BRQS model.
+Implements \link[ramp.xds:F_fqM]{F_fqM} for the BRQS model.
 }
 \keyword{internal}

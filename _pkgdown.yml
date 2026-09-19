@@ -31,7 +31,7 @@ navbar:
       href: articles/L-Overview.html
     - text: How to add a new L model
       href: articles/L-How_To_Add_Model.html
-  - text: Functions
+  - text: Modules
     href: reference/index.html
   right:
   - icon: fa-github

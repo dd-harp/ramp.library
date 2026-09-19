@@ -15,6 +15,6 @@
 none
 }
 \description{
-Implements \link[ramp.xds:setup_MY_ix]{ramp.xds::setup_MY_ix} for the BRQS model.
+Implements \link[ramp.xds:setup_MY_ix]{setup_MY_ix} for the BRQS model.
 }
 \keyword{internal}

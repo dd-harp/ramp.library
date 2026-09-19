@@ -19,6 +19,6 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_fqZ]{ramp.xds::F_fqZ} for the SEI model.
+Implements \link[ramp.xds:F_fqZ]{F_fqZ} for the SEI model.
 }
 \keyword{internal}

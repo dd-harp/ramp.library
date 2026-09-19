@@ -19,6 +19,6 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dMYdt]{ramp.xds::dMYdt} for the BQ ODE model.
+Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQ ODE model.
 }
 \keyword{internal}

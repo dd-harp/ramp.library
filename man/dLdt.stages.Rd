@@ -32,7 +32,7 @@ Density-dependent effects act through the weighted mean crowding index
 
 \strong{Input Term:}
 \itemize{
-\item \eqn{\eta} or \code{eta}: egg deposition rate (from \link[ramp.xds:F_eggs]{ramp.xds::F_eggs})
+\item \eqn{\eta} or \code{eta}: egg deposition rate (from \link[ramp.xds:F_eggs]{F_eggs})
 }
 
 \strong{Dynamical System:}
@@ -46,7 +46,7 @@ Density-dependent effects act through the weighted mean crowding index
 
 \strong{Output Term:}
 \itemize{
-\item The function \link[ramp.xds:F_emerge]{ramp.xds::F_emerge} computes the net emergence rate (\eqn{\alpha}):
+\item The function \link[ramp.xds:F_emerge]{F_emerge} computes the net emergence rate (\eqn{\alpha}):
 }
 
 \deqn{\alpha = \psi_P P}

@@ -19,6 +19,6 @@
 an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:MEffectSizes]{ramp.xds::MEffectSizes} for the BQm model
+Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the BQm model
 }
 \keyword{internal}

@@ -137,8 +137,8 @@ setup_XH_obj.SIP = function(Xname, residence, HPop, xds_obj, i, options=list()){
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
   xds_obj <- setup_births("zero", xds_obj, i)
   xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
-  xds_obj <- setup_blood_search_weights("default", xds_obj, i=i)
-  xds_obj <- setup_time_away("no_travel", xds_obj, i=i)
+  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
+  xds_obj <- setup_time_away("setup", xds_obj, i=i)
   xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
   return(xds_obj)
 }

@@ -19,6 +19,6 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_H]{ramp.xds::F_H} for the SIRS model.
+Implements \link[ramp.xds:F_H]{F_H} for the SIRS model.
 }
 \keyword{internal}

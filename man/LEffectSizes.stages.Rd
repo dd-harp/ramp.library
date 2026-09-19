@@ -19,7 +19,7 @@
 an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:LEffectSizes]{ramp.xds::LEffectSizes} for the \code{stages} model.
+Implements \link[ramp.xds:LEffectSizes]{LEffectSizes} for the \code{stages} model.
 Computes effective parameter values as the product of each time-varying
 baseline (\verb{_t}) and its corresponding effect size (\code{es_}).
 }

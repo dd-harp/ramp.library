@@ -19,6 +19,6 @@
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_MY_obj]{ramp.xds::setup_MY_obj} for the SEI model
+Implements \link[ramp.xds:setup_MY_obj]{setup_MY_obj} for the SEI model
 }
 \keyword{internal}

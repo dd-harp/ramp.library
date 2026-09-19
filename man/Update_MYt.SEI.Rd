@@ -19,6 +19,6 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:Update_MYt]{ramp.xds::Update_MYt} for the SEI model.
+Implements \link[ramp.xds:Update_MYt]{Update_MYt} for the SEI model.
 }
 \keyword{internal}

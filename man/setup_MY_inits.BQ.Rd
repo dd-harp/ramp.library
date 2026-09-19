@@ -17,6 +17,6 @@
 a \link{list}
 }
 \description{
-Implements \link[ramp.xds:setup_MY_inits]{ramp.xds::setup_MY_inits} for the RM model
+Implements \link[ramp.xds:setup_MY_inits]{setup_MY_inits} for the RM model
 }
 \keyword{internal}

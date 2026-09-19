@@ -17,6 +17,6 @@
 none
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{ramp.xds::parse_XH_orbits} for the SIPd model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SIPd model
 }
 \keyword{internal}

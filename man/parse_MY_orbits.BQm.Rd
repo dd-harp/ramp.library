@@ -17,6 +17,6 @@
 none
 }
 \description{
-Implements \link[ramp.xds:parse_MY_orbits]{ramp.xds::parse_MY_orbits} for the BQm model
+Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the BQm model
 }
 \keyword{internal}
