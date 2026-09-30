@@ -21,8 +21,6 @@ navbar:
       href: articles/MY-Overview.html
     - text: How to add a new MY model
       href: articles/MY-How_To_Add_Model.html
-    - text: Macdonald's Model
-      href: articles/MY-macdonald.html
     - text: The BQ Modules
       href: articles/MY-BQ.html
   - text: Mosquito - Aquatic

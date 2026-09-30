@@ -7,7 +7,7 @@
 \method{parse_XH_orbits}{SIR}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve::deSolve}}
+\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
