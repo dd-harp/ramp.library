@@ -276,15 +276,20 @@ get_MY_pars.BQ <- function(xds_obj, s=1) {
 change_MY_pars.BQ <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
-    xds_obj$MY_obj[[s]]$f_t = f
-    xds_obj$MY_obj[[s]]$q_t = q
-    xds_obj$MY_obj[[s]]$g_t = g
-    xds_obj$MY_obj[[s]]$sigma_b_t = sigma_b
-    xds_obj$MY_obj[[s]]$sigma_q_t = sigma_q
-    xds_obj$MY_obj[[s]]$eip = eip
-    xds_obj$MY_obj[[s]]$mu = mu
-    xds_obj$MY_obj[[s]]$nu_t = nu
+    xds_obj$MY_obj[[s]]$f_obj$f = f
+    xds_obj$MY_obj[[s]]$q_obj$q = q
+    xds_obj$MY_obj[[s]]$g_obj$g = g
+    xds_obj$MY_obj[[s]]$sigma_b_obj$sigma_b = sigma_b
+    xds_obj$MY_obj[[s]]$sigma_q_obj$sigma_q = sigma_q
+    xds_obj$MY_obj[[s]]$eip_obj$eip = eip
+    xds_obj$MY_obj[[s]]$mu_obj$mu = mu
+    xds_obj$MY_obj[[s]]$nu_obj$nu = nu
     xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
+
+    y <- get_inits(xds_obj, flatten=TRUE)
+    xds_obj <- MBionomics(0, y, xds_obj, s)
+    xds_obj <- MEffectSizes(0, y, xds_obj, s)
+
     return(xds_obj)
   }))}
 

@@ -329,23 +329,19 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
-    xds_obj$MY_obj[[s]]$f_obj$f = checkIt(f, nPatches)
-    xds_obj$MY_obj[[s]]$q_obj$q = checkIt(q, nPatches)
-    xds_obj$MY_obj[[s]]$g_obj$g = checkIt(g, nPatches)
-    xds_obj$MY_obj[[s]]$sigma_obj$sigma = checkIt(sigma, nPatches)
-    xds_obj$MY_obj[[s]]$eip_obj$eip = checkIt(eip, nPatches)
-    xds_obj$MY_obj[[s]]$mu_obj$mu = checkIt(mu, nPatches)
-    xds_obj$MY_obj[[s]]$nu_obj$nu = checkIt(nu, nPatches)
-    xds_obj$MY_obj[[s]]$eggsPerBatch = checkIt(eggsPerBatch, nPatches)
-
-    xds_obj$MY_obj[[s]]$f_t = checkIt(f, nPatches)
-    xds_obj$MY_obj[[s]]$q_t = checkIt(q, nPatches)
-    xds_obj$MY_obj[[s]]$g_t = checkIt(g, nPatches)
-    xds_obj$MY_obj[[s]]$sigma_t = checkIt(sigma, nPatches)
-    xds_obj$MY_obj[[s]]$eip_t = checkIt(eip, nPatches)
-    xds_obj$MY_obj[[s]]$mu_t = checkIt(mu, nPatches)
-    xds_obj$MY_obj[[s]]$nu_t = checkIt(nu, nPatches)
+    xds_obj$MY_obj[[s]]$f_obj$f = f
+    xds_obj$MY_obj[[s]]$q_obj$q = q
+    xds_obj$MY_obj[[s]]$g_obj$g = g
+    xds_obj$MY_obj[[s]]$sigma_obj$sigma = sigma
+    xds_obj$MY_obj[[s]]$eip_obj$eip = eip
+    xds_obj$MY_obj[[s]]$mu_obj$mu = mu
+    xds_obj$MY_obj[[s]]$nu_obj$nu = nu
     xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
+
+    y <- get_inits(xds_obj, flatten=TRUE)
+    xds_obj <- MBionomics(0, y, xds_obj, s)
+    xds_obj <- MEffectSizes(0, y, xds_obj, s)
+
     return(xds_obj)
   }))}
 
@@ -406,8 +402,7 @@ MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
   xds_obj$MY_obj[[s]]$mu       <- F_mu(t, xds_obj, s)
   xds_obj$MY_obj[[s]]$nu       <- F_nu(t, xds_obj, s)
   xds_obj$MY_obj[[s]]$eip      <- F_eip(t, xds_obj, s)
-  xds_obj                      <- F_K_matrix(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$eggsPerBatch <- eggsPerBatch
+  xds_obj$MY_obj[[s]]$K_matrix <- F_K_matrix(t, xds_obj, s)
 
   # Reset Effect Sizes
   xds_obj$MY_obj[[s]]$es_f     < rep(1, xds_obj$nPatches)
