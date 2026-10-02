@@ -131,12 +131,11 @@ setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
+  xds_obj <- setup_MY_inits(xds_obj, s, options)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)
-  xds_obj <- setup_Upsilon_obj(FALSE, xds_obj, s=s)
+  xds_obj <- setup_Upsilon_obj(xds_obj, s=s, FALSE)
   xds_obj <- setup_K_matrix("zero", xds_obj, s=s)
-  xds_obj <- setup_MY_inits(xds_obj, s, options)
-  xds_obj <- F_Omega_xde(xds_obj, s)
   return(xds_obj)
 }
 
@@ -173,7 +172,7 @@ change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
 get_MY_pars.SEI <- function(xds_obj, s=1) {
   with(xds_obj$MY_obj[[s]], list(
     f=f_t, q=q_t, g=g_t, sigma=sigma_t, eip=eip, mu=mu_t,
-    nu=nu_t, eggsPerBatch=eggsPerBatch, calK=calK
+    nu=nu_t, eggsPerBatch=eggsPerBatch, K_matrix=K_matrix
   ))
 }
 
@@ -314,8 +313,8 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
   M = outputs[,M_ix]
   Y = outputs[,Y_ix]
   Z = outputs[,Z_ix]
-  f = get_ft(xds_obj,s)
-  q = get_ft(xds_obj,s)
+  f = get_f(xds_obj,s)
+  q = get_q(xds_obj,s)
   y = Y/M
   z = Z/M
   return(list(M=M, Z=Z, Y=Y, y=y, z=z, fqZ=f*q*Z, fqM=f*q*M))
@@ -330,14 +329,19 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
-    xds_obj$MY_obj[[s]]$f_t = f
-    xds_obj$MY_obj[[s]]$q_t = q
-    xds_obj$MY_obj[[s]]$g_t = g
-    xds_obj$MY_obj[[s]]$sigma_t = sigma
-    xds_obj$MY_obj[[s]]$eip_t = eip
-    xds_obj$MY_obj[[s]]$mu_t = mu
-    xds_obj$MY_obj[[s]]$nu_t = nu
+    xds_obj$MY_obj[[s]]$f_obj$f = f
+    xds_obj$MY_obj[[s]]$q_obj$q = q
+    xds_obj$MY_obj[[s]]$g_obj$g = g
+    xds_obj$MY_obj[[s]]$sigma_obj$sigma = sigma
+    xds_obj$MY_obj[[s]]$eip_obj$eip = eip
+    xds_obj$MY_obj[[s]]$mu_obj$mu = mu
+    xds_obj$MY_obj[[s]]$nu_obj$nu = nu
     xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
+
+    y <- get_inits(xds_obj, flatten=TRUE)
+    xds_obj <- MBionomics(0, y, xds_obj, s)
+    xds_obj <- MEffectSizes(0, y, xds_obj, s)
+
     return(xds_obj)
   }))}
 
@@ -355,85 +359,31 @@ change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
 #' @keywords internal
+#'
 #' @export
 make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
                              g=1/12,  sigma=1/8,  mu=0,
                              f=0.3,  q=0.95,
                              nu=1,  eggsPerBatch=60){
-  with(options,{
+    with(options,{
+      MY_obj <- list()
+      MY_obj$nPatches <- nPatches
 
-    MY_obj <- list()
+      eip_par <- 'static'
+      class(eip_par) <- 'static'
 
-    MY_obj$nPatches <- nPatches
+      MY_obj <- setup_eip_obj(checkIt(eip, nPatches), MY_obj)
+      MY_obj <- setup_f_obj(checkIt(f, nPatches), MY_obj)
+      MY_obj <- setup_q_obj(checkIt(q, nPatches), MY_obj)
+      MY_obj <- setup_g_obj(checkIt(g, nPatches), MY_obj)
+      MY_obj <- setup_mu_obj(checkIt(mu, nPatches), MY_obj)
+      MY_obj <- setup_nu_obj(checkIt(nu, nPatches), MY_obj)
+      MY_obj <- setup_sigma_obj(checkIt(sigma, nPatches), MY_obj)
+      MY_obj$eggsPerBatch <- eggsPerBatch
 
-    eip_par <- list()
-    class(eip_par) <- 'static'
-    eip_par$eip = eip
-    MY_obj$eip_par <- eip_par
-    MY_obj$eip=eip
+      class(MY_obj) = "SEI"
 
-    f=checkIt(f, nPatches)
-    MY_obj$f_par <- list()
-    class(MY_obj$f_par) <- "static"
-    MY_obj$f_par$f = f
-    MY_obj$f_t = f
-    MY_obj$es_f = 1
-
-    q=checkIt(q, nPatches)
-    MY_obj$q_par <- list()
-    class(MY_obj$q_par) <- "static"
-    MY_obj$q_par$q = q
-    MY_obj$q_t = q
-    MY_obj$es_q = 1
-
-    g=checkIt(g, nPatches)
-    MY_obj$g_par <- list()
-    class(MY_obj$g_par) <- "static"
-    MY_obj$g_par$g = g
-    MY_obj$g_t = g
-    MY_obj$es_g = 1
-
-    mu=checkIt(mu, nPatches)
-    MY_obj$mu_par <- list()
-    class(MY_obj$mu_par) <- "static"
-    MY_obj$mu_par$mu = mu
-    MY_obj$mu = mu
-
-    sigma=checkIt(sigma, nPatches)
-    MY_obj$sigma_par <- list()
-    class(MY_obj$sigma_par) <- "static"
-    MY_obj$sigma_par$sigma = sigma
-    MY_obj$sigma_t = sigma
-    MY_obj$es_sigma = 1
-
-    nu=checkIt(nu, nPatches)
-    MY_obj$nu_par <- list()
-    class(MY_obj$nu_par) <- "static"
-    MY_obj$nu_par$nu = nu
-    MY_obj$nu=nu
-
-    calK = diag(nPatches)
-    MY_obj$calK_par <- list()
-    class(MY_obj$calK_par) <- "static"
-    MY_obj$calK_par$calK = calK
-    MY_obj$calK=calK
-
-    Omega <- diag(g, nPatches)
-    MY_obj$Omega <- Omega
-    MY_obj$Upsilon <- expm::expm(-Omega*eip)
-    MY_obj$nPatches <- nPatches
-
-    Omega <- diag(g, nPatches)
-    MY_obj$Omega <- Omega
-    MY_obj$Upsilon <- expm::expm(-Omega*eip)
-    MY_obj$nPatches <- nPatches
-
-    MY_obj$eggsPerBatch <- eggsPerBatch
-
-    MY_obj$baseline <- MY_obj
-    class(MY_obj$baseline) <- 'SEI'
-
-    return(MY_obj)
+      return(MY_obj)
 })}
 
 
@@ -445,15 +395,15 @@ make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
 #' @export
 MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
   # Baseline parameters
-  xds_obj$MY_obj[[s]]$f_t      <- F_feeding_rate(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$q_t      <- F_human_frac(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$g_t      <- F_mozy_mort(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$sigma_t  <- F_emigrate(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$mu       <- F_dispersal_loss(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$nu       <- F_batch_rate(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$f_t      <- F_f(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$q_t      <- F_q(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$g_t      <- F_g(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$sigma_t  <- F_sigma(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$mu       <- F_mu(t, xds_obj, s)
+  xds_obj$MY_obj[[s]]$nu       <- F_nu(t, xds_obj, s)
   xds_obj$MY_obj[[s]]$eip      <- F_eip(t, xds_obj, s)
-  xds_obj                     <- F_K_matrix(t, xds_obj, s)
-  xds_obj$MY_obj[[s]]$eggsPerBatch <- eggsPerBatch
+  xds_obj$MY_obj[[s]]$K_matrix <- F_K_matrix(t, xds_obj, s)
+
   # Reset Effect Sizes
   xds_obj$MY_obj[[s]]$es_f     < rep(1, xds_obj$nPatches)
   xds_obj$MY_obj[[s]]$es_q     <- rep(1, xds_obj$nPatches)
@@ -474,7 +424,7 @@ MEffectSizes.SEI <- function(t, y, xds_obj, s) {
     xds_obj$MY_obj[[s]]$q <- es_q*q_t
     xds_obj$MY_obj[[s]]$g <- es_g*g_t
     xds_obj$MY_obj[[s]]$sigma <- es_sigma*sigma_t
-    xds_obj <- make_Omega(xds_obj, s)
+    xds_obj <- update_Omega(xds_obj, s)
     return(xds_obj)
 })}
 
