@@ -99,9 +99,9 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
         cases = lagderiv(t=t-nu, nr=ix$cases_ix)
       }
 
-      dH <- Births(t, xds_obj, i) + D_matrix %*% H
-      dE <- foi*S - cases + D_matrix %*% E
-      dI <- cases - r*I + D_matrix %*% I
+      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dE <- foi*S - cases - Deaths(t, E, xds_obj, i)
+      dI <- cases - r*I - Deaths(t, I, xds_obj, i)
       dcases <- foi*S
 
       return(c(dH, dE, dI, dcases))
@@ -122,8 +122,7 @@ setup_XH_obj.SEISd = function(Xname, residence, HPop, xds_obj, i, options=list()
   xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_births("zero", xds_obj, i)
-  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_time_away("setup", xds_obj, i=i)
   xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
