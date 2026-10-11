@@ -94,14 +94,14 @@ dXHdt.garki = function(t, y, xds_obj, i){
       R1 = foi/(exp(foi/r1) - 1)
       R2 = foi/(exp(foi/r2) - 1)
 
-      dH = Births(t, xds_obj, i) + D_matrix %*% H
+      dH = Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
 #     dx1 = Births(t, H, Hpar) -foi*x1 + R1*y2 + dHdt(t, H, Hpar)
-      dx2 = foi*x1 - nu*x2 + D_matrix %*% x2
-      dy1 = nu*x2 - alpha1*y1  + D_matrix %*% y1
-      dy2 = alpha1*y1 - R1*y2 - alpha2*y2 + D_matrix %*% y2
-      dy3 = alpha2*y2 + nu*x4 - R2*y3 + D_matrix %*% y3
-      dx3 = R2*y3 - foi*x3 + D_matrix %*% x3
-      dx4 = foi*x3 - nu*x4 + D_matrix %*% x4
+      dx2 = foi*x1 - nu*x2 - Deaths(t, x2, xds_obj, i)
+      dy1 = nu*x2 - alpha1*y1  - Deaths(t, y1, xds_obj, i)
+      dy2 = alpha1*y1 - R1*y2 - alpha2*y2 - Deaths(t, y2, xds_obj, i)
+      dy3 = alpha2*y2 + nu*x4 - R2*y3 - Deaths(t, y3, xds_obj, i)
+      dx3 = R2*y3 - foi*x3 - Deaths(t, x3, xds_obj, i)
+      dx4 = foi*x3 - nu*x4 - Deaths(t, x4, xds_obj, i)
       return(c(dH, dx2, dy1, dy2, dy3, dx3, dx4))
     })
   })
@@ -120,8 +120,7 @@ setup_XH_obj.garki = function(Xname, residence, HPop, xds_obj, i, options=list()
   xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_births("zero", xds_obj, i)
-  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_time_away("setup", xds_obj, i=i)
   xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)

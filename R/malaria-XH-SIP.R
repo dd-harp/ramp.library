@@ -113,9 +113,9 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
       xi_t = xi + mda(t)
       sigma_t = sigma + msat(t)
 
-      dH <- Births(t, xds_obj, i) + D_matrix %*% H
-      dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I + D_matrix %*% H
-      dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P + D_matrix %*% P
+      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I - Deaths(t, I, xds_obj, i)
+      dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P - Deaths(t, P, xds_obj, i)
 
       return(c(dH, dI, dP))
     })
@@ -135,8 +135,7 @@ setup_XH_obj.SIP = function(Xname, residence, HPop, xds_obj, i, options=list()){
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
-  xds_obj <- setup_births("zero", xds_obj, i)
-  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_time_away("setup", xds_obj, i=i)
   xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)

@@ -88,9 +88,9 @@ dXHdt.SIRS <- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, xds_obj, i) + D_matrix %*% H
-      dI <- foi*S - r*I + D_matrix %*% I
-      dR <- r*I - gamma*R + D_matrix %*% R
+      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dI <- foi*S - r*I - Deaths(t, I, xds_obj, i)
+      dR <- r*I - gamma*R - Deaths(t, R, xds_obj, i)
 
       return(c(dH, dI, dR))
     })
@@ -289,8 +289,7 @@ setup_XH_obj.SIRS = function(Xname, residence, HPop, xds_obj, i, options=list())
   xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_births("zero", xds_obj, i)
-  xds_obj <- setup_mortality_matrix("default", xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_time_away("setup", xds_obj, i=i)
   xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
