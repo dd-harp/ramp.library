@@ -126,7 +126,8 @@ Update_XHt.SIR<- function(t, y, xds_obj, i) {
 #' @return a [list]
 #' @keywords internal
 #' @export
-make_XH_inits_SIR = function(nStrata, H, options = list(), I=1, R=0){with(options,{
+make_XH_inits_SIR = function(nStrata, options = list(), H=1000, I=1, R=0){with(options,{
+  H = checkIt(H, nStrata)
   I = checkIt(I, nStrata)
   R = checkIt(R, nStrata)
   return(list(H=H, I=I, R =R))
@@ -157,8 +158,8 @@ change_XH_inits.SIR <- function(xds_obj, i=1, options=list()) {
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SIR = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIR(xds_obj$nStrata[i], H, options)
+setup_XH_inits.SIR = function(xds_obj, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIR(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
@@ -233,10 +234,10 @@ make_XH_obj_SIR = function(nStrata, options=list(),
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIR = function(Xname, residence, HPop, xds_obj, i, options=list()){
+setup_XH_obj.SIR = function(Xname, residence, xds_obj, i, options=list()){
   xds_obj$Xname = "SIR"
   xds_obj$XH_obj[[i]] = make_XH_obj_SIR(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)

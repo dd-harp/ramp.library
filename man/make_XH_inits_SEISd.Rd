@@ -4,14 +4,14 @@
 \alias{make_XH_inits_SEISd}
 \title{Make initial values for the SEISd Update_XHt human model, with defaults}
 \usage{
-make_XH_inits_SEISd(nStrata, H, options = list(), E = 0, I = 1)
+make_XH_inits_SEISd(nStrata, options = list(), H = 1000, E = 0, I = 1)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{H}{the initial human population density}
-
 \item{options}{a \link{list} to overwrite defaults}
+
+\item{H}{the initial human population density}
 
 \item{E}{the initial values of the parameter E}
 

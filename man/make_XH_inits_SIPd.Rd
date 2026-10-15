@@ -4,14 +4,14 @@
 \alias{make_XH_inits_SIPd}
 \title{Make initial values for the SIPd human model, with defaults}
 \usage{
-make_XH_inits_SIPd(nStrata, H, options = list(), I = 1, P = 0)
+make_XH_inits_SIPd(nStrata, options = list(), H = 1000, I = 1, P = 0)
 }
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{H}{the initial human population density}
-
 \item{options}{a \link{list} that could overwrite defaults}
+
+\item{H}{the initial human population density}
 
 \item{I}{the initial values of the parameter I}
 

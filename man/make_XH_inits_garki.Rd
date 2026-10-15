@@ -6,8 +6,8 @@
 \usage{
 make_XH_inits_garki(
   nStrata,
-  H,
   options = list(),
+  H = 1000,
   x2 = 0,
   y1 = 0,
   y2 = 0,
@@ -19,9 +19,9 @@ make_XH_inits_garki(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{H}{a \link{numeric} initial value for total human population density}
-
 \item{options}{a \link{list} with values to override default values}
+
+\item{H}{a \link{numeric} initial value for total human population density}
 
 \item{x2}{a \link{numeric} initial value for the variable x2}
 

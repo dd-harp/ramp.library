@@ -4,14 +4,14 @@
 \alias{make_XH_inits_SEIR}
 \title{Make initial values for the SEIR human model, with defaults}
 \usage{
-make_XH_inits_SEIR(nStrata, H, options = list(), I = 1, E = 0, R = 1)
+make_XH_inits_SEIR(nStrata, options = list(), H = 1000, I = 1, E = 0, R = 1)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{H}{the initial value for H}
-
 \item{options}{a \link{list} to overwrite defaults}
+
+\item{H}{the initial value for H}
 
 \item{I}{the initial value for I}
 

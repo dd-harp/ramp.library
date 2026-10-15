@@ -93,14 +93,14 @@ eta <- c(1/30, 1/40, 1/35)
 rho <- c(0.05, 0.1, 0.15)
 xi <- rep(0, 3)
 sigma <-rep(0.5,3)
-Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,sigma=sigma,xi=xi)
-params = setup_XH_obj("SIP", residence, H, params, 1, Xo) 
+Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,sigma=sigma,xi=xi, H=H)
+params = setup_XH_obj("SIP", residence, params, 1, Xo) 
 ```
 
 ```{r}
 eir <- c(1,2,3)/365
 steady_state_X(eir*b, H, params) -> ss
-params = setup_XH_inits(params, H, 1, ss)
+params = setup_XH_inits(params, 1, ss)
 ```
 
 ```{r}

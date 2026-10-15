@@ -4,12 +4,10 @@
 \alias{setup_XH_inits.SIR}
 \title{Setup XH_obj.SIR}
 \usage{
-\method{setup_XH_inits}{SIR}(xds_obj, H, i, options = list())
+\method{setup_XH_inits}{SIR}(xds_obj, i, options = list())
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
-
-\item{H}{initial host population density}
 
 \item{i}{the host species index}
 

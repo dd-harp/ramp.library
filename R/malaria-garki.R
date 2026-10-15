@@ -114,10 +114,10 @@ dXHdt.garki = function(t, y, xds_obj, i){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.garki = function(Xname, residence, HPop, xds_obj, i, options=list()){
+setup_XH_obj.garki = function(Xname, residence, xds_obj, i, options=list()){
   xds_obj$Xname = "garki"
   xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -281,24 +281,25 @@ get_XH_vars.garki <- function(y, xds_obj, i) {
 #' @return none
 #' @keywords internal
 #' @export
-make_XH_inits_garki <- function(nStrata, H, options = list(), x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
-  stopifnot(is.numeric(x2))
-  stopifnot(is.numeric(y1))
-  stopifnot(is.numeric(y2))
-  stopifnot(is.numeric(y3))
-  stopifnot(is.numeric(x3))
-  stopifnot(is.numeric(x4))
-  stopifnot(H>0)
+make_XH_inits_garki <- function(nStrata, options = list(), H=1000, x2=0, y1=0, y2=0, y3=0, x3=0, x4=0) {
+  with(options,{
+    stopifnot(is.numeric(x2))
+    stopifnot(is.numeric(y1))
+    stopifnot(is.numeric(y2))
+    stopifnot(is.numeric(y3))
+    stopifnot(is.numeric(x3))
+    stopifnot(is.numeric(x4))
+    stopifnot(H>0)
 
-  H = checkIt(H, nStrata)
-  x2 = checkIt(x2, nStrata)
-  y1 = checkIt(y1, nStrata)
-  y2 = checkIt(y2, nStrata)
-  y3 = checkIt(y3, nStrata)
-  x3 = checkIt(x3, nStrata)
-  x4 = checkIt(x4, nStrata)
-  return(list(H=H,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
-}
+    H = checkIt(H, nStrata)
+    x2 = checkIt(x2, nStrata)
+    y1 = checkIt(y1, nStrata)
+    y2 = checkIt(y2, nStrata)
+    y3 = checkIt(y3, nStrata)
+    x3 = checkIt(x3, nStrata)
+    x4 = checkIt(x4, nStrata)
+    return(list(H=H,x2=x2,y1=y1,y2=y2,y3=y3,x3=x3,x4=x4))
+})}
 
 #' @title Set XH_inits.garki
 #' @description Implements [change_XH_inits] for the garki model
@@ -325,8 +326,8 @@ change_XH_inits.garki = function(xds_obj, i, options=list()){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.garki = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = with(xds_obj, make_XH_inits_garki(xds_obj$nStrata[i], H, options))
+setup_XH_inits.garki = function(xds_obj, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = with(xds_obj, make_XH_inits_garki(xds_obj$nStrata[i], options))
   return(xds_obj)
 }
 

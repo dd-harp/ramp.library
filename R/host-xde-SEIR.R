@@ -165,23 +165,24 @@ steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEIR = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIR(xds_obj$nStrata[i], H, options)
+setup_XH_inits.SEIR = function(xds_obj, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIR(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
 #' @title Make initial values for the SEIR human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param H the initial value for H
 #' @param options a [list] to overwrite defaults
+#' @param H the initial value for H
 #' @param E the initial value for E
 #' @param I the initial value for I
 #' @param R the initial values for R
 #' @return a [list]
 #' @keywords internal
 #' @export
-make_XH_inits_SEIR = function(nStrata, H, options=list(), I=1, E=0, R=1){
+make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
   with(options,{
+    H = checkIt(H, nStrata)
     E = checkIt(E, nStrata)
     I = checkIt(I, nStrata)
     R = checkIt(R, nStrata)
@@ -306,10 +307,10 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIR = function(Xname, residence, HPop, xds_obj, i, options=list()){
+setup_XH_obj.SEIR = function(Xname, residence, xds_obj, i, options=list()){
   xds_obj$Xname = "SEIR"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEIR(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
