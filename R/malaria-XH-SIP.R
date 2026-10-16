@@ -128,10 +128,10 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIP = function(Xname, residence, HPop, xds_obj, i, options=list()){
+setup_XH_obj.SIP = function(Xname, residence, xds_obj, i, options=list()){
   xds_obj$Xname = "SIP"
   xds_obj$XH_obj[[i]] = make_XH_obj_SIP(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
@@ -337,23 +337,24 @@ get_HTC.SIP <- function(xds_obj, i) {
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SIP = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIP(xds_obj$nStrata[i], H, options)
+setup_XH_inits.SIP = function(xds_obj, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIP(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
 #' @title Make initial values for the SIP human model, with defaults
 #' @param nStrata the number of population strata
-#' @param H the initial human population density
 #' @param options a [list] that could overwrite defaults
+#' @param H the initial human population density
 #' @param I the initial values of the parameter I
 #' @param P the initial values of the parameter P
 #' @return a [list]
 #' @keywords internal
 #' @export
-make_XH_inits_SIP = function(nStrata, H, options = list(),
-                           I=1, P=0){with(options,{
-  H = H
+make_XH_inits_SIP = function(nStrata, options = list(),
+                             H=1000, I=1, P=0){
+with(options,{
+  H = checkIt(H, nStrata)
   I = checkIt(I, nStrata)
   P = checkIt(P, nStrata)
   return(list(H=H, I=I, P=P))

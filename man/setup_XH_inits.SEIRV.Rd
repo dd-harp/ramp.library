@@ -4,12 +4,10 @@
 \alias{setup_XH_inits.SEIRV}
 \title{Setup XH_obj.SEIRV}
 \usage{
-\method{setup_XH_inits}{SEIRV}(xds_obj, H, i = 1, options = list())
+\method{setup_XH_inits}{SEIRV}(xds_obj, i = 1, options = list())
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
-
-\item{H}{initial host population density}
 
 \item{i}{the host species index}
 

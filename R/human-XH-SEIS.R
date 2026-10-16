@@ -139,10 +139,10 @@ steady_state_X.SEIS_dts = function(foi, H, xds_obj, i=1){
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIS = function(Xname, residence, HPop, xds_obj, i, options=list()){
+setup_XH_obj.SEIS = function(Xname, residence, xds_obj, i, options=list()){
   xds_obj$Xname = "SEIS"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEIS(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, HPop, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, i, options)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -243,14 +243,14 @@ F_infectivity.SEIS <- function(y, xds_obj, i) {
 
 #' @title Make initial values for the SEIS xde human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param H the initial human population density
 #' @param options a [list] to overwrite defaults
+#' @param H the initial human population density
 #' @param E the initial values of the parameter E
 #' @param I the initial values of the parameter I
 #' @return a [list]
 #' @keywords internal
 #' @export
-make_XH_inits_SEIS = function(nStrata, H, options = list(), E=0, I=1){with(options,{
+make_XH_inits_SEIS = function(nStrata, options = list(), H=1000, E=0, I=1){with(options,{
   H = checkIt(H, nStrata)
   E = checkIt(E, nStrata)
   I = checkIt(I, nStrata)
@@ -296,8 +296,8 @@ get_XH_vars.SEIS <- function(y, xds_obj, i) {
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEIS = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIS(xds_obj$nStrata[i], H, options)
+setup_XH_inits.SEIS = function(xds_obj, i, options=list()){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIS(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 

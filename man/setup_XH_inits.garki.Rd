@@ -4,12 +4,10 @@
 \alias{setup_XH_inits.garki}
 \title{Setup XH_inits.garki}
 \usage{
-\method{setup_XH_inits}{garki}(xds_obj, H, i, options = list())
+\method{setup_XH_inits}{garki}(xds_obj, i, options = list())
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
-
-\item{H}{initial host population density}
 
 \item{i}{the host species index}
 

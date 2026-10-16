@@ -4,12 +4,10 @@
 \alias{setup_XH_inits.SEIS}
 \title{Setup Xinits.SEIS}
 \usage{
-\method{setup_XH_inits}{SEIS}(xds_obj, H, i, options = list())
+\method{setup_XH_inits}{SEIS}(xds_obj, i, options = list())
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
-
-\item{H}{initial host population density}
 
 \item{i}{the host species index}
 
