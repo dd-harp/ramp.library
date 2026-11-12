@@ -172,20 +172,30 @@ F_eggs.BQm <- function(t, y, xds_obj, s) {
 }
 
 
-#' @title Setup MY_obj for the BQm model
-#' @description Implements [setup_MY_obj] for the RM model
+#' @title Set up `BQm` (**MY**)
+#' @description
+#'
+#' This sets up a `BQm` model object for the **MY** module for the \eqn{s^{th}} vector species
+#' + the object is created by [make_MY_obj_BQm]
+#' + the initial conditions are set by [setup_MY_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [BQm], [make_MY_obj_BQm]
+#'
+#' @note The module object is stored at `xds_obj$MY_obj[[s]]`
+#'
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_MY_obj.BQm = function(MYname, xds_obj, s, options=list()){
+setup_MY_obj.BQm = function(MYname, xds_obj, options=list(), s=1){
   xds_obj$MYname <- "BQm"
   xds_obj$MY_obj[[s]] = make_MY_obj_BQm(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_skillset_MY(xds_obj, s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
-  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
   return(xds_obj)
 }
 
@@ -250,12 +260,13 @@ get_MY_pars.BQm <- function(xds_obj, s=1) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `BQm` module (**MY**) for the \eqn{s^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_MY_pars.BQm <- function(xds_obj, s=1, options=list()) {
+change_MY_pars.BQm <- function(xds_obj, options=list(), s=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
 
@@ -276,13 +287,18 @@ change_MY_pars.BQm <- function(xds_obj, s=1, options=list()) {
     return(xds_obj)
   }))}
 
-#' @title Setup initial values for the BQm model
-#' @description Implements [setup_MY_inits] for the RM model
+#' @title Setup initial values for `BQm` (**MY**)
+#' @description Set initial values for all the variables in the `BQm` module
+#' (**MY**) for the \eqn{s^{th}} species.
+#' + [make_MY_inits_BQm] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_MY_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
 #' @export
-setup_MY_inits.BQm = function(xds_obj, s, options=list()){
+setup_MY_inits.BQm = function(xds_obj, options=list(), s=1){
   xds_obj$MY_obj[[s]]$inits = make_MY_inits_BQm(xds_obj$nPatches, options)
   return(xds_obj)
 }
@@ -390,12 +406,13 @@ parse_MY_orbits.BQm <- function(outputs, xds_obj, s) {
 
 
 #' @title Set new MY parameter values
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `BQm` module (**MY**) for the \eqn{s^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return an `xds` object
 #' @keywords internal
 #' @export
-change_MY_inits.BQm <- function(xds_obj, s=1, options=list()) {
+change_MY_inits.BQm <- function(xds_obj, options=list(), s=1) {
   with(xds_obj$MY_obj[[s]],
     with(options,{
       xds_obj$MY_obj[[s]]$inits$Bu = Bu
@@ -446,4 +463,3 @@ get_g.BQm = function(xds_obj, s=1){
 get_sigma.BQm = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], sigma_b_t*es_sigma_b)
 }
-

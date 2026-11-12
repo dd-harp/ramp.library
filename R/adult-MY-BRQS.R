@@ -214,13 +214,23 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 }
 
 
-#' @title Setup MY_obj for the BRQS model
-#' @description Implements [setup_MY_obj] for the RM model
+#' @title Set up `BRQS` (**MY**)
+#' @description
+#'
+#' This sets up a `BRQS` model object for the **MY** module for the \eqn{s^{th}} vector species
+#' + the object is created by [make_MY_obj_BRQS]
+#' + the initial conditions are set by [setup_MY_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [BRQS], [make_MY_obj_BRQS]
+#'
+#' @note The module object is stored at `xds_obj$MY_obj[[s]]`
+#'
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
+setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
   xds_obj$MYname <- "BRQS"
   xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
@@ -228,7 +238,7 @@ setup_MY_obj.BRQS = function(MYname, xds_obj, s, options=list()){
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Ks"), s=s)
-  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
   return(xds_obj)
 }
 
@@ -343,12 +353,13 @@ get_MY_pars.BRQS <- function(xds_obj, s=1) {
 }
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_MY_pars.BRQS <- function(xds_obj, s=1, options=list()) {
+change_MY_pars.BRQS <- function(xds_obj, options=list(), s=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
 
@@ -385,13 +396,18 @@ change_MY_pars.BRQS <- function(xds_obj, s=1, options=list()) {
     return(pars)
   }))}
 
-#' @title Setup initial values for the BRQS model
-#' @description Implements [setup_MY_inits] for the RM model
+#' @title Setup initial values for `BRQS` (**MY**)
+#' @description Set initial values for all the variables in the `BRQS` module
+#' (**MY**) for the \eqn{s^{th}} species.
+#' + [make_MY_inits_BRQS] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_MY_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
 #' @export
-setup_MY_inits.BRQS = function(xds_obj, s, options=list()){
+setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
   xds_obj$MYinits[[s]] = with(xds_obj$MY_obj[[s]], make_MY_inits_BRQS(nPatches, options))
   return(xds_obj)
 }
@@ -526,11 +542,13 @@ parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$ix$MY[[s]],{
 })}
 
 #' @title Make inits for BRQS adult mosquito model
+#' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return none
 #' @keywords internal
 #' @export
-change_MY_inits.BRQS <- function(xds_obj, s, options = list()) {
+change_MY_inits.BRQS <- function(xds_obj, options = list(), s=1) {
   inits = with(get_MY_inits(xds_obj, s), with(options,
     list(Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
          Sy=Sy, By=By, Ry=Ry, Qy=Qy,

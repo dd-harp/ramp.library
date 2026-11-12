@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{dXHdt.SEIS}
 \alias{dXHdt.SEIS}
-\title{\eqn{\cal X} Component Derivatives for the \code{SEIS} Model}
+\title{\eqn{\cal XH} Component Derivatives for the \code{SEIS} Model}
 \usage{
 \method{dXHdt}{SEIS}(t, y, xds_obj, i)
 }

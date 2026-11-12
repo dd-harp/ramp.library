@@ -38,7 +38,7 @@ knitr::purl("X-How_To_Add_Model.Rmd",
 
 4. You should see a new file called `MYmodule-newMYname.R` in the working directory. You can now move and rename it. 
 
-5. Open the file and do a global search for `newMYname` and replace it with the a short string that will define the model as its `Xname.`
+5. Open the file and do a global search for `newMYname` and replace it with the a short string that will define the model as its `XHname.`
 
 6. Edit the functions following the directions below.  
 
@@ -181,8 +181,8 @@ If you did a global search and replace on `newMYname,` this function will not ne
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
 #' @export
-setup_MY_obj.newMYname = function(newMYname, xds_obj, i, options=list()){
-  xds_obj$MY_obj[[i]] = make_MY_obj_newMYname(xds_obj$nPatches, options)
+setup_MY_obj.newMYname = function(MYname, xds_obj, options=list(), s=1){
+  xds_obj$MY_obj[[s]] = make_MY_obj_newMYname(xds_obj$nPatches, options)
   return(xds_obj)
 }
 ```
@@ -296,8 +296,8 @@ If you did the global search and replace, you won't need to change this function
 #' @return a **`ramp.xds`** object 
 #' 
 #' @export
-setup_MY_inits.newMYname = function(xds_obj, H, i, options=list()){
-  xds_obj$MY_obj[[i]]$inits = make_MY_inits_newMYname(xds_obj$nPatches[i], H, options)
+setup_MY_inits.newMYname = function(xds_obj, options=list(), s=1){
+  xds_obj$MY_obj[[s]]$inits = make_MY_inits_newMYname(xds_obj$nPatches, H=options$H, options=options)
   return(xds_obj)
 }
 ```
@@ -305,7 +305,7 @@ setup_MY_inits.newMYname = function(xds_obj, H, i, options=list()){
 ### make_MY_inits
 
 ```{r}
-#' @title Make initial values for the Xname human model, with defaults
+#' @title Make initial values for the XHname human model, with defaults
 #' @param nPatches the number of strata in the model
 #' @param options a [list] to overwrite defaults
 #' @param M0 the initial value for M 
@@ -330,11 +330,11 @@ make_MY_inits_newMYname = function(nPatches, H, options = list(), M0=NULL, Y0=1)
 #' 
 #' @return an **`xds`** object
 #' @export
-change_MY_inits.SIS <- function(xds_obj, i=1, options=list()) {
-  with(get_MY_inits(xds_obj, i), with(options,{
-    xds_obj = change_H(H, xds_obj, i)
-    xds_obj$Xinits[[i]]$M = M 
-    xds_obj$Xinits[[i]]$Y = Y 
+change_MY_inits.SIS <- function(xds_obj, options=list(), s=1) {
+  with(get_MY_inits(xds_obj, s), with(options,{
+    xds_obj = change_H(H, xds_obj, s)
+    xds_obj$Xinits[[s]]$M = M 
+    xds_obj$Xinits[[s]]$Y = Y 
     ... 
     return(xds_obj)
   }))}
@@ -551,4 +551,3 @@ The mathematics supporting this framework were explained in [Spatial Dynamics of
 ^[Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D, Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of malaria transmission. PLoS Comput Biol 19(6): e1010684. https://doi.org/10.1371/journal.pcbi.1010684] 
 
 This vignette was written to help add new modules to `ramp.library.` 
-

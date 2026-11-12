@@ -4,19 +4,20 @@
 \alias{change_XH_inits.SEISd}
 \title{Return the parameters as a list}
 \usage{
-\method{change_XH_inits}{SEISd}(xds_obj, i = 1, options = list())
+\method{change_XH_inits}{SEISd}(xds_obj, options = list(), i = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the vector species index}
-
 \item{options}{a named list}
+
+\item{i}{the host species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
-This method dispatches on the type of \code{xds_obj$XH_obj[[i]]}.
+For the \code{SEISd} module (\strong{XH}) for the \eqn{i^{th}} species,
+change initial values named in \code{options} leaving other values unchanged.
 }
 \keyword{internal}

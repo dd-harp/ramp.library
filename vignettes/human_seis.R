@@ -11,7 +11,7 @@ MYo = list(Z = 2000/365, f=1, q=1)
 Xo = list(b= 0.5)
 
 ## -----------------------------------------------------------------------------
-seis = xds_setup(Xname = "SEIS", MYname = "trivial", MYoptions = MYo, XHoptions=Xo, HPop=HPop)
+seis = xds_setup(XHname = "SEIS", MYname = "trivial", MYoptions = MYo, XHoptions=Xo, HPop=HPop)
 
 ## -----------------------------------------------------------------------------
 seis = xds_solve(seis, 3650, 15)
@@ -28,7 +28,7 @@ seis_ss
 sum((seis_inf-seis_ss)^2) < 1e-9
 
 ## -----------------------------------------------------------------------------
-SEISd = xds_setup(Xname = "SEISd", MYname = "trivial", MYoptions = MYo, XHoptions=Xo, HPop=HPop)
+SEISd = xds_setup(XHname = "SEISd", MYname = "trivial", MYoptions = MYo, XHoptions=Xo, HPop=HPop)
 SEISd = xds_solve(SEISd, Tmax = 3650, dt=15)
 
 ## -----------------------------------------------------------------------------

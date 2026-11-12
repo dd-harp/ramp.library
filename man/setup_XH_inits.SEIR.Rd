@@ -2,21 +2,28 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{setup_XH_inits.SEIR}
 \alias{setup_XH_inits.SEIR}
-\title{Setup XH_obj.SEIR}
+\title{Setup initial values for \code{SEIR} (\strong{XH})}
 \usage{
-\method{setup_XH_inits}{SEIR}(xds_obj, i, options = list())
+\method{setup_XH_inits}{SEIR}(xds_obj, options = list(), i = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the host species index}
-
 \item{options}{a \link{list}}
+
+\item{i}{the host species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_XH_inits]{setup_XH_inits} for the SEIR model
+Set initial values for all the variables in the \code{SEIR} module
+(\strong{XH}) for the \eqn{i^{th}} species.
+\itemize{
+\item \link{make_XH_inits_SEIR} supplies default values
+\item The values in \code{options} overwrite the defaults
+\item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
+see the inline module documentation.
+}
 }
 \keyword{internal}

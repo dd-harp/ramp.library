@@ -126,8 +126,8 @@ make_L_obj_newLname = function(nPatches, options=list(),
 #' @inheritParams ramp.xds::setup_L_obj
 #' @return a [list] vector
 #' @export
-setup_L_obj.newLname = function(newLname, xds_obj, i, options=list()){
-  xds_obj$L_obj[[i]] = make_L_obj_newLname(xds_obj$nPatches, options)
+setup_L_obj.newLname = function(Lname, membership, xds_obj, options=list(), s=1){
+  xds_obj$L_obj[[s]] = make_L_obj_newLname(xds_obj$nPatches, options)
   return(xds_obj)
 }
 
@@ -193,13 +193,13 @@ parse_L_orbits.newLname <- function(outputs, xds_obj, i) {
 #' @return a **`ramp.xds`** object 
 #' 
 #' @export
-setup_L_inits.newLname = function(xds_obj, H, i, options=list()){
-  xds_obj$L_obj[[i]]$inits = make_L_inits_newLname(xds_obj$nPatches[i], H, options)
+setup_L_inits.newLname = function(xds_obj, options=list(), s=1){
+  xds_obj$L_obj[[s]]$inits = make_L_inits_newLname(xds_obj$nPatches[s], H=options$H, options=options)
   return(xds_obj)
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Lake initial values for the Xname human model, with defaults
+#' @title Lake initial values for the XHname human model, with defaults
 #' @param nPatches the number of strata in the model
 #' @param options a [list] to overwrite defaults
 #' @param L0 the initial value for L 
@@ -221,11 +221,11 @@ make_L_inits_newLname = function(nPatches, H, options = list(), L0=NULL, Y0=1){w
 #' 
 #' @return an **`xds`** object
 #' @export
-change_L_inits.SIS <- function(xds_obj, i=1, options=list()) {
-  with(get_L_inits(xds_obj, i), with(options,{
-    xds_obj = change_H(H, xds_obj, i)
-    xds_obj$Xinits[[i]]$L = L 
-    xds_obj$Xinits[[i]]$Y = Y 
+change_L_inits.SIS <- function(xds_obj, options=list(), s=1) {
+  with(get_L_inits(xds_obj, s), with(options,{
+    xds_obj = change_H(H, xds_obj, s)
+    xds_obj$Xinits[[s]]$L = L 
+    xds_obj$Xinits[[s]]$Y = Y 
     ... 
     return(xds_obj)
   }))}

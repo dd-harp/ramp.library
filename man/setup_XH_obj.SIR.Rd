@@ -2,25 +2,36 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{setup_XH_obj.SIR}
 \alias{setup_XH_obj.SIR}
-\title{Setup XH_obj.SIR}
+\title{Set up \code{SIR} (\strong{XH})}
 \usage{
-\method{setup_XH_obj}{SIR}(Xname, residence, xds_obj, i, options = list())
+\method{setup_XH_obj}{SIR}(XHname, residence, xds_obj, options = list(), i = 1)
 }
 \arguments{
-\item{Xname}{the model name}
+\item{XHname}{the model name}
 
 \item{residence}{the residence vector}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the host species index}
-
 \item{options}{model options as a named list}
+
+\item{i}{the host species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_XH_obj]{setup_XH_obj} for the SIR model
+This sets up an \code{SIR} model object for the \strong{XH} module for the \eqn{i^{th}} host species
+\itemize{
+\item the object is created by \link{make_XH_obj_SIR}
+\item the initial conditions are set by \link[ramp.xds:setup_XH_inits]{setup_XH_inits}
+\item \code{options} is passed to both to override the defaults
+}
+}
+\note{
+The module object is stored at \code{xds_obj$XH_obj[[i]]}
+}
+\seealso{
+\link{SIR}, \link{make_XH_obj_SIR}
 }
 \keyword{internal}

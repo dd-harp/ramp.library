@@ -2,23 +2,34 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{setup_MY_obj.SEI}
 \alias{setup_MY_obj.SEI}
-\title{Setup MY_obj for the SEI model}
+\title{Set up \code{SEI} (\strong{MY})}
 \usage{
-\method{setup_MY_obj}{SEI}(MYname, xds_obj, s, options = list())
+\method{setup_MY_obj}{SEI}(MYname, xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{MYname}{the name of the model}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a \link{list}}
+
+\item{s}{the vector species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_MY_obj]{setup_MY_obj} for the SEI model
+This sets up an \code{SEI} model object for the \strong{MY} module for the \eqn{s^{th}} vector species
+\itemize{
+\item the object is created by \link{make_MY_obj_SEI}
+\item the initial conditions are set by \link[ramp.xds:setup_MY_inits]{setup_MY_inits}
+\item \code{options} is passed to both to override the defaults
+}
+}
+\note{
+The module object is stored at \code{xds_obj$MY_obj[[s]]}
+}
+\seealso{
+\link{SEI}, \link{make_MY_obj_SEI}
 }
 \keyword{internal}

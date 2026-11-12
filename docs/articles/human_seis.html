@@ -185,8 +185,7 @@ where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><msub><mi>F</mi><mi>h</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="postfix">)</mo><mo>;</mo></mrow><annotation encoding="application/x-tex">h = F_h(E);</annotation></semantics></math>
 here, we assume that exposure is Poisson, so we let:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mi>b</mi><mi>E</mi></mrow><annotation encoding="application/x-tex">h = bE</annotation></semantics></math></p>
-<p><span class="math display">$$
-\frac{dS}{dt} = - h S + r I \\
+<p><span class="math display">$$\frac{dS}{dt} = - h S + r I \\
 \frac{dE}{dt} = h S - \nu E \\
 \frac{dI}{dt} = \nu E - r I\\
 $$</span></p>
@@ -195,7 +194,7 @@ $$</span></p>
 <span><span class="va">MYo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fl">2000</span><span class="op">/</span><span class="fl">365</span>, f<span class="op">=</span><span class="fl">1</span>, q<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">Xo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>b<span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"SEIS"</span>, MYname <span class="op">=</span> <span class="st">"trivial"</span>, MYoptions <span class="op">=</span> <span class="va">MYo</span>, XHoptions<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>XHname <span class="op">=</span> <span class="st">"SEIS"</span>, MYname <span class="op">=</span> <span class="st">"trivial"</span>, MYoptions <span class="op">=</span> <span class="va">MYo</span>, XHoptions<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seis</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">seis</span>, <span class="fl">3650</span>, <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -204,11 +203,10 @@ $$</span></p>
 <pre><code><span><span class="co">##          S          E          I          H </span></span>
 <span><span class="co">##  652.95170   25.04472  322.00358 1000.00000</span></span></code></pre>
 <p>This model has the steady state…</p>
-<p><span class="math display">$$
-\bar E = H \frac {hr}{h(r+\nu) + r \nu} \\
+<p><span class="math display">$$\bar E = H \frac {hr}{h(r+\nu) + r \nu}
+\\
 \bar I = H \frac {h\nu}{h(r+\nu) + r \nu} \\
-\bar S = H - \bar E - \bar I
-$$</span></p>
+\bar S = H - \bar E - \bar I$$</span></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/steady_state_X.html" class="external-link">steady_state_X</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">365</span>, <span class="fl">1000</span>, <span class="va">seis</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">seis_ss</span></span>
 <span><span class="va">seis_ss</span></span></code></pre></div>
@@ -225,8 +223,7 @@ $$</span></p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ν</mi><annotation encoding="application/x-tex">\nu</annotation></semantics></math>
 denote the duration of the incubation period, and we let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>ν</mi></msub><mo>=</mo><mi>h</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo>−</mo><mi>ν</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">h_\nu = h(t-\nu).</annotation></semantics></math></p>
-<p><span class="math display">$$
-\frac{dS}{dt} = - h S + r I \\
+<p><span class="math display">$$\frac{dS}{dt} = - h S + r I \\
 \frac{dE}{dt} = h S - h_\nu S_\nu \\
 \frac{dI}{dt} = h_\nu S_\nu - r I\\
 $$</span> and
@@ -234,13 +231,11 @@ $$</span> and
 At steady state,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><msub><mi>h</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">h=h_{v}</annotation></semantics></math>,
 so</p>
-<p><span class="math display">$$
-\bar S = \frac{H}{1+h \nu + h/r} \\
+<p><span class="math display">$$\bar S = \frac{H}{1+h \nu + h/r} \\
 \bar E = h \bar S \nu \\
-\bar I = \frac hr \bar S \\
-$$</span></p>
+\bar I = \frac hr \bar S \\ $$</span></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">SEISd</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>Xname <span class="op">=</span> <span class="st">"SEISd"</span>, MYname <span class="op">=</span> <span class="st">"trivial"</span>, MYoptions <span class="op">=</span> <span class="va">MYo</span>, XHoptions<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">SEISd</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_setup.html" class="external-link">xds_setup</a></span><span class="op">(</span>XHname <span class="op">=</span> <span class="st">"SEISd"</span>, MYname <span class="op">=</span> <span class="st">"trivial"</span>, MYoptions <span class="op">=</span> <span class="va">MYo</span>, XHoptions<span class="op">=</span><span class="va">Xo</span>, HPop<span class="op">=</span><span class="va">HPop</span><span class="op">)</span></span>
 <span><span class="va">SEISd</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/xds_solve.html" class="external-link">xds_solve</a></span><span class="op">(</span><span class="va">SEISd</span>, Tmax <span class="op">=</span> <span class="fl">3650</span>, dt<span class="op">=</span><span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_vars.html" class="external-link">get_XH_vars</a></span><span class="op">(</span><span class="va">SEISd</span><span class="op">$</span><span class="va">outputs</span><span class="op">$</span><span class="va">last_y</span>, <span class="va">SEISd</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="op">-&gt;</span> <span class="va">seisd_inf</span></span>

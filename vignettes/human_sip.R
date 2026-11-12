@@ -32,12 +32,12 @@ rho <- c(0.05, 0.1, 0.15)
 xi <- rep(0, 3)
 sigma <-rep(0.5,3)
 Xo = list(b=b,c=c,r=r,eta=eta,rho=rho,sigma=sigma,xi=xi, H=H)
-params = setup_XH_obj("SIP", residence, params, 1, Xo) 
+params = setup_XH_obj("SIP", residence, params, options=Xo, i=1) 
 
 ## -----------------------------------------------------------------------------
 eir <- c(1,2,3)/365
 steady_state_X(eir*b, H, params) -> ss
-params = setup_XH_inits(params, 1, ss)
+params = setup_XH_inits(params, options=ss, i=1)
 
 ## -----------------------------------------------------------------------------
 Xo <- c(Xo, ss) 
@@ -48,8 +48,8 @@ MYo = list(
 )
 
 ## -----------------------------------------------------------------------------
-params = setup_MY_obj("trivial", params, 1, MYo)
-params = setup_L_obj("trivial", membership, params, 1)
+params = setup_MY_obj("trivial", params, options=MYo, s=1)
+params = setup_L_obj("trivial", membership, params, s=1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)
@@ -80,7 +80,7 @@ ggplot(data = out, mapping = aes(x = time, y = value, color = Strata)) +
   theme_bw()
 
 ## -----------------------------------------------------------------------------
-xds_setup_human(Xname="SIP", nPatches=3, residence = 1:3, HPop=H, XHoptions= Xo, MYoptions = MYo) -> test_SIP_xde
+xds_setup_human(XHname="SIP", nPatches=3, residence = 1:3, HPop=H, XHoptions= Xo, MYoptions = MYo) -> test_SIP_xde
 
 ## -----------------------------------------------------------------------------
 steady_state_X(b*eir, H, test_SIP_xde, 1) -> out1

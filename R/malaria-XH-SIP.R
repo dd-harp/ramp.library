@@ -122,16 +122,26 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
   })
 }
 
-#' @title Setup `XH_obj` for an `SIP`
-#' @description Set up the `SIP` model with parameters
+#' @title Set up `SIP` (**XH**)
+#' @description
+#'
+#' This sets up an `SIP` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SIP]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SIP], [make_XH_obj_SIP]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIP = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SIP"
+setup_XH_obj.SIP = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SIP"
   xds_obj$XH_obj[[i]] = make_XH_obj_SIP(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
@@ -179,13 +189,14 @@ make_XH_obj_SIP = function(nStrata, options=list(),
 
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SIP` (**XH**)
+#' @description For the `SIP` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SIP <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SIP <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
@@ -202,12 +213,13 @@ change_XH_pars.SIP <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SIP` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SIP <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SIP <- function(xds_obj, options=list(), i=1) {
   with(get_XH_inits(xds_obj, i), with(options,{
     xds_obj$XH_obj[[i]]$inits$I = I
     xds_obj$XH_obj[[i]]$inits$P = P
@@ -331,13 +343,18 @@ get_HTC.SIP <- function(xds_obj, i) {
   )
 }
 
-#' @title Setup Xinits.SIP
-#' @description Implements [setup_XH_inits] for the SIP model
+#' @title Setup initial values for `SIP` (**XH**)
+#' @description Set initial values for all the variables in the `SIP` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SIP] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SIP = function(xds_obj, i, options=list()){
+setup_XH_inits.SIP = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIP(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -516,4 +533,3 @@ steady_state_X.SIP = function(foi, H, xds_obj, i=1){
     Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
     return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))
 })}
-

@@ -159,13 +159,18 @@ steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
   return(c(S=as.vector(Seq),E = as.vector(Eeq), I=as.vector(Ieq), R = as.vector(Req)))
 })}
 
-#' @title Setup XH_obj.SEIR
-#' @description Implements [setup_XH_inits] for the SEIR model
+#' @title Setup initial values for `SEIR` (**XH**)
+#' @description Set initial values for all the variables in the `SEIR` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SEIR] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEIR = function(xds_obj, i, options=list()){
+setup_XH_inits.SEIR = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIR(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -191,13 +196,14 @@ make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
 
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SEIR` (**XH**)
+#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SEIR <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SEIR <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
@@ -209,12 +215,13 @@ change_XH_pars.SEIR <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SEIR <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SEIR <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_inits[[i]]$inits$H = H
     xds_obj$XH_inits[[i]]$inits$E = E
@@ -301,16 +308,26 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
 
 
 
-#' @title Setup XH_obj.SEIR
-#' @description Implements [setup_XH_obj] for the SEIR model
+#' @title Set up `SEIR` (**XH**)
+#' @description
+#'
+#' This sets up an `SEIR` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SEIR]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SEIR], [make_XH_obj_SEIR]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIR = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SEIR"
+setup_XH_obj.SEIR = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SEIR"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEIR(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -450,4 +467,3 @@ xds_plot_X.SEIR = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","da
          ylab = "No of. Infected", xlab = "Time")
   xds_lines_X_SEIR(time, XH, xds_obj$nStrata[i], clrs, llty)
 }
-

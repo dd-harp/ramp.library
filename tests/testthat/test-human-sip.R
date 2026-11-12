@@ -17,11 +17,11 @@ test_that("human SIP_xde model remains at equilibrium", {
   xi <- rep(0, 3)
   Xo = list(b=b, c=c, r=r, eta=eta, rho=rho, xi=xi)
   foi = stats::rnorm(3, 0.5, .1)
-  params <- xds_setup_human(Xname ="SIP", XHoptions=Xo, nPatches=nPatches, HPop=HPop, residence = residence)
+  params <- xds_setup_human(XHname ="SIP", XHoptions=Xo, nPatches=nPatches, HPop=HPop, residence = residence)
   params$terms$FoI[[1]] <- foi
 
   steady_state_X(foi, HPop, params, 1) ->ss
-  params <- change_XH_inits(params, 1, ss)
+  params <- change_XH_inits(params, options=ss, i=1)
 
 
   # set initial conditions

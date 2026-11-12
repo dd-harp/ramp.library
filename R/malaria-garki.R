@@ -108,16 +108,26 @@ dXHdt.garki = function(t, y, xds_obj, i){
 }
 
 
-#' @title make XH_obj for the Garki model
-#' @description Implements [setup_XH_obj] for the garki model
+#' @title Set up `garki` (**XH**)
+#' @description
+#'
+#' This sets up a `garki` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_garki]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [garki], [make_XH_obj_garki]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.garki = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "garki"
+setup_XH_obj.garki = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "garki"
   xds_obj$XH_obj[[i]] = make_XH_obj_garki(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -169,13 +179,14 @@ make_XH_obj_garki = function(nStrata, options=list(), b=0.55,
   })}
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `garki` (**XH**)
+#' @description For the `garki` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.garki <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.garki <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
@@ -302,12 +313,13 @@ make_XH_inits_garki <- function(nStrata, options = list(), H=1000, x2=0, y1=0, y
 })}
 
 #' @title Set XH_inits.garki
-#' @description Implements [change_XH_inits] for the garki model
+#' @description For the `garki` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-change_XH_inits.garki = function(xds_obj, i, options=list()){
+change_XH_inits.garki = function(xds_obj, options=list(), i=1){
   with(xds_obj$XH_obj[[i]]$inits,
     with(options,{
       xds_obj$XH_inits[[i]]$H = H
@@ -320,13 +332,18 @@ change_XH_inits.garki = function(xds_obj, i, options=list()){
       return(xds_obj)
 }))}
 
-#' @title Setup XH_inits.garki
-#' @description Implements [setup_XH_inits] for the garki model
+#' @title Setup initial values for `garki` (**XH**)
+#' @description Set initial values for all the variables in the `garki` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_garki] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.garki = function(xds_obj, i, options=list()){
+setup_XH_inits.garki = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = with(xds_obj, make_XH_inits_garki(xds_obj$nStrata[i], options))
   return(xds_obj)
 }

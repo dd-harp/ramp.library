@@ -30,7 +30,7 @@ mav3_opts$mild_x_opts = list(rate0 = 1/20, Np=100)
 mav3_opts$mod_c = "dim" 
 mav3_opts$c_opts = list(c0=.8, pda=80, Nc=4) 
 
-mod <- xds_setup_cohort(Xname = "SIPmav3", Xopts = mav3_opts, age_par = makepar_F_type2())
+mod <- xds_setup_cohort(XHname = "SIPmav3", Xopts = mav3_opts, age_par = makepar_F_type2())
 mod <- setup_exposure_nb(mod, .1)
 
 ## -----------------------------------------------------------------------------

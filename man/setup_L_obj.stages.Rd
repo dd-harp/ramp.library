@@ -4,7 +4,7 @@
 \alias{setup_L_obj.stages}
 \title{Set up \code{stages} (\strong{L})}
 \usage{
-\method{setup_L_obj}{stages}(Lname, membership, xds_obj, s, options = list())
+\method{setup_L_obj}{stages}(Lname, membership, xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{Lname}{the class name of the \strong{L} module}
@@ -13,18 +13,25 @@
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the species index}
-
 \item{options}{a named list to configure \strong{\code{L_obj}}}
+
+\item{s}{the species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
-The function sets up \code{L_obj} for the \eqn{s^{th}} species
-by calling \link{make_L_obj_stages}
+This sets up a \code{stages} model object for the \strong{L} module for the \eqn{s^{th}} vector species
+\itemize{
+\item the object is created by \link{make_L_obj_stages}
+\item the initial conditions are set by \link[ramp.xds:setup_L_inits]{setup_L_inits}
+\item \code{options} is passed to both to override the defaults
+}
+}
+\note{
+The module object is stored at \code{xds_obj$L_obj[[s]]}
 }
 \seealso{
-\link{make_L_obj_stages}
+\link{stages}, \link{make_L_obj_stages}
 }
 \keyword{internal}

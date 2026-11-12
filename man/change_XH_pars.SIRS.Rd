@@ -2,21 +2,22 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{change_XH_pars.SIRS}
 \alias{change_XH_pars.SIRS}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{SIRS} (\strong{XH})}
 \usage{
-\method{change_XH_pars}{SIRS}(xds_obj, i = 1, options = list())
+\method{change_XH_pars}{SIRS}(xds_obj, options = list(), i = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the vector species index}
-
 \item{options}{a named list}
+
+\item{i}{the host species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
-This method dispatches on the type of \code{xds_obj$XH_obj[[i]]}.
+For the \code{SIRS} module (\strong{XH}) for the \eqn{i^{th}} species,
+change parameter values named in \code{options} leaving other values unchanged.
 }
 \keyword{internal}

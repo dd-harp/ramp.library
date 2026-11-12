@@ -4,16 +4,16 @@
 \alias{change_MY_pars.SEI}
 \title{Return the parameters as a list}
 \usage{
-\method{change_MY_pars}{SEI}(xds_obj, s = 1, options = list())
+\method{change_MY_pars}{SEI}(xds_obj, options = list(), s = 1)
 
-\method{change_MY_pars}{SEI}(xds_obj, s = 1, options = list())
+\method{change_MY_pars}{SEI}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a named list}
+
+\item{s}{the vector species index}
 }
 \value{
 an \strong{\code{xds}} object
@@ -21,8 +21,10 @@ an \strong{\code{xds}} object
 an \strong{\code{xds}} object
 }
 \description{
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+For the \code{SEI} module (\strong{MY}) for the \eqn{s^{th}} species,
+change parameter values named in \code{options} leaving other values unchanged.
 
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+For the \code{SEI} module (\strong{MY}) for the \eqn{s^{th}} species,
+change parameter values named in \code{options} leaving other values unchanged.
 }
 \keyword{internal}
