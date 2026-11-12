@@ -4,19 +4,22 @@
 \alias{change_L_inits.stages}
 \title{Change initial values for \code{stages} (\strong{L})}
 \usage{
-\method{change_L_inits}{stages}(xds_obj, s = 1, options = list())
+\method{change_L_inits}{stages}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a named list}
+
+\item{s}{the vector species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
+For the \code{stages} module (\strong{L}) for the \eqn{s^{th}} species,
+change initial values named in \code{options} leaving other values unchanged.
+
 Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
 if they are passed as named components of \code{options}.
 }

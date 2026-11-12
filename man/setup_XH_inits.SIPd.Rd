@@ -2,21 +2,28 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{setup_XH_inits.SIPd}
 \alias{setup_XH_inits.SIPd}
-\title{Setup Initial Values}
+\title{Setup initial values for \code{SIPd} (\strong{XH})}
 \usage{
-\method{setup_XH_inits}{SIPd}(xds_obj, i, options = list())
+\method{setup_XH_inits}{SIPd}(xds_obj, options = list(), i = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the host species index}
-
 \item{options}{a \link{list}}
+
+\item{i}{the host species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Setup Initial Values
+Set initial values for all the variables in the \code{SIPd} module
+(\strong{XH}) for the \eqn{i^{th}} species.
+\itemize{
+\item \link{make_XH_inits_SIPd} supplies default values
+\item The values in \code{options} overwrite the defaults
+\item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
+see the inline module documentation.
+}
 }
 \keyword{internal}

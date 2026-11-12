@@ -217,7 +217,7 @@ get_MY_pars.RMG <- function(xds_obj, s=1) {
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @export
-change_MY_pars.RMG <- function(xds_obj, s=1, options=list()) {
+change_MY_pars.RMG <- function(xds_obj, options=list(), s=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
     xds_obj$MY_obj[[s]]$f_t = f
@@ -237,7 +237,7 @@ change_MY_pars.RMG <- function(xds_obj, s=1, options=list()) {
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @export
-setup_MY_inits.RMG = function(xds_obj, s, options=list()){
+setup_MY_inits.RMG = function(xds_obj, options=list(), s=1){
   xds_obj$MY_obj[[s]]$inits = make_MY_inits_RMG(xds_obj$nPatches, options)
   return(xds_obj)
 }
@@ -345,7 +345,7 @@ parse_MY_orbits.RMG <- function(outputs, xds_obj, s) {
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return an `xds` object
 #' @export
-change_MY_inits.RMG <- function(xds_obj, s=1, options=list()) {
+change_MY_inits.RMG <- function(xds_obj, options=list(), s=1) {
   with(xds_obj$MY_obj[[s]],
     with(options,{
       xds_obj$MY_obj[[s]]$inits$U_b = U_b
@@ -392,4 +392,3 @@ get_g.RMG = function(xds_obj, s=1){
 get_sigma.RMG = function(xds_obj, s=1){
   with(xds_obj$MY_obj[[s]], sigma_b_t*es_sigma_b)
 }
-

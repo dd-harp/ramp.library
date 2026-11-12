@@ -73,7 +73,7 @@ dXdt.SIPmav3 <- function(t, y, pars, i){
 #' @inheritParams ramp.xds::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SIPmav3 = function(Xname, pars, i, Xopts=list()){
+setup_Xpar.SIPmav3 = function(XHname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_SIPmav3(pars$nStrata[i], Xopts)
   return(pars)
 }

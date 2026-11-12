@@ -243,18 +243,26 @@ LEffectSizes.stages <- function(t, y, xds_obj, s) {
 }
 
 #' @title Set up `stages` (**L**)
-#' @description The function sets up `L_obj` for the \eqn{s^{th}} species
-#' by calling [make_L_obj_stages]
+#' @description
+#'
+#' This sets up a `stages` model object for the **L** module for the \eqn{s^{th}} vector species
+#' + the object is created by [make_L_obj_stages]
+#' + the initial conditions are set by [setup_L_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [stages], [make_L_obj_stages]
+#'
+#' @note The module object is stored at `xds_obj$L_obj[[s]]`
+#'
 #' @inheritParams ramp.xds::setup_L_obj
 #' @return an **`xds`** object
-#' @seealso [make_L_obj_stages]
 #' @keywords internal
 #' @export
-setup_L_obj.stages = function(Lname, membership, xds_obj, s, options=list()){
+setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
   L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
   class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
   xds_obj$L_obj[[s]] = L_obj
-  xds_obj <- setup_L_inits(xds_obj, s, options)
+  xds_obj <- setup_L_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_habitat_search_weights("setup", xds_obj, list(membership=membership), s=s)
   return(xds_obj)
 }
@@ -411,7 +419,9 @@ get_L_pars.stages <- function(xds_obj, s = 1) {
 }
 
 #' @title Change parameters for `stages` (**L**)
-#' @description Set the values of **L** component parameters.
+#' @description For the `stages` module (**L**) for the \eqn{s^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
+#'
 #' Named values passed in `options` update the corresponding
 #' time-varying baseline (`_t`) fields, which take effect at the
 #' next call to [LEffectSizes.stages].
@@ -423,7 +433,7 @@ get_L_pars.stages <- function(xds_obj, s = 1) {
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_L_pars.stages <- function(xds_obj, s = 1, options = list()) {
+change_L_pars.stages <- function(xds_obj, options = list(), s = 1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$L_obj[[s]], with(options, {
     xds_obj$L_obj[[s]]$psi_E_t  <- checkIt(psi_E,  nHabitats)
@@ -451,15 +461,21 @@ change_L_pars.stages <- function(xds_obj, s = 1, options = list()) {
 }
 
 #' @title Setup initial values for `stages` (**L**)
-#' @description This sets initial values of the variables \eqn{E, L_1, L_2,
-#' L_3, L_4, P} by calling [make_L_inits_stages]. Default values are used
-#' unless other values are passed in `options` by name.
+#' @description Set initial values for all the variables in the `stages` module
+#' (**L**) for the \eqn{s^{th}} species.
+#' + [make_L_inits_stages] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_L_inits] or
+#' see the inline module documentation.
+#'
+#' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be passed in `options`
+#' by name.
 #' @inheritParams ramp.xds::setup_L_inits
 #' @seealso [make_L_inits_stages]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-setup_L_inits.stages = function(xds_obj, s, options = list()){
+setup_L_inits.stages = function(xds_obj, options = list(), s=1){
   xds_obj$L_obj[[s]]$inits = make_L_inits_stages(xds_obj$nHabitats, options)
   return(xds_obj)
 }
@@ -513,13 +529,16 @@ get_L_vars.stages <- function(y, xds_obj, s) {
 }
 
 #' @title Change initial values for `stages` (**L**)
-#' @description Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
+#' @description For the `stages` module (**L**) for the \eqn{s^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
+#'
+#' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
 #' if they are passed as named components of `options`.
 #' @inheritParams ramp.xds::change_L_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_L_inits.stages <- function(xds_obj, s = 1, options = list()) {
+change_L_inits.stages <- function(xds_obj, options = list(), s = 1) {
   with(xds_obj$L_obj[[s]]$inits, with(options, {
     xds_obj$L_obj[[s]]$inits$E  <- E
     xds_obj$L_obj[[s]]$inits$L1 <- L1

@@ -207,7 +207,7 @@ make_Xpar_SEIRV = function(nStrata, Xopts=list(),
 #' @inheritParams ramp.xde::setup_Xpar
 #' @return a [list] vector
 #' @export
-setup_Xpar.SEIRV = function(Xname, pars, i, Xopts=list()){
+setup_Xpar.SEIRV = function(XHname, pars, i, Xopts=list()){
   pars$Xpar[[i]] = make_Xpar_SEIRV(pars$Hpar[[i]]$nStrata, Xopts)
   return(pars)
 }

@@ -1,10 +1,10 @@
 ## -----------------------------------------------------------------------------
 #' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dXHdt] for the newXname model
+#' @description Implements [dXHdt] for the newXHname model
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @export
-dXHdt.newXname <- function(t, y, xds_obj, i) {
+dXHdt.newXHname <- function(t, y, xds_obj, i) {
 
   # do not change this
   foi <- xds_obj$terms$FoI[[i]]
@@ -33,11 +33,11 @@ dXHdt.newXname <- function(t, y, xds_obj, i) {
 
 ## -----------------------------------------------------------------------------
 #' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [UpdateXHt] for the newXname model
+#' @description Implements [UpdateXHt] for the newXHname model
 #' @inheritParams ramp.xds::UpdateXHt
 #' @return a [numeric] vector
 #' @export
-Update_MYt.newXname<- function(t, y, xds_obj, s) {
+Update_MYt.newXHname<- function(t, y, xds_obj, s) {
   ar = xds_obj$terms$AR[[s]]
 
    # do not change this
@@ -63,7 +63,7 @@ Update_MYt.newXname<- function(t, y, xds_obj, s) {
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Make parameters for newXname human model, with defaults
+#' @title Make parameters for newXHname human model, with defaults
 #' @param nStrata is the number of population strata
 #' @param options a [list] that could overwrite defaults
 #' @param p1 the first parameter 
@@ -71,11 +71,11 @@ Update_MYt.newXname<- function(t, y, xds_obj, s) {
 #' @param p3 the third parameter 
 #' @return a [list]
 #' @export
-make_XH_obj_newXname = function(nStrata, options=list(),
+make_XH_obj_newXHname = function(nStrata, options=list(),
                          p1=1, p2=2, p3=3){
   with(options,{
     XH_obj = list()
-    class(XH_obj) <- c("newXname")
+    class(XH_obj) <- c("newXHname")
 
     # Change this
     XH_obj$p1 = checkIt(p1, nStrata)
@@ -98,24 +98,24 @@ make_XH_obj_newXname = function(nStrata, options=list(),
   })}
 
 ## -----------------------------------------------------------------------------
-#' @title Setup XH_obj.newXname
-#' @description Implements [setup_XH_obj] for the newXname model
+#' @title Setup XH_obj.newXHname
+#' @description Implements [setup_XH_obj] for the newXHname model
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @export
-setup_XH_obj.newXname = function(newXname, xds_obj, i, options=list()){
-  xds_obj$XH_obj[[i]] = make_XH_obj_newXname(xds_obj$nStrata[i], options)
+setup_XH_obj.newXHname = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]] = make_XH_obj_newXHname(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
 ## -----------------------------------------------------------------------------
 #' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the newXname model.
+#' @description Implements [setup_XH_ix] for the newXHname model.
 #' @inheritParams ramp.xds::setup_XH_ix
 #' @return none
 #' @importFrom utils tail
 #' @export
-setup_XH_ix.newXname <- function(xds_obj, i) {with(xds_obj,{
+setup_XH_ix.newXHname <- function(xds_obj, i) {with(xds_obj,{
   
   X1_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
   max_ix <- tail(X1_ix, 1)
@@ -136,7 +136,7 @@ setup_XH_ix.newXname <- function(xds_obj, i) {with(xds_obj,{
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
 #' @export
-get_XH_vars.newXname <- function(y, xds_obj, i) {
+get_XH_vars.newXHname <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
       H = y[H_ix]
       X1 = y[X1_ix]
@@ -147,12 +147,12 @@ get_XH_vars.newXname <- function(y, xds_obj, i) {
 }
 
 ## -----------------------------------------------------------------------------
-#' @title parse the output of deSolve and return variables for the newXname model
-#' @description Implements [parse_XH_orbits] for the newXname model
+#' @title parse the output of deSolve and return variables for the newXHname model
+#' @description Implements [parse_XH_orbits] for the newXHname model
 #' @inheritParams ramp.xds::parse_XH_orbits
 #' @return a named list  
 #' @export
-parse_XH_orbits.newXname <- function(outputs, xds_obj, i) {
+parse_XH_orbits.newXHname <- function(outputs, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
     H <- outputs[,H_ix]
     X1 <- outputs[,X1_ix]
@@ -163,27 +163,27 @@ parse_XH_orbits.newXname <- function(outputs, xds_obj, i) {
 })}
 
 ## -----------------------------------------------------------------------------
-#' @title Setup initial values for *newXname*
+#' @title Setup initial values for *newXHname*
 #' 
 #' @inheritParams ramp.xds::setup_XH_inits
 #' 
 #' @return a **`ramp.xds`** object 
 #' 
 #' @export
-setup_XH_inits.newXname = function(xds_obj, H, i, options=list()){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_newXname(xds_obj$nStrata[i], H, options)
+setup_XH_inits.newXHname = function(xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_newXHname(xds_obj$nStrata[i], options=options)
   return(xds_obj)
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Make initial values for the Xname human model, with defaults
+#' @title Make initial values for the XHname human model, with defaults
 #' @param nStrata the number of strata in the model
 #' @param options a [list] to overwrite defaults
 #' @param X10 the initial value for X1 
 #' @param X20 the initial value for X1 
 #' @return a [list]
 #' @export
-make_XH_inits_newXname = function(nStrata, H, options = list(), X10=NULL, X20=1){with(options,{
+make_XH_inits_newXHname = function(nStrata, options = list(), X10=NULL, X20=1){with(options,{
   stopifnot(is.numeric(X10))
   stopifnot(is.numeric(X20))
   X1 = checkIt(X10, nStrata)
@@ -198,7 +198,7 @@ make_XH_inits_newXname = function(nStrata, H, options = list(), X10=NULL, X20=1)
 #' 
 #' @return an **`xds`** object
 #' @export
-change_XH_inits.SIS <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SIS <- function(xds_obj, options=list(), i=1) {
   with(get_XH_inits(xds_obj, i), with(options,{
     xds_obj = change_H(H, xds_obj, i)
     xds_obj$Xinits[[i]]$X1 = X1 
@@ -213,7 +213,7 @@ change_XH_inits.SIS <- function(xds_obj, i=1, options=list()) {
 #' @inheritParams ramp.xds::F_X
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_X.newXname <- function(y, xds_obj, i) {
+F_X.newXHname <- function(y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i), 
     with(xds_obj$XH_obj[[i]], {
       X = ...  
@@ -222,21 +222,21 @@ F_X.newXname <- function(y, xds_obj, i) {
 
 ## -----------------------------------------------------------------------------
 #' @title Size of effective infectious human population
-#' @description Implements [F_H] for the newXname model.
+#' @description Implements [F_H] for the newXHname model.
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_H.newXname <- function(y, xds_obj, i){
+F_H.newXHname <- function(y, xds_obj, i){
   return(get_XH_vars(y, xds_obj, i)$H)
 }
 
 ## -----------------------------------------------------------------------------
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_infectivity] for the newXname model.
+#' @description Implements [F_infectivity] for the newXHname model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_infectivity.newXname <- function(y, xds_obj, i) {
+F_infectivity.newXHname <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]],{ 
     ########################
     # retrieve or compute it 
@@ -251,22 +251,22 @@ F_infectivity.newXname <- function(y, xds_obj, i) {
 
 ## -----------------------------------------------------------------------------
 #' @title Compute the true prevalence of infection / parasite rate
-#' @description Implements F_pr for the newXname model.
+#' @description Implements F_pr for the newXHname model.
 #' @inheritParams F_pr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
-F_prevalence.newXname <- function(vars, XH_obj) {
+F_prevalence.newXHname <- function(vars, XH_obj) {
   pr = with(vars, with(XH_obj,(return(X1/H))))
   return(pr)
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Compute the HTC for the newXname model
-#' @description Implements [HTC] for the newXname model with demography.
+#' @title Compute the HTC for the newXHname model
+#' @description Implements [HTC] for the newXHname model with demography.
 #' @inheritParams ramp.xds::HTC
 #' @return a [numeric] vector
 #' @export
-HTC.newXname <- function(xds_obj, i) {
+HTC.newXHname <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
     #HTC <- 
     return(HTC)
@@ -274,15 +274,15 @@ HTC.newXname <- function(xds_obj, i) {
 }
 
 ## -----------------------------------------------------------------------------
-#' Add lines for the density of infected individuals for the newXname model
+#' Add lines for the density of infected individuals for the newXHname model
 #'
-#' @param XH a list with the outputs of parse_deout_X_newXname
+#' @param XH a list with the outputs of parse_deout_X_newXHname
 #' @param nStrata the number of population strata
 #' @param clrs a vector of colors
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @export
-xds_lines_X_newXname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
+xds_lines_X_newXHname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
   with(XH,{
     if(nStrata==1) {
       lines(time, S, col=clrs[1], lty = llty[1])
@@ -300,11 +300,11 @@ xds_lines_X_newXname = function(XH, nStrata, clrs=c("darkblue","darkred"), llty=
   })}
 
 ## -----------------------------------------------------------------------------
-#' Plot the density of infected individuals for the newXname model
+#' Plot the density of infected individuals for the newXHname model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @export
-xds_plot_X.newXname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
+xds_plot_X.newXHname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
   vars=with(xds_obj$outputs,if(stable==TRUE){stable_orbits}else{orbits})
 
   if(add_axes==TRUE)
@@ -312,6 +312,6 @@ xds_plot_X.newXname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=
          plot(time, 0*time, type = "n", ylim = c(0, max(H)),
               ylab = "# Infected", xlab = "Time"))
 
-  xds_lines_X_newXname(vars$XH[[i]], xds_obj$Hpar[[i]]$nStrata, clrs, llty)
+  xds_lines_X_newXHname(vars$XH[[i]], xds_obj$Hpar[[i]]$nStrata, clrs, llty)
 }
 

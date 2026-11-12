@@ -4,22 +4,30 @@
 \alias{setup_L_inits.stages}
 \title{Setup initial values for \code{stages} (\strong{L})}
 \usage{
-\method{setup_L_inits}{stages}(xds_obj, s, options = list())
+\method{setup_L_inits}{stages}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the species index}
-
 \item{options}{a named \link{list}}
+
+\item{s}{the species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
-This sets initial values of the variables \eqn{E, L_1, L_2,
-L_3, L_4, P} by calling \link{make_L_inits_stages}. Default values are used
-unless other values are passed in \code{options} by name.
+Set initial values for all the variables in the \code{stages} module
+(\strong{L}) for the \eqn{s^{th}} species.
+\itemize{
+\item \link{make_L_inits_stages} supplies default values
+\item The values in \code{options} overwrite the defaults
+\item To inspect variable names, use \link[ramp.xds:get_L_inits]{get_L_inits} or
+see the inline module documentation.
+}
+
+Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be passed in \code{options}
+by name.
 }
 \seealso{
 \link{make_L_inits_stages}

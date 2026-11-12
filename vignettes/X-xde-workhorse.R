@@ -11,7 +11,7 @@ library(ramp.library)
 
 ## ----eval=F-------------------------------------------------------------------
 #  wh <- xds_setup(dlay = 'dde',
-#                  Xname = "workhorse",
+#                  XHname = "workhorse",
 #                  HPop=1000,
 #                  Lname = "trivial",
 #                  Lopts = list(

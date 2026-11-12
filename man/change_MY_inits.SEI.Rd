@@ -4,19 +4,20 @@
 \alias{change_MY_inits.SEI}
 \title{Set new MY parameter values}
 \usage{
-\method{change_MY_inits}{SEI}(xds_obj, s = 1, options = list())
+\method{change_MY_inits}{SEI}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a named list}
+
+\item{s}{the vector species index}
 }
 \value{
 an \code{xds} object
 }
 \description{
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+For the \code{SEI} module (\strong{MY}) for the \eqn{s^{th}} species,
+change initial values named in \code{options} leaving other values unchanged.
 }
 \keyword{internal}

@@ -4,19 +4,20 @@
 \alias{change_XH_inits.garki}
 \title{Set XH_inits.garki}
 \usage{
-\method{change_XH_inits}{garki}(xds_obj, i, options = list())
+\method{change_XH_inits}{garki}(xds_obj, options = list(), i = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the vector species index}
-
 \item{options}{a named list}
+
+\item{i}{the host species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:change_XH_inits]{change_XH_inits} for the garki model
+For the \code{garki} module (\strong{XH}) for the \eqn{i^{th}} species,
+change initial values named in \code{options} leaving other values unchanged.
 }
 \keyword{internal}

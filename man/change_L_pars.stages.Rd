@@ -4,20 +4,22 @@
 \alias{change_L_pars.stages}
 \title{Change parameters for \code{stages} (\strong{L})}
 \usage{
-\method{change_L_pars}{stages}(xds_obj, s = 1, options = list())
+\method{change_L_pars}{stages}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a named list}
+
+\item{s}{the vector species index}
 }
 \value{
 an \strong{\code{xds}} object
 }
 \description{
-Set the values of \strong{L} component parameters.
+For the \code{stages} module (\strong{L}) for the \eqn{s^{th}} species,
+change parameter values named in \code{options} leaving other values unchanged.
+
 Named values passed in \code{options} update the corresponding
 time-varying baseline (\verb{_t}) fields, which take effect at the
 next call to \link{LEffectSizes.stages}.

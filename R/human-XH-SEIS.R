@@ -75,7 +75,7 @@ check_XH.SEIS = function(xds_obj, i){
   return(xds_obj)
 }
 
-#' @title \eqn{\cal X} Component Derivatives for the `SEIS` Model
+#' @title \eqn{\cal XH} Component Derivatives for the `SEIS` Model
 #' @description Implements [dXHdt] for the SEIS model
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
@@ -133,16 +133,26 @@ steady_state_X.SEIS_dts = function(foi, H, xds_obj, i=1){
     return(c(S=Steq, E=Eteq, I=Iteq))
 })}
 
-#' @title Setup XH_obj.SEIS
-#' @description Implements [setup_XH_obj] for the SEIS model
+#' @title Set up `SEIS` (**XH**)
+#' @description
+#'
+#' This sets up an `SEIS` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SEIS]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SEIS], [make_XH_obj_SEIS]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIS = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SEIS"
+setup_XH_obj.SEIS = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SEIS"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEIS(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -178,13 +188,14 @@ make_XH_obj_SEIS = function(nStrata, options=list(),
   })}
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SEIS` (**XH**)
+#' @description For the `SEIS` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SEIS <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SEIS <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
     xds_obj$XH_obj[[i]]$c <- c
@@ -258,12 +269,13 @@ make_XH_inits_SEIS = function(nStrata, options = list(), H=1000, E=0, I=1){with(
 })}
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SEIS` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SEIS <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SEIS <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]]$inits,
        with(options,{
          xds_obj$XH_obj[[i]]$inits[[i]]$H = H
@@ -290,13 +302,18 @@ get_XH_vars.SEIS <- function(y, xds_obj, i) {
     return(list(S=S,E=E,I=I,H=H))})
 }
 
-#' @title Setup Xinits.SEIS
-#' @description Implements [setup_XH_inits] for the SEIS model
+#' @title Setup initial values for `SEIS` (**XH**)
+#' @description Set initial values for all the variables in the `SEIS` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SEIS] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEIS = function(xds_obj, i, options=list()){
+setup_XH_inits.SEIS = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIS(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -460,4 +477,3 @@ steady_state_X.SEIS = function(foi, H, xds_obj, i=1){
     Seq = H- Ieq-Eeq
     return(c(S=Seq, E=Eeq, I=Ieq, H=H))
 })}
-

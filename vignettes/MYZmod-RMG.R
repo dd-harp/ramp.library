@@ -1,5 +1,5 @@
 ## -----------------------------------------------------------------------------
-model <- xde_setup(MYZname="RMG", Lname="trace", Xname = "trace", nPatches=3)
+model <- xde_setup(MYZname="RMG", Lname="trace", XHname = "trace", nPatches=3)
 
 ## -----------------------------------------------------------------------------
 model <- xde_solve(model)

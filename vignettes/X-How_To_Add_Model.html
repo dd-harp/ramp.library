@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -365,15 +366,16 @@ of “X-How_To_Add_Model.Rmd”</p></li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">&quot;X-How_To_Add_Model.Rmd&quot;</span>, </span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>            <span class="at">output =</span> <span class="st">&quot;XHmodule-newXname.R&quot;</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>            <span class="at">output =</span> <span class="st">&quot;XHmodule-newXHname.R&quot;</span>, </span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>            <span class="at">documentation =</span> <span class="dv">0</span>, </span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>            <span class="at">quiet=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
-<li><p>You should see a new file called <code>XHmodule-newXname.R</code>
-in the working directory. You can now move and rename it.</p></li>
-<li><p>Open the file and do a global search for <code>newXname</code>
+<li><p>You should see a new file called
+<code>XHmodule-newXHname.R</code> in the working directory. You can now
+move and rename it.</p></li>
+<li><p>Open the file and do a global search for <code>newXHname</code>
 and replace it with the a short string that will define the model as its
-<code>Xname.</code></p></li>
+<code>XHname.</code></p></li>
 <li><p>Edit the functions following the directions below.</p></li>
 </ol>
 <div id="style-guide" class="section level2">
@@ -407,11 +409,11 @@ variable.</p></li>
 LHS of the derivative equations you just wrote.</p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [dXHdt] for the newXname model</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [dXHdt] for the newXHname model</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::dXHdt</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>dXHdt.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, i) {</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>dXHdt.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, i) {</span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="co"># do not change this</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  foi <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>FoI[[i]]</span>
@@ -441,11 +443,11 @@ LHS of the derivative equations you just wrote.</p></li>
 <div id="update_xht" class="section level3">
 <h3>Update_XHt</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [UpdateXHt] for the newXname model</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [UpdateXHt] for the newXHname model</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::UpdateXHt</span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>Update_MYt.newXname<span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>Update_MYt.newXHname<span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  ar <span class="ot">=</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>AR[[s]]</span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>   <span class="co"># do not change this</span></span>
@@ -483,13 +485,13 @@ host demography” unchanged.</p></li>
 <li><p>If you don’t want to add ports for mass treatment, delete the
 line with <code>mda</code> and <code>msat</code> and leave
 <code>mda=FALSE</code> and <code>msat=FALSE</code> in
-<code>skill_set_XH.newXname.</code> If you do want your module to have
+<code>skill_set_XH.newXHname.</code> If you do want your module to have
 that functionality, add the effects of mass treatment to the parameters
 that define state transitions in <code>dXHdt</code> or
 <code>Update_XHt</code> and set <code>mda=TRUE</code> and
 <code>msat=TRUE</code> in the skill set.</p></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for newXname human model, with defaults</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for newXHname human model, with defaults</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could overwrite defaults</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @param p1 the first parameter </span></span>
@@ -497,11 +499,11 @@ that define state transitions in <code>dXHdt</code> or
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>make_XH_obj_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">options=</span><span class="fu">list</span>(),</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>make_XH_obj_newXHname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">options=</span><span class="fu">list</span>(),</span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>                         <span class="at">p1=</span><span class="dv">1</span>, <span class="at">p2=</span><span class="dv">2</span>, <span class="at">p3=</span><span class="dv">3</span>){</span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="fu">with</span>(options,{</span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    XH_obj <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">class</span>(XH_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newXname&quot;</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">class</span>(XH_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newXHname&quot;</span>)</span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    <span class="co"># Change this</span></span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    XH_obj<span class="sc">$</span>p1 <span class="ot">=</span> <span class="fu">checkIt</span>(p1, nStrata)</span>
@@ -525,15 +527,15 @@ that define state transitions in <code>dXHdt</code> or
 </div>
 <div id="setup_xh_obj" class="section level3">
 <h3>setup_XH_obj</h3>
-<p>If you did a global search and replace on <code>newXname,</code> this
-function will not need to be modified</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Setup XH_obj.newXname</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_XH_obj] for the newXname model</span></span>
+<p>If you did a global search and replace on <code>newXHname,</code>
+this function will not need to be modified</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Setup XH_obj.newXHname</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_XH_obj] for the newXHname model</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_XH_obj</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>setup_XH_obj.newXname <span class="ot">=</span> <span class="cf">function</span>(newXname, xds_obj, i, <span class="at">options=</span><span class="fu">list</span>()){</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]] <span class="ot">=</span> <span class="fu">make_XH_obj_newXname</span>(xds_obj<span class="sc">$</span>nStrata[i], options)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>setup_XH_obj.newXHname <span class="ot">=</span> <span class="cf">function</span>(XHname, residence, xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">i=</span><span class="dv">1</span>){</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]] <span class="ot">=</span> <span class="fu">make_XH_obj_newXHname</span>(xds_obj<span class="sc">$</span>nStrata[i], options)</span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
@@ -552,12 +554,12 @@ and add lines for each variable by copying and pasting and editing the
 pair of lines. Be sure the replacement gets applied to all four
 instances.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Add indices for human population to parameter list</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_XH_ix] for the newXname model.</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_XH_ix] for the newXHname model.</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_XH_ix</span></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>setup_XH_ix.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {<span class="fu">with</span>(xds_obj,{</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>setup_XH_ix.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {<span class="fu">with</span>(xds_obj,{</span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  </span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  X1_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>xds_obj<span class="sc">$</span>nStrata[i])</span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(X1_ix, <span class="dv">1</span>)</span>
@@ -592,7 +594,7 @@ the returned list.</p></li>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_XH_vars</span></span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>get_XH_vars.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>get_XH_vars.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>ix,{</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      H <span class="ot">=</span> y[H_ix]</span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>      X1 <span class="ot">=</span> y[X1_ix]</span>
@@ -617,12 +619,12 @@ with the second variable name.</p></li>
 you use it or if you want to have it available, compute it and add it to
 the returned list.</p></li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title parse the output of deSolve and return variables for the newXname model</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [parse_XH_orbits] for the newXname model</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title parse the output of deSolve and return variables for the newXHname model</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [parse_XH_orbits] for the newXHname model</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::parse_XH_orbits</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @return a named list  </span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>parse_XH_orbits.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, i) {</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>parse_XH_orbits.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, i) {</span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>ix,{</span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    H <span class="ot">&lt;-</span> outputs[,H_ix]</span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    X1 <span class="ot">&lt;-</span> outputs[,X1_ix]</span>
@@ -639,28 +641,28 @@ the returned list.</p></li>
 <h3>setup_XH_inits</h3>
 <p>If you did the global search and replace, you won’t need to change
 this function.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Setup initial values for *newXname*</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Setup initial values for *newXHname*</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; </span></span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_XH_inits</span></span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; </span></span>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @return a **`ramp.xds`** object </span></span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&#39; </span></span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>setup_XH_inits.newXname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, H, i, <span class="at">options=</span><span class="fu">list</span>()){</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>inits <span class="ot">=</span> <span class="fu">make_XH_inits_newXname</span>(xds_obj<span class="sc">$</span>nStrata[i], H, options)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>setup_XH_inits.newXHname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">i=</span><span class="dv">1</span>){</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>inits <span class="ot">=</span> <span class="fu">make_XH_inits_newXHname</span>(xds_obj<span class="sc">$</span>nStrata[i], <span class="at">options=</span>options)</span>
 <span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
 <span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="make_xh_inits" class="section level3">
 <h3>make_XH_inits</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the Xname human model, with defaults</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the XHname human model, with defaults</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to overwrite defaults</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @param X10 the initial value for X1 </span></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @param X20 the initial value for X1 </span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_XH_inits_newXname <span class="ot">=</span> <span class="cf">function</span>(nStrata, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">X10=</span><span class="cn">NULL</span>, <span class="at">X20=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_XH_inits_newXHname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">X10=</span><span class="cn">NULL</span>, <span class="at">X20=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X10))</span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X20))</span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  X1 <span class="ot">=</span> <span class="fu">checkIt</span>(X10, nStrata)</span>
@@ -676,7 +678,7 @@ this function.</p>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&#39; </span></span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** object</span></span>
 <span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>change_XH_inits.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">options=</span><span class="fu">list</span>()) {</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>change_XH_inits.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">i=</span><span class="dv">1</span>) {</span>
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_XH_inits</span>(xds_obj, i), <span class="fu">with</span>(options,{</span>
 <span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    xds_obj <span class="ot">=</span> <span class="fu">change_H</span>(H, xds_obj, i)</span>
 <span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    xds_obj<span class="sc">$</span>Xinits[[i]]<span class="sc">$</span>X1 <span class="ot">=</span> X1 </span>
@@ -698,7 +700,7 @@ weighted by the probability of transmitting.</p>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_X</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>F_X.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>F_X.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_XH_vars</span>(y, xds_obj, i), </span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>XH_obj[[i]], {</span>
 <span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>      X <span class="ot">=</span> ...  </span>
@@ -710,11 +712,11 @@ weighted by the probability of transmitting.</p>
 <p>If you did the global search and repace, and if you haven’t changed
 the name of <code>H</code> then this won’t need to be changed.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_H] for the newXname model.</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_H] for the newXHname model.</span></span>
 <span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_H</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>F_H.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i){</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>F_H.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i){</span>
 <span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">get_XH_vars</span>(y, xds_obj, i)<span class="sc">$</span>H)</span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>}</span></code></pre></div>
 </div>
@@ -723,11 +725,11 @@ the name of <code>H</code> then this won’t need to be changed.</p>
 <p>If you use <code>b</code> for the probability of getting infected,
 per infectious bite, don’t change anything.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&#39; @title Infection blocking pre-erythrocytic immunity</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_infectivity] for the newXname model.</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_infectivity] for the newXHname model.</span></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_infectivity</span></span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>F_infectivity.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>F_infectivity.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
 <span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>XH_obj[[i]],{ </span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    <span class="do">########################</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>    <span class="co"># retrieve or compute it </span></span>
@@ -749,23 +751,23 @@ that parse the outputs and compute some standard metrics.</p>
 <h3>F_prevalence</h3>
 <p>Replace <code>X1/H</code> with the formula to compute prevalence.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the true prevalence of infection / parasite rate</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Implements F_pr for the newXname model.</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Implements F_pr for the newXHname model.</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_pr</span></span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nStrata`</span></span>
 <span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>F_prevalence.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(vars, XH_obj) {</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>F_prevalence.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(vars, XH_obj) {</span>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  pr <span class="ot">=</span> <span class="fu">with</span>(vars, <span class="fu">with</span>(XH_obj,(<span class="fu">return</span>(X1<span class="sc">/</span>H))))</span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="fu">return</span>(pr)</span>
 <span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="htc" class="section level3">
 <h3>HTC</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the HTC for the newXname model</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [HTC] for the newXname model with demography.</span></span>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the HTC for the newXHname model</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [HTC] for the newXHname model with demography.</span></span>
 <span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::HTC</span></span>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
 <span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>HTC.newXname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>HTC.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {</span>
 <span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>XH_obj[[i]],</span>
 <span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>    <span class="co">#HTC &lt;- </span></span>
 <span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>    <span class="fu">return</span>(HTC)</span>
@@ -810,17 +812,17 @@ that parse the outputs and compute some standard metrics.</p>
 <span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>    }</span>
 <span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a>  })}</span></code></pre></div>
 </div>
-<div id="xds_lines_x_newxname" class="section level4">
-<h4>xds_lines_X_newXname</h4>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the newXname model</span></span>
+<div id="xds_lines_x_newxhname" class="section level4">
+<h4>xds_lines_X_newXHname</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the newXHname model</span></span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&#39; @param XH a list with the outputs of parse_deout_X_newXname</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&#39; @param XH a list with the outputs of parse_deout_X_newXHname</span></span>
 <span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of population strata</span></span>
 <span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
 <span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
 <span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
 <span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>xds_lines_X_newXname <span class="ot">=</span> <span class="cf">function</span>(XH, nStrata, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>xds_lines_X_newXHname <span class="ot">=</span> <span class="cf">function</span>(XH, nStrata, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
 <span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="fu">with</span>(XH,{</span>
 <span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>    <span class="cf">if</span>(nStrata<span class="sc">==</span><span class="dv">1</span>) {</span>
 <span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>      <span class="fu">lines</span>(time, S, <span class="at">col=</span>clrs[<span class="dv">1</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
@@ -862,7 +864,7 @@ Instead, it is called by the <code>S3</code> function
 </div>
 <div id="xds_plot_x.sis" class="section level4">
 <h4>xds_plot_X.SIS</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newXname model</span></span>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newXHname model</span></span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::xds_plot_X</span></span>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
@@ -878,13 +880,13 @@ Instead, it is called by the <code>S3</code> function
 <span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a>  <span class="fu">xds_lines_X_SIS</span>(vars<span class="sc">$</span>XH[[i]], xds_obj<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, clrs, llty)</span>
 <span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="xds_plot_x.newxname" class="section level4">
-<h4>xds_plot_X.newXname</h4>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newXname model</span></span>
+<div id="xds_plot_x.newxhname" class="section level4">
+<h4>xds_plot_X.newXHname</h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newXHname model</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::xds_plot_X</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>xds_plot_X.newXname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>xds_plot_X.newXHname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
 <span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  vars<span class="ot">=</span><span class="fu">with</span>(xds_obj<span class="sc">$</span>outputs,<span class="cf">if</span>(stable<span class="sc">==</span><span class="cn">TRUE</span>){stable_orbits}<span class="cf">else</span>{orbits})</span>
 <span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="cf">if</span>(add_axes<span class="sc">==</span><span class="cn">TRUE</span>)</span>
@@ -892,7 +894,7 @@ Instead, it is called by the <code>S3</code> function
 <span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>         <span class="fu">plot</span>(time, <span class="dv">0</span><span class="sc">*</span>time, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(H)),</span>
 <span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;# Infected&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>))</span>
 <span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  <span class="fu">xds_lines_X_newXname</span>(vars<span class="sc">$</span>XH[[i]], xds_obj<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, clrs, llty)</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  <span class="fu">xds_lines_X_newXHname</span>(vars<span class="sc">$</span>XH[[i]], xds_obj<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nStrata, clrs, llty)</span>
 <span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>

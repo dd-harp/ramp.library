@@ -10,7 +10,7 @@ library(ramp.library)
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 
-model <- xds_setup(MYname="RMG", Lname="trivial", Xname = "trivial",  residence=residence, HPop =HPop, nPatches=3)
+model <- xds_setup(MYname="RMG", Lname="trivial", XHname = "trivial",  residence=residence, HPop =HPop, nPatches=3)
 
 ## -----------------------------------------------------------------------------
 model <- xds_solve(model)

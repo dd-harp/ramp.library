@@ -138,12 +138,13 @@ make_XH_inits_SIR = function(nStrata, options = list(), H=1000, I=1, R=0){with(o
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SIR` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SIR <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SIR <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]]$inits,
     with(options,{
       xds_obj$XH_obj[[i]]$S = S
@@ -152,13 +153,18 @@ change_XH_inits.SIR <- function(xds_obj, i=1, options=list()) {
       return(xds_obj)
 }))}
 
-#' @title Setup XH_obj.SIR
-#' @description Implements [setup_XH_inits] for the SIR model
+#' @title Setup initial values for `SIR` (**XH**)
+#' @description Set initial values for all the variables in the `SIR` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SIR] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SIR = function(xds_obj, i, options=list()){
+setup_XH_inits.SIR = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIR(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -228,16 +234,26 @@ make_XH_obj_SIR = function(nStrata, options=list(),
 })}
 
 
-#' @title Setup XH_obj.SIR
-#' @description Implements [setup_XH_obj] for the SIR model
+#' @title Set up `SIR` (**XH**)
+#' @description
+#'
+#' This sets up an `SIR` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SIR]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SIR], [make_XH_obj_SIR]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIR = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SIR"
+setup_XH_obj.SIR = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SIR"
   xds_obj$XH_obj[[i]] = make_XH_obj_SIR(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -247,13 +263,14 @@ setup_XH_obj.SIR = function(Xname, residence, xds_obj, i, options=list()){
   return(xds_obj)
 }
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SIR` (**XH**)
+#' @description For the `SIR` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SIR <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SIR <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b

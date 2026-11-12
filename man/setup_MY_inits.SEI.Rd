@@ -2,21 +2,28 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{setup_MY_inits.SEI}
 \alias{setup_MY_inits.SEI}
-\title{Setup initial values for the SEI model}
+\title{Setup initial values for \code{SEI} (\strong{MY})}
 \usage{
-\method{setup_MY_inits}{SEI}(xds_obj, s, options = list())
+\method{setup_MY_inits}{SEI}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{s}{the vector species index}
-
 \item{options}{a \link{list}}
+
+\item{s}{the vector species index}
 }
 \value{
 a \link{list}
 }
 \description{
-Implements \link[ramp.xds:setup_MY_inits]{setup_MY_inits} for the SEI model
+Set initial values for all the variables in the \code{SEI} module
+(\strong{MY}) for the \eqn{s^{th}} species.
+\itemize{
+\item \link{make_MY_inits_SEI} supplies default values
+\item The values in \code{options} overwrite the defaults
+\item To inspect variable names, use \link[ramp.xds:get_MY_inits]{get_MY_inits} or
+see the inline module documentation.
+}
 }
 \keyword{internal}

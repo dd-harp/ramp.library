@@ -92,8 +92,8 @@ make_MY_obj_newMYname = function(nPatches, options=list(),
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
 #' @export
-setup_MY_obj.newMYname = function(newMYname, xds_obj, i, options=list()){
-  xds_obj$MY_obj[[i]] = make_MY_obj_newMYname(xds_obj$nPatches, options)
+setup_MY_obj.newMYname = function(MYname, xds_obj, options=list(), s=1){
+  xds_obj$MY_obj[[s]] = make_MY_obj_newMYname(xds_obj$nPatches, options)
   return(xds_obj)
 }
 
@@ -159,13 +159,13 @@ parse_MY_orbits.newMYname <- function(outputs, xds_obj, i) {
 #' @return a **`ramp.xds`** object 
 #' 
 #' @export
-setup_MY_inits.newMYname = function(xds_obj, H, i, options=list()){
-  xds_obj$MY_obj[[i]]$inits = make_MY_inits_newMYname(xds_obj$nPatches[i], H, options)
+setup_MY_inits.newMYname = function(xds_obj, options=list(), s=1){
+  xds_obj$MY_obj[[s]]$inits = make_MY_inits_newMYname(xds_obj$nPatches, H=options$H, options=options)
   return(xds_obj)
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Make initial values for the Xname human model, with defaults
+#' @title Make initial values for the XHname human model, with defaults
 #' @param nPatches the number of strata in the model
 #' @param options a [list] to overwrite defaults
 #' @param M0 the initial value for M 
@@ -187,11 +187,11 @@ make_MY_inits_newMYname = function(nPatches, H, options = list(), M0=NULL, Y0=1)
 #' 
 #' @return an **`xds`** object
 #' @export
-change_MY_inits.SIS <- function(xds_obj, i=1, options=list()) {
-  with(get_MY_inits(xds_obj, i), with(options,{
-    xds_obj = change_H(H, xds_obj, i)
-    xds_obj$Xinits[[i]]$M = M 
-    xds_obj$Xinits[[i]]$Y = Y 
+change_MY_inits.SIS <- function(xds_obj, options=list(), s=1) {
+  with(get_MY_inits(xds_obj, s), with(options,{
+    xds_obj = change_H(H, xds_obj, s)
+    xds_obj$Xinits[[s]]$M = M 
+    xds_obj$Xinits[[s]]$Y = Y 
     ... 
     return(xds_obj)
   }))}

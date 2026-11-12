@@ -135,13 +135,14 @@ steady_state_X.SIRS_dts = function(foi, H,  xds_obj, i=1){
 })}
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SIRS` (**XH**)
+#' @description For the `SIRS` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SIRS <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SIRS <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
@@ -153,12 +154,13 @@ change_XH_pars.SIRS <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SIRS` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SIRS <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SIRS <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$inits$S = S
     xds_obj$XH_obj[[i]]$inits$I = I
@@ -199,13 +201,18 @@ make_XH_inits_SIRS = function(nStrata,  options = list(), H=1000, I=1, R=0){with
 
 
 
-#' @title Setup XH_obj.SIRS
-#' @description Implements [setup_XH_inits] for the SIRS model
+#' @title Setup initial values for `SIRS` (**XH**)
+#' @description Set initial values for all the variables in the `SIRS` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SIRS] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SIRS = function(xds_obj, i, options=list()){
+setup_XH_inits.SIRS = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIRS(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -277,16 +284,26 @@ make_XH_obj_SIRS = function(nStrata, options=list(),
 
 
 
-#' @title Setup XH_obj.SIRS
-#' @description Implements [setup_XH_obj] for the SIRS model
+#' @title Set up `SIRS` (**XH**)
+#' @description
+#'
+#' This sets up an `SIRS` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SIRS]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SIRS], [make_XH_obj_SIRS]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SIRS = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SIRS"
+setup_XH_obj.SIRS = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SIRS"
   xds_obj$XH_obj[[i]] = make_XH_obj_SIRS(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -437,4 +454,3 @@ xds_plot_X.SIRS = function(xds_obj, i=1, clrs=c("darkblue","darkred","darkgreen"
          ylab = "No of. Infected", xlab = "Time")
   xds_lines_X_SIRS(times, XH, xds_obj$nStrata[i], clrs, llty)
 }
-

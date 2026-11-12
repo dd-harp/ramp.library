@@ -2,25 +2,36 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{setup_XH_obj.SEIRV}
 \alias{setup_XH_obj.SEIRV}
-\title{Setup XH_obj.SEIRV}
+\title{Set up \code{SEIRV} (\strong{XH})}
 \usage{
-\method{setup_XH_obj}{SEIRV}(Xname, residence, xds_obj, i, options = list())
+\method{setup_XH_obj}{SEIRV}(XHname, residence, xds_obj, options = list(), i = 1)
 }
 \arguments{
-\item{Xname}{the model name}
+\item{XHname}{the model name}
 
 \item{residence}{the residence vector}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
-\item{i}{the host species index}
-
 \item{options}{model options as a named list}
+
+\item{i}{the host species index}
 }
 \value{
 a \link{list} vector
 }
 \description{
-Implements \link[ramp.xds:setup_XH_obj]{setup_XH_obj} for the SEIRV model
+This sets up an \code{SEIRV} model object for the \strong{XH} module for the \eqn{i^{th}} host species
+\itemize{
+\item the object is created by \link{make_XH_obj_SEIRV}
+\item the initial conditions are set by \link[ramp.xds:setup_XH_inits]{setup_XH_inits}
+\item \code{options} is passed to both to override the defaults
+}
+}
+\note{
+The module object is stored at \code{xds_obj$XH_obj[[i]]}
+}
+\seealso{
+\link{SEIRV}, \link{make_XH_obj_SEIRV}
 }
 \keyword{internal}

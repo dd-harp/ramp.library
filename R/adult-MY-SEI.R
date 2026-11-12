@@ -120,18 +120,28 @@ Update_MYt.SEI <- function(t, y, xds_obj, s) {
   })
 }
 
-#' @title Setup MY_obj for the SEI model
-#' @description Implements [setup_MY_obj] for the SEI model
+#' @title Set up `SEI` (**MY**)
+#' @description
+#'
+#' This sets up an `SEI` model object for the **MY** module for the \eqn{s^{th}} vector species
+#' + the object is created by [make_MY_obj_SEI]
+#' + the initial conditions are set by [setup_MY_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SEI], [make_MY_obj_SEI]
+#'
+#' @note The module object is stored at `xds_obj$MY_obj[[s]]`
+#'
 #' @inheritParams ramp.xds::setup_MY_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
+setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
   xds_obj$MYname <- "SEI"
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
-  xds_obj <- setup_MY_inits(xds_obj, s, options)
+  xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)
   xds_obj <- setup_Upsilon_obj(xds_obj, s=s, FALSE)
@@ -141,12 +151,13 @@ setup_MY_obj.SEI = function(MYname, xds_obj, s, options=list()){
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
+change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
     xds_obj$MY_obj[[s]]$f_obj$f = f
@@ -182,12 +193,13 @@ get_MY_pars.SEI <- function(xds_obj, s=1) {
 }
 
 #' @title Set new MY parameter values
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return an `xds` object
 #' @keywords internal
 #' @export
-change_MY_inits.SEI <- function(xds_obj, s=1, options=list()) {
+change_MY_inits.SEI <- function(xds_obj, options=list(), s=1) {
   with(xds_obj$MY_obj[[s]]$inits,
     with(options,{
       xds_obj$MY_obj[[s]]$inits$M = M
@@ -251,13 +263,18 @@ get_MY_vars.SEI <- function(y, xds_obj, s){
 }
 
 
-#' @title Setup initial values for the SEI model
-#' @description Implements [setup_MY_inits] for the SEI model
+#' @title Setup initial values for `SEI` (**MY**)
+#' @description Set initial values for all the variables in the `SEI` module
+#' (**MY**) for the \eqn{s^{th}} species.
+#' + [make_MY_inits_SEI] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_MY_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
 #' @export
-setup_MY_inits.SEI = function(xds_obj, s, options=list()){
+setup_MY_inits.SEI = function(xds_obj, options=list(), s=1){
   xds_obj$MY_obj[[s]]$inits = make_MY_inits_SEI(xds_obj$nPatches, options)
   return(xds_obj)
 }
@@ -326,12 +343,13 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 })}
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_MY_pars.SEI <- function(xds_obj, s=1, options=list()) {
+change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$MY_obj[[s]], with(options,{
     xds_obj$MY_obj[[s]]$f_obj$f = f

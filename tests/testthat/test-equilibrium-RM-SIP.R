@@ -50,7 +50,6 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
 
 
   # human PfPR and H
-  foi <- rnorm(2, 1/500, .002)
   H <- rpois(n = nStrata, lambda = 1000)
   residence = c(1,2)
   searchWtsH = c(1,1)
@@ -58,27 +57,24 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   dg <- rbeta(nStrata, 80,20)
   TaR <- matrix(c(dg[1], 1-dg, dg[2]), 2, 2)
 
+  W <- F_W_available(searchWtsH, H, TaR)
+  beta <- F_beta(H, W, searchWtsH, TaR)
+  fqZ <- rep(2, nPatches)
+  eir <- as.vector(beta %*% fqZ)
+  foi <- b*eir
+
   params <- xds_setup(MYname = "macdonald", MYoptions = MYo,
                       Lname = "trivial", XHoptions = Xo,
-                      Xname = "SIP",
+                      XHname = "SIP",
                       TSoptions = list(name = TaR), Koptions=K_matrix,
                       HPop=H, membership=membership,
                       nPatches=nPatches, residence=residence)
   params <- check_MY(params, 1)
   steady_state_X(foi, H, params, 1) -> ssI
-  params <- change_XH_inits(params, 1, ssI)
+  params <- change_XH_inits(params, options=ssI, i=1)
 
   I <- ssI$I
   Px <- ssI$P
-
-  eir <- foi/b
-
-  # ambient pop
-  W <- F_W_available(searchWtsH, H, TaR)
-  beta <- F_beta(H, W, searchWtsH, TaR)
-
-  # biting distribution matrix
-  fqZ <- solve(beta) %*% eir
 
   # kappa
   kappa <- t(beta) %*% (I*c)
@@ -93,10 +89,10 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   Lambda <- Omega %*% M
 
   Lo = list(Lambda=Lambda)
-  params <- change_L_pars(params, 1, Lo)
+  params <- change_L_pars(params, options=Lo, s=1)
 
   steady_state_MY(Lambda, kappa, params, 1) -> ss
-  params <- change_MY_inits(params, 1, ss)
+  params <- change_MY_inits(params, options=ss, s=1)
 
   params <- xds_solve(params, 730, 1)
 

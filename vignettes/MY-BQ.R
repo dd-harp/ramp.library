@@ -11,7 +11,7 @@ library(ramp.library)
 ## -----------------------------------------------------------------------------
 HPop = rep(1000, 3)
 residence = c(1:3) 
-model <- xds_setup(MYname="BQ", Lname="trivial", Xname = "trivial", residence=residence, HPop=HPop, nPatches=3)
+model <- xds_setup(MYname="BQ", Lname="trivial", XHname = "trivial", residence=residence, HPop=HPop, nPatches=3)
 
 ## -----------------------------------------------------------------------------
 get_K_matrix(model, "Kb")

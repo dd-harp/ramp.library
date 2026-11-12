@@ -131,13 +131,14 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SEIRV` (**XH**)
+#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SEIRV <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
@@ -150,12 +151,13 @@ change_XH_pars.SEIRV <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SEIRV <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SEIRV <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]]$inits,
     with(options,{
       xds_obj$XH_obj[[i]]$inits$S = S
@@ -211,13 +213,18 @@ make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0,
 
 
 
-#' @title Setup XH_obj.SEIRV
-#' @description Implements [setup_XH_inits] for the SEIRV model
+#' @title Setup initial values for `SEIRV` (**XH**)
+#' @description Set initial values for all the variables in the `SEIRV` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SEIRV] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEIRV = function(xds_obj, i=1, options=list()){
+setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIRV(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
@@ -332,16 +339,26 @@ steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
 
 
 
-#' @title Setup XH_obj.SEIRV
-#' @description Implements [setup_XH_obj] for the SEIRV model
+#' @title Set up `SEIRV` (**XH**)
+#' @description
+#'
+#' This sets up an `SEIRV` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SEIRV]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SEIRV], [make_XH_obj_SEIRV]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEIRV = function(Xname, residence, xds_obj, i, options=list()){
-  xds_obj$Xname = "SEIRV"
+setup_XH_obj.SEIRV = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SEIRV"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEIRV(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)

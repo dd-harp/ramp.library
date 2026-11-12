@@ -109,17 +109,27 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Setup XH_obj.SEISd
-#' @description Implements [setup_XH_obj] for the SEISd model
+#' @title Set up `SEISd` (**XH**)
+#' @description
+#'
+#' This sets up an `SEISd` model object for the **XH** module for the \eqn{i^{th}} host species
+#' + the object is created by [make_XH_obj_SEISd]
+#' + the initial conditions are set by [setup_XH_inits]
+#' + `options` is passed to both to override the defaults
+#'
+#' @seealso [SEISd], [make_XH_obj_SEISd]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
 #' @inheritParams ramp.xds::setup_XH_obj
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_obj.SEISd = function(Xname, residence, xds_obj, i, options=list()){
+setup_XH_obj.SEISd = function(XHname, residence, xds_obj, options=list(), i=1){
   xds_obj = ode_to_dde(xds_obj)
-  xds_obj$Xname = "SEISd"
+  xds_obj$XHname = "SEISd"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEISd(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, i, options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
   xds_obj <- setup_skillset_XH(xds_obj, i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)
@@ -155,13 +165,14 @@ make_XH_obj_SEISd = function(nStrata, options=list(),
   })}
 
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @title Get parameters for `SEISd` (**XH**)
+#' @description For the `SEISd` module (**XH**) for the \eqn{i^{th}} species,
+#' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_pars.SEISd <- function(xds_obj, i=1, options=list()) {
+change_XH_pars.SEISd <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]], with(options,{
     xds_obj$XH_obj[[i]]$b <- b
     xds_obj$XH_obj[[i]]$c <- c
@@ -172,12 +183,13 @@ change_XH_pars.SEISd <- function(xds_obj, i=1, options=list()) {
 
 
 #' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj[[i]]`.
+#' @description For the `SEISd` module (**XH**) for the \eqn{i^{th}} species,
+#' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
-change_XH_inits.SEISd <- function(xds_obj, i=1, options=list()) {
+change_XH_inits.SEISd <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]]$inits,
     with(options,{
       xds_obj$XH_obj[[i]]$inits[[i]]$H = H
@@ -273,13 +285,18 @@ get_XH_vars.SEISd <- function(y, xds_obj, i) {
     return(list(S=S,E=E,I=I,H=H,cases=cases))})
 }
 
-#' @title Setup initial values for `SEISd`
-#' @description Implements [setup_XH_inits] for the SEISd model
+#' @title Setup initial values for `SEISd` (**XH**)
+#' @description Set initial values for all the variables in the `SEISd` module
+#' (**XH**) for the \eqn{i^{th}} species.
+#' + [make_XH_inits_SEISd] supplies default values
+#' + The values in `options` overwrite the defaults
+#' + To inspect variable names, use [get_XH_inits] or
+#' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @return a [list] vector
 #' @keywords internal
 #' @export
-setup_XH_inits.SEISd = function(xds_obj, i=1, options=list()){
+setup_XH_inits.SEISd = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEISd(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
