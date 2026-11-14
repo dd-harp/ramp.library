@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{dXHdt.SEIS}
 \alias{dXHdt.SEIS}
-\title{\eqn{\cal XH} Component Derivatives for the \code{SEIS} Model}
+\title{Compute derivatives for \code{SEIS} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEIS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,49 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the SEIS model
+Computes derivatives for the \code{SEIS} module (\strong{XH}).
+}
+\section{Demography}{
+
+Demographic changes (\strong{H}) are given by:
+\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+This model has no parameter or terms to describe disease-induced mortality.
+\describe{
+\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
+\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+}
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
+\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
+Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+}
+}
+
+\section{Infection Dynamics}{
+
+Exposed individuals become infectious at the per-capita rate \eqn{\nu}.
+Infections clear naturally at the per-capita rate \eqn{r}, after which
+individuals are susceptible to infection.
+Incident infections are progression from exposed to infectious, \eqn{\nu E},
+not new exposures \eqn{hS}. A fraction \eqn{\rho} of incident infections
+are treated and cured, returning directly to susceptibility.
+Prevalent infections are treated and cured at rate \eqn{\sigma}.
+Mass treatment adds clearance at rate \eqn{\Xi(t) = mda(t) + msat(t)}.
+Treatment does not change the exposed-state equation and does not add a
+\eqn{\rho h} clearance term to prevalent infections.
+\deqn{
+\begin{array}{rl}
+dE/dt &= hS - \nu E - \mathbf{D}(E) \\
+dI/dt &= (1-\rho)\nu E - (r+\sigma+\Xi(t))I - \mathbf{D}(I) \\
+\end{array}}
+where \eqn{h} is the force of infection and \eqn{S = H - E - I}.
+The mortality function uses the same model for \eqn{E} and \eqn{I} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

@@ -14,16 +14,29 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} object
 }
 \description{
 Set initial values for all the variables in the \code{SEIS} module
-(\strong{XH}) for the \eqn{i^{th}} species.
+(\strong{XH}) for the \eqn{i^{th}} host species.
 \itemize{
 \item \link{make_XH_inits_SEIS} supplies default values
 \item The values in \code{options} override the defaults
 \item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
 see the inline module documentation.
 }
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

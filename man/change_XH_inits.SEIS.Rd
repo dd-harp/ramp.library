@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{change_XH_inits.SEIS}
 \alias{change_XH_inits.SEIS}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SEIS} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SEIS}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,20 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SEIS} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SEIS} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

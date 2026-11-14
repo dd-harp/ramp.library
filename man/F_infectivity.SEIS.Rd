@@ -17,6 +17,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_infectivity]{F_infectivity} for the SEIS model.
+Implements \link[ramp.xds:F_infectivity]{F_infectivity} for the \code{SEIS} model.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

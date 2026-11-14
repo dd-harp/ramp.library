@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{parse_XH_orbits.SEISd}
 \alias{parse_XH_orbits.SEISd}
-\title{parse the output of deSolve and return variables for the SEISd model}
+\title{Parse outputs for \code{SEISd} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SEISd}(outputs, xds_obj, i)
 }
@@ -17,6 +17,9 @@
 none
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SEISd model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SEISd} model
+}
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

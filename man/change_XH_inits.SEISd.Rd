@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{change_XH_inits.SEISd}
 \alias{change_XH_inits.SEISd}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SEISd} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SEISd}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,25 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SEISd} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SEISd} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+\item{\code{cases}}{cumulative exposures used to track delayed progression}
+}
+This implementation includes human demographic change, progressive
+stratification, and parameters to model detection by diagnostic methods.
+It also includes parameters for treating and curing infections and functions
+to model mass treatment.
+}
+
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

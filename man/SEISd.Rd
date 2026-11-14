@@ -2,11 +2,11 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{SEISd}
 \alias{SEISd}
-\title{The \code{SEISd} module for the XH component}
+\title{The \code{SEISd} module for the \strong{XH} component}
 \description{
 Implements the \strong{XH} component using a delay Susceptible-Exposed-Infectious-Susceptible
-(SEISd) model of human infection dynamics. This is a delay differential equation
-(or delay difference equation) version of the SEIS model, in which the exposed
+(\code{SEISd}) model of human infection dynamics. This is a delay differential equation
+version of the \code{SEIS} model, in which the exposed
 period is modelled as a fixed delay \eqn{\nu} rather than an exponential rate.
 }
 \section{State Variables}{
@@ -15,32 +15,118 @@ period is modelled as a fixed delay \eqn{\nu} rather than an exponential rate.
 \item{\code{H}}{total human (or host) population density}
 \item{\code{E}}{density of exposed (infected but not yet infectious) humans}
 \item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+\item{\code{cases}}{cumulative exposures used to track delayed progression}
 }
-Note: susceptible density \eqn{S = H - E - I}.
+This implementation includes human demographic change, progressive
+stratification, and parameters to model detection by diagnostic methods.
+It also includes parameters for treating and curing infections and functions
+to model mass treatment.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+In the \code{SEISd} module, there is no effect of pre-erythrocytic immunity, so
+a constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+The parameters returned by \link{get_XH_pars.SEISd} and modifiable by
+\link{change_XH_pars.SEISd} describe the dynamics or detection by diagnostic methods.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{intrinsic incubation period (fixed delay, in days)}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Infections clear naturally at the per-capita rate \eqn{r}, after which
+individuals are susceptible to infection.
+Incident infections are delayed progression \eqn{C(t)}, not new exposures
+\eqn{hS}. A fraction \eqn{\rho} of incident infections are treated and
+cured, returning directly to susceptibility. Prevalent infections are treated
+and cured at rate \eqn{\sigma}; mass treatment adds clearance at rate
+\eqn{\Xi(t) = mda(t) + msat(t)}. Treatment does not change the exposed-state
+equation or exposure history, and does not add a \eqn{\rho h} clearance term.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dE/dt &= hS - \dot{E}(t-\nu) + D \cdot E \\
-dI/dt &= \dot{E}(t-\nu) - rI + D \cdot I \\
+dE/dt &= hS - C(t) - \mathbf{D}(E) \\
+dI/dt &= (1-\rho)C(t) - (r+\sigma+\Xi(t))I - \mathbf{D}(I) \\
+d\,\mathrm{cases}/dt &= hS \\
 \end{array}}
 where \eqn{h} is the force of infection, \eqn{S = H - E - I}, and
-\eqn{\dot{E}(t-\nu)} is the rate cases were exposed \eqn{\nu} days ago
+\eqn{C(t)} is zero for \eqn{t \leq \nu}; otherwise it is the
+rate of exposure \eqn{h(t-\nu)S(t-\nu)} recorded \eqn{\nu} days ago
 (computed via \link[deSolve:lagderiv]{deSolve::lagderiv}).
+The mortality function uses the same model for \eqn{E} and \eqn{I} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
 }
 
+\section{Demography}{
+
+Demographic changes (\strong{H}) are given by:
+\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+This model has no parameter or terms to describe disease-induced mortality.
+\describe{
+\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
+\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+}
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
+\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
+Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+}
+}
+
+\section{Prevalence}{
+
+\describe{
+\item{\eqn{x}}{True prevalence is \eqn{x = I/H}}
+\item{\eqn{x_{lm}}}{Expected prevalence by light microscopy is \eqn{q_{lm}\; x}}
+\item{\eqn{x_{rdt}}}{Expected prevalence by RDT is \eqn{q_{rdt}\; x}}
+\item{\eqn{x_{pcr}}}{Expected prevalence by PCR is \eqn{q_{pcr}\; x}}
+}
+These prevalence functions count infectious individuals, not exposed individuals.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+Mass treatment clears infectious individuals, returning them to susceptibility;
+exposed individuals are unaffected. At basic setup, \eqn{\Xi(t)=0}.
+To configure mass treatment, see \link[ramp.xds:setup_mass_treatment]{setup_mass_treatment}.
+\describe{
+\item{\code{mda(t)}}{mass drug administration}
+\item{\code{msat(t)}}{mass screen and treat}
+}
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SEISd}, \link{setup_XH_obj.SEISd}
+\item Dynamics: \link{dXHdt.SEISd}
+\item Parameters: \link{get_XH_pars.SEISd}, \link{change_XH_pars.SEISd}
+\item Variables: \link{make_XH_inits_SEISd}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SEISd}, \link{setup_XH_inits.SEISd}
+\item \link{SEIS}, \link[ramp.xds:SIS]{SIS}
+}
+}

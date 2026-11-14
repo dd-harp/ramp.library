@@ -2,12 +2,21 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{SEIS}
 \alias{SEIS}
-\title{The \code{SEIS} module for the XH component}
+\title{The \code{SEIS} module for the \strong{XH} component}
 \description{
-Implements the \strong{XH} component using a Susceptible-Exposed-Infectious-Susceptible
-(SEIS) compartmental model of human infection dynamics. This is an SEI model
-without lasting immunity: individuals return directly to susceptibility after
-clearing infection.
+\code{SEIS} implements the S-E-I-S family of compartmental models for malaria as a
+system of differential equations: individuals are susceptible \eqn{(S)},
+exposed (infected but not yet infectious) \eqn{(E)}, or infectious \eqn{(I)}.
+After clearing infection, individuals return directly to susceptibility.
+
+This implementation includes:
+\itemize{
+\item parameters to model treating and curing infections;
+\item functions to model mass treatment;
+\item functions to model human demographic change;
+\item support for progressive stratification;
+\item parameters to model detection by diagnostic methods.
+}
 }
 \section{State Variables}{
 
@@ -15,30 +24,111 @@ clearing infection.
 \item{\code{H}}{total human (or host) population density}
 \item{\code{E}}{density of exposed (infected but not yet infectious) humans}
 \item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
 }
-Note: susceptible density \eqn{S = H - E - I}.
+}
+
+\section{Demography}{
+
+Demographic changes (\strong{H}) are given by:
+\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+This model has no parameter or terms to describe disease-induced mortality.
+\describe{
+\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
+\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+}
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
+\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
+Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+}
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+In the \code{SEIS} module, there is no effect of pre-erythrocytic immunity, so
+a constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
+\link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{rate of progression from exposed to infectious}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Exposed individuals become infectious at the per-capita rate \eqn{\nu}.
+Infections clear naturally at the per-capita rate \eqn{r}, after which
+individuals are susceptible to infection.
+Incident infections are progression from exposed to infectious, \eqn{\nu E},
+not new exposures \eqn{hS}. A fraction \eqn{\rho} of incident infections
+are treated and cured, returning directly to susceptibility.
+Prevalent infections are treated and cured at rate \eqn{\sigma}.
+Mass treatment adds clearance at rate \eqn{\Xi(t) = mda(t) + msat(t)}.
+Treatment does not change the exposed-state equation and does not add a
+\eqn{\rho h} clearance term to prevalent infections.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dE/dt &= hS - \nu E + D \cdot E \\
-dI/dt &= \nu E - rI + D \cdot I \\
+dE/dt &= hS - \nu E - \mathbf{D}(E) \\
+dI/dt &= (1-\rho)\nu E - (r+\sigma+\Xi(t))I - \mathbf{D}(I) \\
 \end{array}}
 where \eqn{h} is the force of infection and \eqn{S = H - E - I}.
+The mortality function uses the same model for \eqn{E} and \eqn{I} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
 }
 
+\section{Prevalence}{
+
+\describe{
+\item{\eqn{x}}{True prevalence is \eqn{x = I/H}}
+\item{\eqn{x_{lm}}}{Expected prevalence by light microscopy is \eqn{q_{lm}\; x}}
+\item{\eqn{x_{rdt}}}{Expected prevalence by RDT is \eqn{q_{rdt}\; x}}
+\item{\eqn{x_{pcr}}}{Expected prevalence by PCR is \eqn{q_{pcr}\; x}}
+}
+These prevalence functions count infectious individuals, not exposed individuals.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+Mass treatment clears infectious individuals, returning them to susceptibility;
+exposed individuals are unaffected. At basic setup, \eqn{\Xi(t)=0}.
+To configure mass treatment, see \link[ramp.xds:setup_mass_treatment]{setup_mass_treatment}.
+\describe{
+\item{\code{mda(t)}}{mass drug administration}
+\item{\code{msat(t)}}{mass screen and treat}
+}
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SEIS}, \link{setup_XH_obj.SEIS}
+\item Dynamics: \link{dXHdt.SEIS}
+\item Parameters: \link{get_XH_pars.SEIS}, \link{change_XH_pars.SEIS}
+\item Variables: \link{make_XH_inits_SEIS}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SEIS}, \link{setup_XH_inits.SEIS}
+\item \link[ramp.xds:SIS]{SIS}
+}
+}

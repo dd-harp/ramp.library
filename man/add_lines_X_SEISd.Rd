@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{add_lines_X_SEISd}
 \alias{add_lines_X_SEISd}
-\title{Add lines for the density of infected individuals for the SEISd model}
+\title{Add lines for the density of infected individuals for the \code{SEISd} model}
 \usage{
 add_lines_X_SEISd(time, XH, nStrata, clrs = c("darkblue", "darkred"), llty = 1)
 }
@@ -18,6 +18,9 @@ add_lines_X_SEISd(time, XH, nStrata, clrs = c("darkblue", "darkred"), llty = 1)
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
-Add lines for the density of infected individuals for the SEISd model
+Add lines for the density of infected individuals for the \code{SEISd} model
+}
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{xds_plot_X.SEIS}
 \alias{xds_plot_X.SEIS}
-\title{Plot the density of infected individuals for the SEIS model}
+\title{Plot the density of infected individuals for the \code{SEIS} model}
 \usage{
 \method{xds_plot_X}{SEIS}(
   xds_obj,
@@ -24,6 +24,9 @@
 \item{add}{plot axes only if FALSE}
 }
 \description{
-Plot the density of infected individuals for the SEIS model
+Plot the density of infected individuals for the \code{SEIS} model
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

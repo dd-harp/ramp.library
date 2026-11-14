@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{make_XH_obj_SEIS}
 \alias{make_XH_obj_SEIS}
-\title{Make parameters for SEIS xde human model, with defaults}
+\title{Make a \code{SEIS} \strong{XH} model object}
 \usage{
 make_XH_obj_SEIS(
   nStrata,
@@ -10,7 +10,12 @@ make_XH_obj_SEIS(
   b = 0.55,
   r = 1/180,
   nu = 1/14,
-  c = 0.15
+  c = 0.15,
+  q_lm = 0.8,
+  q_rdt = 0.8,
+  q_pcr = 0.9,
+  rho = 0,
+  sigma = 0
 )
 }
 \arguments{
@@ -25,11 +30,41 @@ make_XH_obj_SEIS(
 \item{nu}{1/latent period}
 
 \item{c}{transmission probability (efficiency) from human to mosquito}
+
+\item{q_lm}{test positivity by light microscopy}
+
+\item{q_rdt}{test positivity by RDT}
+
+\item{q_pcr}{test positivity by PCR}
+
+\item{rho}{the fraction of incident infections that are treated and cured}
+
+\item{sigma}{the rate prevalent infections are treated and cured}
 }
 \value{
-a \link{list}
+an \strong{XH} model object
 }
 \description{
-Make parameters for SEIS xde human model, with defaults
+Make a \code{SEIS} \strong{XH} model object
+}
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
+\link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{nu}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
+}
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

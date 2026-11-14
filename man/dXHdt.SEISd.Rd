@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{dXHdt.SEISd}
 \alias{dXHdt.SEISd}
-\title{Compute derivatives for the \strong{XH} module \code{SEISd}}
+\title{Compute derivatives for \code{SEISd} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEISd}(t, y, xds_obj, i)
 }
@@ -19,6 +19,51 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the SEISd model
+Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEISd} model
+}
+\section{Demography}{
+
+Demographic changes (\strong{H}) are given by:
+\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+This model has no parameter or terms to describe disease-induced mortality.
+\describe{
+\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
+\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+}
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
+\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
+Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+}
+}
+
+\section{Infection Dynamics}{
+
+Infections clear naturally at the per-capita rate \eqn{r}, after which
+individuals are susceptible to infection.
+Incident infections are delayed progression \eqn{C(t)}, not new exposures
+\eqn{hS}. A fraction \eqn{\rho} of incident infections are treated and
+cured, returning directly to susceptibility. Prevalent infections are treated
+and cured at rate \eqn{\sigma}; mass treatment adds clearance at rate
+\eqn{\Xi(t) = mda(t) + msat(t)}. Treatment does not change the exposed-state
+equation or exposure history, and does not add a \eqn{\rho h} clearance term.
+\deqn{
+\begin{array}{rl}
+dE/dt &= hS - C(t) - \mathbf{D}(E) \\
+dI/dt &= (1-\rho)C(t) - (r+\sigma+\Xi(t))I - \mathbf{D}(I) \\
+d\,\mathrm{cases}/dt &= hS \\
+\end{array}}
+where \eqn{h} is the force of infection, \eqn{S = H - E - I}, and
+\eqn{C(t)} is zero for \eqn{t \leq \nu}; otherwise it is the
+rate of exposure \eqn{h(t-\nu)S(t-\nu)} recorded \eqn{\nu} days ago
+(computed via \link[deSolve:lagderiv]{deSolve::lagderiv}).
+The mortality function uses the same model for \eqn{E} and \eqn{I} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
+}
+
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{get_XH_vars.SEIS}
 \alias{get_XH_vars.SEIS}
-\title{Return the variables as a list}
+\title{List variables for \code{SEIS} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SEIS}(y, xds_obj, i)
 }
@@ -18,5 +18,8 @@ a \link{list}
 }
 \description{
 This method dispatches on the type of \code{xds_obj$XH_obj}
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

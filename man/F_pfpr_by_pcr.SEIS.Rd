@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{F_pfpr_by_pcr.SEIS}
 \alias{F_pfpr_by_pcr.SEIS}
-\title{Compute the prevalence of infection by pcr}
+\title{Compute the prevalence of infection by PCR}
 \usage{
 \method{F_pfpr_by_pcr}{SEIS}(vars, XH_obj)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SEIS model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SEIS} model.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

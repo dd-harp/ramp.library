@@ -21,4 +21,7 @@ a module's capabilities.
 \note{
 This method dispatches on \code{class(xds_obj$XH_obj)}
 }
+\seealso{
+\link{SEISd}
+}
 \keyword{internal}

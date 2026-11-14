@@ -15,6 +15,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SEIS model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SEIS} model.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

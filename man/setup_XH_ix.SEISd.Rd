@@ -15,6 +15,9 @@
 none
 }
 \description{
-Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the SEISd model.
+Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the \code{SEISd} model.
+}
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{make_XH_inits_SEIS}
 \alias{make_XH_inits_SEIS}
-\title{Make initial values for the SEIS xde human model, with defaults}
+\title{Make initial values for \code{SEIS} (\strong{XH})}
 \usage{
 make_XH_inits_SEIS(nStrata, options = list(), H = 1000, E = 0, I = 1)
 }
@@ -13,14 +13,27 @@ make_XH_inits_SEIS(nStrata, options = list(), H = 1000, E = 0, I = 1)
 
 \item{H}{the initial human population density}
 
-\item{E}{the initial values of the parameter E}
+\item{E}{the initial number of exposed humans}
 
-\item{I}{the initial values of the parameter I}
+\item{I}{the initial number of infectious humans}
 }
 \value{
 a \link{list}
 }
 \description{
-Make initial values for the SEIS xde human model, with defaults
+Make initial values for \code{SEIS} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

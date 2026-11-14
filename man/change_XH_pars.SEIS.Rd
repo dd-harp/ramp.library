@@ -17,7 +17,27 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SEIS} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SEIS} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
+\link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{nu}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
+}
+}
+
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}
