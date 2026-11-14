@@ -551,7 +551,7 @@ that define state transitions in <code>dLdt</code> or
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Lake parameters for newLname human model, with defaults</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches is the number of population strata</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could overwrite defaults</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could override defaults</span></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @param p1 the first parameter </span></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @param p2 the second parameter </span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
@@ -706,16 +706,16 @@ this function.</p>
 <h3>make_L_inits</h3>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&#39; @title Lake initial values for the XHname human model, with defaults</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches the number of strata in the model</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to overwrite defaults</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @param L0 the initial value for L </span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @param Y0 the initial value for L </span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to override defaults</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @param L the initial value for L </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @param Y the initial value for L </span></span>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>make_L_inits_newLname <span class="ot">=</span> <span class="cf">function</span>(nPatches, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">L0=</span><span class="cn">NULL</span>, <span class="at">Y0=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(L0))</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(Y0))</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  L <span class="ot">=</span> <span class="fu">checkIt</span>(L0, nPatches)</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">checkIt</span>(Y0, nPatches)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>make_L_inits_newLname <span class="ot">=</span> <span class="cf">function</span>(nPatches, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">L=</span><span class="cn">NULL</span>, <span class="at">Y=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(L))</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(Y))</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  L <span class="ot">=</span> <span class="fu">checkIt</span>(L, nPatches)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">checkIt</span>(Y, nPatches)</span>
 <span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">L=</span>L, <span class="at">Y=</span>Y, ...))</span>
 <span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>})}</span></code></pre></div>
 </div>

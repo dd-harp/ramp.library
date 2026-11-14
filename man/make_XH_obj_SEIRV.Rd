@@ -19,7 +19,7 @@ make_XH_obj_SEIRV(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{alpha}{proportion of vaccinated humans}
 

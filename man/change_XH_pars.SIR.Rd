@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{change_XH_pars.SIR}
 \alias{change_XH_pars.SIR}
-\title{Get parameters for \code{SIR} (\strong{XH})}
+\title{Change parameters for \code{SIR} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIR}(xds_obj, options = list(), i = 1)
 }

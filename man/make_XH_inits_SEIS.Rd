@@ -9,7 +9,7 @@ make_XH_inits_SEIS(nStrata, options = list(), H = 1000, E = 0, I = 1)
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{options}{a \link{list} to overwrite defaults}
+\item{options}{a \link{list} to override defaults}
 
 \item{H}{the initial human population density}
 

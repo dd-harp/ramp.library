@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{change_MY_pars.SEI}
 \alias{change_MY_pars.SEI}
-\title{Return the parameters as a list}
+\title{Change parameters for \code{SEI} (\strong{MY})}
 \usage{
 \method{change_MY_pars}{SEI}(xds_obj, options = list(), s = 1)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{change_XH_pars.garki}
 \alias{change_XH_pars.garki}
-\title{Get parameters for \code{garki} (\strong{XH})}
+\title{Change parameters for \code{garki} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{garki}(xds_obj, options = list(), i = 1)
 }

@@ -151,7 +151,7 @@ setup_XH_obj.SIPd = function(XHname, residence, xds_obj, options=list(), i=1){
 
 #' @title Make parameters for SIPd human model, with defaults
 #' @param nStrata the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param b transmission probability (efficiency) from mosquito to human
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @param r recovery rate
@@ -181,7 +181,7 @@ make_XH_obj_SIPd = function(nStrata, options=list(),
   })}
 
 
-#' @title Get parameters for `SIPd` (**XH**)
+#' @title Change parameters for `SIPd` (**XH**)
 #' @description For the `SIPd` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -337,7 +337,7 @@ get_HTC.SIPd <- function(xds_obj, i) {
 #' @description Set initial values for all the variables in the `SIPd` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SIPd] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
@@ -351,7 +351,7 @@ setup_XH_inits.SIPd = function(xds_obj, options=list(), i=1){
 
 #' @title Make initial values for the SIPd human model, with defaults
 #' @param nStrata the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param H the initial human population density
 #' @param I the initial values of the parameter I
 #' @param P the initial values of the parameter P

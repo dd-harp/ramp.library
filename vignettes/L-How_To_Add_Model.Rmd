@@ -200,7 +200,7 @@ LEffectSizes.newLname <- function(t, y, xds_obj, s) {
 ```{r}
 #' @title Lake parameters for newLname human model, with defaults
 #' @param nPatches is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param p1 the first parameter 
 #' @param p2 the second parameter 
 #' @param p3 the third parameter 
@@ -361,16 +361,16 @@ setup_L_inits.newLname = function(xds_obj, options=list(), s=1){
 ```{r}
 #' @title Lake initial values for the XHname human model, with defaults
 #' @param nPatches the number of strata in the model
-#' @param options a [list] to overwrite defaults
-#' @param L0 the initial value for L 
-#' @param Y0 the initial value for L 
+#' @param options a [list] to override defaults
+#' @param L the initial value for L 
+#' @param Y the initial value for L 
 #' @return a [list]
 #' @export
-make_L_inits_newLname = function(nPatches, H, options = list(), L0=NULL, Y0=1){with(options,{
-  stopifnot(is.numeric(L0))
-  stopifnot(is.numeric(Y0))
-  L = checkIt(L0, nPatches)
-  Y = checkIt(Y0, nPatches)
+make_L_inits_newLname = function(nPatches, H, options = list(), L=NULL, Y=1){with(options,{
+  stopifnot(is.numeric(L))
+  stopifnot(is.numeric(Y))
+  L = checkIt(L, nPatches)
+  Y = checkIt(Y, nPatches)
   return(list(L=L, Y=Y, ...))
 })}
 ```

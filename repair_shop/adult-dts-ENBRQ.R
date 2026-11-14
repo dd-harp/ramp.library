@@ -88,7 +88,7 @@ setup_MYZpar.ENBRQ_dts = function(MYZname, pars, s, MYZopts=list()){
 
 #' @title Make parameters for ENBRQ_dts adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param MYZopts a [list] of values that overwrites the defaults
+#' @param MYZopts a [list] of values that overrides the defaults
 #' @param D number of time steps per day
 #' @param nR1 number of time steps in R1
 #' @param p daily mosquito survival
@@ -189,7 +189,7 @@ setup_MYZinits.ENBRQ_dts = function(pars, s, MYZopts=list()){
 #' @title Make inits for ENBRQ_dts adult mosquito model
 #' @param nPatches the number of patches in the model
 #' @param nR1 number of time steps in R1
-#' @param MYZopts a [list] of values that overwrites the defaults
+#' @param MYZopts a [list] of values that overrides the defaults
 #' @param E total null-parous, blood feeding mosquito density
 #' @param N total null-parous, blood feeding mosquito density
 #' @param B total parous, blood feeding mosquito density at each patch

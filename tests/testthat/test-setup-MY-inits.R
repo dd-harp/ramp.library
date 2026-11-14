@@ -7,7 +7,7 @@ test_that("library MY initial-value interfaces match the generic defaults", {
 
 test_that("library MY initial values accept positional, named and default arguments", {
   model <- xds_setup(MYname="BQ")
-  options <- list(Bu0=20)
+  options <- list(Bu=20)
   positional <- setup_MY_inits(model, options)
   expect_equal(positional, setup_MY_inits(model, options=options, s=1))
   expect_equal(positional$MY_obj[[1]]$inits$Bu, 20)

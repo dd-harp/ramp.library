@@ -216,7 +216,7 @@ setup_MY_obj.BQ = function(MYname, xds_obj, options=list(), s=1){
 
 #' @title Make parameters for RM ODE adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
@@ -277,7 +277,7 @@ get_MY_pars.BQ <- function(xds_obj, s=1) {
 }
 
 
-#' @title Return the parameters as a list
+#' @title Change parameters for `BQ` (**MY**)
 #' @description For the `BQ` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
@@ -308,7 +308,7 @@ change_MY_pars.BQ <- function(xds_obj, options=list(), s=1) {
 #' @description Set initial values for all the variables in the `BQ` module
 #' (**MY**) for the \eqn{s^{th}} species.
 #' + [make_MY_inits_BQ] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
@@ -322,25 +322,25 @@ setup_MY_inits.BQ = function(xds_obj, options=list(), s=1){
 
 #' @title Make inits for BQ adult mosquito model
 #' @param nPatches the number of patches in the model
-#' @param options a [list] of values that overwrites the defaults
-#' @param Bu0 total uninfected, not gravid mosquito density at each patch
-#' @param Qu0 total uninfected, gravid mosquito density at each patch
-#' @param By0 infected, not gravid mosquito density at each patch
-#' @param Qy0 infected, gravid mosquito density at each patch
-#' @param Bz0 infectious, not gravid mosquito density at each patch
-#' @param Qz0 infectious, gravid mosquito density at each patch
+#' @param options a [list] of values that overrides the defaults
+#' @param Bu total uninfected, not gravid mosquito density at each patch
+#' @param Qu total uninfected, gravid mosquito density at each patch
+#' @param By infected, not gravid mosquito density at each patch
+#' @param Qy infected, gravid mosquito density at each patch
+#' @param Bz infectious, not gravid mosquito density at each patch
+#' @param Qz infectious, gravid mosquito density at each patch
 #' @return a [list]
 #' @keywords internal
 #' @export
 make_MY_inits_BQ = function(nPatches, options = list(),
-                             Bu0=5, Qu0=1, By0=1, Qy0=1, Bz0=1, Qz0=1){
+                             Bu=5, Qu=1, By=1, Qy=1, Bz=1, Qz=1){
   with(options,{
-    Bu = checkIt(Bu0, nPatches)
-    Qu = checkIt(Qu0, nPatches)
-    By = checkIt(By0, nPatches)
-    Qy = checkIt(Qy0, nPatches)
-    Bz = checkIt(Bz0, nPatches)
-    Qz = checkIt(Qz0, nPatches)
+    Bu = checkIt(Bu, nPatches)
+    Qu = checkIt(Qu, nPatches)
+    By = checkIt(By, nPatches)
+    Qy = checkIt(Qy, nPatches)
+    Bz = checkIt(Bz, nPatches)
+    Qz = checkIt(Qz, nPatches)
 
     return(list(Bu=Bu, Qu=Qu, By=By, Qy=Qy, Bz=Bz, Qz=Qz))
   })}

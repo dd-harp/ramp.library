@@ -155,7 +155,7 @@ setup_XH_obj.SIP = function(XHname, residence, xds_obj, options=list(), i=1){
 
 #' @title Make parameters for SIP human model, with defaults
 #' @param nStrata the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param b transmission probability (efficiency) from mosquito to human
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @param r recovery rate
@@ -189,7 +189,7 @@ make_XH_obj_SIP = function(nStrata, options=list(),
 
 
 
-#' @title Get parameters for `SIP` (**XH**)
+#' @title Change parameters for `SIP` (**XH**)
 #' @description For the `SIP` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -347,7 +347,7 @@ get_HTC.SIP <- function(xds_obj, i) {
 #' @description Set initial values for all the variables in the `SIP` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SIP] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
@@ -361,7 +361,7 @@ setup_XH_inits.SIP = function(xds_obj, options=list(), i=1){
 
 #' @title Make initial values for the SIP human model, with defaults
 #' @param nStrata the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param H the initial human population density
 #' @param I the initial values of the parameter I
 #' @param P the initial values of the parameter P

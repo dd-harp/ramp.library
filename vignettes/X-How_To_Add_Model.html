@@ -493,7 +493,7 @@ that define state transitions in <code>dXHdt</code> or
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for newXHname human model, with defaults</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could overwrite defaults</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could override defaults</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @param p1 the first parameter </span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @param p2 the second parameter </span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
@@ -657,16 +657,16 @@ this function.</p>
 <h3>make_XH_inits</h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the XHname human model, with defaults</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata the number of strata in the model</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to overwrite defaults</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @param X10 the initial value for X1 </span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @param X20 the initial value for X1 </span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to override defaults</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @param X1 the initial value for X1 </span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @param X2 the initial value for X1 </span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_XH_inits_newXHname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">X10=</span><span class="cn">NULL</span>, <span class="at">X20=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X10))</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X20))</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  X1 <span class="ot">=</span> <span class="fu">checkIt</span>(X10, nStrata)</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  X2 <span class="ot">=</span> <span class="fu">checkIt</span>(X20, nStrata)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_XH_inits_newXHname <span class="ot">=</span> <span class="cf">function</span>(nStrata, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">X1=</span><span class="cn">NULL</span>, <span class="at">X2=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X1))</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(X2))</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  X1 <span class="ot">=</span> <span class="fu">checkIt</span>(X1, nStrata)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  X2 <span class="ot">=</span> <span class="fu">checkIt</span>(X2, nStrata)</span>
 <span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">X1=</span>X1, <span class="at">X2=</span>X2, ...))</span>
 <span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>})}</span></code></pre></div>
 </div>

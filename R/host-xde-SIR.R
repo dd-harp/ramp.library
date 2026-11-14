@@ -119,7 +119,7 @@ Update_XHt.SIR<- function(t, y, xds_obj, i) {
 
 #' @title Make initial values for the SIR human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param options a [list] to overwrite defaults
+#' @param options a [list] to override defaults
 #' @param H the initial value for H
 #' @param I the initial value for I
 #' @param R the initial values for R
@@ -157,7 +157,7 @@ change_XH_inits.SIR <- function(xds_obj, options=list(), i=1) {
 #' @description Set initial values for all the variables in the `SIR` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SIR] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
@@ -212,7 +212,7 @@ get_XH_vars.SIR <- function(y, xds_obj, i) {
 
 #' @title Make parameters for SIR human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the the duration of an infection
 #' @param c the proportion of bites on infected humans that infect a mosquito
@@ -263,7 +263,7 @@ setup_XH_obj.SIR = function(XHname, residence, xds_obj, options=list(), i=1){
   return(xds_obj)
 }
 
-#' @title Get parameters for `SIR` (**XH**)
+#' @title Change parameters for `SIR` (**XH**)
 #' @description For the `SIR` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars

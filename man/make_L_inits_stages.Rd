@@ -18,7 +18,7 @@ make_L_inits_stages(
 \arguments{
 \item{nHabitats}{the number of habitats in the model}
 
-\item{options}{a \link{list} that overwrites default values}
+\item{options}{a \link{list} that overrides default values}
 
 \item{E}{initial egg density}
 

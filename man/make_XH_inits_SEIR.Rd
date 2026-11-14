@@ -9,7 +9,7 @@ make_XH_inits_SEIR(nStrata, options = list(), H = 1000, I = 1, E = 0, R = 1)
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{options}{a \link{list} to overwrite defaults}
+\item{options}{a \link{list} to override defaults}
 
 \item{H}{the initial value for H}
 

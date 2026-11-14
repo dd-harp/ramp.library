@@ -24,7 +24,7 @@ F_take_drugs.func <- function(t, y, Xpars, take_drugs_mod) {
 #' @title Make a function to simulate mass treatment
 #' @description Mass treatment
 #' @param nStrata the number of population strata
-#' @param opts a [list] that overwrites default values
+#' @param opts a [list] that overrides default values
 #' @param scale a scaling parameter
 #' @param F_season a function describing a seasonal pattern over time
 #' @param season_par an object to configure a seasonality function using [make_function]

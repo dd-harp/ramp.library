@@ -244,7 +244,7 @@ setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
 
 #' @title Make parameters for RM ODE adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
@@ -352,7 +352,7 @@ get_MY_pars.BRQS <- function(xds_obj, s=1) {
   ))
 }
 
-#' @title Return the parameters as a list
+#' @title Change parameters for `BRQS` (**MY**)
 #' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
@@ -400,7 +400,7 @@ change_MY_pars.BRQS <- function(xds_obj, options=list(), s=1) {
 #' @description Set initial values for all the variables in the `BRQS` module
 #' (**MY**) for the \eqn{s^{th}} species.
 #' + [make_MY_inits_BRQS] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
@@ -414,7 +414,7 @@ setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
 
 #' @title Make inits for BRQS adult mosquito model
 #' @param nPatches the number of patches in the model
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param Su uninfected, sugar feeding mosquitoes
 #' @param Bu uninfected, blood feeding mosquitoes
 #' @param Ru uninfected, resting mosquitoes

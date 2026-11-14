@@ -131,7 +131,7 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Get parameters for `SEIRV` (**XH**)
+#' @title Change parameters for `SEIRV` (**XH**)
 #' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -190,7 +190,7 @@ steady_state_X.SEIRV_dts = function(foi, H, xds_obj, i=1){
 
 #' @title Make initial values for the SEIRV human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param options a [list] to overwrite defaults
+#' @param options a [list] to override defaults
 #' @param H the initial value for H
 #' @param E the initial value for E
 #' @param I the initial value for I
@@ -217,7 +217,7 @@ make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0,
 #' @description Set initial values for all the variables in the `SEIRV` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SEIRV] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
@@ -288,7 +288,7 @@ get_XH_vars.SEIRV <- function(y, xds_obj, i) {
 
 #' @title Make parameters for SEIRV human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the rate infections clear

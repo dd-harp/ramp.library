@@ -16,7 +16,7 @@ make_XH_obj_SIRS(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{b}{the proportion of infective bites that cause an infection}
 

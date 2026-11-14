@@ -21,7 +21,7 @@ Set initial values for all the variables in the \code{SIP} module
 (\strong{XH}) for the \eqn{i^{th}} species.
 \itemize{
 \item \link{make_XH_inits_SIP} supplies default values
-\item The values in \code{options} overwrite the defaults
+\item The values in \code{options} override the defaults
 \item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
 see the inline module documentation.
 }

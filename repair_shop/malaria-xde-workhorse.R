@@ -80,7 +80,7 @@ list_Xvars.workhorse <- function(y, pars, i) {
 
 #' @title Make parameters for workhorse human model, with defaults
 #' @param nStrata the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param Xopts a [list] that could override defaults
 #' @param tau the incubation period
 #' @param b the probability of infection, per infectious bite
 #' @param r the clearance rate
@@ -249,8 +249,8 @@ setup_Xix.workhorse <- function(pars, i) {with(pars,{
 
 #' @title Make initial values for the workhorse human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial population size
+#' @param Xopts a [list] to override defaults
+#' @param H the initial population size
 #' @param U the initial number uninfected
 #' @param A0 the initial number in U and A
 #' @param P the initial number chemoprotected and not infectious
@@ -266,7 +266,7 @@ setup_Xix.workhorse <- function(pars, i) {with(pars,{
 #' @param w exposure tracking variable
 #' @return a [list]
 #' @export
-make_Xinits_workhorse = function(nStrata, Xopts = list(), H0 = NULL,
+make_Xinits_workhorse = function(nStrata, Xopts = list(), H = NULL,
                                  U = 180,  A0 = 13, P = 11,  G = 3,
                                  I1 = 20, I2 = 40, I3 = 80, I4 = 100,
                                  A1 = 2, A2 = 4, A3 = 8, A4 = 12,

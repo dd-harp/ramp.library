@@ -21,7 +21,7 @@ make_MY_obj_BQm(
 \arguments{
 \item{nPatches}{is the number of patches, an integer}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
 \item{eip}{extrinsic incubation period}
 

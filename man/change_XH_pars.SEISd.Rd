@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{change_XH_pars.SEISd}
 \alias{change_XH_pars.SEISd}
-\title{Get parameters for \code{SEISd} (\strong{XH})}
+\title{Change parameters for \code{SEISd} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SEISd}(xds_obj, options = list(), i = 1)
 }

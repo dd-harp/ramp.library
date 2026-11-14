@@ -93,7 +93,7 @@ setup_Linits.stages_dts = function(pars, s, Lopts=list()){
 
 #' @title Make parameters for stages_dts competition aquatic mosquito model
 #' @param nHabitats the number of habitats in the model
-#' @param Lopts a [list] that overwrites default values
+#' @param Lopts a [list] that overrides default values
 #' @param psi1 maturation rates for L1 in each aquatic habitat
 #' @param psi2 maturation rates for L2 in each aquatic habitat
 #' @param psi3 maturation rates for L3 in each aquatic habitat
@@ -160,7 +160,7 @@ make_Lpar_stages_dts = function(nHabitats, Lopts=list(),
 
 #' @title Make inits for stages_dts competition aquatic mosquito model
 #' @param nHabitats the number of habitats in the model
-#' @param Lopts a [list] that overwrites default values
+#' @param Lopts a [list] that overrides default values
 #' @param L1 initial conditions
 #' @param L2 initial conditions
 #' @param L3 initial conditions

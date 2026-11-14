@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{change_MY_pars.BQ}
 \alias{change_MY_pars.BQ}
-\title{Return the parameters as a list}
+\title{Change parameters for \code{BQ} (\strong{MY})}
 \usage{
 \method{change_MY_pars}{BQ}(xds_obj, options = list(), s = 1)
 }

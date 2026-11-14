@@ -17,7 +17,7 @@ make_XH_inits_SEIRV(
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{options}{a \link{list} to overwrite defaults}
+\item{options}{a \link{list} to override defaults}
 
 \item{H}{the initial value for H}
 

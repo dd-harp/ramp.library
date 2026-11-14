@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{change_XH_pars.SEIRV}
 \alias{change_XH_pars.SEIRV}
-\title{Get parameters for \code{SEIRV} (\strong{XH})}
+\title{Change parameters for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SEIRV}(xds_obj, options = list(), i = 1)
 }

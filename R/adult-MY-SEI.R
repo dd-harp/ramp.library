@@ -150,7 +150,7 @@ setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
 }
 
 
-#' @title Return the parameters as a list
+#' @title Change parameters for `SEI` (**MY**)
 #' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_pars
@@ -267,7 +267,7 @@ get_MY_vars.SEI <- function(y, xds_obj, s){
 #' @description Set initial values for all the variables in the `SEI` module
 #' (**MY**) for the \eqn{s^{th}} species.
 #' + [make_MY_inits_SEI] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_MY_inits
@@ -282,7 +282,7 @@ setup_MY_inits.SEI = function(xds_obj, options=list(), s=1){
 
 #' @title Make inits for SEI adult mosquito model
 #' @param nPatches the number of patches in the model
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param M total mosquito density at each patch
 #' @param Y total infected mosquito density at each patch
 #' @param Z infectious mosquito density at each patch
@@ -342,7 +342,7 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
   return(list(M=M, Z=Z, Y=Y, y=y, z=z, fqZ=f*q*Z, fqM=f*q*M))
 })}
 
-#' @title Return the parameters as a list
+#' @title Change parameters for `SEI` (**MY**)
 #' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams change_MY_pars
@@ -371,7 +371,7 @@ change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
 
 #' @title Make parameters for SEI ODE adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param eip the extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma emigration rate

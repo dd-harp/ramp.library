@@ -9,7 +9,7 @@ make_XH_inits_SIP(nStrata, options = list(), H = 1000, I = 1, P = 0)
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{H}{the initial human population density}
 

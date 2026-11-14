@@ -65,7 +65,7 @@ Update_MYt.newXHname<- function(t, y, xds_obj, s) {
 ## -----------------------------------------------------------------------------
 #' @title Make parameters for newXHname human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param p1 the first parameter 
 #' @param p2 the second parameter 
 #' @param p3 the third parameter 
@@ -178,16 +178,16 @@ setup_XH_inits.newXHname = function(xds_obj, options=list(), i=1){
 ## -----------------------------------------------------------------------------
 #' @title Make initial values for the XHname human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param options a [list] to overwrite defaults
-#' @param X10 the initial value for X1 
-#' @param X20 the initial value for X1 
+#' @param options a [list] to override defaults
+#' @param X1 the initial value for X1 
+#' @param X2 the initial value for X1 
 #' @return a [list]
 #' @export
-make_XH_inits_newXHname = function(nStrata, options = list(), X10=NULL, X20=1){with(options,{
-  stopifnot(is.numeric(X10))
-  stopifnot(is.numeric(X20))
-  X1 = checkIt(X10, nStrata)
-  X2 = checkIt(X20, nStrata)
+make_XH_inits_newXHname = function(nStrata, options = list(), X1=NULL, X2=1){with(options,{
+  stopifnot(is.numeric(X1))
+  stopifnot(is.numeric(X2))
+  X1 = checkIt(X1, nStrata)
+  X2 = checkIt(X2, nStrata)
   return(list(X1=X1, X2=X2, ...))
 })}
 

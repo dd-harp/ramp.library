@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{change_XH_pars.SIPd}
 \alias{change_XH_pars.SIPd}
-\title{Get parameters for \code{SIPd} (\strong{XH})}
+\title{Change parameters for \code{SIPd} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIPd}(xds_obj, options = list(), i = 1)
 }

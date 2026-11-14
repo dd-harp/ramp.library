@@ -80,7 +80,7 @@ setup_Xpar.SIPmav3 = function(XHname, pars, i, Xopts=list()){
 
 #' @title Make parameters for SIPmav3_xde human model, with defaults
 #' @param nStrata the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param Xopts a [list] that could override defaults
 #' @param mod_b a string, the S3 class name for F_infect
 #' @param b_opts a list: options for setup_F_infect
 #' @param mod_c a string, the S3 class name for F_transmit
@@ -310,7 +310,7 @@ setup_Xinits.SIPmav3 = function(pars, H, i, Xopts=list()){
 
 #' @title Make initial values for a SIPmav3 human model, with defaults
 #' @param nStrata the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param Xopts a [list] that could override defaults
 #' @param H the initial human population density
 #' @param I the initial values of the variable I
 #' @param P the initial values of the variable P

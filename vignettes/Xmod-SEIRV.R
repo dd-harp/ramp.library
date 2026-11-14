@@ -47,23 +47,23 @@ xde_steady_state_X.SEIRV = function(foi, H, Xpar){with(Xpar,{
 
 #' @title Make initial values for the SEIRV human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param Xopts a [list] to overwrite defaults
-#' @param H0 the initial value for H
-#' @param S0 the initial value for S
-#' @param E0 the initial value for E
-#' @param I0 the initial value for I
-#' @param R0 the initial values for R
-#' @param V0 the initial values for V
+#' @param Xopts a [list] to override defaults
+#' @param H the initial value for H
+#' @param S the initial value for S
+#' @param E the initial value for E
+#' @param I the initial value for I
+#' @param R the initial values for R
+#' @param V the initial values for V
 #' @return a [list]
 #' @export
-make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E0=0,R0 = 1,V0 = 1){with(Xopts,{
-  if(is.null(S0)) S0 = H0-(E0+I0+R0+V0)
-  stopifnot(is.numeric(S0))
-  S = checkIt(S0, nStrata)
-  E = checkIt(E0, nStrata)
-  I = checkIt(I0, nStrata)
-  R = checkIt(R0, nStrata)
-  V = checkIt(V0, nStrata)
+make_Xinits_SEIRV = function(nStrata, Xopts = list(), H= NULL, S=NULL, I=1, E=0,R = 1,V = 1){with(Xopts,{
+  if(is.null(S)) S = H-(E+I+R+V)
+  stopifnot(is.numeric(S))
+  S = checkIt(S, nStrata)
+  E = checkIt(E, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
+  V = checkIt(V, nStrata)
   return(list(S=S, E=E, I=I, R =R,V=V))
 })}
 
@@ -78,7 +78,7 @@ make_Xinits_SEIRV = function(nStrata, Xopts = list(), H0= NULL, S0=NULL, I0=1, E
 #' @return a [list] vector
 #' @export
 setup_Xinits.SEIRV = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_SEIRV(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+  pars$Xinits[[i]] = with(pars, make_Xinits_SEIRV(pars$Hpar[[i]]$nStrata, Xopts, H=Hpar[[i]]$H))
   return(pars)
 }
 
@@ -161,7 +161,7 @@ get_inits_X.SEIRV <- function(pars, i){
 #' @export
 update_inits_X.SEIRV <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_SEIRV(pars, list(), S0=S,E0= E, I0=I, R0=R,V0 =V)
+    pars = make_Xinits_SEIRV(pars, list(), S=S,E= E, I=I, R=R,V =V)
     return(pars)
   })}
 
@@ -169,7 +169,7 @@ update_inits_X.SEIRV <- function(pars, y0, i) {
 
 #' @title Make parameters for SEIRV human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param Xopts a [list] that could override defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the the duration of an infection

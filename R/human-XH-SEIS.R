@@ -164,7 +164,7 @@ setup_XH_obj.SEIS = function(XHname, residence, xds_obj, options=list(), i=1){
 
 #' @title Make parameters for SEIS xde human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param b transmission probability (efficiency) from mosquito to human
 #' @param r recovery rate
 #' @param nu 1/latent period
@@ -188,7 +188,7 @@ make_XH_obj_SEIS = function(nStrata, options=list(),
   })}
 
 
-#' @title Get parameters for `SEIS` (**XH**)
+#' @title Change parameters for `SEIS` (**XH**)
 #' @description For the `SEIS` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -254,7 +254,7 @@ F_infectivity.SEIS <- function(y, xds_obj, i) {
 
 #' @title Make initial values for the SEIS xde human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param options a [list] to overwrite defaults
+#' @param options a [list] to override defaults
 #' @param H the initial human population density
 #' @param E the initial values of the parameter E
 #' @param I the initial values of the parameter I
@@ -306,7 +306,7 @@ get_XH_vars.SEIS <- function(y, xds_obj, i) {
 #' @description Set initial values for all the variables in the `SEIS` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SEIS] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits

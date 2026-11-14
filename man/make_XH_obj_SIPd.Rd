@@ -18,7 +18,7 @@ make_XH_obj_SIPd(
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{b}{transmission probability (efficiency) from mosquito to human}
 

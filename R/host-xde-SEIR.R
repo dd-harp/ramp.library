@@ -163,7 +163,7 @@ steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
 #' @description Set initial values for all the variables in the `SEIR` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_SEIR] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
@@ -177,7 +177,7 @@ setup_XH_inits.SEIR = function(xds_obj, options=list(), i=1){
 
 #' @title Make initial values for the SEIR human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param options a [list] to overwrite defaults
+#' @param options a [list] to override defaults
 #' @param H the initial value for H
 #' @param E the initial value for E
 #' @param I the initial value for I
@@ -196,7 +196,7 @@ make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
 
 
 
-#' @title Get parameters for `SEIR` (**XH**)
+#' @title Change parameters for `SEIR` (**XH**)
 #' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -281,7 +281,7 @@ get_XH_vars.SEIR <- function(y, xds_obj, i) {
 
 #' @title Make parameters for SEIR human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
 #' @param r the the duration of an infection

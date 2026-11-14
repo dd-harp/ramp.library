@@ -179,7 +179,7 @@ make_XH_obj_garki = function(nStrata, options=list(), b=0.55,
   })}
 
 
-#' @title Get parameters for `garki` (**XH**)
+#' @title Change parameters for `garki` (**XH**)
 #' @description For the `garki` module (**XH**) for the \eqn{i^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
@@ -336,7 +336,7 @@ change_XH_inits.garki = function(xds_obj, options=list(), i=1){
 #' @description Set initial values for all the variables in the `garki` module
 #' (**XH**) for the \eqn{i^{th}} species.
 #' + [make_XH_inits_garki] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits

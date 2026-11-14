@@ -33,16 +33,16 @@ dXdt.newXHname <- function(t, y, pars, i) {
 
 #' @title Make initial values for the XHname human model, with defaults
 #' @param nStrata the number of strata in the model
-#' @param Xopts a [list] to overwrite defaults
-#' @param X10 the initial value for X1
-#' @param X20 the initial value for X1
+#' @param Xopts a [list] to override defaults
+#' @param X1 the initial value for X1
+#' @param X2 the initial value for X1
 #' @return a [list]
 #' @export
-make_Xinits_newXHname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(Xopts,{
-  stopifnot(is.numeric(X10))
-  stopifnot(is.numeric(X20))
-  X1 = checkIt(X10, nStrata)
-  X2 = checkIt(X20, nStrata)
+make_Xinits_newXHname = function(nStrata, Xopts = list(), X1=NULL, X2=1){with(Xopts,{
+  stopifnot(is.numeric(X1))
+  stopifnot(is.numeric(X2))
+  X1 = checkIt(X1, nStrata)
+  X2 = checkIt(X2, nStrata)
   return(list(X1=X1, X2=X2, ...))
 })}
 
@@ -56,7 +56,7 @@ make_Xinits_newXHname = function(nStrata, Xopts = list(), X10=NULL, X20=1){with(
 #' @return a [list] vector
 #' @export
 setup_Xinits.newXHname = function(pars, i, Xopts=list()){
-  pars$Xinits[[i]] = with(pars, make_Xinits_newXHname(pars$Hpar[[i]]$nStrata, Xopts, H0=Hpar[[i]]$H))
+  pars$Xinits[[i]] = with(pars, make_Xinits_newXHname(pars$Hpar[[i]]$nStrata, Xopts, H=Hpar[[i]]$H))
   return(pars)
 }
 
@@ -126,7 +126,7 @@ get_inits_X.newXHname <- function(pars, i){
 #' @export
 update_inits_X.newXHname <- function(pars, y0, i) {
   with(list_Xvars(y0, pars, i),{
-    pars = make_Xinits_newXHname(pars, list(), X10=X1, X20=X2, ...)
+    pars = make_Xinits_newXHname(pars, list(), X1=X1, X2=X2, ...)
     return(pars)
 })}
 
@@ -134,7 +134,7 @@ update_inits_X.newXHname <- function(pars, y0, i) {
 
 #' @title Make parameters for newXHname human model, with defaults
 #' @param nStrata is the number of population strata
-#' @param Xopts a [list] that could overwrite defaults
+#' @param Xopts a [list] that could override defaults
 #' @param p1 the first parameter
 #' @param p2 the second parameter
 #' @param p3 the third parameter

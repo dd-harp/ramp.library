@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{change_MY_pars.BRQS}
 \alias{change_MY_pars.BRQS}
-\title{Return the parameters as a list}
+\title{Change parameters for \code{BRQS} (\strong{MY})}
 \usage{
 \method{change_MY_pars}{BRQS}(xds_obj, options = list(), s = 1)
 }

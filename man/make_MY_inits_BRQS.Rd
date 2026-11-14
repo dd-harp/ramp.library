@@ -24,7 +24,7 @@ make_MY_inits_BRQS(
 \arguments{
 \item{nPatches}{the number of patches in the model}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
 \item{Su}{uninfected, sugar feeding mosquitoes}
 

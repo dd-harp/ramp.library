@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{change_XH_pars.SIP}
 \alias{change_XH_pars.SIP}
-\title{Get parameters for \code{SIP} (\strong{XH})}
+\title{Change parameters for \code{SIP} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIP}(xds_obj, options = list(), i = 1)
 }
