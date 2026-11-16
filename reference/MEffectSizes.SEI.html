@@ -132,6 +132,60 @@
     <h2>Value</h2>
     <p>an <strong><code>xds</code></strong> object</p>
     </div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<dl><dt><code>f</code></dt>
+<dd><p>blood feeding rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_f</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_blood_feeding_rates</a></p></dd>
+
+<dt><code>q</code></dt>
+<dd><p>human fraction — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_q</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_human_fractions</a></p></dd>
+
+<dt><code>g</code></dt>
+<dd><p>mosquito mortality rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_g</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_mosquito_mortality</a></p></dd>
+
+<dt><code>sigma</code> or \(\sigma\)</dt>
+<dd><p>emigration rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_sigma.html" class="external-link">ramp.xds::setup_sigma</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_sigma.html" class="external-link">ramp.xds::setup_emigration_rates</a></p></dd>
+
+<dt><code>mu</code> or \(\mu\)</dt>
+<dd><p>fraction of emigrating mosquitoes lost — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_mu.html" class="external-link">ramp.xds::setup_mu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_mu.html" class="external-link">ramp.xds::setup_emigration_loss</a></p></dd>
+
+<dt><code>K</code> or <code>K_matrix</code></dt>
+<dd><p>mosquito dispersal matrix — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_K_matrix.html" class="external-link">ramp.xds::setup_K_matrix</a></p></dd>
+
+<dt><code>eip</code> or \(\tau\)</dt>
+<dd><p>extrinsic incubation period — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_eip.html" class="external-link">ramp.xds::setup_eip</a></p></dd>
+
+<dt><code>nu</code> or \(\nu\)</dt>
+<dd><p>egg batch rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
+
+<dt><code>eggsPerBatch</code> or \(\Gamma\)</dt>
+<dd><p>number of eggs per batch</p></dd>
+
+
+</dl><p>After basic setup, <a href="change_MY_pars.SEI.html">change_MY_pars.SEI</a> can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.</p>
+    </div>
+    <div id="survival-and-dispersal">
+    <h2>Survival and Dispersal</h2>
+
+
+<p>Mosquito survival and dispersal are described by the demographic matrix
+\(\Omega\). The parameter \(g\) is the per-capita mortality rate while
+mosquitoes are in a patch. Mosquitoes emigrate from patches at per-capita
+rates \(\sigma\), and a fraction \(\mu\) of emigrating mosquitoes is
+lost. The total rate of loss from a patch is $$g+\mu\sigma.$$
+The columns of the dispersal matrix \(K\) sum to zero. For non-trivial
+dispersal matrices, \(\mbox{diag}(K)=-1\); its off-diagonal elements
+describe the fractions of surviving emigrants that arrive in other patches.
+The demographic matrix is
+$$\Omega=\mbox{diag}(g+\sigma\mu)-K\cdot\mbox{diag}(\sigma(1-\mu)).$$</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="SEI.html">SEI</a>, <a href="MBionomics.SEI.html">MBionomics.SEI</a></p></div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -132,6 +132,55 @@
     <h2>Value</h2>
     <p>an <strong><code>xds</code></strong> object</p>
     </div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<dl><dt><code>f</code></dt>
+<dd><p>blood feeding rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_f</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_blood_feeding_rates</a></p></dd>
+
+<dt><code>q</code></dt>
+<dd><p>human fraction — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_q</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_human_fractions</a></p></dd>
+
+<dt><code>g</code></dt>
+<dd><p>mosquito mortality rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_g</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_mosquito_mortality</a></p></dd>
+
+<dt><code>sigma_b</code></dt>
+<dd><p>emigration rate during blood feeding</p></dd>
+
+<dt><code>sigma_q</code></dt>
+<dd><p>emigration rate during egg laying</p></dd>
+
+<dt><code>mu</code></dt>
+<dd><p>fraction of emigrating mosquitoes lost</p></dd>
+
+<dt><code>eip</code> or \(\tau\)</dt>
+<dd><p>extrinsic incubation period</p></dd>
+
+<dt><code>nu</code> or \(\nu\)</dt>
+<dd><p>egg batch rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
+
+<dt><code>eggsPerBatch</code> or \(\Gamma\)</dt>
+<dd><p>number of eggs per batch</p></dd>
+
+
+</dl><p>After basic setup, <a href="change_MY_pars.BQm.html">change_MY_pars.BQm</a> can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.</p>
+    </div>
+    <div id="survival-and-dispersal">
+    <h2>Survival and Dispersal</h2>
+
+
+<p>Blood-feeding and gravid mosquitoes have separate demographic matrices,
+\(\Omega_b\) and \(\Omega_q\). Each combines mortality \(g\), the
+corresponding emigration rate (\(\sigma_b\) or \(\sigma_q\)), the
+emigration-loss fraction \(\mu\), and its dispersal matrix (\(K_b\) or
+\(K_q\)).</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="BQm.html">BQm</a>, <a href="MBionomics.BQm.html">MBionomics.BQm</a></p></div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -141,12 +141,60 @@ options is passed to both to override the defaults
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> vector</p>
+    <p>an <strong><code>xds</code></strong> object</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>The module object is stored at <code>xds_obj$XH_obj[[i]]</code></p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>H</code></dt>
+<dd><p>total human (or host) population density</p></dd>
+
+<dt><code>I</code></dt>
+<dd><p>density of infectious humans</p></dd>
+
+<dt><code>P</code></dt>
+<dd><p>density of humans under chemoprotection</p></dd>
+
+<dt><code>S=H-I-P</code></dt>
+<dd><p>density of susceptible humans or hosts</p></dd>
+
+<dt><code>treated</code></dt>
+<dd><p>cumulative treatment history used for delayed outflow from \(P\)</p></dd>
+
+
+</dl><p>The delay derivative tracks treatment history. The initializer currently
+returns this auxiliary initial value under the name <code>cfoi</code>.</p>
+    </div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<p>The parameters returned by <a href="get_XH_pars.SIPd.html">get_XH_pars.SIPd</a> and modifiable by
+<a href="change_XH_pars.SIPd.html">change_XH_pars.SIPd</a> describe infection, treatment, and chemoprotection.</p><dl><dt><code>b</code></dt>
+<dd><p>transmission probability from mosquito to human</p></dd>
+
+<dt><code>c</code></dt>
+<dd><p>transmission probability from human to mosquito</p></dd>
+
+<dt><code>r</code></dt>
+<dd><p>clearance rate for infections</p></dd>
+
+<dt><code>rho</code> or \(\rho\)</dt>
+<dd><p>fraction of incident infections treated and cured, entering \(P\)</p></dd>
+
+<dt><code>xi</code> or \(\xi\)</dt>
+<dd><p>background treatment rate for susceptible and infectious individuals</p></dd>
+
+<dt><code>eta</code></dt>
+<dd><p>chemoprotection duration (fixed delay, in days)</p></dd>
+
+
+</dl></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="SIPd.html">SIPd</a>, <a href="make_XH_obj_SIPd.html">make_XH_obj_SIPd</a></p></div>

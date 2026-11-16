@@ -141,12 +141,52 @@ options is passed to both to override the defaults
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> vector</p>
+    <p>an <strong><code>xds</code></strong> object</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>The module object is stored at <code>xds_obj$XH_obj[[i]]</code></p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>H</code></dt>
+<dd><p>total human (or host) population density</p></dd>
+
+<dt><code>E</code></dt>
+<dd><p>density of exposed (infected but not yet infectious) humans</p></dd>
+
+<dt><code>I</code></dt>
+<dd><p>density of infectious humans</p></dd>
+
+<dt><code>R</code></dt>
+<dd><p>density of recovered humans</p></dd>
+
+<dt><code>S=H-E-I-R</code></dt>
+<dd><p>density of susceptible humans or hosts</p></dd>
+
+
+</dl></div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<p><a href="make_XH_obj_SEIR.html">make_XH_obj_SEIR</a> supplies defaults for the parameters, which can be changed
+using <a href="change_XH_pars.SEIR.html">change_XH_pars.SEIR</a>.</p><dl><dt><code>b</code></dt>
+<dd><p>transmission probability from mosquito to human</p></dd>
+
+<dt><code>c</code></dt>
+<dd><p>transmission probability from human to mosquito</p></dd>
+
+<dt><code>tau</code></dt>
+<dd><p>rate of progression from exposed to infectious</p></dd>
+
+<dt><code>r</code></dt>
+<dd><p>clearance rate for infections</p></dd>
+
+
+</dl></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="SEIR.html">SEIR</a>, <a href="make_XH_obj_SEIR.html">make_XH_obj_SEIR</a></p></div>
