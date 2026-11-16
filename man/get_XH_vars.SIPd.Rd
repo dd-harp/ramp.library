@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{get_XH_vars.SIPd}
 \alias{get_XH_vars.SIPd}
-\title{Return the variables as a list}
+\title{List variables for \code{SIPd} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SIPd}(y, xds_obj, i)
 }
@@ -18,5 +18,8 @@ a \link{list}
 }
 \description{
 This method dispatches on the type of \code{xds_obj$XH_obj}
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

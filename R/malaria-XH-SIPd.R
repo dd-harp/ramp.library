@@ -1,41 +1,84 @@
 # specialized methods for the human SIPd model
 
-#' @title The `SIPd` module for the XH component
+#' @title The `SIPd` module for the **XH** component
 #' @description
-#' Implements the **XH** component using a delay Susceptible-Infectious-Prophylaxis
-#' (SIPd) model of malaria infection dynamics. This is the delay differential
-#' equation version of the SIP model, in which the duration of prophylaxis
+#' Implements the **XH** component using a delay Susceptible-Infected-chemoProtected
+#' (`SIPd`) model of malaria infection dynamics. This is the delay differential
+#' equation version of the `SIP` model, in which the duration of chemoprotection
 #' \eqn{\eta} is modelled as a fixed delay.
+#' Treatment clears infection and moves individuals into \eqn{P}, where they
+#' are protected from infection until chemoprotection ends.
+#' This implementation includes treatment parameters, human demographic change,
+#' and support for progressive stratification.
 #'
 #' @section State Variables:
 #' \describe{
 #'   \item{`H`}{total human (or host) population density}
 #'   \item{`I`}{density of infectious humans}
-#'   \item{`P`}{density of humans under chemoprophylaxis}
+#'   \item{`P`}{density of humans under chemoprotection}
+#'   \item{`S=H-I-P`}{density of susceptible humans or hosts}
+#'   \item{`treated`}{cumulative treatment history used for delayed outflow from \eqn{P}}
 #' }
-#' Note: susceptible density \eqn{S = H - I - P}.
+#' The delay derivative tracks treatment history. The initializer currently
+#' returns this auxiliary initial value under the name `cfoi`.
+#'
+#' @inheritSection ramp.xds::SIS Demography
+#'
+#' @section Dynamical Term:
+#' \describe{
+#'   \item{\eqn{h} or `foi`}{The force of infection is computed and stored by [Exposure] as `FoI`}
+#' }
+#' In the `SIPd` module, a constant fraction of infectious bites causes an
+#' infection: the parameter \eqn{b}.
 #'
 #' @section Parameters:
+#' The parameters returned by [get_XH_pars.SIPd] and modifiable by
+#' [change_XH_pars.SIPd] describe infection, treatment, and chemoprotection.
 #' \describe{
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
 #'   \item{`r`}{clearance rate for infections}
-#'   \item{`rho`}{fraction of new infections immediately treated / entering \eqn{P}}
-#'   \item{`xi`}{rate of mass drug administration (\eqn{\xi})}
-#'   \item{`eta`}{prophylaxis duration (fixed delay, in days)}
-#'   \item{`B`}{time-dependent birth rate function \eqn{B(t, H)}}
-#'   \item{`D`}{linear operator (matrix) for mortality, migration, aging, and transfers}
+#'   \item{`rho` or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+#'   \item{`xi` or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+#'   \item{`eta`}{chemoprotection duration (fixed delay, in days)}
 #' }
 #'
-#' @section Dynamics:
+#' @section Infection Dynamics:
+#' Infections clear naturally at rate \eqn{r}, returning individuals to
+#' susceptibility. Treatment moves individuals into chemoprotection.
+#' A fraction \eqn{\rho} of incident infections \eqn{hS} are treated immediately.
 #' \deqn{
 #' \begin{array}{rl}
-#' dH/dt &= B(t,H) + D \cdot H \\
-#' dI/dt &= (1-\rho)hS - (r + \xi)I + D \cdot I \\
-#' dP/dt &= (\rho h + \xi)S + \xi I - \dot{\mathcal{H}}(P) + D \cdot P \\
+#' dI/dt &= (1-\rho)hS - (r + \xi)I - \mathbf{D}(I) \\
+#' dP/dt &= \rho hS + \xi(S+I) - T(t) - \mathbf{D}(P) \\
+#' d\,\mathrm{treated}/dt &= \rho hS + \xi(S+I) \\
 #' \end{array}}
-#' where \eqn{\dot{\mathcal{H}}(P)} is the delayed outflow from \eqn{P},
-#' computed via [deSolve::lagderiv].
+#' where \eqn{S=H-I-P}. Delayed outflow \eqn{T(t)} is zero for
+#' \eqn{t \leq \eta}; otherwise it is the treatment inflow recorded
+#' \eqn{\eta} days ago, computed via [deSolve::lagderiv].
+#' The mortality function uses the same model for \eqn{I} and \eqn{P} as for \eqn{H}.
+#'
+#' @section Prevalence:
+#' True prevalence is \eqn{x = I/H}. The light microscopy, RDT, and PCR
+#' prevalence functions currently also return \eqn{I/H}, without diagnostic
+#' sensitivity parameters.
+#'
+#' @section Infectiousness:
+#' The probability that a mosquito becomes infected after feeding on an
+#' infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+#' infectiousness is \eqn{cI/H}.
+#'
+#' @section Mass Treatment:
+#' This implementation does not currently initialize or use `mda(t)` or
+#' `msat(t)`. Treatment is modelled through the parameters `rho` and `xi`;
+#' unlike `SIP`, it has no `sigma` parameter.
+#'
+#' @seealso
+#' + Basic Setup: [make_XH_obj_SIPd], [setup_XH_obj.SIPd]
+#' + Dynamics: [dXHdt.SIPd]
+#' + Parameters: [get_XH_pars.SIPd], [change_XH_pars.SIPd]
+#' + Variables: [make_XH_inits_SIPd], [get_XH_inits], [change_XH_inits.SIPd], [setup_XH_inits.SIPd]
+#' + [SIP], [SIS]
 #'
 #' @name SIPd
 #' @rdname SIPd
@@ -53,6 +96,7 @@ NULL
 #' @return the **`xds`** object
 #' @keywords internal
 #'
+#' @seealso [SIPd]
 #' @export
 setup_skillset_XH.SIPd = function(xds_obj,i){
   skills =   list(
@@ -73,25 +117,18 @@ setup_skillset_XH.SIPd = function(xds_obj,i){
 #'
 #' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 check_XH.SIPd = function(xds_obj, i){
   return(xds_obj)
 }
 
-#' @title Compute derivatives for the **XH** module `SIPd`
+#' @title Compute derivatives for `SIPd` (**XH**)
+#' @description Computes derivatives for the `SIPd` module (**XH**).
+#' @inheritSection SIPd Demography
+#' @inheritSection SIPd Infection Dynamics
 #'
-#' @description Compute the derivatives for SIPd compartmental model:
-#' \deqn{
-#' \begin{array}{rrrrcc}
-#' dH/dt =& B(t,H) + D \cdot H \\
-#' dI/dt =& (1-\rho) h S & - (r+\xi) I &&+ D \cdot I \\
-#' dP/dt =& (\rho h +\xi)S & +\xi I & - \eta P &+ d{\cal H}(P)
-#' \end{array}
-#' }
-#' where \eqn{S = H-I-P}; \eqn{B(t, H)} is the
-#' time-dependent birth rate; and the demographic matrix is \eqn{D}
-#'
-#' @seealso The parameters are defined in [make_XH_obj_SIPd]
+#' @seealso [SIPd], [make_XH_obj_SIPd]
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @keywords internal
@@ -129,9 +166,11 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
 #' @seealso [SIPd], [make_XH_obj_SIPd]
 #'
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#' @inheritSection SIPd State Variables
+#' @inheritSection SIPd Parameters
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return a [list] vector
+#' @return an **`xds`** object
 #' @keywords internal
 #' @export
 setup_XH_obj.SIPd = function(XHname, residence, xds_obj, options=list(), i=1){
@@ -149,17 +188,19 @@ setup_XH_obj.SIPd = function(XHname, residence, xds_obj, options=list(), i=1){
 }
 
 
-#' @title Make parameters for SIPd human model, with defaults
+#' @title Make a `SIPd` **XH** model object
+#' @inheritSection SIPd Parameters
 #' @param nStrata the number of population strata
 #' @param options a [list] that could override defaults
 #' @param b transmission probability (efficiency) from mosquito to human
 #' @param c transmission probability (efficiency) from human to mosquito
 #' @param r recovery rate
-#' @param rho probability of successful treatment upon infection
-#' @param eta duration of chemo-protection
-#' @param xi background treatment rate
-#' @return a [list]
+#' @param rho fraction of incident infections treated and cured, entering P
+#' @param eta chemoprotection duration (fixed delay, in days)
+#' @param xi background treatment rate for susceptible and infectious individuals
+#' @return an **XH** model object
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 make_XH_obj_SIPd = function(nStrata, options=list(),
                             b=0.55, r=1/180, c=0.15,
@@ -182,11 +223,13 @@ make_XH_obj_SIPd = function(nStrata, options=list(),
 
 
 #' @title Change parameters for `SIPd` (**XH**)
-#' @description For the `SIPd` module (**XH**) for the \eqn{i^{th}} species,
+#' @description For the `SIPd` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
+#' @inheritSection SIPd Parameters
 #' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 change_XH_pars.SIPd <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
@@ -201,12 +244,14 @@ change_XH_pars.SIPd <- function(xds_obj, options=list(), i=1) {
   }))}
 
 
-#' @title Return the parameters as a list
-#' @description For the `SIPd` module (**XH**) for the \eqn{i^{th}} species,
+#' @title Change initial values for `SIPd` (**XH**)
+#' @description For the `SIPd` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
+#' @inheritSection SIPd State Variables
 #' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 change_XH_inits.SIPd <- function(xds_obj, options=list(), i=1) {
   with(get_XH_inits(xds_obj, i), with(options,{
@@ -217,13 +262,14 @@ change_XH_inits.SIPd <- function(xds_obj, options=list(), i=1) {
   }))}
 
 
-#' @title Return the parameters as a list
+#' @title Get parameters for `SIPd` (**XH**)
 #' @description Parameter values for the \eqn{i^{th}} host are
 #' stored as `xds_obj$XH_obj[[i]]`. This returns the stored parameter
 #' values as a list.
 #' @inheritParams ramp.xds::get_XH_pars
+#' @inheritSection SIPd Parameters
 #' @return a [list]
-#' @seealso [make_XH_obj_SIPd]
+#' @seealso [SIPd], [make_XH_obj_SIPd]
 #' @keywords internal
 #' @export
 get_XH_pars.SIPd <- function(xds_obj, i=1) {
@@ -231,10 +277,11 @@ get_XH_pars.SIPd <- function(xds_obj, i=1) {
 }
 
 #' @title Derivatives for human population
-#' @description Implements [Update_XHt] for the SIPd model.
+#' @description Implements [Update_XHt] for the `SIPd` model.
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 Update_XHt.SIPd <- function(t, y, xds_obj, i){
 
@@ -256,11 +303,12 @@ Update_XHt.SIPd <- function(t, y, xds_obj, i){
   })
 }
 
-#' @title Compute the steady states for the  dts SIPd model as a function of the daily EIR
-#' @description Compute the steady state of the  dts SIPd model as a function of the daily eir.
+#' @title Compute the steady states for the  dts `SIPd` model as a function of the daily EIR
+#' @description Compute the steady state of the  dts `SIPd` model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
   Iteq =(ar*H*eta*(1-rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
@@ -270,10 +318,11 @@ steady_state_X.SIPd = function(ar, H, XH_obj){with(XH_obj,{
 })}
 
 #' @title Size of effective infectious human population
-#' @description Implements [F_I] for the SIPd model.
+#' @description Implements [F_I] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_I.SIPd <- function(t, y, xds_obj, i) {
   I = y[xds_obj$ix$X[[i]]$I_ix]
@@ -281,11 +330,12 @@ F_I.SIPd <- function(t, y, xds_obj, i) {
   return(X)
 }
 
-#' @title Size of effective infectious human population
-#' @description Implements [F_I] for the SIPd model.
-#' @inheritParams ramp.xds::F_I
+#' @title Compute population density
+#' @description Implements [F_H] for the `SIPd` model.
+#' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_H.SIPd <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj, i), return(H))
@@ -293,10 +343,11 @@ F_H.SIPd <- function(t, y, xds_obj, i){
 
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_infectivity] for the SIPd model.
+#' @description Implements [F_infectivity] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_infectivity.SIPd <- function(y, xds_obj,i) {
   with(xds_obj$XH_obj[[i]], b)
@@ -304,11 +355,12 @@ F_infectivity.SIPd <- function(y, xds_obj,i) {
 
 
 
-#' @title Return the variables as a list
+#' @title List variables for `SIPd` (**XH**)
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 get_XH_vars.SIPd <- function(y, xds_obj, i) {
   with(xds_obj$ix$X[[i]],{
@@ -320,11 +372,12 @@ get_XH_vars.SIPd <- function(y, xds_obj, i) {
 }
 
 
-#' @title Compute the HTC for the SIPd model
-#' @description Implements [get_HTC] for the SIPd model with demography.
+#' @title Compute the HTC for the `SIPd` model
+#' @description Implements [get_HTC] for the `SIPd` model with demography.
 #' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 get_HTC.SIPd <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
@@ -335,28 +388,32 @@ get_HTC.SIPd <- function(xds_obj, i) {
 
 #' @title Setup initial values for `SIPd` (**XH**)
 #' @description Set initial values for all the variables in the `SIPd` module
-#' (**XH**) for the \eqn{i^{th}} species.
+#' (**XH**) for the \eqn{i^{th}} host species.
 #' + [make_XH_inits_SIPd] supplies default values
 #' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return a [list] vector
+#' @inheritSection SIPd State Variables
+#' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 setup_XH_inits.SIPd = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIPd(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
-#' @title Make initial values for the SIPd human model, with defaults
+#' @title Make initial values for `SIPd` (**XH**)
+#' @inheritSection SIPd State Variables
 #' @param nStrata the number of population strata
 #' @param options a [list] that could override defaults
 #' @param H the initial human population density
-#' @param I the initial values of the parameter I
-#' @param P the initial values of the parameter P
+#' @param I the initial number of infectious humans
+#' @param P the initial number of humans under chemoprotection
 #' @return a [list]
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 make_XH_inits_SIPd = function(nStrata,
                               options = list(),
@@ -368,13 +425,14 @@ make_XH_inits_SIPd = function(nStrata,
     return(list(H=H, I=I, P=P, cfoi=P*0))
 })}
 
-#' @title Parse Solutions Matrix for the SIPd model
+#' @title Parse outputs for `SIPd` (**XH**)
 
-#' @description Implements [parse_XH_orbits] for the SIPd model
+#' @description Implements [parse_XH_orbits] for the `SIPd` model
 #'
 #' @inheritParams ramp.xds::parse_XH_orbits
-#' @return none
+#' @return a named list of module variables and prevalence summaries
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
   with(xds_obj$X_obj[[i]]$ix,{
@@ -389,11 +447,12 @@ parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
   })}
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the SIPd model.
+#' @description Implements [setup_XH_ix] for the `SIPd` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return none
+#' @return an **`xds`** object
 #' @importFrom utils tail
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 setup_XH_ix.SIPd <- function(xds_obj, i) {with(xds_obj,{
 
@@ -415,11 +474,12 @@ setup_XH_ix.SIPd <- function(xds_obj, i) {with(xds_obj,{
 })}
 
 
-#' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_ni] for the SIPd model.
+#' @title Compute the net infectiousness
+#' @description Implements [F_ni] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_ni.SIPd <- function(vars, XH_obj) {
   ni = with(vars, XH_obj$c*I/H)
@@ -427,10 +487,11 @@ F_ni.SIPd <- function(vars, XH_obj) {
 }
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_prevalence] for the SIPd model.
+#' @description Implements [F_prevalence] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_prevalence.SIPd <- function(vars, XH_obj){
   pr = with(vars, I/H)
@@ -438,10 +499,11 @@ F_prevalence.SIPd <- function(vars, XH_obj){
 }
 
 #' @title Compute the prevalence of infection by light microscopy
-#' @description Implements [F_prevalence] for the SIPd model.
+#' @description Implements [F_prevalence] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_pfpr_by_lm.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -449,31 +511,34 @@ F_pfpr_by_lm.SIPd <- function(vars, XH_obj) {
 }
 
 #' @title Compute the prevalence of infection by RDT
-#' @description Implements [F_prevalence] for the SIPd model.
+#' @description Implements [F_prevalence] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_pfpr_by_rdt.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
   return(pr)
 }
 
-#' @title Compute the prevalence of infection by pcr
-#' @description Implements [F_prevalence] for the SIPd model.
+#' @title Compute the prevalence of infection by PCR
+#' @description Implements [F_prevalence] for the `SIPd` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 F_pfpr_by_pcr.SIPd <- function(vars, XH_obj) {
   pr = with(vars, I/H)
   return(pr)
 }
 
-#' Plot the density of infected individuals for the SIPd model
+#' Plot the density of infected individuals for the `SIPd` model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 xds_plot_X.SIPd = function(xds_obj, i=1, clrs=c("darkblue", "darkred", "darkgreen"), llty=1, add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]
@@ -487,7 +552,7 @@ xds_plot_X.SIPd = function(xds_obj, i=1, clrs=c("darkblue", "darkred", "darkgree
 }
 
 
-#' Add lines for the density of infected individuals for the SIPd model
+#' Add lines for the density of infected individuals for the `SIPd` model
 #'
 #' @param time time points for the observations
 #' @param XH a list with the outputs of parse_XH_orbits.SIPd
@@ -496,6 +561,7 @@ xds_plot_X.SIPd = function(xds_obj, i=1, clrs=c("darkblue", "darkred", "darkgree
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 add_lines_X_SIPd = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
@@ -512,11 +578,12 @@ add_lines_X_SIPd = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "da
     }})
 }
 
-#' @title Compute the steady states for the SIPd model as a function of the daily foi
-#' @description Compute the steady state of the SIPd model as a function of the daily eir.
+#' @title Compute the steady states for the `SIPd` model as a function of the daily foi
+#' @description Compute the steady state of the `SIPd` model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named vector
+#' @return the steady states as a named list
 #' @keywords internal
+#' @seealso [SIPd]
 #' @export
 steady_state_X.SIPd = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{

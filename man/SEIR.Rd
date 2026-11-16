@@ -2,10 +2,18 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{SEIR}
 \alias{SEIR}
-\title{The \code{SEIR} module for the XH component}
+\title{The \code{SEIR} module for the \strong{XH} component}
 \description{
 Implements the \strong{XH} component using a Susceptible-Exposed-Infectious-Recovered
-(SEIR) compartmental model of human infection dynamics.
+(\code{SEIR}) compartmental model of human infection dynamics.
+Exposed individuals become infectious, then recover with lasting immunity.
+This implementation includes human demographic change and support for
+progressive stratification.
+}
+\note{
+The current \code{SEIR} implementation adds the result of \code{\link[ramp.xds:Deaths]{Deaths}}
+rather than subtracting it as described in the shared Demography section:
+\eqn{dH/dt = \mathbf{B}(t,H) + \mathbf{D}(H)}.
 }
 \section{State Variables}{
 
@@ -14,31 +22,101 @@ Implements the \strong{XH} component using a Susceptible-Exposed-Infectious-Reco
 \item{\code{E}}{density of exposed (infected but not yet infectious) humans}
 \item{\code{I}}{density of infectious humans}
 \item{\code{R}}{density of recovered humans}
+\item{\code{S=H-E-I-R}}{density of susceptible humans or hosts}
 }
-Note: susceptible density \eqn{S = H - E - I - R}.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+\link{make_XH_obj_SEIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SEIR}.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{tau}}{rate of progression from exposed to infectious}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Exposed individuals become infectious at the per-capita rate \eqn{\tau}.
+Infections clear at the per-capita rate \eqn{r}, moving individuals into
+the recovered class with lasting immunity.
+The current implementation uses the following equations, adding \code{\link[ramp.xds:Deaths]{Deaths}}:
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dE/dt &= hS - \tau E + D \cdot E \\
-dI/dt &= \tau E - rI + D \cdot I \\
-dR/dt &= rI + D \cdot R \\
+dE/dt &= hS - \tau E + \mathbf{D}(E) \\
+dI/dt &= \tau E - rI + \mathbf{D}(I) \\
+dR/dt &= rI + \mathbf{D}(R) \\
 \end{array}}
 where \eqn{h} is the force of infection and \eqn{S = H - E - I - R}.
+Susceptible density is redundant and is computed after solving.
 }
 
+\section{Prevalence}{
+
+\link{F_prevalence.SEIR} returns \eqn{x=I/H}. In contrast,
+\link{parse_XH_orbits.SEIR} stores \code{true_pr} as \eqn{(E+I)/H}.
+This module has no diagnostic sensitivity parameters or module-specific
+light microscopy, RDT, or PCR prevalence methods.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+This implementation does not initialize or use \code{mda(t)} or \code{msat(t)},
+and has no treatment parameters \code{rho} or \code{sigma}.
+}
+
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SEIR}, \link{setup_XH_obj.SEIR}
+\item Dynamics: \link{dXHdt.SEIR}
+\item Parameters: \link{change_XH_pars.SEIR}
+\item Variables: \link{make_XH_inits_SEIR}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SEIR}, \link{setup_XH_inits.SEIR}
+\item \link{SIR}, \link{SEIS}
+}
+}

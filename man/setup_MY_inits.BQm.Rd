@@ -26,4 +26,15 @@ Set initial values for all the variables in the \code{BQm} module
 see the inline module documentation.
 }
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}, \code{By}, \code{Bz}}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+\item{\code{Qu}, \code{Qy}, \code{Qz}}{uninfected, exposed, and infectious gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
 \keyword{internal}

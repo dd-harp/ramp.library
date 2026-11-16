@@ -17,4 +17,13 @@ a \link{list}
 \description{
 Implements \link[ramp.xds:setup_MY_ix]{setup_MY_ix} for the SEI model.
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
 \keyword{internal}

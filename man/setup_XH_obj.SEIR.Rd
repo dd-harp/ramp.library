@@ -18,7 +18,7 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} object
 }
 \description{
 This sets up an \code{SEIR} model object for the \strong{XH} module for the \eqn{i^{th}} host species
@@ -31,6 +31,29 @@ This sets up an \code{SEIR} model object for the \strong{XH} module for the \eqn
 \note{
 The module object is stored at \code{xds_obj$XH_obj[[i]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{S=H-E-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\section{Parameters}{
+
+\link{make_XH_obj_SEIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SEIR}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+}
+}
+
 \seealso{
 \link{SEIR}, \link{make_XH_obj_SEIR}
 }

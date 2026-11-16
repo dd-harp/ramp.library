@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{F_H.SIRS}
 \alias{F_H.SIRS}
-\title{Size of effective infectious human population}
+\title{Compute population density}
 \usage{
 \method{F_H}{SIRS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,37 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_H]{F_H} for the SIRS model.
+Implements \link[ramp.xds:F_H]{F_H} for the \code{SIRS} model.
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

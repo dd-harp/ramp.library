@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{Update_XHt.SEIRV}
 \alias{Update_XHt.SEIRV}
-\title{DTS updating for the SIS model for human / vertebrate host infections}
+\title{DTS updating for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SEIRV}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the SIS model
+Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the \code{SEIRV} model
+}
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

@@ -21,6 +21,8 @@
 #'   \item{`x4`}{density of semi-immune susceptibles}
 #' }
 #'
+#' @inheritSection ramp.xds::SIS Demography
+#'
 #' @section Parameters:
 #' \describe{
 #'   \item{`r1`, `r2`}{recovery rates for the two classes of infected individuals}

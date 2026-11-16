@@ -21,4 +21,52 @@ a \link{numeric} vector
 \description{
 Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQm ODE model.
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}, \code{By}, \code{Bz}}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+\item{\code{Qu}, \code{Qy}, \code{Qz}}{uninfected, exposed, and infectious gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
+}
+}
+
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma_b}}{emigration rate during blood feeding}
+\item{\code{sigma_q}}{emigration rate during egg laying}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.BQm} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Dynamics}{
+
+Initialization and output parsing expose six state variables: \eqn{B_u},
+\eqn{Q_u}, \eqn{B_y}, \eqn{Q_y}, \eqn{B_z}, and \eqn{Q_z}. The current
+\link{dMYdt.BQm} method instead refers to aggregate \eqn{B} and \eqn{Q}, which
+are not returned by \link{get_MY_vars.BQm}. Therefore its equations do not
+currently correspond to the initialized six-state vector.
+}
+
+\seealso{
+\link{BQm}, \link{F_fqZ.BQm}, \link{F_eggs.BQm}
+}
 \keyword{internal}

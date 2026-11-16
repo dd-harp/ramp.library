@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{make_XH_inits_SIP}
 \alias{make_XH_inits_SIP}
-\title{Make initial values for the SIP human model, with defaults}
+\title{Make initial values for \code{SIP} (\strong{XH})}
 \usage{
 make_XH_inits_SIP(nStrata, options = list(), H = 1000, I = 1, P = 0)
 }
@@ -13,14 +13,27 @@ make_XH_inits_SIP(nStrata, options = list(), H = 1000, I = 1, P = 0)
 
 \item{H}{the initial human population density}
 
-\item{I}{the initial values of the parameter I}
+\item{I}{the initial number of infectious humans}
 
-\item{P}{the initial values of the parameter P}
+\item{P}{the initial number of humans under chemoprotection}
 }
 \value{
 a \link{list}
 }
 \description{
-Make initial values for the SIP human model, with defaults
+Make initial values for \code{SIP} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

@@ -21,4 +21,67 @@ a \link{numeric} vector
 \description{
 Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQ ODE model.
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}}{density of uninfected, blood-feeding mosquitoes}
+\item{\code{Qu}}{density of uninfected, gravid (egg-laying) mosquitoes}
+\item{\code{By}}{density of infected (exposed), blood-feeding mosquitoes}
+\item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
+\item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
+\item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
+}
+}
+
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma_b}}{emigration rate during blood feeding}
+\item{\code{sigma_q}}{emigration rate during egg laying}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+
+After basic setup, \link{change_MY_pars.BQ} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Dynamics}{
+
+Let \eqn{\phi=1/\tau}, where \eqn{\tau} is the extrinsic incubation period.
+Mosquitoes move between blood-feeding and gravid states at rate \eqn{f} and
+oviposit at rate \eqn{\nu}. Infection is acquired by uninfected
+blood-feeding mosquitoes; exposed mosquitoes progress to the infectious
+class at rate \eqn{\phi}. The compartment equations are:
+\deqn{
+\begin{array}{rl}
+dB_u/dt &= \Lambda+\nu Q_u-fB_u-\Omega_b\cdot B_u \\\\
+dQ_u/dt &= f(1-q\kappa)B_u-\nu Q_u-\Omega_q\cdot Q_u \\\\
+dB_y/dt &= \nu Q_y-(f+\phi)B_y-\Omega_b\cdot B_y \\\\
+dQ_y/dt &= fq\kappa B_u+fB_y-(\nu+\phi)Q_y-\Omega_q\cdot Q_y \\\\
+dB_z/dt &= \phi B_y+\nu Q_z-fB_z-\Omega_b\cdot B_z \\\\
+dQ_z/dt &= \phi Q_y+fB_z-\nu Q_z-\Omega_q\cdot Q_z
+\end{array}
+}
+}
+
+\seealso{
+\link{BQ}, \link{F_fqZ.BQ}, \link{F_eggs.BQ}
+}
 \keyword{internal}

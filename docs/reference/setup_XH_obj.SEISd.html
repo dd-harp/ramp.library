@@ -141,12 +141,71 @@ options is passed to both to override the defaults
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> vector</p>
+    <p>an <strong><code>xds</code></strong> object</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>The module object is stored at <code>xds_obj$XH_obj[[i]]</code></p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>H</code></dt>
+<dd><p>total human (or host) population density</p></dd>
+
+<dt><code>E</code></dt>
+<dd><p>density of exposed (infected but not yet infectious) humans</p></dd>
+
+<dt><code>I</code></dt>
+<dd><p>density of infectious humans</p></dd>
+
+<dt><code>S=H-E-I</code></dt>
+<dd><p>density of susceptible humans or hosts</p></dd>
+
+<dt><code>cases</code></dt>
+<dd><p>cumulative exposures used to track delayed progression</p></dd>
+
+
+</dl><p>This implementation includes human demographic change, progressive
+stratification, and parameters to model detection by diagnostic methods.
+It also includes parameters for treating and curing infections and functions
+to model mass treatment.</p>
+    </div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<p>The parameters returned by <a href="get_XH_pars.SEISd.html">get_XH_pars.SEISd</a> and modifiable by
+<a href="change_XH_pars.SEISd.html">change_XH_pars.SEISd</a> describe the dynamics or detection by diagnostic methods.</p><dl><dt><code>b</code></dt>
+<dd><p>transmission probability from mosquito to human</p></dd>
+
+<dt><code>c</code></dt>
+<dd><p>transmission probability from human to mosquito</p></dd>
+
+<dt><code>nu</code></dt>
+<dd><p>intrinsic incubation period (fixed delay, in days)</p></dd>
+
+<dt><code>r</code></dt>
+<dd><p>clearance rate for infections</p></dd>
+
+<dt><code>rho</code> or \(\rho\)</dt>
+<dd><p>the fraction of incident infections that are treated and cured</p></dd>
+
+<dt><code>sigma</code> or \(\sigma\)</dt>
+<dd><p>the rate that prevalent infections are treated and cured</p></dd>
+
+<dt><code>q_lm</code></dt>
+<dd><p>test positivity by light microscopy</p></dd>
+
+<dt><code>q_rdt</code></dt>
+<dd><p>test positivity by RDT</p></dd>
+
+<dt><code>q_pcr</code></dt>
+<dd><p>test positivity by PCR</p></dd>
+
+
+</dl></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="SEISd.html">SEISd</a>, <a href="make_XH_obj_SEISd.html">make_XH_obj_SEISd</a></p></div>

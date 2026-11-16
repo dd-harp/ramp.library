@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{change_XH_inits.SIPd}
 \alias{change_XH_inits.SIPd}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SIPd} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SIPd}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,23 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+\item{\code{treated}}{cumulative treatment history used for delayed outflow from \eqn{P}}
+}
+The delay derivative tracks treatment history. The initializer currently
+returns this auxiliary initial value under the name \code{cfoi}.
+}
+
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

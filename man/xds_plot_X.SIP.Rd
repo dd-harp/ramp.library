@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{xds_plot_X.SIP}
 \alias{xds_plot_X.SIP}
-\title{Plot the density of infected individuals for the SIP model}
+\title{Plot the density of infected individuals for the \code{SIP} model}
 \usage{
 \method{xds_plot_X}{SIP}(
   xds_obj,
@@ -24,6 +24,9 @@
 \item{add}{plot axes only if FALSE}
 }
 \description{
-Plot the density of infected individuals for the SIP model
+Plot the density of infected individuals for the \code{SIP} model
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

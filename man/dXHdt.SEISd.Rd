@@ -23,20 +23,30 @@ Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEISd} model
 }
 \section{Demography}{
 
-Demographic changes (\strong{H}) are given by:
-\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
-This model has no parameter or terms to describe disease-induced mortality.
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
 \describe{
-\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
-\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
 }
+
 \strong{Setup:}
 \itemize{
 \item The defaults are no births and no deaths
-\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
-\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
-Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
 }
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
 }
 
 \section{Infection Dynamics}{

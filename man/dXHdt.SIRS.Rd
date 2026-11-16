@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{dXHdt.SIRS}
 \alias{dXHdt.SIRS}
-\title{Compute the derivatives for parasite infection dynamics in human population strata}
+\title{Compute derivatives for \code{SIRS} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIRS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,53 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the SIRS model
+Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SIRS} model
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Infection Dynamics}{
+
+Susceptible individuals become infectious at rate \eqn{hS}.
+Infections clear at the per-capita rate \eqn{r}, moving individuals into
+the recovered class. Immunity wanes at rate \eqn{\gamma}, returning
+recovered individuals to susceptibility.
+\deqn{
+\begin{array}{rl}
+dI/dt &= hS - rI - \mathbf{D}(I) \\
+dR/dt &= rI - \gamma R - \mathbf{D}(R) \\
+\end{array}}
+where \eqn{h} is the force of infection and \eqn{S = H - I - R}.
+The mortality function uses the same model for \eqn{I} and \eqn{R} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

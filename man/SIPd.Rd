@@ -2,46 +2,125 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{SIPd}
 \alias{SIPd}
-\title{The \code{SIPd} module for the XH component}
+\title{The \code{SIPd} module for the \strong{XH} component}
 \description{
-Implements the \strong{XH} component using a delay Susceptible-Infectious-Prophylaxis
-(SIPd) model of malaria infection dynamics. This is the delay differential
-equation version of the SIP model, in which the duration of prophylaxis
+Implements the \strong{XH} component using a delay Susceptible-Infected-chemoProtected
+(\code{SIPd}) model of malaria infection dynamics. This is the delay differential
+equation version of the \code{SIP} model, in which the duration of chemoprotection
 \eqn{\eta} is modelled as a fixed delay.
+Treatment clears infection and moves individuals into \eqn{P}, where they
+are protected from infection until chemoprotection ends.
+This implementation includes treatment parameters, human demographic change,
+and support for progressive stratification.
 }
 \section{State Variables}{
 
 \describe{
 \item{\code{H}}{total human (or host) population density}
 \item{\code{I}}{density of infectious humans}
-\item{\code{P}}{density of humans under chemoprophylaxis}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+\item{\code{treated}}{cumulative treatment history used for delayed outflow from \eqn{P}}
 }
-Note: susceptible density \eqn{S = H - I - P}.
+The delay derivative tracks treatment history. The initializer currently
+returns this auxiliary initial value under the name \code{cfoi}.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+In the \code{SIPd} module, a constant fraction of infectious bites causes an
+infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+The parameters returned by \link{get_XH_pars.SIPd} and modifiable by
+\link{change_XH_pars.SIPd} describe infection, treatment, and chemoprotection.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{rho}}{fraction of new infections immediately treated / entering \eqn{P}}
-\item{\code{xi}}{rate of mass drug administration (\eqn{\xi})}
-\item{\code{eta}}{prophylaxis duration (fixed delay, in days)}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{eta}}{chemoprotection duration (fixed delay, in days)}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Infections clear naturally at rate \eqn{r}, returning individuals to
+susceptibility. Treatment moves individuals into chemoprotection.
+A fraction \eqn{\rho} of incident infections \eqn{hS} are treated immediately.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dI/dt &= (1-\rho)hS - (r + \xi)I + D \cdot I \\
-dP/dt &= (\rho h + \xi)S + \xi I - \dot{\mathcal{H}}(P) + D \cdot P \\
+dI/dt &= (1-\rho)hS - (r + \xi)I - \mathbf{D}(I) \\
+dP/dt &= \rho hS + \xi(S+I) - T(t) - \mathbf{D}(P) \\
+d\,\mathrm{treated}/dt &= \rho hS + \xi(S+I) \\
 \end{array}}
-where \eqn{\dot{\mathcal{H}}(P)} is the delayed outflow from \eqn{P},
-computed via \link[deSolve:lagderiv]{deSolve::lagderiv}.
+where \eqn{S=H-I-P}. Delayed outflow \eqn{T(t)} is zero for
+\eqn{t \leq \eta}; otherwise it is the treatment inflow recorded
+\eqn{\eta} days ago, computed via \link[deSolve:lagderiv]{deSolve::lagderiv}.
+The mortality function uses the same model for \eqn{I} and \eqn{P} as for \eqn{H}.
 }
 
+\section{Prevalence}{
+
+True prevalence is \eqn{x = I/H}. The light microscopy, RDT, and PCR
+prevalence functions currently also return \eqn{I/H}, without diagnostic
+sensitivity parameters.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+This implementation does not currently initialize or use \code{mda(t)} or
+\code{msat(t)}. Treatment is modelled through the parameters \code{rho} and \code{xi};
+unlike \code{SIP}, it has no \code{sigma} parameter.
+}
+
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SIPd}, \link{setup_XH_obj.SIPd}
+\item Dynamics: \link{dXHdt.SIPd}
+\item Parameters: \link{get_XH_pars.SIPd}, \link{change_XH_pars.SIPd}
+\item Variables: \link{make_XH_inits_SIPd}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SIPd}, \link{setup_XH_inits.SIPd}
+\item \link{SIP}, \link[ramp.xds:SIS]{SIS}
+}
+}

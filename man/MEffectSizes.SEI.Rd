@@ -21,4 +21,38 @@ an \strong{\code{xds}} object
 \description{
 Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the SEI model
 }
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_emigration_rates]{ramp.xds::setup_emigration_rates}}
+\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
+\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Survival and Dispersal}{
+
+Mosquito survival and dispersal are described by the demographic matrix
+\eqn{\Omega}. The parameter \eqn{g} is the per-capita mortality rate while
+mosquitoes are in a patch. Mosquitoes emigrate from patches at per-capita
+rates \eqn{\sigma}, and a fraction \eqn{\mu} of emigrating mosquitoes is
+lost. The total rate of loss from a patch is \deqn{g+\mu\sigma.}
+The columns of the dispersal matrix \eqn{K} sum to zero. For non-trivial
+dispersal matrices, \eqn{\mbox{diag}(K)=-1}; its off-diagonal elements
+describe the fractions of surviving emigrants that arrive in other patches.
+The demographic matrix is
+\deqn{\Omega=\mbox{diag}(g+\sigma\mu)-K\cdot\mbox{diag}(\sigma(1-\mu)).}
+}
+
+\seealso{
+\link{SEI}, \link{MBionomics.SEI}
+}
 \keyword{internal}

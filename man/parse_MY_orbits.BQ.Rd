@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{parse_MY_orbits.BQ}
 \alias{parse_MY_orbits.BQ}
-\title{parse the output of deSolve and return variables for the BQ model}
+\title{Parse outputs for \code{BQ} (\strong{MY})}
 \usage{
 \method{parse_MY_orbits}{BQ}(outputs, xds_obj, s)
 }
@@ -18,5 +18,34 @@ none
 }
 \description{
 Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the BQ model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}}{density of uninfected, blood-feeding mosquitoes}
+\item{\code{Qu}}{density of uninfected, gravid (egg-laying) mosquitoes}
+\item{\code{By}}{density of infected (exposed), blood-feeding mosquitoes}
+\item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
+\item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
+\item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on the total
+blood-feeding mosquito density \eqn{B_u+B_y+B_z}. The infective biting
+density, \code{fqZ}, is based on infectious blood-feeding mosquitoes \eqn{B_z}.
+\link{F_fqM.BQ} and \link{F_fqZ.BQ} compute these quantities. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR}
+combines \code{fqZ} with the biting distribution matrix and resident-bite
+fraction to compute stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to
+compute stratum-level \code{HBR}.
+}
+
+\seealso{
+\link{BQ}, \link{get_MY_vars.BQ}
 }
 \keyword{internal}

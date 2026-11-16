@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{make_XH_inits_SIR}
 \alias{make_XH_inits_SIR}
-\title{Make initial values for the SIR human model, with defaults}
+\title{Make initial values for \code{SIR} (\strong{XH})}
 \usage{
 make_XH_inits_SIR(nStrata, options = list(), H = 1000, I = 1, R = 0)
 }
@@ -21,6 +21,19 @@ make_XH_inits_SIR(nStrata, options = list(), H = 1000, I = 1, R = 0)
 a \link{list}
 }
 \description{
-Make initial values for the SIR human model, with defaults
+Make initial values for \code{SIR} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

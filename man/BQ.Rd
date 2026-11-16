@@ -2,12 +2,13 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{BQ}
 \alias{BQ}
-\title{The \code{BQ} module for the MY component}
+\title{The \code{BQ} module for the \strong{MY} component}
 \description{
 Implements the \strong{MY} component using a BQ (Blood-feeding / egg-laying Queue)
 model of adult mosquito ecology and infection dynamics. Mosquitoes alternate
-between a blood-feeding state (\strong{B}) and a gravid / egg-laying state (\strong{Q}),
-and infection is tracked across both states.
+between blood-feeding (\strong{B}) and gravid / egg-laying (\strong{Q}) states.
+Infection is tracked as uninfected (\strong{u}), exposed (\strong{y}), or infectious
+(\strong{z}).
 }
 \section{State Variables}{
 
@@ -18,35 +19,102 @@ and infection is tracked across both states.
 \item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
 \item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
 \item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
 }
 }
 
 \section{Parameters}{
 
 \describe{
-\item{\code{f}}{blood feeding rate}
-\item{\code{q}}{human blood fraction}
-\item{\code{g}}{mosquito mortality rate}
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
 \item{\code{sigma_b}}{emigration rate during blood feeding}
 \item{\code{sigma_q}}{emigration rate during egg laying}
-\item{\code{mu}}{fraction lost during emigration}
-\item{\code{nu}}{oviposition rate (per mosquito)}
-\item{\code{eip}}{extrinsic incubation period (\eqn{\tau}); \eqn{\phi = 1/\tau}}
-\item{\code{eggsPerBatch}}{eggs laid per oviposition bout}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
+
+After basic setup, \link{change_MY_pars.BQ} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Survival and Dispersal}{
+
+Blood-feeding and gravid mosquitoes have separate demographic matrices,
+\eqn{\Omega_b} and \eqn{\Omega_q}. Each combines mortality \eqn{g}, the
+corresponding emigration rate (\eqn{\sigma_b} or \eqn{\sigma_q}), the
+emigration-loss fraction \eqn{\mu}, and its dispersal matrix (\eqn{K_b} or
+\eqn{K_q}). The columns of each dispersal matrix sum to zero; its
+off-diagonal elements describe the fractions of surviving emigrants that
+arrive in other patches.
+}
+
+\section{Blood Feeding}{
+
+Human blood feeding occurs from the blood-feeding state at rate \eqn{f}.
+A blood meal infects a susceptible mosquito with probability \eqn{\kappa};
+consequently, \eqn{fq\kappa} is the force of infection on susceptible
+blood-feeding mosquitoes.
 }
 
 \section{Dynamics}{
 
+Let \eqn{\phi=1/\tau}, where \eqn{\tau} is the extrinsic incubation period.
+Mosquitoes move between blood-feeding and gravid states at rate \eqn{f} and
+oviposit at rate \eqn{\nu}. Infection is acquired by uninfected
+blood-feeding mosquitoes; exposed mosquitoes progress to the infectious
+class at rate \eqn{\phi}. The compartment equations are:
 \deqn{
 \begin{array}{rl}
-dB_u/dt &= \Lambda + \nu Q_u - f B_u - \Omega_b \cdot B_u \\
-dQ_u/dt &= f(1 - q\kappa) B_u - \nu Q_u - \Omega_q \cdot Q_u \\
-dB_y/dt &= \nu Q_y - (f + \phi) B_y - \Omega_b \cdot B_y \\
-dQ_y/dt &= fq\kappa B_u + f B_y - (\nu + \phi) Q_y - \Omega_q \cdot Q_y \\
-dB_z/dt &= \phi B_y + \nu Q_z - f B_z - \Omega_b \cdot B_z \\
-dQ_z/dt &= \phi Q_y + f B_z - \nu Q_z - \Omega_q \cdot Q_z \\
+dB_u/dt &= \Lambda+\nu Q_u-fB_u-\Omega_b\cdot B_u \\\\
+dQ_u/dt &= f(1-q\kappa)B_u-\nu Q_u-\Omega_q\cdot Q_u \\\\
+dB_y/dt &= \nu Q_y-(f+\phi)B_y-\Omega_b\cdot B_y \\\\
+dQ_y/dt &= fq\kappa B_u+fB_y-(\nu+\phi)Q_y-\Omega_q\cdot Q_y \\\\
+dB_z/dt &= \phi B_y+\nu Q_z-fB_z-\Omega_b\cdot B_z \\\\
+dQ_z/dt &= \phi Q_y+fB_z-\nu Q_z-\Omega_q\cdot Q_z
 \end{array}
 }
 }
 
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on the total
+blood-feeding mosquito density \eqn{B_u+B_y+B_z}. The infective biting
+density, \code{fqZ}, is based on infectious blood-feeding mosquitoes \eqn{B_z}.
+\link{F_fqM.BQ} and \link{F_fqZ.BQ} compute these quantities. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR}
+combines \code{fqZ} with the biting distribution matrix and resident-bite
+fraction to compute stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to
+compute stratum-level \code{HBR}.
+}
+
+\section{Egg Laying}{
+
+Gravid mosquitoes lay eggs at rate \eqn{\nu}; the egg batch rate and
+number of eggs per batch determine patch-level egg production:
+\deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
+\link{F_eggs.BQ} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying} for
+distribution among aquatic habitats.
+}
+
+\seealso{
+\itemize{
+\item Basic setup: \link{make_MY_obj_BQ}, \link{setup_MY_obj.BQ}
+\item Dynamics: \link{dMYdt.BQ}
+\item Biting and eggs: \link{F_fqZ.BQ}, \link{F_fqM.BQ}, \link{F_eggs.BQ}
+\item Parameters: \link{get_MY_pars.BQ}, \link{change_MY_pars.BQ}
+\item Variables: \link{make_MY_inits_BQ}, \link{setup_MY_inits.BQ}, \link{parse_MY_orbits.BQ}
+}
+}

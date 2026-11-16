@@ -22,19 +22,7 @@
 #'   \item{`S=H-E-I`}{density of susceptible humans or hosts}
 #' }
 #'
-#' @section Demography:
-#' Demographic changes (**H**) are given by:
-#' \deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
-#' This model has no parameter or terms to describe disease-induced mortality.
-#' \describe{
-#'   \item{[Births] or \eqn{\mathbf{B}}}{the births function}
-#'   \item{[Deaths] or \eqn{\mathbf{D}}}{the deaths function}
-#' }
-#' **Setup:**
-#' + The defaults are no births and no deaths
-#' + Use [setup_births] to configure [Births]
-#' + Use [setup_deaths] to configure [Deaths]
-#' Also, see [xds_info_demographic_change].
+#' @inheritSection ramp.xds::SIS Demography
 #'
 #' @section Dynamical Term:
 #' \describe{
@@ -92,14 +80,10 @@
 #' infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
 #' infectiousness is \eqn{cI/H}.
 #'
-#' @section Mass Treatment:
-#' Mass treatment clears infectious individuals, returning them to susceptibility;
-#' exposed individuals are unaffected. At basic setup, \eqn{\Xi(t)=0}.
-#' To configure mass treatment, see [setup_mass_treatment].
-#' \describe{
-#'   \item{`mda(t)`}{mass drug administration}
-#'   \item{`msat(t)`}{mass screen and treat}
-#' }
+#' @inheritSection ramp.xds::SIS Mass Treatment
+#'
+#' @note In `SEIS`, mass treatment clears infectious individuals, returning
+#' them to susceptibility; exposed individuals are unaffected.
 #'
 #' @seealso
 #' + Basic Setup: [make_XH_obj_SEIS], [setup_XH_obj.SEIS]

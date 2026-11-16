@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{steady_state_X.SEIRV}
 \alias{steady_state_X.SEIRV}
-\title{Compute the steady states for the SEIRV model as a function of the daily EIR}
+\title{Compute the steady states for the \code{SEIRV} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SEIRV}(foi, H, xds_obj, i = 1)
 }
@@ -19,6 +19,9 @@
 the steady states as a named vector
 }
 \description{
-Compute the steady state of the SIS model as a function of the daily eir.
+Compute the steady state of the \code{SEIRV} model as a function of the daily eir.
+}
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

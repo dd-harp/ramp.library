@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{make_MY_obj_BRQS}
 \alias{make_MY_obj_BRQS}
-\title{Make parameters for RM ODE adult mosquito model}
+\title{Make parameters for \code{BRQS} (\strong{MY})}
 \usage{
 make_MY_obj_BRQS(
   nPatches,
@@ -45,6 +45,6 @@ make_MY_obj_BRQS(
 a \link{list}
 }
 \description{
-Make parameters for RM ODE adult mosquito model
+Make parameters for \code{BRQS} (\strong{MY})
 }
 \keyword{internal}

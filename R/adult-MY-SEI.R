@@ -1,9 +1,11 @@
 # specialized methods for the adult mosquito SEI model
 
-#' @title The `SEI` module for the MY component
+#' @title The `SEI` module for the **MY** component
 #' @description
 #' Implements the **MY** component using a Susceptible-Exposed-Infectious
-#' (SEI) compartmental model of adult mosquito infection dynamics.
+#' (SEI) compartmental model of adult mosquito infection dynamics. Mosquito
+#' abundance, exposed mosquitoes, and infectious mosquitoes are tracked
+#' separately across patches.
 #'
 #' @section State Variables:
 #' \describe{
@@ -12,28 +14,80 @@
 #'   \item{`Z`}{density of infectious adult mosquitoes}
 #' }
 #'
-#' @section Parameters:
+#' @section Dynamical Terms:
 #' \describe{
-#'   \item{`f`}{blood feeding rate}
-#'   \item{`q`}{human blood fraction}
-#'   \item{`g`}{mosquito mortality rate}
-#'   \item{`sigma`}{patch emigration rate}
-#'   \item{`mu`}{emigration-related loss}
-#'   \item{`eip`}{extrinsic incubation period (\eqn{\tau})}
-#'   \item{`nu`}{oviposition rate (per mosquito)}
-#'   \item{`eggsPerBatch`}{eggs laid per oviposition bout}
+#'   \item{`Lambda` or \eqn{\Lambda}}{adult mosquito emergence rate, computed by [ramp.xds::Emergence]}
+#'   \item{`kappa` or \eqn{\kappa}}{net infectiousness, computed by [ramp.xds::Transmission]}
 #' }
 #'
+#' @section Parameters:
+#' \describe{
+#'   \item{`f`}{blood feeding rate --- use [ramp.xds::setup_f] or [ramp.xds::setup_blood_feeding_rates]}
+#'   \item{`q`}{human fraction --- use [ramp.xds::setup_q] or [ramp.xds::setup_human_fractions]}
+#'   \item{`g`}{mosquito mortality rate --- use [ramp.xds::setup_g] or [ramp.xds::setup_mosquito_mortality]}
+#'   \item{`sigma` or \eqn{\sigma}}{emigration rate --- use [ramp.xds::setup_sigma] or [ramp.xds::setup_emigration_rates]}
+#'   \item{`mu` or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use [ramp.xds::setup_mu] or [ramp.xds::setup_emigration_loss]}
+#'   \item{`K` or `K_matrix`}{mosquito dispersal matrix --- use [ramp.xds::setup_K_matrix]}
+#'   \item{`eip` or \eqn{\tau}}{extrinsic incubation period --- use [ramp.xds::setup_eip]}
+#'   \item{`nu` or \eqn{\nu}}{egg batch rate --- use [ramp.xds::setup_nu] or [ramp.xds::setup_egg_batch_rates]}
+#'   \item{`eggsPerBatch` or \eqn{\Gamma}}{number of eggs per batch}
+#' }
+#' After basic setup, [change_MY_pars.SEI] can be used to change parameter
+#' values. Bionomic parameters are configured as static baselines by default.
+#'
+#' @section Survival and Dispersal:
+#' Mosquito survival and dispersal are described by the demographic matrix
+#' \eqn{\Omega}. The parameter \eqn{g} is the per-capita mortality rate while
+#' mosquitoes are in a patch. Mosquitoes emigrate from patches at per-capita
+#' rates \eqn{\sigma}, and a fraction \eqn{\mu} of emigrating mosquitoes is
+#' lost. The total rate of loss from a patch is \deqn{g+\mu\sigma.}
+#' The columns of the dispersal matrix \eqn{K} sum to zero. For non-trivial
+#' dispersal matrices, \eqn{\mbox{diag}(K)=-1}; its off-diagonal elements
+#' describe the fractions of surviving emigrants that arrive in other patches.
+#' The demographic matrix is
+#' \deqn{\Omega=\mbox{diag}(g+\sigma\mu)-K\cdot\mbox{diag}(\sigma(1-\mu)).}
+#'
+#' @section Blood Feeding:
+#' The blood feeding rate \eqn{f} and human fraction \eqn{q} determine the
+#' rate of human blood feeding, \eqn{fq}. Natural constraints are
+#' \eqn{f=0} when no blood hosts are available, \eqn{q=0} when no humans are
+#' available, and \eqn{q=1} when humans are the only available hosts.
+#'
 #' @section Dynamics:
+#' Adult mosquitoes emerge from aquatic habitats at rate \eqn{\Lambda}.
+#' Mosquitoes become exposed when they take an infectious human blood meal;
+#' exposed mosquitoes progress to the infectious class at rate
+#' \eqn{1/\tau}, where \eqn{\tau} is the EIP. The model equations are
 #' \deqn{
 #' \begin{array}{rl}
-#' dM/dt &= \Lambda - \Omega \cdot M \\
-#' dY/dt &= fq\kappa(M-Y) - \Omega \cdot Y \\
-#' dZ/dt &= (Y-Z)/\tau - \Omega \cdot Z \\
+#' dM/dt &= \Lambda-\Omega\cdot M \\\\
+#' dY/dt &= fq\kappa(M-Y)-\Omega\cdot Y \\\\
+#' dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
 #' \end{array}
 #' }
-#' where \eqn{\Omega} is the demographic matrix encoding mortality and dispersal,
-#' and \eqn{\kappa} is the net infectiousness of humans.
+#'
+#' @section Infective Biting:
+#' The patch-level human biting density, `fqM`, is \eqn{f q M}; the
+#' infective biting density, `fqZ`, is \eqn{f q Z}. [F_fqM.SEI] and
+#' [F_fqZ.SEI] compute these quantities from the total and infectious mosquito
+#' densities, respectively. [ramp.xds::compute_EIR] combines `fqZ` with the
+#' biting distribution matrix and resident-bite fraction to compute
+#' stratum-level `EIR`; [ramp.xds::F_hbr] uses `fqM` to compute stratum-level
+#' `HBR`.
+#'
+#' @section Egg Laying:
+#' The egg batch rate \eqn{\nu} and the number of eggs per batch
+#' \eqn{\Gamma} determine the egg production rate per patch:
+#' \deqn{G=\nu\Gamma M.}
+#' [F_eggs.SEI] computes \eqn{G}, which is passed to [ramp.xds::EggLaying]
+#' for distribution among aquatic habitats.
+#'
+#' @seealso
+#' + Basic setup: [make_MY_obj_SEI], [setup_MY_obj.SEI]
+#' + Dynamics: [dMYdt.SEI], [Update_MYt.SEI]
+#' + Biting and eggs: [F_fqZ.SEI], [F_fqM.SEI], [F_eggs.SEI]
+#' + Parameters: [get_MY_pars.SEI], [change_MY_pars.SEI]
+#' + Variables: [make_MY_inits_SEI], [setup_MY_inits.SEI], [parse_MY_orbits.SEI]
 #'
 #' @name SEI
 #' @rdname SEI
@@ -68,17 +122,13 @@ check_MY.SEI = function(xds_obj, s){
 
 #' @title Compute derivatives for `SEI` (**MY**)
 #' @description Implements [dMYdt] for the SEI ODE model.
-#'
-#' The dynamics of adult mosquitoes:
-#' \deqn{dM/dt = \Lambda - \Omega \cdot M}
-#'
-#' The density of infected but not infectious mosquitoes:
-#' \deqn{dY/dt = fq\kappa(M-Y) - \Omega \cdot Y}
-#'
-#' The density of infectious mosquitoes:
-#' \deqn{dZ/dt = (Y-Z)/\tau - \Omega \cdot Z}
+#' @inheritSection SEI State Variables
+#' @inheritSection SEI Dynamical Terms
+#' @inheritSection SEI Parameters
+#' @inheritSection SEI Dynamics
 #'
 #' @inheritParams ramp.xds::dMYdt
+#' @seealso [SEI], [F_fqZ.SEI], [F_eggs.SEI]
 #' @return a [numeric] vector
 #' @keywords internal
 #' @export
@@ -99,9 +149,12 @@ dMYdt.SEI <- function(t, y, xds_obj, s) {
 }
 
 
-#' @title Derivatives for adult mosquitoes
+#' @title Update state variables for `SEI` (**MY**)
 #' @description Implements [Update_MYt] for the SEI model.
+#' @inheritSection SEI State Variables
+#' @inheritSection SEI Dynamics
 #' @inheritParams ramp.xds::Update_MYt
+#' @seealso [SEI], [dMYdt.SEI]
 #' @return a [numeric] vector
 #' @keywords internal
 #' @export
@@ -128,7 +181,9 @@ Update_MYt.SEI <- function(t, y, xds_obj, s) {
 #' + the initial conditions are set by [setup_MY_inits]
 #' + `options` is passed to both to override the defaults
 #'
-#' @seealso [SEI], [make_MY_obj_SEI]
+#' @inheritSection SEI State Variables
+#' @inheritSection SEI Parameters
+#' @seealso [SEI], [make_MY_obj_SEI], [setup_MY_inits.SEI]
 #'
 #' @note The module object is stored at `xds_obj$MY_obj[[s]]`
 #'
@@ -153,6 +208,7 @@ setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
 #' @title Change parameters for `SEI` (**MY**)
 #' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
+#' @inheritSection SEI Parameters
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
@@ -179,6 +235,7 @@ change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
 #' @title Return the parameters as a list
 #'
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @inheritSection SEI Parameters
 #'
 #' @inheritParams ramp.xds::get_MY_pars
 #'
@@ -208,9 +265,11 @@ change_MY_inits.SEI <- function(xds_obj, options=list(), s=1) {
       return(xds_obj)
 }))}
 
-#' @title The net blood feeding rate of the infective mosquito population in a patch
+#' @title Infective mosquito biting rate for `SEI`
 #' @description Implements [F_fqZ] for the SEI model.
+#' @inheritSection SEI Infective Biting
 #' @inheritParams ramp.xds::F_fqZ
+#' @seealso [SEI], [F_fqM.SEI]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -221,9 +280,12 @@ F_fqZ.SEI <- function(t, y, xds_obj, s) {
   return(f*q*Z)
 }
 
-#' @title The net blood feeding rate of the infective mosquito population in a patch
-#' @description Implements [F_fqM] for the SEI model.
+#' @title Mosquito biting rate for `SEI`
+#' @description Returns `fqM`, the daily mosquito biting density on humans
+#' for each patch in the SEI model.
+#' @inheritSection SEI Infective Biting
 #' @inheritParams ramp.xds::F_fqM
+#' @seealso [SEI], [ramp.xds::F_hbr]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -234,9 +296,11 @@ F_fqM.SEI <- function(t, y, xds_obj, s) {
   return(f*q*M)
 }
 
-#' @title Number of eggs laid by adult mosquitoes
+#' @title Egg production rate for `SEI`
 #' @description Implements [F_eggs] for the SEI model.
+#' @inheritSection SEI Egg Laying
 #' @inheritParams ramp.xds::F_eggs
+#' @seealso [SEI], [ramp.xds::EggLaying]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -249,6 +313,7 @@ F_eggs.SEI <- function(t, y, xds_obj, s) {
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
+#' @inheritSection SEI State Variables
 #' @inheritParams ramp.xds::get_MY_vars
 #' @return a [list]
 #' @keywords internal
@@ -270,6 +335,7 @@ get_MY_vars.SEI <- function(y, xds_obj, s){
 #' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
+#' @inheritSection SEI State Variables
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
@@ -281,11 +347,13 @@ setup_MY_inits.SEI = function(xds_obj, options=list(), s=1){
 
 
 #' @title Make inits for SEI adult mosquito model
-#' @param nPatches the number of patches in the model
+#' @param nPatches the number of patches
 #' @param options a [list] of values that overrides the defaults
 #' @param M total mosquito density at each patch
 #' @param Y total infected mosquito density at each patch
 #' @param Z infectious mosquito density at each patch
+#' @inheritSection SEI State Variables
+#' @seealso [SEI], [setup_MY_inits.SEI]
 #' @return a [list]
 #' @keywords internal
 #' @export
@@ -303,6 +371,7 @@ make_MY_inits_SEI = function(nPatches, options = list(),
 
 #' @title Add indices for adult mosquitoes to parameter list
 #' @description Implements [setup_MY_ix] for the SEI model.
+#' @inheritSection SEI State Variables
 #' @inheritParams ramp.xds::setup_MY_ix
 #' @return a [list]
 #' @importFrom utils tail
@@ -325,9 +394,12 @@ setup_MY_ix.SEI <- function(xds_obj, s) {with(xds_obj,{
 })}
 
 
-#' @title parse the output of deSolve and return variables for the SEI model
+#' @title Parse outputs for `SEI` (**MY**)
 #' @description Implements [parse_MY_orbits] for the SEI model
+#' @inheritSection SEI State Variables
+#' @inheritSection SEI Infective Biting
 #' @inheritParams ramp.xds::parse_MY_orbits
+#' @seealso [SEI], [get_MY_vars.SEI]
 #' @return a [list]
 #' @keywords internal
 #' @export
@@ -345,6 +417,7 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 #' @title Change parameters for `SEI` (**MY**)
 #' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
+#' @inheritSection SEI Parameters
 #' @inheritParams change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
@@ -369,7 +442,7 @@ change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
   }))}
 
 
-#' @title Make parameters for SEI ODE adult mosquito model
+#' @title Make parameters for `SEI` (**MY**)
 #' @param nPatches is the number of patches, an integer
 #' @param options a [list] of values that overrides the defaults
 #' @param eip the extrinsic incubation period
@@ -381,6 +454,7 @@ change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @seealso [SEI], [setup_MY_obj.SEI]
 #' @keywords internal
 #'
 #' @export
@@ -412,7 +486,11 @@ make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
 
 #' @title Mosquito bionomics for `SEI` (**MY**)
 #' @description Implements [MBionomics] for the SEI model
+#' @inheritSection SEI Parameters
+#' @inheritSection SEI Survival and Dispersal
+#' @inheritSection SEI Blood Feeding
 #' @inheritParams ramp.xds::MBionomics
+#' @seealso [SEI], [MEffectSizes.SEI]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -437,7 +515,10 @@ MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
 
 #' @title Apply effect sizes for `SEI` (**MY**)
 #' @description Implements [MEffectSizes] for the SEI model
+#' @inheritSection SEI Parameters
+#' @inheritSection SEI Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
+#' @seealso [SEI], [MBionomics.SEI]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -494,7 +575,11 @@ get_sigma.SEI = function(xds_obj, s=1){
 
 #' @title Steady States: MY-SEI
 #' @description This method dispatches on the type of `MY_obj`.
+#' @inheritSection SEI State Variables
+#' @inheritSection SEI Parameters
+#' @inheritSection SEI Dynamics
 #' @inheritParams ramp.xds::steady_state_MY
+#' @seealso [SEI]
 #' @return none
 #' @keywords internal
 #' @export

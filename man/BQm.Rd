@@ -2,42 +2,92 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{BQm}
 \alias{BQm}
-\title{The \code{BQm} module for the MY component}
+\title{The \code{BQm} module for the \strong{MY} component}
 \description{
-Implements the \strong{MY} component using a BQm (Blood-feeding / egg-laying Queue,
-mosquito-only) model. This is the uninfected-only version of the BQ model:
-mosquitoes alternate between a blood-feeding state (\strong{B}) and a gravid /
-egg-laying state (\strong{Q}), without tracking infection states.
+Implements a mosquito blood-feeding / egg-laying queue model. Its
+initialized and parsed state vector tracks blood-feeding (\strong{B}) and gravid
+(\strong{Q}) mosquitoes in uninfected (\strong{u}), exposed (\strong{y}), and infectious
+(\strong{z}) classes.
 }
 \section{State Variables}{
 
 \describe{
-\item{\code{B}}{density of blood-feeding (not gravid) mosquitoes}
-\item{\code{Q}}{density of gravid (egg-laying) mosquitoes}
+\item{\code{Bu}, \code{By}, \code{Bz}}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+\item{\code{Qu}, \code{Qy}, \code{Qz}}{uninfected, exposed, and infectious gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
 }
 }
 
 \section{Parameters}{
 
 \describe{
-\item{\code{f}}{blood feeding rate}
-\item{\code{q}}{human blood fraction}
-\item{\code{g}}{mosquito mortality rate}
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
 \item{\code{sigma_b}}{emigration rate during blood feeding}
 \item{\code{sigma_q}}{emigration rate during egg laying}
-\item{\code{mu}}{fraction lost during emigration}
-\item{\code{nu}}{oviposition rate (per mosquito)}
-\item{\code{eggsPerBatch}}{eggs laid per oviposition bout}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
+After basic setup, \link{change_MY_pars.BQm} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Survival and Dispersal}{
+
+Blood-feeding and gravid mosquitoes have separate demographic matrices,
+\eqn{\Omega_b} and \eqn{\Omega_q}. Each combines mortality \eqn{g}, the
+corresponding emigration rate (\eqn{\sigma_b} or \eqn{\sigma_q}), the
+emigration-loss fraction \eqn{\mu}, and its dispersal matrix (\eqn{K_b} or
+\eqn{K_q}).
 }
 
 \section{Dynamics}{
 
-\deqn{
-\begin{array}{rl}
-dB/dt &= \Lambda + \nu Q - f B - \Omega_b \cdot B \\
-dQ/dt &= f B - \nu Q - \Omega_q \cdot Q \\
-\end{array}
-}
+Initialization and output parsing expose six state variables: \eqn{B_u},
+\eqn{Q_u}, \eqn{B_y}, \eqn{Q_y}, \eqn{B_z}, and \eqn{Q_z}. The current
+\link{dMYdt.BQm} method instead refers to aggregate \eqn{B} and \eqn{Q}, which
+are not returned by \link{get_MY_vars.BQm}. Therefore its equations do not
+currently correspond to the initialized six-state vector.
 }
 
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on
+\eqn{B_u+B_y+B_z}; the infective biting density, \code{fqZ}, is based on
+\eqn{B_z}. \link{F_fqM.BQm} and \link{F_fqZ.BQm} compute these quantities.
+\link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the biting distribution matrix
+and resident-bite fraction to compute stratum-level \code{EIR};
+\link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level \code{HBR}.
+}
+
+\section{Egg Laying}{
+
+Gravid mosquitoes lay eggs at rate \eqn{\nu}; the egg batch rate and
+number of eggs per batch determine patch-level egg production:
+\deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
+\link{F_eggs.BQm} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}
+for distribution among aquatic habitats.
+}
+
+\seealso{
+\itemize{
+\item Basic setup: \link{make_MY_obj_BQm}, \link{setup_MY_obj.BQm}
+\item Dynamics: \link{dMYdt.BQm}
+\item Biting and eggs: \link{F_fqZ.BQm}, \link{F_fqM.BQm}, \link{F_eggs.BQm}
+\item Parameters: \link{get_MY_pars.BQm}, \link{change_MY_pars.BQm}
+\item Variables: \link{make_MY_inits_BQm}, \link{setup_MY_inits.BQm}, \link{parse_MY_orbits.BQm}
+}
+}

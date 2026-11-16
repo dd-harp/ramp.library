@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{F_ni.SIPd}
 \alias{F_ni.SIPd}
-\title{Compute the "true" prevalence of infection / parasite rate}
+\title{Compute the net infectiousness}
 \usage{
 \method{F_ni}{SIPd}(vars, XH_obj)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_ni]{F_ni} for the SIPd model.
+Implements \link[ramp.xds:F_ni]{F_ni} for the \code{SIPd} model.
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

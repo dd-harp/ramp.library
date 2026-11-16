@@ -1,37 +1,77 @@
 # specialized methods for the adult mosquito BQm model
 
-#' @title The `BQm` module for the MY component
+#' @title The `BQm` module for the **MY** component
 #' @description
-#' Implements the **MY** component using a BQm (Blood-feeding / egg-laying Queue,
-#' mosquito-only) model. This is the uninfected-only version of the BQ model:
-#' mosquitoes alternate between a blood-feeding state (**B**) and a gravid /
-#' egg-laying state (**Q**), without tracking infection states.
+#' Implements a mosquito blood-feeding / egg-laying queue model. Its
+#' initialized and parsed state vector tracks blood-feeding (**B**) and gravid
+#' (**Q**) mosquitoes in uninfected (**u**), exposed (**y**), and infectious
+#' (**z**) classes.
 #'
 #' @section State Variables:
 #' \describe{
-#'   \item{`B`}{density of blood-feeding (not gravid) mosquitoes}
-#'   \item{`Q`}{density of gravid (egg-laying) mosquitoes}
+#'   \item{`Bu`, `By`, `Bz`}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+#'   \item{`Qu`, `Qy`, `Qz`}{uninfected, exposed, and infectious gravid mosquitoes}
+#'   \item{`M`}{total adult mosquito density, derived during parsing}
+#'   \item{`Y`}{total infected and infectious mosquito density, derived during parsing}
+#'   \item{`Z`}{total infectious mosquito density, derived during parsing}
+#' }
+#'
+#' @section Dynamical Terms:
+#' \describe{
+#'   \item{`Lambda` or \eqn{\Lambda}}{adult mosquito emergence rate, computed by [ramp.xds::Emergence]}
+#'   \item{`kappa` or \eqn{\kappa}}{net infectiousness, computed by [ramp.xds::Transmission]}
 #' }
 #'
 #' @section Parameters:
 #' \describe{
-#'   \item{`f`}{blood feeding rate}
-#'   \item{`q`}{human blood fraction}
-#'   \item{`g`}{mosquito mortality rate}
+#'   \item{`f`}{blood feeding rate --- use [ramp.xds::setup_f] or [ramp.xds::setup_blood_feeding_rates]}
+#'   \item{`q`}{human fraction --- use [ramp.xds::setup_q] or [ramp.xds::setup_human_fractions]}
+#'   \item{`g`}{mosquito mortality rate --- use [ramp.xds::setup_g] or [ramp.xds::setup_mosquito_mortality]}
 #'   \item{`sigma_b`}{emigration rate during blood feeding}
 #'   \item{`sigma_q`}{emigration rate during egg laying}
-#'   \item{`mu`}{fraction lost during emigration}
-#'   \item{`nu`}{oviposition rate (per mosquito)}
-#'   \item{`eggsPerBatch`}{eggs laid per oviposition bout}
+#'   \item{`mu`}{fraction of emigrating mosquitoes lost}
+#'   \item{`eip` or \eqn{\tau}}{extrinsic incubation period}
+#'   \item{`nu` or \eqn{\nu}}{egg batch rate --- use [ramp.xds::setup_nu] or [ramp.xds::setup_egg_batch_rates]}
+#'   \item{`eggsPerBatch` or \eqn{\Gamma}}{number of eggs per batch}
 #' }
+#' After basic setup, [change_MY_pars.BQm] can be used to change parameter
+#' values. Bionomic parameters are configured as static baselines by default.
+#'
+#' @section Survival and Dispersal:
+#' Blood-feeding and gravid mosquitoes have separate demographic matrices,
+#' \eqn{\Omega_b} and \eqn{\Omega_q}. Each combines mortality \eqn{g}, the
+#' corresponding emigration rate (\eqn{\sigma_b} or \eqn{\sigma_q}), the
+#' emigration-loss fraction \eqn{\mu}, and its dispersal matrix (\eqn{K_b} or
+#' \eqn{K_q}).
 #'
 #' @section Dynamics:
-#' \deqn{
-#' \begin{array}{rl}
-#' dB/dt &= \Lambda + \nu Q - f B - \Omega_b \cdot B \\
-#' dQ/dt &= f B - \nu Q - \Omega_q \cdot Q \\
-#' \end{array}
-#' }
+#' Initialization and output parsing expose six state variables: \eqn{B_u},
+#' \eqn{Q_u}, \eqn{B_y}, \eqn{Q_y}, \eqn{B_z}, and \eqn{Q_z}. The current
+#' [dMYdt.BQm] method instead refers to aggregate \eqn{B} and \eqn{Q}, which
+#' are not returned by [get_MY_vars.BQm]. Therefore its equations do not
+#' currently correspond to the initialized six-state vector.
+#'
+#' @section Infective Biting:
+#' The patch-level human biting density, `fqM`, is based on
+#' \eqn{B_u+B_y+B_z}; the infective biting density, `fqZ`, is based on
+#' \eqn{B_z}. [F_fqM.BQm] and [F_fqZ.BQm] compute these quantities.
+#' [ramp.xds::compute_EIR] combines `fqZ` with the biting distribution matrix
+#' and resident-bite fraction to compute stratum-level `EIR`;
+#' [ramp.xds::F_hbr] uses `fqM` to compute stratum-level `HBR`.
+#'
+#' @section Egg Laying:
+#' Gravid mosquitoes lay eggs at rate \eqn{\nu}; the egg batch rate and
+#' number of eggs per batch determine patch-level egg production:
+#' \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
+#' [F_eggs.BQm] computes \eqn{G}, which is passed to [ramp.xds::EggLaying]
+#' for distribution among aquatic habitats.
+#'
+#' @seealso
+#' + Basic setup: [make_MY_obj_BQm], [setup_MY_obj.BQm]
+#' + Dynamics: [dMYdt.BQm]
+#' + Biting and eggs: [F_fqZ.BQm], [F_fqM.BQm], [F_eggs.BQm]
+#' + Parameters: [get_MY_pars.BQm], [change_MY_pars.BQm]
+#' + Variables: [make_MY_inits_BQm], [setup_MY_inits.BQm], [parse_MY_orbits.BQm]
 #'
 #' @name BQm
 #' @rdname BQm
@@ -39,7 +79,12 @@ NULL
 
 #' @title Compute derivatives for `BQm` (**MY**)
 #' @description Implements [dMYdt] for the BQm ODE model.
+#' @inheritSection BQm State Variables
+#' @inheritSection BQm Dynamical Terms
+#' @inheritSection BQm Parameters
+#' @inheritSection BQm Dynamics
 #' @inheritParams ramp.xds::dMYdt
+#' @seealso [BQm], [F_fqZ.BQm], [F_eggs.BQm]
 #' @return a [numeric] vector
 #' @keywords internal
 #' @export
@@ -87,7 +132,10 @@ check_MY.BQm = function(xds_obj, s){
 
 #' @title Mosquito bionomics for `BQm` (**MY**)
 #' @description Implements [MBionomics] for the BQm model
+#' @inheritSection BQm Parameters
+#' @inheritSection BQm Survival and Dispersal
 #' @inheritParams ramp.xds::MBionomics
+#' @seealso [BQm], [MEffectSizes.BQm]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -112,7 +160,10 @@ MBionomics.BQm <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 
 #' @title Apply effect sizes for `BQm` (**MY**)
 #' @description Implements [MEffectSizes] for the BQm model
+#' @inheritSection BQm Parameters
+#' @inheritSection BQm Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
+#' @seealso [BQm], [MBionomics.BQm]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -129,9 +180,11 @@ MEffectSizes.BQm <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   return(xds_obj)
 })}
 
-#' @title Blood feeding rate of the infective mosquito population
+#' @title Infective mosquito biting rate for `BQm`
 #' @description Implements [F_fqZ] for the BQm model.
+#' @inheritSection BQm Infective Biting
 #' @inheritParams ramp.xds::F_fqZ
+#' @seealso [BQm], [F_fqM.BQm]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -142,9 +195,12 @@ F_fqZ.BQm <- function(t, y, xds_obj, s) {
   return(fqZ)
 }
 
-#' @title Blood feeding rate of the infective mosquito population
-#' @description Implements [F_fqM] for the BQm model.
+#' @title Mosquito biting rate for `BQm`
+#' @description Returns `fqM`, the daily mosquito biting density on humans
+#' for each patch in the BQm model.
+#' @inheritSection BQm Infective Biting
 #' @inheritParams ramp.xds::F_fqM
+#' @seealso [BQm], [ramp.xds::F_hbr]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -156,9 +212,11 @@ F_fqM.BQm <- function(t, y, xds_obj, s) {
   return(fqM)
 }
 
-#' @title Number of eggs laid by adult mosquitoes
+#' @title Egg production rate for `BQm`
 #' @description Implements [F_eggs] for the BQm model.
+#' @inheritSection BQm Egg Laying
 #' @inheritParams ramp.xds::F_eggs
+#' @seealso [BQm], [ramp.xds::EggLaying]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -180,7 +238,9 @@ F_eggs.BQm <- function(t, y, xds_obj, s) {
 #' + the initial conditions are set by [setup_MY_inits]
 #' + `options` is passed to both to override the defaults
 #'
-#' @seealso [BQm], [make_MY_obj_BQm]
+#' @inheritSection BQm State Variables
+#' @inheritSection BQm Parameters
+#' @seealso [BQm], [make_MY_obj_BQm], [setup_MY_inits.BQm]
 #'
 #' @note The module object is stored at `xds_obj$MY_obj[[s]]`
 #'
@@ -199,7 +259,7 @@ setup_MY_obj.BQm = function(MYname, xds_obj, options=list(), s=1){
   return(xds_obj)
 }
 
-#' @title Make parameters for RM ODE adult mosquito model
+#' @title Make parameters for `BQm` (**MY**)
 #' @param nPatches is the number of patches, an integer
 #' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
@@ -212,6 +272,7 @@ setup_MY_obj.BQm = function(MYname, xds_obj, options=list(), s=1){
 #' @param nu oviposition rate, per mosquito
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
+#' @seealso [BQm], [setup_MY_obj.BQm]
 #' @keywords internal
 #' @importFrom ramp.xds checkIt
 #' @export
@@ -244,10 +305,12 @@ make_MY_obj_BQm = function(nPatches, options=list(), eip=12,
 #' @title Return the parameters as a list
 #'
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @inheritSection BQm Parameters
 #'
 #' @inheritParams ramp.xds::get_MY_pars
 #'
 #' @return a [list]
+#' @seealso [BQm], [change_MY_pars.BQm]
 #' @keywords internal
 #' @export
 get_MY_pars.BQm <- function(xds_obj, s=1) {
@@ -262,6 +325,7 @@ get_MY_pars.BQm <- function(xds_obj, s=1) {
 #' @title Change parameters for `BQm` (**MY**)
 #' @description For the `BQm` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
+#' @inheritSection BQm Parameters
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
@@ -294,6 +358,7 @@ change_MY_pars.BQm <- function(xds_obj, options=list(), s=1) {
 #' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
+#' @inheritSection BQm State Variables
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
@@ -304,7 +369,7 @@ setup_MY_inits.BQm = function(xds_obj, options=list(), s=1){
 }
 
 #' @title Make inits for BQm adult mosquito model
-#' @param nPatches the number of patches in the model
+#' @param nPatches the number of patches
 #' @param options a [list] of values that overrides the defaults
 #' @param Bu total uninfected, not gravid mosquito density at each patch
 #' @param Qu total uninfected, gravid mosquito density at each patch
@@ -312,6 +377,8 @@ setup_MY_inits.BQm = function(xds_obj, options=list(), s=1){
 #' @param Qy infected, gravid mosquito density at each patch
 #' @param Bz infectious, not gravid mosquito density at each patch
 #' @param Qz infectious, gravid mosquito density at each patch
+#' @inheritSection BQm State Variables
+#' @seealso [BQm], [setup_MY_inits.BQm]
 #' @return a [list]
 #' @keywords internal
 #' @export
@@ -330,6 +397,7 @@ make_MY_inits_BQm = function(nPatches, options = list(),
 
 #' @title Add indices for adult mosquitoes to parameter list
 #' @description Implements [setup_MY_ix] for the BQm model.
+#' @inheritSection BQm State Variables
 #' @inheritParams ramp.xds::setup_MY_ix
 #' @return none
 #' @importFrom utils tail
@@ -364,6 +432,7 @@ setup_MY_ix.BQm <- function(xds_obj, s) {with(xds_obj,{
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
+#' @inheritSection BQm State Variables
 #' @inheritParams ramp.xds::get_MY_vars
 #' @return a [list]
 #' @keywords internal
@@ -379,9 +448,12 @@ get_MY_vars.BQm <- function(y, xds_obj, s){
          Qz = y[Qz_ix]
 )))}
 
-#' @title parse the output of deSolve and return variables for the BQm model
+#' @title Parse outputs for `BQm` (**MY**)
 #' @description Implements [parse_MY_orbits] for the BQm model
+#' @inheritSection BQm State Variables
+#' @inheritSection BQm Infective Biting
 #' @inheritParams ramp.xds::parse_MY_orbits
+#' @seealso [BQm], [get_MY_vars.BQm]
 #' @return none
 #' @keywords internal
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{make_XH_inits_SEIRV}
 \alias{make_XH_inits_SEIRV}
-\title{Make initial values for the SEIRV human model, with defaults}
+\title{Make initial values for \code{SEIRV} (\strong{XH})}
 \usage{
 make_XH_inits_SEIRV(
   nStrata,
@@ -33,6 +33,21 @@ make_XH_inits_SEIRV(
 a \link{list}
 }
 \description{
-Make initial values for the SEIRV human model, with defaults
+Make initial values for \code{SEIRV} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{V}}{density of vaccinated humans}
+\item{\code{S=H-E-I-R-V}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

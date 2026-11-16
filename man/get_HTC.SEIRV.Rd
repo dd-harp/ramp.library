@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{get_HTC.SEIRV}
 \alias{get_HTC.SEIRV}
-\title{Compute the HTC for the SEIRV model}
+\title{Compute the HTC for the \code{SEIRV} model}
 \usage{
 \method{get_HTC}{SEIRV}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SEIRV model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SEIRV} model with demography.
+}
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

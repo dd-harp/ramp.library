@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{get_HTC.SIP}
 \alias{get_HTC.SIP}
-\title{Compute the HTC for the SIP model}
+\title{Compute the HTC for the \code{SIP} model}
 \usage{
 \method{get_HTC}{SIP}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SIP model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SIP} model with demography.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

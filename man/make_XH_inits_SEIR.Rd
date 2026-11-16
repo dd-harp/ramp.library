@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{make_XH_inits_SEIR}
 \alias{make_XH_inits_SEIR}
-\title{Make initial values for the SEIR human model, with defaults}
+\title{Make initial values for \code{SEIR} (\strong{XH})}
 \usage{
 make_XH_inits_SEIR(nStrata, options = list(), H = 1000, I = 1, E = 0, R = 1)
 }
@@ -23,6 +23,20 @@ make_XH_inits_SEIR(nStrata, options = list(), H = 1000, I = 1, E = 0, R = 1)
 a \link{list}
 }
 \description{
-Make initial values for the SEIR human model, with defaults
+Make initial values for \code{SEIR} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{S=H-E-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

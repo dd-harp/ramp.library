@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{get_XH_vars.SIRS}
 \alias{get_XH_vars.SIRS}
-\title{Return the variables as a list}
+\title{List variables for \code{SIRS} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SIRS}(y, xds_obj, i)
 }
@@ -18,5 +18,18 @@ a \link{list}
 }
 \description{
 This method dispatches on the type of \code{xds_obj$XH_obj}
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered (temporarily immune) humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

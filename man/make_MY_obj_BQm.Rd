@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{make_MY_obj_BQm}
 \alias{make_MY_obj_BQm}
-\title{Make parameters for RM ODE adult mosquito model}
+\title{Make parameters for \code{BQm} (\strong{MY})}
 \usage{
 make_MY_obj_BQm(
   nPatches,
@@ -45,6 +45,9 @@ make_MY_obj_BQm(
 a \link{list}
 }
 \description{
-Make parameters for RM ODE adult mosquito model
+Make parameters for \code{BQm} (\strong{MY})
+}
+\seealso{
+\link{BQm}, \link{setup_MY_obj.BQm}
 }
 \keyword{internal}

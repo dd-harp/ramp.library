@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{dXHdt.SIPd}
 \alias{dXHdt.SIPd}
-\title{Compute derivatives for the \strong{XH} module \code{SIPd}}
+\title{Compute derivatives for \code{SIPd} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIPd}(t, y, xds_obj, i)
 }
@@ -19,18 +19,54 @@
 a \link{numeric} vector
 }
 \description{
-Compute the derivatives for SIPd compartmental model:
+Computes derivatives for the \code{SIPd} module (\strong{XH}).
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
 \deqn{
-\begin{array}{rrrrcc}
-dH/dt =& B(t,H) + D \cdot H \\
-dI/dt =& (1-\rho) h S & - (r+\xi) I &&+ D \cdot I \\
-dP/dt =& (\rho h +\xi)S & +\xi I & - \eta P &+ d{\cal H}(P)
-\end{array}
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
 }
-where \eqn{S = H-I-P}; \eqn{B(t, H)} is the
-time-dependent birth rate; and the demographic matrix is \eqn{D}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
 }
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Infection Dynamics}{
+
+Infections clear naturally at rate \eqn{r}, returning individuals to
+susceptibility. Treatment moves individuals into chemoprotection.
+A fraction \eqn{\rho} of incident infections \eqn{hS} are treated immediately.
+\deqn{
+\begin{array}{rl}
+dI/dt &= (1-\rho)hS - (r + \xi)I - \mathbf{D}(I) \\
+dP/dt &= \rho hS + \xi(S+I) - T(t) - \mathbf{D}(P) \\
+d\,\mathrm{treated}/dt &= \rho hS + \xi(S+I) \\
+\end{array}}
+where \eqn{S=H-I-P}. Delayed outflow \eqn{T(t)} is zero for
+\eqn{t \leq \eta}; otherwise it is the treatment inflow recorded
+\eqn{\eta} days ago, computed via \link[deSolve:lagderiv]{deSolve::lagderiv}.
+The mortality function uses the same model for \eqn{I} and \eqn{P} as for \eqn{H}.
+}
+
 \seealso{
-The parameters are defined in \link{make_XH_obj_SIPd}
+\link{SIPd}, \link{make_XH_obj_SIPd}
 }
 \keyword{internal}

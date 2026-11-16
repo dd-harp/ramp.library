@@ -2,46 +2,141 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{SIP}
 \alias{SIP}
-\title{The \code{SIP} module for the XH component}
+\title{The \code{SIP} module for the \strong{XH} component}
 \description{
-Implements the \strong{XH} component using a Susceptible-Infectious-Prophylaxis
-(SIP) compartmental model of malaria infection dynamics.
-Individuals in \eqn{P} are protected from infection but not from becoming
-infectious; they re-enter susceptibility when prophylaxis wanes.
+Implements the \strong{XH} component using a Susceptible-Infected-chemoProtected
+(\code{SIP}) compartmental model of malaria infection dynamics.
+Treatment clears infection and moves individuals into \eqn{P}, where they
+are protected from infection; they re-enter susceptibility when chemoprotection wanes.
+
+This implementation includes:
+\itemize{
+\item parameters to model treating and curing infections;
+\item functions to model mass treatment;
+\item functions to model human demographic change;
+\item support for progressive stratification.
+}
+}
+\note{
+In \code{SIP}, mass drug administration treats susceptible and infectious
+individuals, while mass screen and treat acts on infectious individuals.
+Treatment moves individuals into chemoprotection \eqn{P}, not susceptibility.
+Background treatment rates
+\code{xi} and \code{sigma} remain active when the mass-treatment functions are zero.
 }
 \section{State Variables}{
 
 \describe{
 \item{\code{H}}{total human (or host) population density}
 \item{\code{I}}{density of infectious humans}
-\item{\code{P}}{density of humans under chemoprophylaxis}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
 }
-Note: susceptible density \eqn{S = H - I - P}.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+In the \code{SIP} module, a constant fraction of infectious bites causes an
+infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+The parameters returned by \link{get_XH_pars.SIP} and modifiable by
+\link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{rho}}{fraction of new infections immediately treated / entering \eqn{P}}
-\item{\code{xi}}{rate of mass drug administration (\eqn{\xi(t)})}
-\item{\code{sigma}}{rate of mass screen-and-treat (\eqn{\sigma(t)})}
-\item{\code{eta}}{rate of prophylaxis waning}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{sigma} or \eqn{\sigma}}{additional treatment rate for infectious individuals}
+\item{\code{eta}}{rate of chemoprotection waning}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Infections clear naturally at rate \eqn{r}, returning individuals to
+susceptibility. Treatment instead moves individuals into chemoprotection.
+A fraction \eqn{\rho} of incident infections \eqn{hS} are treated immediately.
+Define \eqn{\xi_t = \xi + mda(t)} and \eqn{\sigma_t = \sigma + msat(t)}.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dI/dt &= (1-\rho)hS - (r + \xi + \sigma)I + D \cdot I \\
-dP/dt &= \rho hS + \xi(S+I) + \sigma I - \eta P + D \cdot P \\
+dI/dt &= (1-\rho)hS - (r + \xi_t + \sigma_t)I - \mathbf{D}(I) \\
+dP/dt &= \rho hS + \xi_t(S+I) + \sigma_t I - \eta P - \mathbf{D}(P) \\
 \end{array}}
 where \eqn{h} is the force of infection and \eqn{S = H - I - P}.
+The mortality function uses the same model for \eqn{I} and \eqn{P} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
 }
 
+\section{Prevalence}{
+
+True prevalence is \eqn{x = I/H}. The light microscopy, RDT, and PCR
+prevalence functions currently also return \eqn{I/H}, without diagnostic
+sensitivity parameters.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Mass Treatment}{
+
+
+
+Mass treatment clears infections. At basic setup
+\eqn{\Xi(t)=0}. To set up mass treatment, see \link[ramp.xds]{setup_mass_treatment}.
+Mass treatment is either:
+
+\describe{
+\item{\code{mda(t)} or \eqn{\Xi(t)}}{mass drug administration}
+\item{\code{msat(t)} or \eqn{\Xi(t)}}{mass screen and treat}
+}
+
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SIP}, \link{setup_XH_obj.SIP}
+\item Dynamics: \link{dXHdt.SIP}
+\item Parameters: \link{get_XH_pars.SIP}, \link{change_XH_pars.SIP}
+\item Variables: \link{make_XH_inits_SIP}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SIP}, \link{setup_XH_inits.SIP}
+\item \link[ramp.xds:SIS]{SIS}
+}
+}

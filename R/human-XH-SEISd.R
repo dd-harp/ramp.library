@@ -20,7 +20,7 @@
 #' It also includes parameters for treating and curing infections and functions
 #' to model mass treatment.
 #'
-#' @inheritSection SEIS Demography
+#' @inheritSection ramp.xds::SIS Demography
 #'
 #' @section Dynamical Term:
 #' \describe{
@@ -69,7 +69,10 @@
 #' @inheritSection SEIS Prevalence
 #' @inheritSection SEIS Infectiousness
 #'
-#' @inheritSection SEIS Mass Treatment
+#' @inheritSection ramp.xds::SIS Mass Treatment
+#'
+#' @note In `SEISd`, mass treatment clears infectious individuals, returning
+#' them to susceptibility; exposed individuals and exposure history are unaffected.
 #'
 #' @seealso
 #' + Basic Setup: [make_XH_obj_SEISd], [setup_XH_obj.SEISd]

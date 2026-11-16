@@ -17,6 +17,17 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_infectivity]{F_infectivity} for the SEIRV model.
+Implements \link[ramp.xds:F_infectivity]{F_infectivity} for the \code{SEIRV} model.
+}
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

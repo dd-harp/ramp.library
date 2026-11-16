@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{F_pfpr_by_pcr.SIPd}
 \alias{F_pfpr_by_pcr.SIPd}
-\title{Compute the prevalence of infection by pcr}
+\title{Compute the prevalence of infection by PCR}
 \usage{
 \method{F_pfpr_by_pcr}{SIPd}(vars, XH_obj)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SIPd model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SIPd} model.
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

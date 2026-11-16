@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{F_H.SIP}
 \alias{F_H.SIP}
-\title{Size of effective infectious human population}
+\title{Compute population density}
 \usage{
 \method{F_H}{SIP}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_I]{F_I} for the SIP model.
+Implements \link[ramp.xds:F_H]{F_H} for the \code{SIP} model.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

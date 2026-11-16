@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{get_XH_vars.SIP}
 \alias{get_XH_vars.SIP}
-\title{Return the variables as a list}
+\title{List variables for \code{SIP} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SIP}(y, xds_obj, i)
 }
@@ -18,5 +18,8 @@ a \link{list}
 }
 \description{
 This method dispatches on the type of \code{xds_obj$XH_obj}
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

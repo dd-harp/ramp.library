@@ -19,4 +19,15 @@ a \link{list}
 \description{
 This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}, \code{By}, \code{Bz}}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+\item{\code{Qu}, \code{Qy}, \code{Qz}}{uninfected, exposed, and infectious gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
 \keyword{internal}

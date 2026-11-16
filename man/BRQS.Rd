@@ -2,29 +2,41 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{BRQS}
 \alias{BRQS}
-\title{The \code{BRQS} module for the MY component}
+\title{The \code{BRQS} module for the \strong{MY} component}
 \description{
 Implements the \strong{MY} component using a BRQS (Blood-feeding / Resting /
 gravid Queue / Sugar-feeding) model of adult mosquito ecology and infection
-dynamics. Mosquitoes cycle through four behavioural states, and infection
-is tracked across all states with rate \eqn{\tau} governing progression from
-exposed (\strong{y}) to infectious (\strong{z}).
+dynamics. Mosquitoes cycle through sugar-feeding (\strong{S}), blood-feeding
+(\strong{B}), resting (\strong{R}), and gravid (\strong{Q}) states. Each behavioral state
+is tracked as uninfected (\strong{u}), exposed (\strong{y}), or infectious (\strong{z}).
 }
 \section{State Variables}{
 
 \describe{
 \item{\code{Su}, \code{Bu}, \code{Ru}, \code{Qu}}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
-\item{\code{Sy}, \code{By}, \code{Ry}, \code{Qy}}{infected (exposed) mosquitoes in each behavioural state}
-\item{\code{Sz}, \code{Bz}, \code{Rz}, \code{Qz}}{infectious mosquitoes in each behavioural state}
+\item{\code{Sy}, \code{By}, \code{Ry}, \code{Qy}}{exposed mosquitoes in each behavioral state}
+\item{\code{Sz}, \code{Bz}, \code{Rz}, \code{Qz}}{infectious mosquitoes in each behavioral state}
+\item{\code{S}, \code{B}, \code{R}, \code{Q}}{total mosquitoes in each behavioral state, derived by \link{get_MY_vars.BRQS}}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total exposed and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, supplied by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, supplied by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
 }
 }
 
 \section{Parameters}{
 
 \describe{
-\item{\code{f}}{blood feeding rate}
-\item{\code{q}}{human blood fraction}
-\item{\code{g}}{background mortality rate}
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g_b}, \code{g_q}, \code{g_s}, \code{g_r}}{mortality rates in the blood-feeding, gravid, sugar-feeding, and resting states}
 \item{\code{rho}}{rate of leaving the sugar-feeding state to blood-feed}
 \item{\code{zeta}}{rate at which blood-feeding mosquitoes take a sugar meal}
 \item{\code{xi}}{rate of leaving the resting state}
@@ -32,22 +44,69 @@ exposed (\strong{y}) to infectious (\strong{z}).
 \item{\code{nu}, \code{theta}}{parameters governing the egg-laying / gravid state}
 \item{\code{delta}}{fraction of gravid mosquitoes returning to blood feeding}
 \item{\code{omega}}{fraction of emerging mosquitoes entering the sugar-feeding state}
-\item{\code{tau}}{rate of progression from exposed to infectious (\eqn{1/\tau} = EIP)}
-\item{\code{sigma_b}, \code{sigma_q}, \code{sigma_s}}{emigration rates in each state}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{eip}}{extrinsic incubation period; \eqn{\tau} is its reciprocal}
+\item{\code{sigma_b}, \code{sigma_q}, \code{sigma_s}}{emigration rates in the blood-feeding, gravid, and sugar-feeding states}
+\item{\code{mu_b}, \code{mu_q}, \code{mu_s}}{fraction of emigrants lost in each dispersal state}
+\item{\code{K_b}, \code{K_q}, \code{K_s}}{dispersal matrices for the blood-feeding, gravid, and sugar-feeding states}
+\item{\code{eggsPerBatch}}{number of eggs per batch}
 }
+
+After basic setup, \link{change_MY_pars.BRQS} can be used to change parameter
+values. The model routes emergence between the blood-feeding and
+sugar-feeding states using \eqn{\omega}; behavioral transition rates
+\eqn{\rho}, \eqn{\zeta}, \eqn{\xi}, \eqn{\eta}, \eqn{\nu}, and \eqn{\theta}
+govern movement among the four behavioral states.
+}
+
+\section{Survival and Dispersal}{
+
+Blood-feeding, gravid, and sugar-feeding mosquitoes have separate
+demographic matrices, \eqn{\Omega_b}, \eqn{\Omega_q}, and \eqn{\Omega_s}.
+Each combines its state-specific mortality, emigration rate, emigration-loss
+fraction, and dispersal matrix.
+}
+
+\section{Blood Feeding}{
+
+Blood feeding occurs from the blood-feeding state at rate \eqn{f}. A
+human blood meal transmits infection to a susceptible mosquito with
+probability \eqn{\kappa}; the force of infection is \eqn{fq\kappa}.
 }
 
 \section{Dynamics}{
 
-\deqn{
-\begin{array}{rl}
-dB_u/dt &= (1-\omega)\Lambda + \rho S_u + (\nu+\theta)\delta Q_u + \xi R - (f+\zeta) B_u - \Omega_b \cdot B_u \\
-dR_u/dt &= f(1-q\kappa) B_u - (\xi + \eta + g) R_u \\
-dQ_u/dt &= \eta R_u - (\nu + \theta) Q_u - \Omega_q \cdot Q_u \\
-dS_u/dt &= \omega\Lambda + \zeta B_u + (\nu+\theta)(1-\delta) Q_u - \rho S_u - \Omega_s \cdot S_u \\
-\end{array}
-}
-with analogous equations for the infected (\strong{y}) and infectious (\strong{z}) classes,
-where the term \eqn{\tau} governs progression between infection stages.
+The derivative method tracks the twelve state variables listed above.
+Mosquitoes move among the four behavioral states, acquire infection during
+human blood feeding, and progress from exposed to infectious at rate
+\eqn{\tau}. The implementation is \link{dMYdt.BRQS}.
 }
 
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on blood-feeding
+mosquitoes; infective biting density, \code{fqZ}, is based on infectious
+blood-feeding mosquitoes. \link{F_fqM.BRQS} and \link{F_fqZ.BRQS} compute these
+quantities. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the biting
+distribution matrix and resident-bite fraction to compute stratum-level
+\code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level \code{HBR}.
+}
+
+\section{Egg Laying}{
+
+Gravid mosquitoes lay eggs at rate \eqn{\nu}; egg production is the number
+of gravid mosquitoes multiplied by the egg batch rate and eggs per batch:
+\deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
+\link{F_eggs.BRQS} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}
+for distribution among aquatic habitats.
+}
+
+\seealso{
+\itemize{
+\item Basic setup: \link{make_MY_obj_BRQS}, \link{setup_MY_obj.BRQS}
+\item Dynamics: \link{dMYdt.BRQS}
+\item Biting and eggs: \link{F_fqZ.BRQS}, \link{F_fqM.BRQS}, \link{F_eggs.BRQS}
+\item Parameters: \link{get_MY_pars.BRQS}, \link{change_MY_pars.BRQS}
+\item Variables: \link{make_MY_inits_BRQS}, \link{setup_MY_inits.BRQS}, \link{parse_MY_orbits.BRQS}
+}
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{make_XH_obj_SIP}
 \alias{make_XH_obj_SIP}
-\title{Make parameters for SIP human model, with defaults}
+\title{Make a \code{SIP} \strong{XH} model object}
 \usage{
 make_XH_obj_SIP(
   nStrata,
@@ -27,18 +27,36 @@ make_XH_obj_SIP(
 
 \item{c}{transmission probability (efficiency) from human to mosquito}
 
-\item{rho}{probability of successful treatment upon infection}
+\item{rho}{fraction of incident infections treated and cured, entering P}
 
-\item{eta}{prophylaxis waning rate}
+\item{eta}{chemoprotection waning rate}
 
-\item{xi}{background treatment rate}
+\item{xi}{background treatment rate for susceptible and infectious individuals}
 
-\item{sigma}{increased treatment rate while infected}
+\item{sigma}{additional treatment rate for infectious individuals}
 }
 \value{
-a \link{list}
+an \strong{XH} model object
 }
 \description{
-Make parameters for SIP human model, with defaults
+Make a \code{SIP} \strong{XH} model object
+}
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SIP} and modifiable by
+\link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{sigma} or \eqn{\sigma}}{additional treatment rate for infectious individuals}
+\item{\code{eta}}{rate of chemoprotection waning}
+}
+}
+
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

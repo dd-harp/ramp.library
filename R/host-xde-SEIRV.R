@@ -1,10 +1,12 @@
 # specialized methods for the human SEIRV model
 
-#' @title The `SEIRV` module for the XH component
+#' @title The `SEIRV` module for the **XH** component
 #' @description
 #' Implements the **XH** component using a Susceptible-Exposed-Infectious-Recovered-Vaccinated
-#' (SEIRV) compartmental model of human infection dynamics, extending SEIR with a
+#' (`SEIRV`) compartmental model of human infection dynamics, extending `SEIR` with a
 #' vaccinated compartment.
+#' This implementation includes human demographic change and support for
+#' progressive stratification.
 #'
 #' @section State Variables:
 #' \describe{
@@ -13,10 +15,21 @@
 #'   \item{`I`}{density of infectious humans}
 #'   \item{`R`}{density of recovered humans}
 #'   \item{`V`}{density of vaccinated humans}
+#'   \item{`S=H-E-I-R-V`}{density of susceptible humans or hosts}
 #' }
-#' Note: susceptible density \eqn{S = H - E - I - R - V}.
+#'
+#' @inheritSection ramp.xds::SIS Demography
+#'
+#' @section Dynamical Term:
+#' \describe{
+#'   \item{\eqn{h} or `foi`}{The force of infection is computed and stored by [Exposure] as `FoI`}
+#' }
+#' A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 #'
 #' @section Parameters:
+#' [make_XH_obj_SEIRV] supplies defaults for all parameters.
+#' [change_XH_pars.SEIRV] currently changes `b`, `c`, `r`, `tau`, and `gamma`;
+#' it leaves `alpha` and `varepsilon` unchanged.
 #' \describe{
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
@@ -25,20 +38,47 @@
 #'   \item{`alpha`}{proportion of births that are vaccinated}
 #'   \item{`varepsilon`}{proportion of recovered individuals that gain vaccine-like protection}
 #'   \item{`gamma`}{rate of loss of immunity in \eqn{R}}
-#'   \item{`B`}{time-dependent birth rate function \eqn{B(t, H)}}
-#'   \item{`D`}{linear operator (matrix) for mortality, migration, aging, and transfers}
 #' }
 #'
-#' @section Dynamics:
+#' @section Infection Dynamics:
+#' Exposed individuals become infectious at rate \eqn{\tau}.
+#' Infections clear at rate \eqn{r}; a fraction \eqn{\varepsilon} enter
+#' the vaccinated class, while the rest enter the recovered class.
+#' Recovered immunity wanes at rate \eqn{\gamma}. A fraction \eqn{\alpha}
+#' of births enter the vaccinated class, which has no waning term.
 #' \deqn{
 #' \begin{array}{rl}
-#' dH/dt &= B(t,H) + D \cdot H \\
-#' dE/dt &= hS - \tau E + D \cdot E \\
-#' dI/dt &= \tau E - rI + D \cdot I \\
-#' dR/dt &= (1-\varepsilon)rI - \gamma R + D \cdot R \\
-#' dV/dt &= \alpha B(t,H) + \varepsilon rI + D \cdot V \\
+#' dE/dt &= hS - \tau E - \mathbf{D}(E) \\
+#' dI/dt &= \tau E - rI - \mathbf{D}(I) \\
+#' dR/dt &= (1-\varepsilon)rI - \gamma R - \mathbf{D}(R) \\
+#' dV/dt &= \alpha\mathbf{B}(t,H) + \varepsilon rI - \mathbf{D}(V) \\
 #' \end{array}}
 #' where \eqn{h} is the force of infection.
+#' The mortality function uses the same model for each compartment as for
+#' \eqn{H}. Susceptible density \eqn{S=H-E-I-R-V} is redundant and is
+#' computed after solving.
+#'
+#' @section Prevalence:
+#' [F_prevalence.SEIRV] returns \eqn{x=I/H}. In contrast,
+#' [parse_XH_orbits.SEIRV] stores `true_pr` as \eqn{(E+I)/H}.
+#' This module has no diagnostic sensitivity parameters or module-specific
+#' light microscopy, RDT, or PCR prevalence methods.
+#'
+#' @section Infectiousness:
+#' The probability that a mosquito becomes infected after feeding on an
+#' infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+#' infectiousness is \eqn{cI/H}.
+#'
+#' @section Mass Treatment:
+#' This implementation does not initialize or use `mda(t)` or `msat(t)`,
+#' and has no treatment parameters `rho` or `sigma`.
+#'
+#' @seealso
+#' + Basic Setup: [make_XH_obj_SEIRV], [setup_XH_obj.SEIRV]
+#' + Dynamics: [dXHdt.SEIRV]
+#' + Parameters: [change_XH_pars.SEIRV]
+#' + Variables: [make_XH_inits_SEIRV], [get_XH_inits], [change_XH_inits.SEIRV], [setup_XH_inits.SEIRV]
+#' + [SEIR], [SIRS]
 #'
 #' @name SEIRV
 #' @rdname SEIRV
@@ -56,6 +96,7 @@ NULL
 #' @return the **`xds`** object
 #' @keywords internal
 #'
+#' @seealso [SEIRV]
 #' @export
 setup_skillset_XH.SEIRV = function(xds_obj,i){
   skills =   list(
@@ -76,17 +117,21 @@ setup_skillset_XH.SEIRV = function(xds_obj,i){
 #'
 #' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 check_XH.SEIRV = function(xds_obj, i){
   return(xds_obj)
 }
 
 
-#' @title Compute the derivatives for parasite infection dynamics in human population strata
-#' @description Implements [dXHdt] for the SEIRV model
+#' @title Compute derivatives for `SEIRV` (**XH**)
+#' @description Implements [dXHdt] for the `SEIRV` model
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @keywords internal
+#' @inheritSection SEIRV Demography
+#' @inheritSection SEIRV Infection Dynamics
+#' @seealso [SEIRV]
 #' @export
 dXHdt.SEIRV<- function(t, y, xds_obj, i) {
 
@@ -108,11 +153,12 @@ dXHdt.SEIRV<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title DTS updating for the SIS model for human / vertebrate host infections
-#' @description Implements [Update_XHt] for the SIS model
+#' @title DTS updating for `SEIRV` (**XH**)
+#' @description Implements [Update_XHt] for the `SEIRV` model
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
 
@@ -132,11 +178,13 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
 }
 
 #' @title Change parameters for `SEIRV` (**XH**)
-#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} species,
+#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIRV Parameters
+#' @seealso [SEIRV]
 #' @export
 change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
@@ -150,12 +198,14 @@ change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
   }))}
 
 
-#' @title Return the parameters as a list
-#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} species,
+#' @title Change initial values for `SEIRV` (**XH**)
+#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
 #' @export
 change_XH_inits.SEIRV <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]]$inits,
@@ -168,11 +218,12 @@ change_XH_inits.SEIRV <- function(xds_obj, options=list(), i=1) {
       return(xds_obj)
   }))}
 
-#' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
-#' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
+#' @title Compute the steady states for the dts `SEIRV` model as a function of the daily EIR
+#' @description Compute the steady state of the  dts `SEIRV` model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 steady_state_X.SEIRV_dts = function(foi, H, xds_obj, i=1){
   ar = exp(-foi)
@@ -188,7 +239,7 @@ steady_state_X.SEIRV_dts = function(foi, H, xds_obj, i=1){
 
 
 
-#' @title Make initial values for the SEIRV human model, with defaults
+#' @title Make initial values for `SEIRV` (**XH**)
 #' @param nStrata the number of strata in the model
 #' @param options a [list] to override defaults
 #' @param H the initial value for H
@@ -198,6 +249,8 @@ steady_state_X.SEIRV_dts = function(foi, H, xds_obj, i=1){
 #' @param V the initial values for V
 #' @return a [list]
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
 #' @export
 make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0, V=1){with(options,{
   H = checkIt(H, nStrata)
@@ -215,14 +268,16 @@ make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0,
 
 #' @title Setup initial values for `SEIRV` (**XH**)
 #' @description Set initial values for all the variables in the `SEIRV` module
-#' (**XH**) for the \eqn{i^{th}} species.
+#' (**XH**) for the \eqn{i^{th}} host species.
 #' + [make_XH_inits_SEIRV] supplies default values
 #' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return a [list] vector
+#' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
 #' @export
 setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIRV(xds_obj$nStrata[i], options)
@@ -234,11 +289,12 @@ setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the SEIRV model.
+#' @description Implements [setup_XH_ix] for the `SEIRV` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return none
+#' @return an **`xds`** object
 #' @importFrom utils tail
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 setup_XH_ix.SEIRV <- function(xds_obj, i) {with(xds_obj,{
 
@@ -266,11 +322,13 @@ setup_XH_ix.SEIRV <- function(xds_obj, i) {with(xds_obj,{
 
 
 
-#' @title Return the variables as a list
+#' @title List variables for `SEIRV` (**XH**)
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
 #' @export
 get_XH_vars.SEIRV <- function(y, xds_obj, i) {
     with(xds_obj$XH_obj[[i]]$ix,{
@@ -286,7 +344,7 @@ get_XH_vars.SEIRV <- function(y, xds_obj, i) {
 
 
 
-#' @title Make parameters for SEIRV human model, with defaults
+#' @title Make a `SEIRV` **XH** model object
 #' @param nStrata is the number of population strata
 #' @param options a [list] that could override defaults
 #' @param tau  incubation rate
@@ -296,8 +354,10 @@ get_XH_vars.SEIRV <- function(y, xds_obj, i) {
 #' @param alpha  proportion of vaccinated humans
 #' @param gamma   loss of immunity rate
 #' @param varepsilon proportion of recovered humans that are protected from the pathogen
-#' @return a [list]
+#' @return an **XH** model object
 #' @keywords internal
+#' @inheritSection SEIRV Parameters
+#' @seealso [SEIRV]
 #' @export
 make_XH_obj_SEIRV = function(nStrata, options=list(),
                           alpha =0.1, b=0.55, r=1/180,
@@ -319,11 +379,12 @@ make_XH_obj_SEIRV = function(nStrata, options=list(),
     return(XH_obj)
   })}
 
-#' @title Compute the steady states for the SEIRV model as a function of the daily EIR
-#' @description Compute the steady state of the SIS model as a function of the daily eir.
+#' @title Compute the steady states for the `SEIRV` model as a function of the daily EIR
+#' @description Compute the steady state of the `SEIRV` model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
@@ -352,8 +413,10 @@ steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return a [list] vector
+#' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @inheritSection SEIRV Parameters
 #' @export
 setup_XH_obj.SEIRV = function(XHname, residence, xds_obj, options=list(), i=1){
   xds_obj$XHname = "SEIRV"
@@ -372,11 +435,13 @@ setup_XH_obj.SEIRV = function(XHname, residence, xds_obj, options=list(), i=1){
 
 
 
-#' @title Size of effective infectious human population
-#' @description Implements [F_I] for the SIS model.
+#' @title Compute infectious density for `SEIRV` (**XH**)
+#' @description Implements [F_I] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIRV Infectiousness
+#' @seealso [SEIRV]
 #' @export
 F_I.SEIRV <- function(t,y, xds_obj, i) {
   I = y[xds_obj$XH_obj[[i]]$ix$I_ix]
@@ -388,11 +453,13 @@ F_I.SEIRV <- function(t,y, xds_obj, i) {
 
 
 
-#' @title Size of effective infectious human population
-#' @description Implements [F_H] for the SEIRV model.
+#' @title Compute population density
+#' @description Implements [F_H] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIRV Demography
+#' @seealso [SEIRV]
 #' @export
 F_H.SEIRV <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj, i), {
@@ -405,21 +472,25 @@ F_H.SEIRV <- function(t, y, xds_obj, i){
 
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_infectivity] for the SEIRV model.
+#' @description Implements [F_infectivity] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIRV Dynamical Term
+#' @seealso [SEIRV]
 #' @export
 F_infectivity.SEIRV <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]],return(b))
 }
 
 
-#' @title parse the output of deSolve and return variables for the SEIRV model
-#' @description Implements [parse_XH_orbits] for the SEIRV model
+#' @title Parse outputs for `SEIRV` (**XH**)
+#' @description Implements [parse_XH_orbits] for the `SEIRV` model
 #' @inheritParams ramp.xds::parse_XH_orbits
-#' @return none
+#' @return a named list of module variables
 #' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
 #' @export
 parse_XH_orbits.SEIRV <- function(outputs, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -436,32 +507,37 @@ parse_XH_orbits.SEIRV <- function(outputs, xds_obj, i) {
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_prevalence] for the SEIRV model.
+#' @description Implements [F_prevalence] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIRV Prevalence
+#' @seealso [SEIRV]
 #' @export
 F_prevalence.SEIRV <- function(vars, XH_obj) {
   pr = with(vars, I/H)
   return(pr)
 }
 
-#' @title Compute the NI
-#' @description Implements [F_ni] for the SEIS model.
+#' @title Compute the net infectiousness
+#' @description Implements [F_ni] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIRV Infectiousness
+#' @seealso [SEIRV]
 #' @export
 F_ni.SEIRV <- function(vars, XH_obj) {
   ni = with(vars, XH_obj$c*I/H)
   return(ni)
 }
 
-#' @title Compute the HTC for the SEIRV model
-#' @description Implements [get_HTC] for the SEIRV model with demography.
+#' @title Compute the HTC for the `SEIRV` model
+#' @description Implements [get_HTC] for the `SEIRV` model with demography.
 #' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 get_HTC.SEIRV <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
@@ -471,7 +547,7 @@ get_HTC.SEIRV <- function(xds_obj, i) {
 }
 
 
-#' Add lines for the density of infected individuals for the SEIRV model
+#' Add lines for the density of infected individuals for the `SEIRV` model
 #'
 #' @param time time points for the observations
 #' @param XH a list with the outputs of parse_outputs_X_SEIRV
@@ -480,6 +556,7 @@ get_HTC.SEIRV <- function(xds_obj, i) {
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 xds_lines_X_SEIRV = function(time, XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen", "purple"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
@@ -501,10 +578,11 @@ xds_lines_X_SEIRV = function(time, XH, nStrata, clrs=c("black","darkblue","darkr
 })}
 
 
-#' Plot the density of infected individuals for the SEIRV model
+#' Plot the density of infected individuals for the `SEIRV` model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @keywords internal
+#' @seealso [SEIRV]
 #' @export
 xds_plot_X.SEIRV = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]

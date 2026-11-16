@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{xds_plot_X.SIRS}
 \alias{xds_plot_X.SIRS}
-\title{Plot the density of infected individuals for the SIRS model}
+\title{Plot the density of infected individuals for the \code{SIRS} model}
 \usage{
 \method{xds_plot_X}{SIRS}(
   xds_obj,
@@ -24,6 +24,9 @@
 \item{add}{plot axes only if FALSE}
 }
 \description{
-Plot the density of infected individuals for the SIRS model
+Plot the density of infected individuals for the \code{SIRS} model
+}
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

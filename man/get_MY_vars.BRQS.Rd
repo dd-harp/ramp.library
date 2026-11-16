@@ -19,4 +19,20 @@ a \link{list}
 \description{
 This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Su}, \code{Bu}, \code{Ru}, \code{Qu}}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
+\item{\code{Sy}, \code{By}, \code{Ry}, \code{Qy}}{exposed mosquitoes in each behavioral state}
+\item{\code{Sz}, \code{Bz}, \code{Rz}, \code{Qz}}{infectious mosquitoes in each behavioral state}
+\item{\code{S}, \code{B}, \code{R}, \code{Q}}{total mosquitoes in each behavioral state, derived by \link{get_MY_vars.BRQS}}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total exposed and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\seealso{
+\link{BRQS}, \link{setup_MY_obj.BRQS}
+}
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{add_lines_X_SIPd}
 \alias{add_lines_X_SIPd}
-\title{Add lines for the density of infected individuals for the SIPd model}
+\title{Add lines for the density of infected individuals for the \code{SIPd} model}
 \usage{
 add_lines_X_SIPd(
   time,
@@ -24,6 +24,9 @@ add_lines_X_SIPd(
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
-Add lines for the density of infected individuals for the SIPd model
+Add lines for the density of infected individuals for the \code{SIPd} model
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

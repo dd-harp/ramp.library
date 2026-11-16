@@ -16,7 +16,7 @@ make_MY_inits_BQ(
 )
 }
 \arguments{
-\item{nPatches}{the number of patches in the model}
+\item{nPatches}{the number of patches}
 
 \item{options}{a \link{list} of values that overrides the defaults}
 
@@ -37,5 +37,23 @@ a \link{list}
 }
 \description{
 Make inits for BQ adult mosquito model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}}{density of uninfected, blood-feeding mosquitoes}
+\item{\code{Qu}}{density of uninfected, gravid (egg-laying) mosquitoes}
+\item{\code{By}}{density of infected (exposed), blood-feeding mosquitoes}
+\item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
+\item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
+\item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\seealso{
+\link{BQ}, \link{setup_MY_inits.BQ}
 }
 \keyword{internal}

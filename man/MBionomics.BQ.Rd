@@ -21,4 +21,36 @@ an \strong{\code{xds}} object
 \description{
 Implements \link[ramp.xds:MBionomics]{MBionomics} for the BQ model
 }
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma_b}}{emigration rate during blood feeding}
+\item{\code{sigma_q}}{emigration rate during egg laying}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+
+After basic setup, \link{change_MY_pars.BQ} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Survival and Dispersal}{
+
+Blood-feeding and gravid mosquitoes have separate demographic matrices,
+\eqn{\Omega_b} and \eqn{\Omega_q}. Each combines mortality \eqn{g}, the
+corresponding emigration rate (\eqn{\sigma_b} or \eqn{\sigma_q}), the
+emigration-loss fraction \eqn{\mu}, and its dispersal matrix (\eqn{K_b} or
+\eqn{K_q}). The columns of each dispersal matrix sum to zero; its
+off-diagonal elements describe the fractions of surviving emigrants that
+arrive in other patches.
+}
+
+\seealso{
+\link{BQ}, \link{MEffectSizes.BQ}
+}
 \keyword{internal}

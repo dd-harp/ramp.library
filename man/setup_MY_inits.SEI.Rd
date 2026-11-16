@@ -26,4 +26,13 @@ Set initial values for all the variables in the \code{SEI} module
 see the inline module documentation.
 }
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
 \keyword{internal}

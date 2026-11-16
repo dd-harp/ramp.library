@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{F_fqZ.BRQS}
 \alias{F_fqZ.BRQS}
-\title{Blood feeding rate of the infective mosquito population}
+\title{Infective mosquito biting rate for \code{BRQS}}
 \usage{
 \method{F_fqZ}{BRQS}(t, y, xds_obj, s)
 }
@@ -20,5 +20,18 @@ a \link{numeric} vector of length \code{nPatches}
 }
 \description{
 Implements \link[ramp.xds:F_fqZ]{F_fqZ} for the BRQS model.
+}
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on blood-feeding
+mosquitoes; infective biting density, \code{fqZ}, is based on infectious
+blood-feeding mosquitoes. \link{F_fqM.BRQS} and \link{F_fqZ.BRQS} compute these
+quantities. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the biting
+distribution matrix and resident-bite fraction to compute stratum-level
+\code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level \code{HBR}.
+}
+
+\seealso{
+\link{BRQS}, \link{F_fqM.BRQS}
 }
 \keyword{internal}

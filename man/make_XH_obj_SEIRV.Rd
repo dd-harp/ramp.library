@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{make_XH_obj_SEIRV}
 \alias{make_XH_obj_SEIRV}
-\title{Make parameters for SEIRV human model, with defaults}
+\title{Make a \code{SEIRV} \strong{XH} model object}
 \usage{
 make_XH_obj_SEIRV(
   nStrata,
@@ -36,9 +36,28 @@ make_XH_obj_SEIRV(
 \item{gamma}{loss of immunity rate}
 }
 \value{
-a \link{list}
+an \strong{XH} model object
 }
 \description{
-Make parameters for SEIRV human model, with defaults
+Make a \code{SEIRV} \strong{XH} model object
+}
+\section{Parameters}{
+
+\link{make_XH_obj_SEIRV} supplies defaults for all parameters.
+\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, and \code{gamma};
+it leaves \code{alpha} and \code{varepsilon} unchanged.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{alpha}}{proportion of births that are vaccinated}
+\item{\code{varepsilon}}{proportion of recovered individuals that gain vaccine-like protection}
+\item{\code{gamma}}{rate of loss of immunity in \eqn{R}}
+}
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

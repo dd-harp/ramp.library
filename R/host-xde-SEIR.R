@@ -1,9 +1,12 @@
 # specialized methods for the human SEIR model
 
-#' @title The `SEIR` module for the XH component
+#' @title The `SEIR` module for the **XH** component
 #' @description
 #' Implements the **XH** component using a Susceptible-Exposed-Infectious-Recovered
-#' (SEIR) compartmental model of human infection dynamics.
+#' (`SEIR`) compartmental model of human infection dynamics.
+#' Exposed individuals become infectious, then recover with lasting immunity.
+#' This implementation includes human demographic change and support for
+#' progressive stratification.
 #'
 #' @section State Variables:
 #' \describe{
@@ -11,28 +14,66 @@
 #'   \item{`E`}{density of exposed (infected but not yet infectious) humans}
 #'   \item{`I`}{density of infectious humans}
 #'   \item{`R`}{density of recovered humans}
+#'   \item{`S=H-E-I-R`}{density of susceptible humans or hosts}
 #' }
-#' Note: susceptible density \eqn{S = H - E - I - R}.
+#'
+#' @inheritSection ramp.xds::SIS Demography
+#'
+#' @note The current `SEIR` implementation adds the result of [`Deaths`]
+#' rather than subtracting it as described in the shared Demography section:
+#' \eqn{dH/dt = \mathbf{B}(t,H) + \mathbf{D}(H)}.
+#'
+#' @section Dynamical Term:
+#' \describe{
+#'   \item{\eqn{h} or `foi`}{The force of infection is computed and stored by [Exposure] as `FoI`}
+#' }
+#' A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 #'
 #' @section Parameters:
+#' [make_XH_obj_SEIR] supplies defaults for the parameters, which can be changed
+#' using [change_XH_pars.SEIR].
 #' \describe{
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
 #'   \item{`tau`}{rate of progression from exposed to infectious}
 #'   \item{`r`}{clearance rate for infections}
-#'   \item{`B`}{time-dependent birth rate function \eqn{B(t, H)}}
-#'   \item{`D`}{linear operator (matrix) for mortality, migration, aging, and transfers}
 #' }
 #'
-#' @section Dynamics:
+#' @section Infection Dynamics:
+#' Exposed individuals become infectious at the per-capita rate \eqn{\tau}.
+#' Infections clear at the per-capita rate \eqn{r}, moving individuals into
+#' the recovered class with lasting immunity.
+#' The current implementation uses the following equations, adding [`Deaths`]:
 #' \deqn{
 #' \begin{array}{rl}
-#' dH/dt &= B(t,H) + D \cdot H \\
-#' dE/dt &= hS - \tau E + D \cdot E \\
-#' dI/dt &= \tau E - rI + D \cdot I \\
-#' dR/dt &= rI + D \cdot R \\
+#' dE/dt &= hS - \tau E + \mathbf{D}(E) \\
+#' dI/dt &= \tau E - rI + \mathbf{D}(I) \\
+#' dR/dt &= rI + \mathbf{D}(R) \\
 #' \end{array}}
 #' where \eqn{h} is the force of infection and \eqn{S = H - E - I - R}.
+#' Susceptible density is redundant and is computed after solving.
+#'
+#' @section Prevalence:
+#' [F_prevalence.SEIR] returns \eqn{x=I/H}. In contrast,
+#' [parse_XH_orbits.SEIR] stores `true_pr` as \eqn{(E+I)/H}.
+#' This module has no diagnostic sensitivity parameters or module-specific
+#' light microscopy, RDT, or PCR prevalence methods.
+#'
+#' @section Infectiousness:
+#' The probability that a mosquito becomes infected after feeding on an
+#' infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+#' infectiousness is \eqn{cI/H}.
+#'
+#' @section Mass Treatment:
+#' This implementation does not initialize or use `mda(t)` or `msat(t)`,
+#' and has no treatment parameters `rho` or `sigma`.
+#'
+#' @seealso
+#' + Basic Setup: [make_XH_obj_SEIR], [setup_XH_obj.SEIR]
+#' + Dynamics: [dXHdt.SEIR]
+#' + Parameters: [change_XH_pars.SEIR]
+#' + Variables: [make_XH_inits_SEIR], [get_XH_inits], [change_XH_inits.SEIR], [setup_XH_inits.SEIR]
+#' + [SIR], [SEIS]
 #'
 #' @name SEIR
 #' @rdname SEIR
@@ -50,6 +91,7 @@ NULL
 #' @return the **`xds`** object
 #' @keywords internal
 #'
+#' @seealso [SEIR]
 #' @export
 setup_skillset_XH.SEIR = function(xds_obj,i){
   skills =   list(
@@ -71,17 +113,21 @@ setup_skillset_XH.SEIR = function(xds_obj,i){
 #'
 #' @return an **`xds`** object
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 check_XH.SEIR = function(xds_obj, i){
   return(xds_obj)
 }
 
 
-#' @title Compute the derivatives for parasite infection dynamics in human population strata
-#' @description Implements [dXHdt] for the SEIR model
+#' @title Compute derivatives for `SEIR` (**XH**)
+#' @description Implements [dXHdt] for the `SEIR` model
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @keywords internal
+#' @inheritSection SEIR Demography
+#' @inheritSection SEIR Infection Dynamics
+#' @seealso [SEIR]
 #' @export
 dXHdt.SEIR<- function(t, y, xds_obj, i) {
   # do not change this
@@ -104,11 +150,12 @@ dXHdt.SEIR<- function(t, y, xds_obj, i) {
 }
 
 
-#' @title DTS updating for the SIS model for human / vertebrate host infections
-#' @description Implements [Update_XHt] for the SIS model
+#' @title DTS updating for `SEIR` (**XH**)
+#' @description Implements [Update_XHt] for the `SEIR` model
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 Update_XHt.SEIR<- function(t, y, xds_obj, i) {
 
@@ -127,11 +174,12 @@ Update_XHt.SEIR<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Compute the steady states for the  dts SEIS model as a function of the daily EIR
-#' @description Compute the steady state of the  dts SIS model as a function of the daily eir.
+#' @title Compute the steady states for the dts `SEIR` model as a function of the daily EIR
+#' @description Compute the steady state of the  dts `SEIR` model as a function of the daily eir.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 steady_state_X.SEIR_dts = function(foi, H, xds_obj, i=1){
   ar = exp(-foi)
@@ -144,11 +192,12 @@ steady_state_X.SEIR_dts = function(foi, H, xds_obj, i=1){
 })}
 
 
-#' @title Compute the steady states for the SIRS model as a function of the daily EIR
-#' @description Compute the steady state of the SIRS model as a function of the daily eir.
+#' @title Compute the steady states for the `SEIR` model as a function of the daily EIR
+#' @description Compute the steady state of the `SEIR` model as a function of the daily eir.
 #' @inheritParams  ramp.xds::steady_state_X
 #' @return the steady states as a named vector
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
   with(xds_obj$XH_obj[[i]],{
@@ -161,21 +210,23 @@ steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
 
 #' @title Setup initial values for `SEIR` (**XH**)
 #' @description Set initial values for all the variables in the `SEIR` module
-#' (**XH**) for the \eqn{i^{th}} species.
+#' (**XH**) for the \eqn{i^{th}} host species.
 #' + [make_XH_inits_SEIR] supplies default values
 #' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return a [list] vector
+#' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @seealso [SEIR]
 #' @export
 setup_XH_inits.SEIR = function(xds_obj, options=list(), i=1){
   xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIR(xds_obj$nStrata[i], options)
   return(xds_obj)
 }
 
-#' @title Make initial values for the SEIR human model, with defaults
+#' @title Make initial values for `SEIR` (**XH**)
 #' @param nStrata the number of strata in the model
 #' @param options a [list] to override defaults
 #' @param H the initial value for H
@@ -184,6 +235,8 @@ setup_XH_inits.SEIR = function(xds_obj, options=list(), i=1){
 #' @param R the initial values for R
 #' @return a [list]
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @seealso [SEIR]
 #' @export
 make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
   with(options,{
@@ -197,11 +250,13 @@ make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
 
 
 #' @title Change parameters for `SEIR` (**XH**)
-#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} species,
+#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIR Parameters
+#' @seealso [SEIR]
 #' @export
 change_XH_pars.SEIR <- function(xds_obj, options=list(), i=1) {
   nHabitats <- xds_obj$nHabitats
@@ -214,12 +269,14 @@ change_XH_pars.SEIR <- function(xds_obj, options=list(), i=1) {
   }))}
 
 
-#' @title Return the parameters as a list
-#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} species,
+#' @title Change initial values for `SEIR` (**XH**)
+#' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @seealso [SEIR]
 #' @export
 change_XH_inits.SEIR <- function(xds_obj, options=list(), i=1) {
   with(xds_obj$XH_obj[[i]], with(options,{
@@ -235,11 +292,12 @@ change_XH_inits.SEIR <- function(xds_obj, options=list(), i=1) {
 
 
 #' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the SEIR model.
+#' @description Implements [setup_XH_ix] for the `SEIR` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return none
+#' @return an **`xds`** object
 #' @importFrom utils tail
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 setup_XH_ix.SEIR <- function(xds_obj, i) {with(xds_obj,{
 
@@ -261,11 +319,13 @@ setup_XH_ix.SEIR <- function(xds_obj, i) {with(xds_obj,{
 })}
 
 
-#' @title Return the variables as a list
+#' @title List variables for `SEIR` (**XH**)
 #' @description This method dispatches on the type of `xds_obj$XH_obj`
 #' @inheritParams ramp.xds::get_XH_vars
 #' @return a [list]
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @seealso [SEIR]
 #' @export
 get_XH_vars.SEIR <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -279,15 +339,17 @@ get_XH_vars.SEIR <- function(y, xds_obj, i) {
 
 
 
-#' @title Make parameters for SEIR human model, with defaults
+#' @title Make a `SEIR` **XH** model object
 #' @param nStrata is the number of population strata
 #' @param options a [list] that could override defaults
 #' @param tau  incubation rate
 #' @param b the proportion of infective bites that cause an infection
-#' @param r the the duration of an infection
+#' @param r the clearance rate for infections
 #' @param c the proportion of bites on infected humans that infect a mosquito
-#' @return a [list]
+#' @return an **XH** model object
 #' @keywords internal
+#' @inheritSection SEIR Parameters
+#' @seealso [SEIR]
 #' @export
 make_XH_obj_SEIR = function(nStrata, options=list(),
                           b=0.55, r=1/180, c=0.15,tau= 0.5){
@@ -321,8 +383,10 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return a [list] vector
+#' @return an **`xds`** object
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @inheritSection SEIR Parameters
 #' @export
 setup_XH_obj.SEIR = function(XHname, residence, xds_obj, options=list(), i=1){
   xds_obj$XHname = "SEIR"
@@ -338,11 +402,13 @@ setup_XH_obj.SEIR = function(XHname, residence, xds_obj, options=list(), i=1){
 }
 
 
-#' @title Size of effective infectious human population
-#' @description Implements [F_I] for the SIS model.
+#' @title Compute infectious density for `SEIR` (**XH**)
+#' @description Implements [F_I] for the `SEIR` model.
 #' @inheritParams ramp.xds::F_I
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIR Infectiousness
+#' @seealso [SEIR]
 #' @export
 F_I.SEIR <- function(t,y, xds_obj, i) {
   I = y[xds_obj$XH_obj[[i]]$ix$I_ix]
@@ -351,11 +417,13 @@ F_I.SEIR <- function(t,y, xds_obj, i) {
 }
 
 
-#' @title Size of effective infectious human population
-#' @description Implements [F_H] for the SEIR model.
+#' @title Compute population density
+#' @description Implements [F_H] for the `SEIR` model.
 #' @inheritParams ramp.xds::F_H
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIR Demography
+#' @seealso [SEIR]
 #' @export
 F_H.SEIR <- function(t, y, xds_obj, i){
   with(get_XH_vars(y, xds_obj, i), return(H))
@@ -363,30 +431,36 @@ F_H.SEIR <- function(t, y, xds_obj, i){
 
 
 #' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_infectivity] for the SEIR model.
+#' @description Implements [F_infectivity] for the `SEIR` model.
 #' @inheritParams ramp.xds::F_infectivity
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIR Dynamical Term
+#' @seealso [SEIR]
 #' @export
 F_infectivity.SEIR <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]],return(b))
 }
 
-#' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_ni] for the SIR model.
+#' @title Compute the net infectiousness
+#' @description Implements [F_ni] for the `SEIR` model.
 #' @inheritParams ramp.xds::F_ni
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIR Infectiousness
+#' @seealso [SEIR]
 #' @export
 F_ni.SEIR <- function(vars, XH_obj) {
   with(vars, with(XH_obj, c*I/H))
 }
 
-#' @title parse the output of deSolve and return variables for the SEIR model
-#' @description Implements [parse_XH_orbits] for the SEIR model
+#' @title Parse outputs for `SEIR` (**XH**)
+#' @description Implements [parse_XH_orbits] for the `SEIR` model
 #' @inheritParams ramp.xds::parse_XH_orbits
-#' @return none
+#' @return a named list of module variables
 #' @keywords internal
+#' @inheritSection SEIR State Variables
+#' @seealso [SEIR]
 #' @export
 parse_XH_orbits.SEIR <- function(outputs, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -402,10 +476,12 @@ parse_XH_orbits.SEIR <- function(outputs, xds_obj, i) {
 
 
 #' @title Compute the "true" prevalence of infection / parasite rate
-#' @description Implements [F_prevalence] for the SEIR model.
+#' @description Implements [F_prevalence] for the `SEIR` model.
 #' @inheritParams ramp.xds::F_prevalence
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
+#' @inheritSection SEIR Prevalence
+#' @seealso [SEIR]
 #' @export
 F_prevalence.SEIR <- function(vars, XH_obj) {
   pr = with(vars, I/H)
@@ -413,11 +489,12 @@ F_prevalence.SEIR <- function(vars, XH_obj) {
 }
 
 
-#' @title Compute the HTC for the SEIR model
-#' @description Implements [get_HTC] for the SEIR model with demography.
+#' @title Compute the HTC for the `SEIR` model
+#' @description Implements [get_HTC] for the `SEIR` model with demography.
 #' @inheritParams ramp.xds::get_HTC
 #' @return a [numeric] vector
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 get_HTC.SEIR <- function(xds_obj, i) {
   with(xds_obj$XH_obj[[i]],
@@ -427,7 +504,7 @@ get_HTC.SEIR <- function(xds_obj, i) {
 }
 
 
-#' Add lines for the density of infected individuals for the SEIR model
+#' Add lines for the density of infected individuals for the `SEIR` model
 #' @param time time points for the observations
 #' @param XH a list with the outputs of parse_outputs_X_SEIR
 #' @param nStrata the number of population strata
@@ -435,6 +512,7 @@ get_HTC.SEIR <- function(xds_obj, i) {
 #' @param llty an integer (or integers) to set the `lty` for plotting
 #'
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkred","darkgreen"), llty=1){
   if (length(llty)< nStrata) llty = rep(llty, nStrata)
@@ -453,10 +531,11 @@ xds_lines_X_SEIR = function(time, XH, nStrata, clrs=c("black","darkblue","darkre
 }})}
 
 
-#' Plot the density of infected individuals for the SEIR model
+#' Plot the density of infected individuals for the `SEIR` model
 #'
 #' @inheritParams ramp.xds::xds_plot_X
 #' @keywords internal
+#' @seealso [SEIR]
 #' @export
 xds_plot_X.SEIR = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","darkgreen"), llty=1,  add=FALSE){
   XH = xds_obj$outputs$orbits$XH[[i]]

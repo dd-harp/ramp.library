@@ -9,6 +9,10 @@ Implements the \strong{XH} component using a delay Susceptible-Exposed-Infectiou
 version of the \code{SEIS} model, in which the exposed
 period is modelled as a fixed delay \eqn{\nu} rather than an exponential rate.
 }
+\note{
+In \code{SEISd}, mass treatment clears infectious individuals, returning
+them to susceptibility; exposed individuals and exposure history are unaffected.
+}
 \section{State Variables}{
 
 \describe{
@@ -76,20 +80,30 @@ The mortality function uses the same model for \eqn{E} and \eqn{I} as for
 
 \section{Demography}{
 
-Demographic changes (\strong{H}) are given by:
-\deqn{dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
-This model has no parameter or terms to describe disease-induced mortality.
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
 \describe{
-\item{\link[ramp.xds:Births]{Births} or \eqn{\mathbf{B}}}{the births function}
-\item{\link[ramp.xds:Deaths]{Deaths} or \eqn{\mathbf{D}}}{the deaths function}
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
 }
+
 \strong{Setup:}
 \itemize{
 \item The defaults are no births and no deaths
-\item Use \link[ramp.xds:setup_births]{setup_births} to configure \link[ramp.xds:Births]{Births}
-\item Use \link[ramp.xds:setup_deaths]{setup_deaths} to configure \link[ramp.xds:Deaths]{Deaths}
-Also, see \link[ramp.xds:xds_info_demographic_change]{xds_info_demographic_change}.
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
 }
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
 }
 
 \section{Prevalence}{
@@ -112,13 +126,17 @@ infectiousness is \eqn{cI/H}.
 
 \section{Mass Treatment}{
 
-Mass treatment clears infectious individuals, returning them to susceptibility;
-exposed individuals are unaffected. At basic setup, \eqn{\Xi(t)=0}.
-To configure mass treatment, see \link[ramp.xds:setup_mass_treatment]{setup_mass_treatment}.
+
+
+Mass treatment clears infections. At basic setup
+\eqn{\Xi(t)=0}. To set up mass treatment, see \link[ramp.xds]{setup_mass_treatment}.
+Mass treatment is either:
+
 \describe{
-\item{\code{mda(t)}}{mass drug administration}
-\item{\code{msat(t)}}{mass screen and treat}
+\item{\code{mda(t)} or \eqn{\Xi(t)}}{mass drug administration}
+\item{\code{msat(t)} or \eqn{\Xi(t)}}{mass screen and treat}
 }
+
 }
 
 \seealso{

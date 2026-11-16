@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{change_MY_inits.BRQS}
 \alias{change_MY_inits.BRQS}
-\title{Make inits for BRQS adult mosquito model}
+\title{Change initial values for \code{BRQS} (\strong{MY})}
 \usage{
 \method{change_MY_inits}{BRQS}(xds_obj, options = list(), s = 1)
 }
@@ -19,5 +19,21 @@ none
 \description{
 For the \code{BRQS} module (\strong{MY}) for the \eqn{s^{th}} species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{Su}, \code{Bu}, \code{Ru}, \code{Qu}}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
+\item{\code{Sy}, \code{By}, \code{Ry}, \code{Qy}}{exposed mosquitoes in each behavioral state}
+\item{\code{Sz}, \code{Bz}, \code{Rz}, \code{Qz}}{infectious mosquitoes in each behavioral state}
+\item{\code{S}, \code{B}, \code{R}, \code{Q}}{total mosquitoes in each behavioral state, derived by \link{get_MY_vars.BRQS}}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total exposed and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\seealso{
+\link{BRQS}, \link{setup_MY_inits.BRQS}
 }
 \keyword{internal}
