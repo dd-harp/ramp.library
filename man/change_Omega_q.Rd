@@ -12,7 +12,7 @@ change_Omega_q(xds_obj, s)
 \item{s}{vector species index}
 }
 \value{
-an \strong{xds} model object
+an \strong{\code{xds}} model object
 }
 \description{
 Update the demographic matrix for

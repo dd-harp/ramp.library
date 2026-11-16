@@ -95,7 +95,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SIP]
@@ -117,7 +117,7 @@ setup_skillset_XH.SIP = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
@@ -146,7 +146,7 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
       xi_t = xi + mda(t)
       sigma_t = sigma + msat(t)
 
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dI <- (1-rho)*foi*S - (r+xi_t+sigma_t)*I - Deaths(t, I, xds_obj, i)
       dP <- rho*foi*S + xi_t*(S+I) + sigma_t*I - eta*P - Deaths(t, P, xds_obj, i)
 
@@ -170,7 +170,7 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
 #' @inheritSection SIP Parameters
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_XH_obj.SIP = function(XHname, residence, xds_obj, options=list(), i=1){
@@ -231,7 +231,7 @@ make_XH_obj_SIP = function(nStrata, options=list(),
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @inheritSection SIP Parameters
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
@@ -257,7 +257,7 @@ change_XH_pars.SIP <- function(xds_obj, options=list(), i=1) {
 #' @inheritParams ramp.xds::change_XH_inits
 #' @inheritSection SIP State Variables
 #' @note This method changes `I` and `P`; it leaves `H` unchanged.
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
@@ -301,7 +301,7 @@ Update_XHt.SIP <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, y, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 
@@ -402,7 +402,7 @@ get_HTC.SIP <- function(xds_obj, i) {
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @inheritSection SIP State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
@@ -458,7 +458,7 @@ parse_XH_orbits.SIP <- function(outputs, xds_obj, i) {
 #' @title Add indices for human population to parameter list
 #' @description Implements [setup_XH_ix] for the `SIP` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SIP]

@@ -138,7 +138,7 @@ dMYdt.BQ <- function(t, y, xds_obj, s){
 #'
 #' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #'
 #' @keywords internal
 #' @export
@@ -154,7 +154,7 @@ setup_skillset_MY.BQ = function(xds_obj, s){
 #'
 #' @inheritParams ramp.xds::check_MY
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 check_MY.BQ = function(xds_obj, s){
@@ -167,7 +167,7 @@ check_MY.BQ = function(xds_obj, s){
 #' @inheritSection BQ Survival and Dispersal
 #' @inheritParams ramp.xds::MBionomics
 #' @seealso [BQ], [MEffectSizes.BQ]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
@@ -195,7 +195,7 @@ MBionomics.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 #' @inheritSection BQ Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
 #' @seealso [BQ], [MBionomics.BQ]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MEffectSizes.BQ <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
@@ -360,7 +360,7 @@ get_MY_pars.BQ <- function(xds_obj, s=1) {
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritSection BQ Parameters
 #' @inheritParams ramp.xds::change_MY_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_pars.BQ <- function(xds_obj, options=list(), s=1) {
@@ -513,7 +513,7 @@ parse_MY_orbits.BQ <- function(outputs, xds_obj, s) {
 #' @description For the `BQ` module (**MY**) for the \eqn{s^{th}} species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_inits
-#' @return an `xds` object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_inits.BQ <- function(xds_obj, options=list(), s=1) {
@@ -529,7 +529,7 @@ change_MY_inits.BQ <- function(xds_obj, options=list(), s=1) {
   }))}
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return a [numeric] vector
 #' @keywords internal
@@ -539,7 +539,7 @@ get_f.BQ = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -549,7 +549,7 @@ get_q.BQ = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -559,7 +559,7 @@ get_g.BQ = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal

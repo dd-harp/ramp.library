@@ -97,7 +97,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #'
 #' @keywords internal
 #' @export
@@ -113,7 +113,7 @@ setup_skillset_MY.SEI = function(xds_obj, s){
 #'
 #' @inheritParams ramp.xds::check_MY
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 check_MY.SEI = function(xds_obj, s){
@@ -210,7 +210,7 @@ setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritSection SEI Parameters
 #' @inheritParams ramp.xds::change_MY_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
@@ -253,7 +253,7 @@ get_MY_pars.SEI <- function(xds_obj, s=1) {
 #' @description For the `SEI` module (**MY**) for the \eqn{s^{th}} species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_MY_inits
-#' @return an `xds` object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_inits.SEI <- function(xds_obj, options=list(), s=1) {
@@ -419,7 +419,7 @@ parse_MY_orbits.SEI <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$i
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritSection SEI Parameters
 #' @inheritParams change_MY_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_pars.SEI <- function(xds_obj, options=list(), s=1) {
@@ -491,7 +491,7 @@ make_MY_obj_SEI = function(nPatches, options=list(), eip =12,
 #' @inheritSection SEI Blood Feeding
 #' @inheritParams ramp.xds::MBionomics
 #' @seealso [SEI], [MEffectSizes.SEI]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
@@ -519,7 +519,7 @@ MBionomics.SEI <- function(t, y, xds_obj, s){with(xds_obj$MY_obj[[s]],{
 #' @inheritSection SEI Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
 #' @seealso [SEI], [MBionomics.SEI]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MEffectSizes.SEI <- function(t, y, xds_obj, s) {
@@ -534,7 +534,7 @@ MEffectSizes.SEI <- function(t, y, xds_obj, s) {
 
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -544,7 +544,7 @@ get_f.SEI = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -554,7 +554,7 @@ get_q.SEI = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -564,7 +564,7 @@ get_g.SEI = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal

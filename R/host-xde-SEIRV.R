@@ -93,7 +93,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SEIRV]
@@ -115,7 +115,7 @@ setup_skillset_XH.SEIRV = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIRV]
 #' @export
@@ -140,11 +140,11 @@ dXHdt.SEIRV<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dE <- foi*S - tau*E - Deaths(t, E, xds_obj, i)
       dI <- tau*E - r*I - Deaths(t, I, xds_obj, i)
       dR <- (1-varepsilon)*r*I - gamma*R - Deaths(t, R, xds_obj, i)
-      dV <- alpha*Births(t, xds_obj, i) + varepsilon*r*I - Deaths(t, V, xds_obj, i)
+      dV <- alpha*Births(t, y, xds_obj, i) + varepsilon*r*I - Deaths(t, V, xds_obj, i)
 
       derivs = c(dH, dE, dI, dR, dV)
 
@@ -166,7 +166,7 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, xds_obj, i)
+      St <- (1-ar)*S  + gamma*R + dHdt(t, S, Hpar) + Births(t, y, xds_obj, i)
       Et <- a*S +(1-tau)*E
       It <- (1-r)*I + tau*E + dHdt(t, I, Hpar)
       Rt <- (1-gamma)*R + (1-varepsilon)*r*I + dHdt(t, R, Hpar)
@@ -181,7 +181,7 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
 #' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIRV Parameters
 #' @seealso [SEIRV]
@@ -202,7 +202,7 @@ change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
 #' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIRV State Variables
 #' @seealso [SEIRV]
@@ -274,7 +274,7 @@ make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0,
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIRV State Variables
 #' @seealso [SEIRV]
@@ -291,7 +291,7 @@ setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
 #' @title Add indices for human population to parameter list
 #' @description Implements [setup_XH_ix] for the `SEIRV` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SEIRV]
@@ -413,7 +413,7 @@ steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIRV State Variables
 #' @inheritSection SEIRV Parameters

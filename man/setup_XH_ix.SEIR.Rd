@@ -12,7 +12,7 @@
 \item{i}{the host species index}
 }
 \value{
-an \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the \code{SEIR} model.

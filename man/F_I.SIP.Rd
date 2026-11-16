@@ -7,9 +7,9 @@
 \method{F_I}{SIP}(t, y, xds_obj, i)
 }
 \arguments{
-\item{t}{current simulation time}
+\item{t}{time}
 
-\item{y}{state vector}
+\item{y}{dependent variables}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 

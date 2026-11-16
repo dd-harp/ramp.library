@@ -1,313 +1,224 @@
-## -----------------------------------------------------------------------------
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dLdt] for the newLname model
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Compute derivatives for `newLname` (**L**)
+#' @description Implements [ramp.xds::dLdt] for `newLname`.
 #' @inheritParams ramp.xds::dLdt
-#' @return a [numeric] vector
+#' @return a numeric vector of derivatives, in state-variable order
 #' @export
-dLdt.newLname <- function(t, y, xds_obj, i) {
+dLdt.newLname <- function(t, y, xds_obj, s) {
+  eta <- xds_obj$terms$eta[[s]]
 
-  # do not change this
-  eta <- xds_obj$terms$eta[[i]]
-
-  # do not change this
-  # attach the variables by name 
-  with(get_L_vars(y, xds_obj, i),{
-    # do not change this
-    # attach the parameters by name 
-    with(xds_obj$L_obj[[i]], {
-      # Do not change this 
-      dL <- F_L(eta, L) 
-      ... 
-      
-      # Change this 
-      derivs = c(dL, ...) 
-      
-      # return the derivatives 
-      return(derivs)
+  with(ramp.xds::get_L_vars(y, xds_obj, s), {
+    with(xds_obj$L_obj[[s]], {
+      # Replace this expression with the model's derivative equation.
+      dL <- rep(0, xds_obj$nHabitats)
+      derivatives <- c(dL)
+      return(derivatives)
     })
   })
 }
 
-## -----------------------------------------------------------------------------
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [UpdateLt] for the newLname model
-#' @inheritParams ramp.xds::UpdateLt
-#' @return a [numeric] vector
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Update states for `newLname` (**L**)
+#' @description Implements [ramp.xds::Update_Lt] for `newLname`.
+#' @inheritParams ramp.xds::Update_Lt
+#' @return a numeric vector of updated states, in state-variable order
 #' @export
-Update_Lt.newLname<- function(t, y, xds_obj, s) {
-  
-  # do not change this
-  eta <- xds_obj$terms$eta[[i]]
+Update_Lt.newLname <- function(t, y, xds_obj, s) {
+  eta <- xds_obj$terms$eta[[s]]
 
-   # do not change this
-  # attach the variables by name 
-  with(get_L_vars(y, xds_obj, i),{
-    # do not change this
-    # attach the parameters by name 
-    with(xds_obj$L_obj[[i]], {
-      # Change this
-      Lt <- L + Lambda + F_L(L) 
-      ... 
-      
-      # Change this 
-      states = c(Lt, ...) 
-      
-      # return the derivatives 
+  with(ramp.xds::get_L_vars(y, xds_obj, s), {
+    with(xds_obj$L_obj[[s]], {
+      # Replace this expression with the model's discrete update.
+      Lt <- rep(0, xds_obj$nHabitats)
+      states <- c(Lt)
       return(states)
     })
   })
 }
 
-## -----------------------------------------------------------------------------
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
 #' @title Mosquito bionomics for `newLname` (**L**)
-#' @description Implements [LBionomics] for the newLname model
+#' @description Update baseline parameters and reset effect sizes.
 #' @inheritParams ramp.xds::LBionomics
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @export
 LBionomics.newLname <- function(t, y, xds_obj, s) {
   with(xds_obj$L_obj[[s]], {
-
-    # Change this: call the forcing function for each bionomic parameter
-    xds_obj$L_obj[[s]]$p1_t <- F_p1(t, xds_obj, s)
-    xds_obj$L_obj[[s]]$p2_t <- F_p2(t, xds_obj, s)
-
-    # Change this: reset one effect size for each bionomic parameter
-    xds_obj$L_obj[[s]]$es_p1 <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_p2 <- rep(1, nHabitats)
-
+    # Replace these assignments with the appropriate forcing functions.
+    xds_obj$L_obj[[s]]$p1_t <- p1
+    xds_obj$L_obj[[s]]$p2_t <- p2
+    xds_obj$L_obj[[s]]$es_p1 <- rep(1, xds_obj$nHabitats)
+    xds_obj$L_obj[[s]]$es_p2 <- rep(1, xds_obj$nHabitats)
     return(xds_obj)
-  })}
+  })
+}
 
-## -----------------------------------------------------------------------------
 #' @title Apply effect sizes for `newLname` (**L**)
-#' @description Implements [LEffectSizes] for the newLname model
+#' @description Apply vector-control effect sizes to baseline parameters.
 #' @inheritParams ramp.xds::LEffectSizes
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @export
 LEffectSizes.newLname <- function(t, y, xds_obj, s) {
   with(xds_obj$L_obj[[s]], {
-
-    # Change this: multiply each baseline parameter by its effect size
     xds_obj$L_obj[[s]]$p1 <- p1_t * es_p1
     xds_obj$L_obj[[s]]$p2 <- p2_t * es_p2
-
     return(xds_obj)
-  })}
+  })
+}
 
-## -----------------------------------------------------------------------------
-#' @title Lake parameters for newLname human model, with defaults
-#' @param nPatches is the number of population strata
-#' @param options a [list] that could override defaults
-#' @param p1 the first parameter 
-#' @param p2 the second parameter 
-#' @param p3 the third parameter 
-#' @return a [list]
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Make the `newLname` module object
+#' @param nHabitats the number of habitats in the model
+#' @param options a named list of parameter values
+#' @return an L module object
 #' @export
-make_L_obj_newLname = function(nPatches, options=list(),
-                         p1=1, p2=2, p3=3){
-  with(options,{
-    L_obj = list()
-    class(L_obj) <- c("newLname")
-
-    # Change this
-    L_obj$p1 = checkIt(p1, nPatches)
-    L_obj$p2 = checkIt(p2, nPatches)
-    L_obj$p3 = checkIt(p3, nPatches)
-
-    # Don't change this
-     L_obj <- setup_K_obj(nPatches, L_obj) 
-    
+make_L_obj_newLname <- function(nHabitats, options = list(), p1 = 1, p2 = 1) {
+  with(options, {
+    L_obj <- list(
+      p1 = ramp.xds::checkIt(p1, nHabitats),
+      p2 = ramp.xds::checkIt(p2, nHabitats),
+      p1_t = ramp.xds::checkIt(p1, nHabitats),
+      p2_t = ramp.xds::checkIt(p2, nHabitats),
+      es_p1 = rep(1, nHabitats),
+      es_p2 = rep(1, nHabitats),
+      nHabitats = nHabitats
+    )
+    class(L_obj) <- "newLname"
     return(L_obj)
-  })}
+  })
+}
 
-## -----------------------------------------------------------------------------
-#' @title Setup L_obj.newLname
-#' @description Implements [setup_L_obj] for the newLname model
+#' @title Set up `newLname` (**L**)
+#' @description Implements [ramp.xds::setup_L_obj] for `newLname`.
 #' @inheritParams ramp.xds::setup_L_obj
-#' @return a [list] vector
+#' @return an **`xds`** model object
 #' @export
-setup_L_obj.newLname = function(Lname, membership, xds_obj, options=list(), s=1){
-  xds_obj$L_obj[[s]] = make_L_obj_newLname(xds_obj$nPatches, options)
+setup_L_obj.newLname <- function(Lname, membership, xds_obj,
+                                 options = list(), s = 1) {
+  L_obj <- make_L_obj_newLname(xds_obj$nHabitats, options)
+  class(L_obj) <- c("newLname", paste0("newLname_", xds_obj$xds))
+  xds_obj$L_obj[[s]] <- L_obj
+  xds_obj <- ramp.xds::setup_L_inits(xds_obj, options = options, s = s)
+  xds_obj <- ramp.xds::setup_habitat_search_weights(
+    "setup", xds_obj, list(membership = membership), s = s
+  )
   return(xds_obj)
 }
 
-## -----------------------------------------------------------------------------
-#' @title Add indices for human population to parameter list
-#' @description Implements [setup_L_ix] for the newLname model.
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Get parameters for `newLname` (**L**)
+#' @inheritParams ramp.xds::get_L_pars
+#' @return a named list of parameters
+#' @export
+get_L_pars.newLname <- function(xds_obj, s = 1) {
+  with(xds_obj$L_obj[[s]], {
+    return(list(p1 = p1, p2 = p2))
+  })
+}
+
+#' @title Change parameters for `newLname` (**L**)
+#' @inheritParams ramp.xds::change_L_pars
+#' @return an **`xds`** model object
+#' @export
+change_L_pars.newLname <- function(xds_obj, options = list(), s = 1) {
+  nHabitats <- xds_obj$nHabitats
+  if ("p1" %in% names(options)) {
+    xds_obj$L_obj[[s]]$p1_t <- ramp.xds::checkIt(options$p1, nHabitats)
+  }
+  if ("p2" %in% names(options)) {
+    xds_obj$L_obj[[s]]$p2_t <- ramp.xds::checkIt(options$p2, nHabitats)
+  }
+  return(xds_obj)
+}
+
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Set up state indices for `newLname` (**L**)
 #' @inheritParams ramp.xds::setup_L_ix
-#' @return none
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @export
-setup_L_ix.newLname <- function(xds_obj, i) {with(xds_obj,{
-  
-  L_ix <- seq(from = max_ix+1, length.out=xds_obj$nPatches[i])
-  max_ix <- tail(L_ix, 1)
-
-  Y_ix <- seq(from = max_ix+1, length.out=xds_obj$nPatches[i])
-  max_ix <- tail(Y_ix, 1)
-
-  ... 
-  
-  xds_obj$max_ix = max_ix
-  xds_obj$L_obj[[i]]$ix = list(L_ix=L_ix, Y_ix=Y_ix, ...)
+setup_L_ix.newLname <- function(xds_obj, s) {
+  L_ix <- seq(from = xds_obj$max_ix + 1, length.out = xds_obj$nHabitats)
+  xds_obj$max_ix <- utils::tail(L_ix, 1)
+  xds_obj$L_obj[[s]]$ix <- list(L_ix = L_ix)
   return(xds_obj)
-})}
+}
 
-## -----------------------------------------------------------------------------
-#' @title Return the variables as a list
-#' @description This method dispatches on the type of `xds_obj$L_obj`
+#' @title Extract states for `newLname` (**L**)
 #' @inheritParams ramp.xds::get_L_vars
-#' @return a [list]
+#' @return a named list of state variables
 #' @export
-get_L_vars.newLname <- function(y, xds_obj, i) {
-  with(xds_obj$L_obj[[i]]$ix,{
-      H = y[H_ix]
-      L = y[L_ix]
-      Y = y[Y_ix]
-      ...
-      X0 = H-L-Y 
-      return(list(H=H, L=L, Y=Y,...,X0=X0))})
+get_L_vars.newLname <- function(y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]]$ix, {
+    L <- y[L_ix]
+    return(list(L = L))
+  })
 }
 
-## -----------------------------------------------------------------------------
-#' @title parse the output of deSolve and return variables for the newLname model
-#' @description Implements [parse_L_orbits] for the newLname model
-#' @inheritParams ramp.xds::parse_L_orbits
-#' @return a named list  
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Make initial values for `newLname` (**L**)
+#' @param nHabitats the number of habitats in the model
+#' @param options a named list of initial values
+#' @param L the initial value for state `L`
+#' @return a named list of initial values
 #' @export
-parse_L_orbits.newLname <- function(outputs, xds_obj, i) {
-  with(xds_obj$L_obj[[i]]$ix,{
-    H <- outputs[,H_ix]
-    L <- outputs[,L_ix]
-    Y <- outputs[,Y_ix]
-    X0 <- H-L-Y
-    vars <- list(H=H, L=L, Y=Y, X0=X0)
-    return(vars)
-})}
+make_L_inits_newLname <- function(nHabitats, options = list(), L = 1) {
+  with(options, {
+    L <- ramp.xds::checkIt(L, nHabitats)
+    return(list(L = L))
+  })
+}
 
-## -----------------------------------------------------------------------------
-#' @title Setup initial values for *newLname*
-#' 
+#' @title Set up initial values for `newLname` (**L**)
 #' @inheritParams ramp.xds::setup_L_inits
-#' 
-#' @return a **`ramp.xds`** object 
-#' 
+#' @return an **`xds`** model object
 #' @export
-setup_L_inits.newLname = function(xds_obj, options=list(), s=1){
-  xds_obj$L_obj[[s]]$inits = make_L_inits_newLname(xds_obj$nPatches[s], H=options$H, options=options)
+setup_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
+  xds_obj$L_obj[[s]]$inits <- make_L_inits_newLname(
+    xds_obj$nHabitats, options
+  )
   return(xds_obj)
 }
 
-## -----------------------------------------------------------------------------
-#' @title Lake initial values for the XHname human model, with defaults
-#' @param nPatches the number of strata in the model
-#' @param options a [list] to override defaults
-#' @param L the initial value for L 
-#' @param Y the initial value for L 
-#' @return a [list]
+#' @title Change initial values for `newLname` (**L**)
+#' @inheritParams ramp.xds::change_L_inits
+#' @return an **`xds`** model object
 #' @export
-make_L_inits_newLname = function(nPatches, H, options = list(), L=NULL, Y=1){with(options,{
-  stopifnot(is.numeric(L))
-  stopifnot(is.numeric(Y))
-  L = checkIt(L, nPatches)
-  Y = checkIt(Y, nPatches)
-  return(list(L=L, Y=Y, ...))
-})}
-
-## -----------------------------------------------------------------------------
-#' @title Return the parameters as a list
-#' 
-#' @inheritParams ramp.xds::change_L_inits 
-#' 
-#' @return an **`xds`** object
-#' @export
-change_L_inits.SIS <- function(xds_obj, options=list(), s=1) {
-  with(get_L_inits(xds_obj, s), with(options,{
-    xds_obj = change_H(H, xds_obj, s)
-    xds_obj$Xinits[[s]]$L = L 
-    xds_obj$Xinits[[s]]$Y = Y 
-    ... 
-    return(xds_obj)
-  }))}
-
-## -----------------------------------------------------------------------------
-#' @title Size of effective infectious human population
-#' @description Implements [F_emerge] for the SIS model.
-#' @inheritParams ramp.xds::F_emerge
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_emerge.newLname <- function(y, xds_obj, i) {
-  with(get_L_vars(y, xds_obj, i), 
-    with(xds_obj$L_obj[[i]], {
-      emerge = ...  
-      return(emerge)
-}))}
-
-## -----------------------------------------------------------------------------
-#' @title Size of effective infectious human population
-#' @description Implements [F_L] for the SIS model.
-#' @inheritParams ramp.xds::F_L
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_L.newLname <- function(y, xds_obj, i) {
-  with(get_L_vars(y, xds_obj, i), 
-    with(xds_obj$L_obj[[i]], {
-      L = ...  
-      return(L)
-}))}
-
-## -----------------------------------------------------------------------------
-#' @title Compute the true prevalence of infection / parasite rate
-#' @description Implements F_pr for the newLname model.
-#' @inheritParams F_pr
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_capacity.newLname <- function(vars, L_obj) {
-  with(vars, 
-    with(L_obj,
-       return(...)
-  ))
+change_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
+  with(options, {
+    if (!is.null(L)) {
+      xds_obj$L_obj[[s]]$inits$L <- ramp.xds::checkIt(
+        L, xds_obj$nHabitats
+      )
+    }
+  })
+  return(xds_obj)
 }
 
-## -----------------------------------------------------------------------------
-#' Add lines for the density of infected individuals for the newLname model
-#'
-#' @param L a list with the outputs of parse_deout_X_newLname
-#' @param nPatches the number of population strata
-#' @param clrs a vector of colors
-#' @param llty an integer (or integers) to set the `lty` for plotting
-#'
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Compute emergence for `newLname` (**L**)
+#' @inheritParams ramp.xds::F_emerge
+#' @return a numeric vector of length `nHabitats`
 #' @export
-xds_lines_X_newLname = function(L, nPatches, clrs=c("darkblue","darkred"), llty=1){
-  with(L,{
-    if(nPatches==1) {
-      lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-    }
-    if(nPatches>1){
-      if (length(clrs)==2) clrs=matrix(clrs, 2, nPatches)
-      if (length(llty)==1) llty=rep(llty, nPatches)
+F_emerge.newLname <- function(t, y, xds_obj, s) {
+  with(ramp.xds::get_L_vars(y, xds_obj, s), {
+    with(xds_obj$L_obj[[s]], {
+      # Replace this expression with the model's emergence equation.
+      alpha <- rep(0, xds_obj$nHabitats)
+      return(alpha)
+    })
+  })
+}
 
-      for(i in 1:nPatches){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-      }
-    }
-  })}
-
-## -----------------------------------------------------------------------------
-#' Plot the density of infected individuals for the newLname model
-#'
-#' @inheritParams ramp.xds::xds_plot_X
+## ----eval=TRUE, purl=TRUE-----------------------------------------------------
+#' @title Parse outputs for `newLname` (**L**)
+#' @inheritParams ramp.xds::parse_L_orbits
+#' @return a named list of state-variable orbits
 #' @export
-xds_plot_X.newLname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(xds_obj$outputs,if(stable==TRUE){stable_orbits}else{orbits})
-
-  if(add_axes==TRUE)
-    with(vars$L[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
-
-  xds_lines_X_newLname(vars$L[[i]], xds_obj$Hpar[[i]]$nPatches, clrs, llty)
+parse_L_orbits.newLname <- function(outputs, xds_obj, s) {
+  with(xds_obj$L_obj[[s]]$ix, {
+    L <- outputs[, L_ix]
+    return(list(L = L))
+  })
 }
 

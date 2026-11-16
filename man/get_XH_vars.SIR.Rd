@@ -7,7 +7,7 @@
 \method{get_XH_vars}{SIR}(y, xds_obj, i)
 }
 \arguments{
-\item{y}{the variables}
+\item{y}{dependent variables}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 

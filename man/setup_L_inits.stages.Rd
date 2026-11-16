@@ -14,7 +14,7 @@
 \item{s}{the species index}
 }
 \value{
-an \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 Set initial values for all the variables in the \code{stages} module

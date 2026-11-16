@@ -7,7 +7,7 @@
 \method{F_infectivity}{SEISd}(y, xds_obj, i)
 }
 \arguments{
-\item{y}{state vector}
+\item{y}{dependent variables}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 

@@ -7,7 +7,7 @@
 \method{get_MY_vars}{BQ}(y, xds_obj, s)
 }
 \arguments{
-\item{y}{the variables}
+\item{y}{dependent variables}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 

@@ -7,7 +7,7 @@
 #'
 #' @inheritParams ramp.xds::change_Omega
 #'
-#' @return an **xds** model object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_Omega_b = function(xds_obj, s){
@@ -23,7 +23,7 @@ change_Omega_b = function(xds_obj, s){
 #'
 #' @inheritParams ramp.xds::change_Omega
 #'
-#' @return an **xds** model object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_Omega_q = function(xds_obj, s){
@@ -39,7 +39,7 @@ change_Omega_q = function(xds_obj, s){
 #'
 #' @inheritParams ramp.xds::change_Omega
 #'
-#' @return an **xds** model object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_Omega_s = function(xds_obj, s){

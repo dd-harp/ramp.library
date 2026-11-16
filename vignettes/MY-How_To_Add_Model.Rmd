@@ -1,6 +1,6 @@
 ---
-title: "Developing MY Modules" 
-subtitle: "Models for Adult Mosquito Ecology and Infection Dynamics" 
+title: "Developing MY Modules"
+subtitle: "Models for Adult Mosquito Ecology and Infection Dynamics"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Developing MY Modules}
@@ -8,546 +8,368 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+This vignette describes how to add an adult mosquito (**MY**) model module to
+[`ramp.library`](https://github.com/dd-harp/ramp.library). Before creating a
+new module, check whether the model family is already available in the
+SimBA library. For an overview of the component interfaces, see the
+[`ramp.xds` MY interface vignette](https://dd-harp.github.io/ramp.xds/articles/MY-interface.html).
 
-This vignette discusses how to add a new **MY** module to [`ramp.library`](https://github.com/dd-harp/ramp.library). As background, 
-we strongly recommend reading the **`ramp.xds`** vignette about the [**MY** Interface.](https://dd-harp.github.io/ramp.xds/articles/MY-interface.html)
+An MY module represents adult mosquito ecology and, when applicable, pathogen
+infection dynamics in mosquitoes. It supplies methods that integrate with
+[`ramp.xds`](https://github.com/dd-harp/ramp.xds), which provides the shared
+model setup, transmission, egg-laying, and solver interfaces.
 
-Each **MY** module implements a unique model family describing human/host infection dynamics and immunity that can be used by  [`ramp.xds`](https://github.com/dd-harp/ramp.xds). Before writing a new module, please check and see if the model family is already part of the SimBA library. 
+## Create a module template
 
-If you need help, please contact [Professor David L Smith](mailto:smitdave@gmail.com)
+This vignette's R code chunks can be extracted to create a starting R file.
+Download `MY-How_To_Add_Model.Rmd`, set your working directory to the folder
+containing it, then run:
 
-*** 
-
-We have written this vignette to produce a new template file using `knitr::purl.` The template can be modified to build a new **MY** module. 
-
-Do this:
-
-1. Download the markdown file that created this document ["X-How_To_Add_Model.Rmd."](https://github.com/dd-harp/ramp.library/blob/main/vignettes/X-How_To_Add_Model.Rmd)
-
-2. Set your working directory to the location of the downloaded copy of "X-How_To_Add_Model.Rmd"
-
-3. Execute these commands:
-
-```{r, purl=F, eval=F}
-library(knitr)
-knitr::purl("X-How_To_Add_Model.Rmd", 
-            output = "MYmodule-newMYname.R", 
-            documentation = 0, 
-            quiet=TRUE)
+```{r, eval=FALSE, purl=FALSE}
+knitr::purl(
+  "MY-How_To_Add_Model.Rmd",
+  output = "adult-MY-newMYname.R",
+  documentation = 0,
+  quiet = TRUE
+)
 ```
 
-4. You should see a new file called `MYmodule-newMYname.R` in the working directory. You can now move and rename it. 
+Replace `newMYname` throughout the extracted file with a short, unique class
+name for the model. Review every placeholder and adapt the methods to the
+model's equations and state variables before using the file.
 
-5. Open the file and do a global search for `newMYname` and replace it with the a short string that will define the model as its `XHname.`
+## Conventions
 
-6. Edit the functions following the directions below.  
+- MY methods dispatch on the class of `xds_obj$MY_obj[[s]]`; use `s` as the
+  vector-species index in method signatures and calls.
+- Use `get_MY_vars(y, xds_obj, s)` to retrieve named state variables, and keep
+  the order of variables consistent across `setup_MY_ix`, `get_MY_vars`,
+  initial values, and the dynamics.
+- Document the model's state variables, parameters, equations, assumptions,
+  and relevant references in roxygen.
+- Add tests for setup, parameter and initial-value changes, dynamics, and any
+  model-specific outputs.
 
-## Style Guide 
+## Model object and state variables
 
-We recommend that new models conform to a set of style guidelines:
+`make_MY_obj_newMYname` creates the module-specific list and assigns its class.
+`setup_MY_obj.newMYname` attaches it to the full `xds_obj`. Include the
+parameters and any model-specific objects needed by the equations. Parameters
+that use the shared bionomics or dispersal interfaces should be set up with
+the corresponding `ramp.xds` helpers.
 
-+ All the names of the variables by name using the indices attached to `MY_obj` 
-+ All documentation is written in `roxygen2`
-
-+ Functions should use `with(*,{...})` to make the code easier to read. 
-
-+ A vignette should accompany each model, including citations to the relevant publications, and proposed tests of the code.  
-
-+ The functions should easy to relate to the equations defining a model, following notation defined in an accompanying vignette.
-
-## Dynamics 
-
-
-### dMYdt 
-
-The sections that need to be modified are marked `# Change this`
-
-+ Replace `M` with the your first variable (*e.g.* mosquito population density), and replace `F_M` with the formula that computes the derivatives. Do the same with `Y` and add lines for each variable.  
-
-+ Modify `derivs = c(dM, dY, ...)` to return the LHS of the derivative equations you just wrote. 
-
-```{r}
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dMYdt] for the newMYname model
-#' @inheritParams ramp.xds::dMYdt
-#' @return a [numeric] vector
+```{r, eval=TRUE, purl=TRUE}
+#' @title Make the model object for newMYname
+#' @param nPatches number of patches
+#' @param options named values that override defaults
+#' @return a list
 #' @export
-dMYdt.newMYname <- function(t, y, xds_obj, i) {
-
-  # do not change this
-  Lambda <- xds_obj$terms$Lambda[[i]]
-  kappa <- xds_obj$terms$kappa[[i]]
-
-  # do not change this
-  # attach the variables by name 
-  with(get_MY_vars(y, xds_obj, i),{
-    # do not change this
-    # attach the parameters by name 
-    with(xds_obj$MY_obj[[i]], {
-      # Do not change this 
-      dM <- F_M(Lambda, M) 
-      dY <- F_Y(kappa, M, Y) 
-      ... 
-      
-      # Change this 
-      derivs = c(dM, dY, ...) 
-      
-      # return the derivatives 
-      return(derivs)
-    })
+make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
+  with(options, {
+    MY_obj <- list()
+    MY_obj$p1 <- checkIt(p1, nPatches)
+    MY_obj$nPatches <- nPatches
+    class(MY_obj) <- "newMYname"
+    MY_obj
   })
 }
-```
 
-### Update_MYt 
-
-```{r}
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [UpdateMYt] for the newMYname model
-#' @inheritParams ramp.xds::UpdateMYt
-#' @return a [numeric] vector
-#' @export
-Update_MYt.newMYname<- function(t, y, xds_obj, s) {
-  Lambda <- xds_obj$terms$Lambda[[i]]
-  kappa <- xds_obj$terms$kappa[[i]]
-
-   # do not change this
-  # attach the variables by name 
-  with(get_MY_vars(y, xds_obj, i),{
-    # do not change this
-    # attach the parameters by name 
-    with(xds_obj$MY_obj[[i]], {
-      # Change this
-      Mt <- M + Lambda + F_M(M) 
-      Yt <- Y + F_Y(kappa, M, Y) 
-      ... 
-      
-      # Change this 
-      states = c(Mt, Yt, ...) 
-      
-      # return the derivatives 
-      return(states)
-    })
-  })
-}
-```
-
-
-## MY Model Object 
-
-### make_MY_obj
-
-+ In the following, replace `p1` with the first parameter, `p2` with the second, and so on.
-
-+ Unless you know what you're doing, leave the "Ports for human / host demography" unchanged. 
-
-+ If you don't want to add ports for mass treatment, delete the line with `mda` and `msat` and leave `mda=FALSE` and `msat=FALSE` in  `skill_set_MY.newMYname.` If you do want your module to have that functionality, add the effects of mass treatment to the parameters that define state transitions in `dMYdt` or `Update_MYt` and set `mda=TRUE` and `msat=TRUE` in the skill set. 
-
-```{r}
-#' @title Make parameters for newMYname human model, with defaults
-#' @param nPatches is the number of population strata
-#' @param options a [list] that could override defaults
-#' @param p1 the first parameter 
-#' @param p2 the second parameter 
-#' @param p3 the third parameter 
-#' @return a [list]
-#' @export
-make_MY_obj_newMYname = function(nPatches, options=list(),
-                         p1=1, p2=2, p3=3){
-  with(options,{
-    MY_obj = list()
-    class(MY_obj) <- c("newMYname")
-
-    # Change this
-    MY_obj$p1 = checkIt(p1, nPatches)
-    MY_obj$p2 = checkIt(p2, nPatches)
-    MY_obj$p3 = checkIt(p3, nPatches)
-
-    # Don't change this
-     MY_obj <- setup_K_obj(nPatches, MY_obj) 
-    
-    return(MY_obj)
-  })}
-```
-
-
-### setup_MY_obj  
-
-If you did a global search and replace on `newMYname,` this function will not need to be modified
-
-```{r}
-#' @title Setup MY_obj.newMYname
-#' @description Implements [setup_MY_obj] for the newMYname model
+#' @title Set up the newMYname MY module
+#' @description Implements [ramp.xds::setup_MY_obj] for newMYname.
 #' @inheritParams ramp.xds::setup_MY_obj
-#' @return a [list] vector
+#' @return an **`xds`** model object
 #' @export
-setup_MY_obj.newMYname = function(MYname, xds_obj, options=list(), s=1){
-  xds_obj$MY_obj[[s]] = make_MY_obj_newMYname(xds_obj$nPatches, options)
-  return(xds_obj)
+setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
+  xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
+  xds_obj
 }
 ```
 
-## Parameters 
+### State-variable indices
 
-## Variables 
+`setup_MY_ix.newMYname` assigns a contiguous index range to each state
+variable. The example follows the SI implementation; add or remove index
+ranges to match the model and store them in the named list at
+`xds_obj$MY_obj[[s]]$ix`.
 
-### setup_MY_ix  
-
-In the following, each variable in your model gets its own pair of lines. Replace `M` in `M_ix` with the first variable name, `Y` in `Y_ix` with the second, and add lines for each variable by copying and pasting and editing the pair of lines. Be sure the replacement gets applied to all four instances.  
-
-
-```{r}
-#' @title Add indices for human population to parameter list
-#' @description Implements [setup_MY_ix] for the newMYname model.
+```{r, eval=TRUE, purl=TRUE}
+#' @title Set up indices for newMYname
+#' @description Implements [ramp.xds::setup_MY_ix] for newMYname.
 #' @inheritParams ramp.xds::setup_MY_ix
-#' @return none
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @export
-setup_MY_ix.newMYname <- function(xds_obj, i) {with(xds_obj,{
-  
-  M_ix <- seq(from = max_ix+1, length.out=xds_obj$nPatches[i])
-  max_ix <- tail(M_ix, 1)
+setup_MY_ix.newMYname <- function(xds_obj, s) {
+  with(xds_obj, {
+    M_ix <- seq(from = max_ix + 1, length.out = nPatches)
+    max_ix <- tail(M_ix, 1)
 
-  Y_ix <- seq(from = max_ix+1, length.out=xds_obj$nPatches[i])
-  max_ix <- tail(Y_ix, 1)
+    Y_ix <- seq(from = max_ix + 1, length.out = nPatches)
+    max_ix <- tail(Y_ix, 1)
 
-  ... 
-  
-  xds_obj$max_ix = max_ix
-  xds_obj$MY_obj[[i]]$ix = list(M_ix=M_ix, Y_ix=Y_ix, ...)
-  return(xds_obj)
-})}
-```
-
-### get_MY_vars   
-
-In the following, each variable in your model gets its own pair of lines. 
-
-+ Leave `H` as-is 
-
-+ Replace `M` in `M` and `M_ix` with the first variable name. 
-
-+ Replace `Y` in `Y` and `Y_ix` with the second variable name. 
-
-+ Copy the form for every other variable 
-
-+ The variable `X0` is the class that gets newborns. If you use it or if you want to have it available, compute it and add it to the returned list. 
-
-```{r}
-#' @title Return the variables as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj`
-#' @inheritParams ramp.xds::get_MY_vars
-#' @return a [list]
-#' @export
-get_MY_vars.newMYname <- function(y, xds_obj, i) {
-  with(xds_obj$MY_obj[[i]]$ix,{
-      H = y[H_ix]
-      M = y[M_ix]
-      Y = y[Y_ix]
-      ...
-      X0 = H-M-Y 
-      return(list(H=H, M=M, Y=Y,...,X0=X0))})
-}
-``` 
-
-### parse_MY_orbits  
-
-In the following, each variable in your model gets its own pair of lines. 
-
-+ Leave `H` as-is 
-
-+ Replace `M` in `M` and `M_ix` with the first variable name. 
-
-+ Replace `Y` in `Y` and `Y_ix` with the second variable name. 
-
-+ Copy the form for every other variable 
-
-+ The variable `X0` is the class that gets newborns. If you use it or if you want to have it available, compute it and add it to the returned list.
-
-```{r}
-#' @title parse the output of deSolve and return variables for the newMYname model
-#' @description Implements [parse_MY_orbits] for the newMYname model
-#' @inheritParams ramp.xds::parse_MY_orbits
-#' @return a named list  
-#' @export
-parse_MY_orbits.newMYname <- function(outputs, xds_obj, i) {
-  with(xds_obj$MY_obj[[i]]$ix,{
-    H <- outputs[,H_ix]
-    M <- outputs[,M_ix]
-    Y <- outputs[,Y_ix]
-    X0 <- H-M-Y
-    vars <- list(H=H, M=M, Y=Y, X0=X0)
-    return(vars)
-})}
-```
- 
-
-## Initial Values 
-
-### setup_MY_inits
-
-If you did the global search and replace, you won't need to change this function. 
-
-```{r}
-#' @title Setup initial values for *newMYname*
-#' 
-#' @inheritParams ramp.xds::setup_MY_inits
-#' 
-#' @return a **`ramp.xds`** object 
-#' 
-#' @export
-setup_MY_inits.newMYname = function(xds_obj, options=list(), s=1){
-  xds_obj$MY_obj[[s]]$inits = make_MY_inits_newMYname(xds_obj$nPatches, H=options$H, options=options)
-  return(xds_obj)
-}
-```
-
-### make_MY_inits
-
-```{r}
-#' @title Make initial values for the XHname human model, with defaults
-#' @param nPatches the number of strata in the model
-#' @param options a [list] to override defaults
-#' @param M the initial value for M 
-#' @param Y the initial value for M 
-#' @return a [list]
-#' @export
-make_MY_inits_newMYname = function(nPatches, H, options = list(), M=NULL, Y=1){with(options,{
-  stopifnot(is.numeric(M))
-  stopifnot(is.numeric(Y))
-  M = checkIt(M, nPatches)
-  Y = checkIt(Y, nPatches)
-  return(list(M=M, Y=Y, ...))
-})}
-```
-
-### change_MY_inits 
-
-```{r}
-#' @title Return the parameters as a list
-#' 
-#' @inheritParams ramp.xds::change_MY_inits 
-#' 
-#' @return an **`xds`** object
-#' @export
-change_MY_inits.SIS <- function(xds_obj, options=list(), s=1) {
-  with(get_MY_inits(xds_obj, s), with(options,{
-    xds_obj = change_H(H, xds_obj, s)
-    xds_obj$Xinits[[s]]$M = M 
-    xds_obj$Xinits[[s]]$Y = Y 
-    ... 
-    return(xds_obj)
-  }))}
-```
-
-
-## Dynamical Terms   
-
-### F_fqZ  
-
-In the following, replace ... with a formula to compute the effective density of infectious humans: it is population density by strata weighted by the probability of transmitting. 
-
-```{r}
-#' @title Size of effective infectious human population
-#' @description Implements [F_fqZ] for the SIS model.
-#' @inheritParams ramp.xds::F_fqZ
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_fqZ.newMYname <- function(y, xds_obj, i) {
-  with(get_MY_vars(y, xds_obj, i), 
-    with(xds_obj$MY_obj[[i]], {
-      fqZ = ...  
-      return(fqZ)
-}))}
-```
-
-### F_fqM  
-
-In the following, replace ... with a formula to compute the effective density of infectious humans: it is population density by strata weighted by the probability of transmitting. 
-
-```{r}
-#' @title Size of effective infectious human population
-#' @description Implements [F_fqM] for the SIS model.
-#' @inheritParams ramp.xds::F_fqM
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_fqM.newMYname <- function(y, xds_obj, i) {
-  with(get_MY_vars(y, xds_obj, i), 
-    with(xds_obj$MY_obj[[i]], {
-      fqM = ...  
-      return(fqM)
-}))}
-```
-
-### F_eggs
-
-
-```{r}
-#' @title Infection blocking pre-erythrocytic immunity
-#' @description Implements [F_eggs] for the newMYname model.
-#' @inheritParams ramp.xds::F_eggs
-#' @return a [numeric] vector of length `nPatches`
-#' @export
-F_eggs.newMYname <- function(y, xds_obj, i) {
-  with(xds_obj$MY_obj[[i]],{ 
-    ########################
-    # retrieve or compute it 
-    ########################
-    eggs = ... 
-    ########################
-    # return it 
-    ########################
-    return(eggs)
+    xds_obj$max_ix <- max_ix
+    xds_obj$MY_obj[[s]]$ix <- list(M_ix = M_ix, Y_ix = Y_ix)
+    xds_obj
   })
 }
 ```
 
+`get_MY_vars.newMYname` maps the dependent-variable vector `y` to the named
+state variables used in the equations. Include only variables that belong to
+the module's state vector; do not add host variables unless they are actual MY
+states.
 
-## Other Outputs  
-
-To make `ramp.xds` easy to use, we provide some functions that parse the outputs and compute some standard metrics. 
-
-### F_y?  
-
-## Internal Consistency
-
-## Optional Functions
-
-### Plotting   
-
-### 16. xds_lines_X   
-
-#### xds_lines_X_SIS
-
-```{r, eval=F, purl=F}
-#' Add lines for the density of infected individuals for the SIS model
-#'
-#' @param MY a list with the outputs of parse_deout_X_SIS
-#' @param nPatches the number of population strata
-#' @param clrs a vector of colors
-#' @param llty an integer (or integers) to set the `lty` for plotting
-#'
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get newMYname state variables
+#' @description Implements [ramp.xds::get_MY_vars] for newMYname.
+#' @inheritParams ramp.xds::get_MY_vars
+#' @return a named list
 #' @export
-xds_lines_X_SIS = function(MY, nPatches, clrs=c("darkblue","darkred"), llty=1){
-  with(MY,{
-    if(nPatches==1) {
-      lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-    }
-    if(nPatches>1){
-      if (length(clrs)==2) clrs=matrix(clrs, 2, nPatches)
-      if (length(llty)==1) llty=rep(llty, nPatches)
-
-      for(i in 1:nPatches){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-      }
-    }
-  })}
-```
-
-#### xds_lines_X_newMYname
-
-```{r}
-#' Add lines for the density of infected individuals for the newMYname model
-#'
-#' @param MY a list with the outputs of parse_deout_X_newMYname
-#' @param nPatches the number of population strata
-#' @param clrs a vector of colors
-#' @param llty an integer (or integers) to set the `lty` for plotting
-#'
-#' @export
-xds_lines_X_newMYname = function(MY, nPatches, clrs=c("darkblue","darkred"), llty=1){
-  with(MY,{
-    if(nPatches==1) {
-      lines(time, S, col=clrs[1], lty = llty[1])
-      lines(time, I, col=clrs[2], lty = llty[1])
-    }
-    if(nPatches>1){
-      if (length(clrs)==2) clrs=matrix(clrs, 2, nPatches)
-      if (length(llty)==1) llty=rep(llty, nPatches)
-
-      for(i in 1:nPatches){
-        lines(time, S[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, I[,i], col=clrs[2,i], lty = llty[i])
-      }
-    }
-  })}
-```
-
-### 17. xds_plot_X   
-
-We provide a basic plotting function. The function `xds_lines_X_*` does not have an `S3` version. Instead, it is called by the `S3` function `xds_plot_X`
-
-#### Generic
-
-```{r, eval=F, purl=F}
-#' Basic plotting for epidemiological models
-#'
-#' @param xds_obj a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)
-#' @param i the host species index
-#' @param clrs a vector of colors
-#' @param llty an integer (or integers) to set the `lty` for plotting
-#' @param stable a logical: set to FALSE for `orbits` and TRUE for `stable_orbits`
-#' @param add_axes a logical: plot axes only if TRUE
-#'
-#' @export
-xds_plot_X = function(xds_obj, i=1, clrs="black", llty=1, stable=FALSE, add_axes=TRUE){
-  UseMethod("xds_plot_X", xds_obj$MY_obj[[i]])
+get_MY_vars.newMYname <- function(y, xds_obj, s) {
+  with(xds_obj$MY_obj[[s]]$ix, {
+    list(
+      M = y[M_ix],
+      Y = y[Y_ix]
+    )
+  })
 }
 ```
 
-#### xds_plot_X.SIS
+`parse_MY_orbits.newMYname` extracts the same state variables from the solver
+output matrix. It can also return derived quantities, such as prevalence or
+parity, when those quantities are defined for the model.
 
-```{r, eval=F, purl=F}
-#' Plot the density of infected individuals for the newMYname model
-#'
-#' @inheritParams ramp.xds::xds_plot_X
+```{r, eval=TRUE, purl=TRUE}
+#' @title Parse newMYname model output
+#' @description Implements [ramp.xds::parse_MY_orbits] for newMYname.
+#' @inheritParams ramp.xds::parse_MY_orbits
+#' @return a named list
 #' @export
-xds_plot_X.SIS = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(xds_obj$outputs,if(stable==TRUE){stable_orbits}else{orbits})
-
-  if(add_axes==TRUE)
-    with(vars$MY[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
-
-
-  xds_lines_X_SIS(vars$MY[[i]], xds_obj$Hpar[[i]]$nPatches, clrs, llty)
+parse_MY_orbits.newMYname <- function(outputs, xds_obj, s) {
+  with(xds_obj$MY_obj[[s]]$ix, {
+    M <- outputs[, M_ix]
+    Y <- outputs[, Y_ix]
+    list(M = M, Y = Y)
+  })
 }
 ```
 
-#### xds_plot_X.newMYname
+## Initial values
 
-```{r}
-#' Plot the density of infected individuals for the newMYname model
-#'
-#' @inheritParams ramp.xds::xds_plot_X
+`make_MY_inits_newMYname` returns a named list containing an initial value for
+every state variable. `setup_MY_inits.newMYname` stores those values in the
+module object, and `change_MY_inits.newMYname` updates named values after
+setup.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Make newMYname initial values
+#' @param nPatches number of patches
+#' @param options named values that override defaults
+#' @param M initial adult mosquito density
+#' @param Y initial infected mosquito density
+#' @return a named list
 #' @export
-xds_plot_X.newMYname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty=1, stable=FALSE, add_axes=TRUE){
-  vars=with(xds_obj$outputs,if(stable==TRUE){stable_orbits}else{orbits})
+make_MY_inits_newMYname <- function(nPatches, options = list(), M = 10, Y = 1) {
+  with(options, {
+    M <- checkIt(M, nPatches)
+    Y <- checkIt(Y, nPatches)
+    list(M = M, Y = Y)
+  })
+}
 
-  if(add_axes==TRUE)
-    with(vars$MY[[i]],
-         plot(time, 0*time, type = "n", ylim = c(0, max(H)),
-              ylab = "# Infected", xlab = "Time"))
+#' @title Set up newMYname initial values
+#' @description Implements [ramp.xds::setup_MY_inits] for newMYname.
+#' @inheritParams ramp.xds::setup_MY_inits
+#' @return an **`xds`** model object
+#' @export
+setup_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]]$inits <-
+    make_MY_inits_newMYname(xds_obj$nPatches, options)
+  xds_obj
+}
 
-  xds_lines_X_newMYname(vars$MY[[i]], xds_obj$Hpar[[i]]$nPatches, clrs, llty)
+#' @title Change newMYname initial values
+#' @description Implements [ramp.xds::change_MY_inits] for newMYname.
+#' @inheritParams ramp.xds::change_MY_inits
+#' @return an **`xds`** model object
+#' @export
+change_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]]$inits[names(options)] <- options
+  xds_obj
 }
 ```
 
+## Parameters and bionomics
 
-## Reusable Code 
+Implement `get_MY_pars.newMYname` and `change_MY_pars.newMYname` for the
+parameters users should inspect and change. For bionomic parameters managed
+through shared ports, implement `MBionomics.newMYname` to evaluate their
+baseline values at time `t`, and `MEffectSizes.newMYname` to apply the
+intervention effects. These methods receive `t`, `y`, `xds_obj`, and `s`, and
+return the updated `xds_obj`.
 
-**`ramp.xds`** has a modular design. The modular design makes it possible to break down published models to serve as dynamical components in new models for malaria, a kind of plug-and-play functionality for two kinds of systems: 
+The SI module is an example of a module using the shared parameter helpers
+for feeding rate (`f`), human fraction (`q`), mortality (`g`), emigration
+(`sigma`), emigration loss (`mu`), egg-batch rate (`nu`), and EIP duration.
+Use only the parameters relevant to the model.
 
-+ systems of ordinary and delay differential equations models for malaria and other mosquito-transmitted pathogens. 
+## Dynamics
 
-+ stochastic and deterministic discrete time systems for malaria and other mosquito-transmitted pathogens. 
+Implement one dynamics method for the model family: `dMYdt.newMYname` for a
+continuous-time model, or `Update_MYt.newMYname` for a discrete-time model.
+Both methods receive `t`, the dependent-variable vector `y`, `xds_obj`, and
+the vector-species index `s`. Return values in the same order used for the
+state indices.
 
-This package -- `ramp.library` -- is a collection of models to implement a large number of dynamical model families and other algorithms taken from the literature describing malaria and other mosquito-transmitted pathogens (see Reiner, *et al.* 2013)^[Reiner RC Jr, Perkins TA, Barker CM, Niu T, Chaves LF, Ellis AM, et al. A systematic review of mathematical models of mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface. 2013;10: 20120921.]. Those models have been implemented here as code that has undergone rigorous testing and that can be used to build models for simulation-based analytics.  
+```{r, eval=TRUE, purl=TRUE}
+#' @title Compute newMYname derivatives
+#' @description Implements [ramp.xds::dMYdt] for newMYname.
+#' @inheritParams ramp.xds::dMYdt
+#' @return a numeric vector of derivatives
+#' @export
+dMYdt.newMYname <- function(t, y, xds_obj, s) {
+  # Retrieve the shared terms needed by this model.
+  Lambda <- xds_obj$terms$Lambda[[s]]
+  kappa <- xds_obj$terms$kappa[[s]]
 
-The mathematics supporting this framework were explained in [Spatial Dynamics of Malaria Transmission](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684){target="_blank"}
-^[Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D, Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of malaria transmission. PLoS Comput Biol 19(6): e1010684. https://doi.org/10.1371/journal.pcbi.1010684] 
+  with(get_MY_vars(y, xds_obj, s), {
+    with(xds_obj$MY_obj[[s]], {
+      # Replace these placeholders with the model's equations.
+      dM <- ...
+      dY <- ...
+      c(dM, dY)
+    })
+  })
+}
+```
 
-This vignette was written to help add new modules to `ramp.library.` 
+For discrete-time models, implement the update equations directly and return
+the updated state vector; do not return derivatives or add them to the
+current state unless that is the model's defined update rule.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Update newMYname states
+#' @description Implements [ramp.xds::Update_MYt] for newMYname.
+#' @inheritParams ramp.xds::Update_MYt
+#' @return a numeric vector of updated states
+#' @export
+Update_MYt.newMYname <- function(t, y, xds_obj, s) {
+  with(get_MY_vars(y, xds_obj, s), {
+    with(xds_obj$MY_obj[[s]], {
+      M_next <- ...
+      Y_next <- ...
+      c(M_next, Y_next)
+    })
+  })
+}
+```
+
+## Interface outputs
+
+Implement the following methods with one value per patch:
+
+- `F_fqZ.newMYname` returns the daily density of infectious mosquito bites on
+  humans (`fqZ`). The transmission interface uses it to compute EIR by human
+  stratum.
+- `F_fqM.newMYname` returns the daily density of mosquito bites on humans
+  (`fqM`). The transmission interface uses it to compute HBR by human
+  stratum.
+- `F_eggs.newMYname` returns daily egg production by adult mosquitoes in each
+  patch. The egg-laying interface distributes the eggs among habitats.
+
+Each method receives `t`, `y`, `xds_obj`, and `s`.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Compute newMYname infective biting density
+#' @description Implements [ramp.xds::F_fqZ] for newMYname.
+#' @inheritParams ramp.xds::F_fqZ
+#' @return a numeric vector with one value per patch
+#' @export
+F_fqZ.newMYname <- function(t, y, xds_obj, s) {
+  with(get_MY_vars(y, xds_obj, s), {
+    with(xds_obj$MY_obj[[s]], {
+      fqZ <- ...
+      fqZ
+    })
+  })
+}
+
+#' @title Compute newMYname human biting density
+#' @description Implements [ramp.xds::F_fqM] for newMYname.
+#' @inheritParams ramp.xds::F_fqM
+#' @return a numeric vector with one value per patch
+#' @export
+F_fqM.newMYname <- function(t, y, xds_obj, s) {
+  with(get_MY_vars(y, xds_obj, s), {
+    with(xds_obj$MY_obj[[s]], {
+      fqM <- ...
+      fqM
+    })
+  })
+}
+
+#' @title Compute newMYname egg production
+#' @description Implements [ramp.xds::F_eggs] for newMYname.
+#' @inheritParams ramp.xds::F_eggs
+#' @return a numeric vector with one value per patch
+#' @export
+F_eggs.newMYname <- function(t, y, xds_obj, s) {
+  with(get_MY_vars(y, xds_obj, s), {
+    with(xds_obj$MY_obj[[s]], {
+      eggs <- ...
+      eggs
+    })
+  })
+}
+```
+
+## Skill set and checks
+
+Implement `setup_skillset_MY.newMYname` to record the module's capabilities
+and limitations. Implement `check_MY.newMYname` for model-specific setup
+checks that should run before solving.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Set up newMYname skill set
+#' @inheritParams ramp.xds::setup_skillset_MY
+#' @return an **`xds`** model object
+#' @export
+setup_skillset_MY.newMYname <- function(xds_obj, s) {
+  xds_obj$MY_obj[[s]]$skill_set <- list()
+  xds_obj
+}
+
+#' @title Check newMYname setup
+#' @inheritParams ramp.xds::check_MY
+#' @return an **`xds`** model object
+#' @export
+check_MY.newMYname <- function(xds_obj, s) {
+  xds_obj
+}
+```
+
+## Optional methods and tests
+
+Implement `steady_state_M.newMYname`, `steady_state_Y.newMYname`, or
+`steady_state_MY.newMYname` only when the corresponding steady state is
+defined for the model. The MY interface does not define MY-specific plotting
+generics; model-specific plots can use the parsed output from
+`parse_MY_orbits.newMYname`.
+
+Add the module to the appropriate source file in `ramp.library` and write
+tests that check the equations and integration with `ramp.xds`. For example,
+check that initial values have the expected names and dimensions, that
+derivatives or updates preserve state ordering, and that the biting and egg
+outputs have one value per patch.
+
+## Reusable model code
+
+**`ramp.xds`** has a modular design that allows published models to serve as
+dynamical components in new models for malaria and other mosquito-transmitted
+pathogens, including ordinary and delay differential equation models and
+stochastic or deterministic discrete-time models.
+
+The mathematics supporting this framework are described in [Spatial Dynamics
+of Malaria Transmission](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684){target="_blank"}.
+^[Wu SL, Henry JM, Citron DT, Mbabazi Ssebuliba D, Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of malaria transmission. PLoS Comput Biol 19(6): e1010684. https://doi.org/10.1371/journal.pcbi.1010684]
