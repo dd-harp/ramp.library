@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{Update_XHt.SIRS}
 \alias{Update_XHt.SIRS}
-\title{DTS updating for the SIS model for human / vertebrate host infections}
+\title{DTS updating for \code{SIRS} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SIRS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the SIS model
+Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the \code{SIRS} model
+}
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

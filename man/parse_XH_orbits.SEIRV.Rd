@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{parse_XH_orbits.SEIRV}
 \alias{parse_XH_orbits.SEIRV}
-\title{parse the output of deSolve and return variables for the SEIRV model}
+\title{Parse outputs for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SEIRV}(outputs, xds_obj, i)
 }
@@ -14,9 +14,24 @@
 \item{i}{the host species index}
 }
 \value{
-none
+a named list of module variables
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SEIRV model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SEIRV} model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{V}}{density of vaccinated humans}
+\item{\code{S=H-E-I-R-V}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

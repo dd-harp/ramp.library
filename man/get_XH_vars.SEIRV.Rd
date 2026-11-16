@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{get_XH_vars.SEIRV}
 \alias{get_XH_vars.SEIRV}
-\title{Return the variables as a list}
+\title{List variables for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SEIRV}(y, xds_obj, i)
 }
@@ -18,5 +18,20 @@ a \link{list}
 }
 \description{
 This method dispatches on the type of \code{xds_obj$XH_obj}
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{V}}{density of vaccinated humans}
+\item{\code{S=H-E-I-R-V}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

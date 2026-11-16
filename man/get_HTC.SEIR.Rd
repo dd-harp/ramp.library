@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{get_HTC.SEIR}
 \alias{get_HTC.SEIR}
-\title{Compute the HTC for the SEIR model}
+\title{Compute the HTC for the \code{SEIR} model}
 \usage{
 \method{get_HTC}{SEIR}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SEIR model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SEIR} model with demography.
+}
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

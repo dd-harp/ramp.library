@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{steady_state_X.SIP_dts}
 \alias{steady_state_X.SIP_dts}
-\title{Compute the steady states for the  dts SIP model as a function of the daily EIR}
+\title{Compute the steady states for the  dts \code{SIP} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SIP_dts}(foi, H, xds_obj, i = 1)
 }
@@ -19,6 +19,9 @@
 the steady states as a named vector
 }
 \description{
-Compute the steady state of the  dts SIP model as a function of the daily eir.
+Compute the steady state of the  dts \code{SIP} model as a function of the daily eir.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{get_XH_pars.SEISd}
 \alias{get_XH_pars.SEISd}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{SEISd} (\strong{XH})}
 \usage{
 \method{get_XH_pars}{SEISd}(xds_obj, i = 1)
 }
@@ -19,7 +19,24 @@ Parameter values for the \eqn{i^{th}} host are
 stored as \code{xds_obj$XH_obj[[i]]}. This returns the stored parameter
 values as a list.
 }
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SEISd} and modifiable by
+\link{change_XH_pars.SEISd} describe the dynamics or detection by diagnostic methods.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{nu}}{intrinsic incubation period (fixed delay, in days)}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
+}
+}
+
 \seealso{
-\link{make_XH_obj_SEISd}
+\link{SEISd}, \link{make_XH_obj_SEISd}
 }
 \keyword{internal}

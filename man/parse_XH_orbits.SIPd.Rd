@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{parse_XH_orbits.SIPd}
 \alias{parse_XH_orbits.SIPd}
-\title{Parse Solutions Matrix for the SIPd model}
+\title{Parse outputs for \code{SIPd} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SIPd}(outputs, xds_obj, i)
 }
@@ -14,9 +14,12 @@
 \item{i}{the host species index}
 }
 \value{
-none
+a named list of module variables and prevalence summaries
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SIPd model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SIPd} model
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

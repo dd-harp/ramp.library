@@ -20,14 +20,57 @@ a \link{numeric} vector
 }
 \description{
 Implements \link[ramp.xds:dMYdt]{dMYdt} for the SEI ODE model.
+}
+\section{State Variables}{
 
-The dynamics of adult mosquitoes:
-\deqn{dM/dt = \Lambda - \Omega \cdot M}
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
 
-The density of infected but not infectious mosquitoes:
-\deqn{dY/dt = fq\kappa(M-Y) - \Omega \cdot Y}
+\section{Dynamical Terms}{
 
-The density of infectious mosquitoes:
-\deqn{dZ/dt = (Y-Z)/\tau - \Omega \cdot Z}
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
+}
+}
+
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_emigration_rates]{ramp.xds::setup_emigration_rates}}
+\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
+\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Dynamics}{
+
+Adult mosquitoes emerge from aquatic habitats at rate \eqn{\Lambda}.
+Mosquitoes become exposed when they take an infectious human blood meal;
+exposed mosquitoes progress to the infectious class at rate
+\eqn{1/\tau}, where \eqn{\tau} is the EIP. The model equations are
+\deqn{
+\begin{array}{rl}
+dM/dt &= \Lambda-\Omega\cdot M \\\\
+dY/dt &= fq\kappa(M-Y)-\Omega\cdot Y \\\\
+dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
+\end{array}
+}
+}
+
+\seealso{
+\link{SEI}, \link{F_fqZ.SEI}, \link{F_eggs.SEI}
 }
 \keyword{internal}

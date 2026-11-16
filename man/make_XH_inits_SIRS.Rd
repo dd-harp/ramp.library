@@ -2,14 +2,14 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{make_XH_inits_SIRS}
 \alias{make_XH_inits_SIRS}
-\title{Make initial values for the SIRS human model, with defaults}
+\title{Make initial values for \code{SIRS} (\strong{XH})}
 \usage{
 make_XH_inits_SIRS(nStrata, options = list(), H = 1000, I = 1, R = 0)
 }
 \arguments{
 \item{nStrata}{the number of strata in the model}
 
-\item{options}{a \link{list} to overwrite defaults}
+\item{options}{a \link{list} to override defaults}
 
 \item{H}{the initial value for H}
 
@@ -21,6 +21,19 @@ make_XH_inits_SIRS(nStrata, options = list(), H = 1000, I = 1, R = 0)
 a \link{list}
 }
 \description{
-Make initial values for the SIRS human model, with defaults
+Make initial values for \code{SIRS} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered (temporarily immune) humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

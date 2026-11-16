@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{get_HTC.SEIS}
 \alias{get_HTC.SEIS}
-\title{Compute the HTC for the SEIS model}
+\title{Compute the HTC for the \code{SEIS} model}
 \usage{
 \method{get_HTC}{SEIS}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SEIS model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SEIS} model with demography.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

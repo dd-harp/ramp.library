@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{xds_plot_X.SEIRV}
 \alias{xds_plot_X.SEIRV}
-\title{Plot the density of infected individuals for the SEIRV model}
+\title{Plot the density of infected individuals for the \code{SEIRV} model}
 \usage{
 \method{xds_plot_X}{SEIRV}(
   xds_obj,
@@ -24,6 +24,9 @@
 \item{add}{plot axes only if FALSE}
 }
 \description{
-Plot the density of infected individuals for the SEIRV model
+Plot the density of infected individuals for the \code{SEIRV} model
+}
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

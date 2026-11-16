@@ -2,25 +2,41 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{make_XH_inits_SIPd}
 \alias{make_XH_inits_SIPd}
-\title{Make initial values for the SIPd human model, with defaults}
+\title{Make initial values for \code{SIPd} (\strong{XH})}
 \usage{
 make_XH_inits_SIPd(nStrata, options = list(), H = 1000, I = 1, P = 0)
 }
 \arguments{
 \item{nStrata}{the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{H}{the initial human population density}
 
-\item{I}{the initial values of the parameter I}
+\item{I}{the initial number of infectious humans}
 
-\item{P}{the initial values of the parameter P}
+\item{P}{the initial number of humans under chemoprotection}
 }
 \value{
 a \link{list}
 }
 \description{
-Make initial values for the SIPd human model, with defaults
+Make initial values for \code{SIPd} (\strong{XH})
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+\item{\code{treated}}{cumulative treatment history used for delayed outflow from \eqn{P}}
+}
+The delay derivative tracks treatment history. The initializer currently
+returns this auxiliary initial value under the name \code{cfoi}.
+}
+
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

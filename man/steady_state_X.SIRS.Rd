@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{steady_state_X.SIRS}
 \alias{steady_state_X.SIRS}
-\title{Compute the steady states for the SIRS model as a function of the daily EIR}
+\title{Compute the steady states for the \code{SIRS} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SIRS}(foi, H, xds_obj, i = 1)
 }
@@ -19,6 +19,9 @@
 the steady states as a named vector
 }
 \description{
-Compute the steady state of the SIRS model as a function of the daily eir.
+Compute the steady state of the \code{SIRS} model as a function of the daily eir.
+}
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

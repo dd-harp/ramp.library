@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{steady_state_X.SEIS_dts}
 \alias{steady_state_X.SEIS_dts}
-\title{Compute the steady states for the  dts SEIS model as a function of the daily EIR}
+\title{Compute the steady states for the  dts \code{SEIS} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SEIS_dts}(foi, H, xds_obj, i = 1)
 }
@@ -19,6 +19,9 @@
 the steady states as a named vector
 }
 \description{
-Compute the steady state of the  dts SIS model as a function of the daily eir.
+Compute the steady state of the dts \code{SEIS} model as a function of the daily eir.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{F_H.SEIS}
 \alias{F_H.SEIS}
-\title{Size of effective infectious human population}
+\title{Compute population density}
 \usage{
 \method{F_H}{SEIS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_H]{F_H} for the SEIS model.
+Implements \link[ramp.xds:F_H]{F_H} for the \code{SEIS} model.
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

@@ -15,7 +15,7 @@ F_force_malaria <- function(t, y, Xpars, forcing_mod) {
 #' @description Mass treatment
 #' @param mod_forcing is a string that defines an S3 class
 #' @param nStrata  the number of population strata
-#' @param opts a [list] that overwrites default values
+#' @param opts a [list] that overrides default values
 #' @return none
 #' @export
 setup_force_malaria = function(mod_forcing, nStrata, opts=list()){
@@ -44,7 +44,7 @@ setup_force_malaria.val = function(mod_forcing, nStrata, opts=list()){
 #' @title Make a function to simulate mass treatment
 #' @description Mass treatment
 #' @param nStrata the number of population strata
-#' @param opts a [list] that overwrites default values
+#' @param opts a [list] that overrides default values
 #' @param value the value to return
 #' @return none
 #' @export
@@ -79,7 +79,7 @@ setup_force_malaria.func = function(mod_forcing, nStrata, opts=list()){
 #' @title Make a function to simulate mass treatment
 #' @description Mass treatment
 #' @param nStrata the number of population strata
-#' @param opts a [list] that overwrites default values
+#' @param opts a [list] that overrides default values
 #' @param scale a scaling parameter
 #' @param F_season a function describing a seasonal pattern over time
 #' @param season_par an object to configure a seasonality function using [make_function]

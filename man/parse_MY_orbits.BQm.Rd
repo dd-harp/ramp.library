@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{parse_MY_orbits.BQm}
 \alias{parse_MY_orbits.BQm}
-\title{parse the output of deSolve and return variables for the BQm model}
+\title{Parse outputs for \code{BQm} (\strong{MY})}
 \usage{
 \method{parse_MY_orbits}{BQm}(outputs, xds_obj, s)
 }
@@ -18,5 +18,29 @@ none
 }
 \description{
 Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the BQm model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}, \code{By}, \code{Bz}}{uninfected, exposed, and infectious blood-feeding mosquitoes}
+\item{\code{Qu}, \code{Qy}, \code{Qz}}{uninfected, exposed, and infectious gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is based on
+\eqn{B_u+B_y+B_z}; the infective biting density, \code{fqZ}, is based on
+\eqn{B_z}. \link{F_fqM.BQm} and \link{F_fqZ.BQm} compute these quantities.
+\link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the biting distribution matrix
+and resident-bite fraction to compute stratum-level \code{EIR};
+\link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level \code{HBR}.
+}
+
+\seealso{
+\link{BQm}, \link{get_MY_vars.BQm}
 }
 \keyword{internal}

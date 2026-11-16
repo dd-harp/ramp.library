@@ -146,7 +146,7 @@ Update_MYt.newMYname<- function(t, y, xds_obj, s) {
 ```{r}
 #' @title Make parameters for newMYname human model, with defaults
 #' @param nPatches is the number of population strata
-#' @param options a [list] that could overwrite defaults
+#' @param options a [list] that could override defaults
 #' @param p1 the first parameter 
 #' @param p2 the second parameter 
 #' @param p3 the third parameter 
@@ -307,16 +307,16 @@ setup_MY_inits.newMYname = function(xds_obj, options=list(), s=1){
 ```{r}
 #' @title Make initial values for the XHname human model, with defaults
 #' @param nPatches the number of strata in the model
-#' @param options a [list] to overwrite defaults
-#' @param M0 the initial value for M 
-#' @param Y0 the initial value for M 
+#' @param options a [list] to override defaults
+#' @param M the initial value for M 
+#' @param Y the initial value for M 
 #' @return a [list]
 #' @export
-make_MY_inits_newMYname = function(nPatches, H, options = list(), M0=NULL, Y0=1){with(options,{
-  stopifnot(is.numeric(M0))
-  stopifnot(is.numeric(Y0))
-  M = checkIt(M0, nPatches)
-  Y = checkIt(Y0, nPatches)
+make_MY_inits_newMYname = function(nPatches, H, options = list(), M=NULL, Y=1){with(options,{
+  stopifnot(is.numeric(M))
+  stopifnot(is.numeric(Y))
+  M = checkIt(M, nPatches)
+  Y = checkIt(Y, nPatches)
   return(list(M=M, Y=Y, ...))
 })}
 ```

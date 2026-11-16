@@ -132,6 +132,110 @@
     <h2>Value</h2>
     <p>a <a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a> vector</p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>Bu</code></dt>
+<dd><p>density of uninfected, blood-feeding mosquitoes</p></dd>
+
+<dt><code>Qu</code></dt>
+<dd><p>density of uninfected, gravid (egg-laying) mosquitoes</p></dd>
+
+<dt><code>By</code></dt>
+<dd><p>density of infected (exposed), blood-feeding mosquitoes</p></dd>
+
+<dt><code>Qy</code></dt>
+<dd><p>density of infected (exposed), gravid mosquitoes</p></dd>
+
+<dt><code>Bz</code></dt>
+<dd><p>density of infectious, blood-feeding mosquitoes</p></dd>
+
+<dt><code>Qz</code></dt>
+<dd><p>density of infectious, gravid mosquitoes</p></dd>
+
+<dt><code>M</code></dt>
+<dd><p>total adult mosquito density, derived during parsing</p></dd>
+
+<dt><code>Y</code></dt>
+<dd><p>total infected and infectious mosquito density, derived during parsing</p></dd>
+
+<dt><code>Z</code></dt>
+<dd><p>total infectious mosquito density, derived during parsing</p></dd>
+
+
+</dl></div>
+    <div id="dynamical-terms">
+    <h2>Dynamical Terms</h2>
+
+
+<dl><dt><code>Lambda</code> or \(\Lambda\)</dt>
+<dd><p>adult mosquito emergence rate, computed by <a href="https://dd-harp.github.io/ramp.xds/reference/Emergence.html" class="external-link">ramp.xds::Emergence</a></p></dd>
+
+<dt><code>kappa</code> or \(\kappa\)</dt>
+<dd><p>net infectiousness, computed by <a href="https://dd-harp.github.io/ramp.xds/reference/Transmission.html" class="external-link">ramp.xds::Transmission</a></p></dd>
+
+
+</dl></div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<dl><dt><code>f</code></dt>
+<dd><p>blood feeding rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_f</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_blood_feeding_rates</a></p></dd>
+
+<dt><code>q</code></dt>
+<dd><p>human fraction — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_q</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_human_fractions</a></p></dd>
+
+<dt><code>g</code></dt>
+<dd><p>mosquito mortality rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_g</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_mosquito_mortality</a></p></dd>
+
+<dt><code>sigma_b</code></dt>
+<dd><p>emigration rate during blood feeding</p></dd>
+
+<dt><code>sigma_q</code></dt>
+<dd><p>emigration rate during egg laying</p></dd>
+
+<dt><code>mu</code></dt>
+<dd><p>fraction of emigrating mosquitoes lost</p></dd>
+
+<dt><code>eip</code> or \(\tau\)</dt>
+<dd><p>extrinsic incubation period; \(\phi=1/\tau\)</p></dd>
+
+<dt><code>nu</code> or \(\nu\)</dt>
+<dd><p>egg batch rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
+
+<dt><code>eggsPerBatch</code> or \(\Gamma\)</dt>
+<dd><p>number of eggs per batch</p></dd>
+
+
+</dl><p>After basic setup, <a href="change_MY_pars.BQ.html">change_MY_pars.BQ</a> can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.</p>
+    </div>
+    <div id="dynamics">
+    <h2>Dynamics</h2>
+
+
+<p>Let \(\phi=1/\tau\), where \(\tau\) is the extrinsic incubation period.
+Mosquitoes move between blood-feeding and gravid states at rate \(f\) and
+oviposit at rate \(\nu\). Infection is acquired by uninfected
+blood-feeding mosquitoes; exposed mosquitoes progress to the infectious
+class at rate \(\phi\). The compartment equations are:
+$$
+\begin{array}{rl}
+dB_u/dt &amp;= \Lambda+\nu Q_u-fB_u-\Omega_b\cdot B_u \\\\
+dQ_u/dt &amp;= f(1-q\kappa)B_u-\nu Q_u-\Omega_q\cdot Q_u \\\\
+dB_y/dt &amp;= \nu Q_y-(f+\phi)B_y-\Omega_b\cdot B_y \\\\
+dQ_y/dt &amp;= fq\kappa B_u+fB_y-(\nu+\phi)Q_y-\Omega_q\cdot Q_y \\\\
+dB_z/dt &amp;= \phi B_y+\nu Q_z-fB_z-\Omega_b\cdot B_z \\\\
+dQ_z/dt &amp;= \phi Q_y+fB_z-\nu Q_z-\Omega_q\cdot Q_z
+\end{array}
+$$</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="BQ.html">BQ</a>, <a href="F_fqZ.BQ.html">F_fqZ.BQ</a>, <a href="F_eggs.BQ.html">F_eggs.BQ</a></p></div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

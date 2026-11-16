@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{Update_MYt.SEI}
 \alias{Update_MYt.SEI}
-\title{Derivatives for adult mosquitoes}
+\title{Update state variables for \code{SEI} (\strong{MY})}
 \usage{
 \method{Update_MYt}{SEI}(t, y, xds_obj, s)
 }
@@ -20,5 +20,32 @@ a \link{numeric} vector
 }
 \description{
 Implements \link[ramp.xds:Update_MYt]{Update_MYt} for the SEI model.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
+\section{Dynamics}{
+
+Adult mosquitoes emerge from aquatic habitats at rate \eqn{\Lambda}.
+Mosquitoes become exposed when they take an infectious human blood meal;
+exposed mosquitoes progress to the infectious class at rate
+\eqn{1/\tau}, where \eqn{\tau} is the EIP. The model equations are
+\deqn{
+\begin{array}{rl}
+dM/dt &= \Lambda-\Omega\cdot M \\\\
+dY/dt &= fq\kappa(M-Y)-\Omega\cdot Y \\\\
+dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
+\end{array}
+}
+}
+
+\seealso{
+\link{SEI}, \link{dMYdt.SEI}
 }
 \keyword{internal}

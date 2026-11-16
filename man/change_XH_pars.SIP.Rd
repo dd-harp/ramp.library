@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{change_XH_pars.SIP}
 \alias{change_XH_pars.SIP}
-\title{Get parameters for \code{SIP} (\strong{XH})}
+\title{Change parameters for \code{SIP} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIP}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,25 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIP} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIP} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SIP} and modifiable by
+\link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{sigma} or \eqn{\sigma}}{additional treatment rate for infectious individuals}
+\item{\code{eta}}{rate of chemoprotection waning}
+}
+}
+
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

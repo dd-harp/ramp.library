@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{F_H.SIPd}
 \alias{F_H.SIPd}
-\title{Size of effective infectious human population}
+\title{Compute population density}
 \usage{
 \method{F_H}{SIPd}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_I]{F_I} for the SIPd model.
+Implements \link[ramp.xds:F_H]{F_H} for the \code{SIPd} model.
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

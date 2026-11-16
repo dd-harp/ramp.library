@@ -357,7 +357,7 @@ that define state transitions in <code>dLdt</code> or
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Lake parameters for newLname human model, with defaults</span></span>
 <span><span class="co">#' @param nPatches is the number of population strata</span></span>
-<span><span class="co">#' @param options a [list] that could overwrite defaults</span></span>
+<span><span class="co">#' @param options a [list] that could override defaults</span></span>
 <span><span class="co">#' @param p1 the first parameter </span></span>
 <span><span class="co">#' @param p2 the second parameter </span></span>
 <span><span class="co">#' @param p3 the third parameter </span></span>
@@ -527,16 +527,16 @@ this function.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Lake initial values for the XHname human model, with defaults</span></span>
 <span><span class="co">#' @param nPatches the number of strata in the model</span></span>
-<span><span class="co">#' @param options a [list] to overwrite defaults</span></span>
-<span><span class="co">#' @param L0 the initial value for L </span></span>
-<span><span class="co">#' @param Y0 the initial value for L </span></span>
+<span><span class="co">#' @param options a [list] to override defaults</span></span>
+<span><span class="co">#' @param L the initial value for L </span></span>
+<span><span class="co">#' @param Y the initial value for L </span></span>
 <span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">make_L_inits_newLname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">H</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">L0</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">Y0</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">L0</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">Y0</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">L</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">L0</span>, <span class="va">nPatches</span><span class="op">)</span></span>
-<span>  <span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">Y0</span>, <span class="va">nPatches</span><span class="op">)</span></span>
+<span><span class="va">make_L_inits_newLname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">H</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">L</span><span class="op">=</span><span class="cn">NULL</span>, <span class="va">Y</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">L</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">L</span>, <span class="va">nPatches</span><span class="op">)</span></span>
+<span>  <span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">nPatches</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L<span class="op">=</span><span class="va">L</span>, Y<span class="op">=</span><span class="va">Y</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>

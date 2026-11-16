@@ -18,7 +18,7 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} object
 }
 \description{
 This sets up an \code{SIPd} model object for the \strong{XH} module for the \eqn{i^{th}} host species
@@ -31,6 +31,33 @@ This sets up an \code{SIPd} model object for the \strong{XH} module for the \eqn
 \note{
 The module object is stored at \code{xds_obj$XH_obj[[i]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+\item{\code{treated}}{cumulative treatment history used for delayed outflow from \eqn{P}}
+}
+The delay derivative tracks treatment history. The initializer currently
+returns this auxiliary initial value under the name \code{cfoi}.
+}
+
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SIPd} and modifiable by
+\link{change_XH_pars.SIPd} describe infection, treatment, and chemoprotection.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{eta}}{chemoprotection duration (fixed delay, in days)}
+}
+}
+
 \seealso{
 \link{SIPd}, \link{make_XH_obj_SIPd}
 }

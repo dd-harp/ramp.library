@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{F_I.SEIR}
 \alias{F_I.SEIR}
-\title{Size of effective infectious human population}
+\title{Compute infectious density for \code{SEIR} (\strong{XH})}
 \usage{
 \method{F_I}{SEIR}(t, y, xds_obj, i)
 }
@@ -19,6 +19,16 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_I]{F_I} for the SIS model.
+Implements \link[ramp.xds:F_I]{F_I} for the \code{SEIR} model.
+}
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

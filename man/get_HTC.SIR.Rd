@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{get_HTC.SIR}
 \alias{get_HTC.SIR}
-\title{Compute the HTC for the SIR model}
+\title{Compute the HTC for the \code{SIR} model}
 \usage{
 \method{get_HTC}{SIR}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SIR model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SIR} model with demography.
+}
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

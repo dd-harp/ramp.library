@@ -7,35 +7,53 @@
 make_MY_inits_BQ(
   nPatches,
   options = list(),
-  Bu0 = 5,
-  Qu0 = 1,
-  By0 = 1,
-  Qy0 = 1,
-  Bz0 = 1,
-  Qz0 = 1
+  Bu = 5,
+  Qu = 1,
+  By = 1,
+  Qy = 1,
+  Bz = 1,
+  Qz = 1
 )
 }
 \arguments{
-\item{nPatches}{the number of patches in the model}
+\item{nPatches}{the number of patches}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
-\item{Bu0}{total uninfected, not gravid mosquito density at each patch}
+\item{Bu}{total uninfected, not gravid mosquito density at each patch}
 
-\item{Qu0}{total uninfected, gravid mosquito density at each patch}
+\item{Qu}{total uninfected, gravid mosquito density at each patch}
 
-\item{By0}{infected, not gravid mosquito density at each patch}
+\item{By}{infected, not gravid mosquito density at each patch}
 
-\item{Qy0}{infected, gravid mosquito density at each patch}
+\item{Qy}{infected, gravid mosquito density at each patch}
 
-\item{Bz0}{infectious, not gravid mosquito density at each patch}
+\item{Bz}{infectious, not gravid mosquito density at each patch}
 
-\item{Qz0}{infectious, gravid mosquito density at each patch}
+\item{Qz}{infectious, gravid mosquito density at each patch}
 }
 \value{
 a \link{list}
 }
 \description{
 Make inits for BQ adult mosquito model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}}{density of uninfected, blood-feeding mosquitoes}
+\item{\code{Qu}}{density of uninfected, gravid (egg-laying) mosquitoes}
+\item{\code{By}}{density of infected (exposed), blood-feeding mosquitoes}
+\item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
+\item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
+\item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
+\seealso{
+\link{BQ}, \link{setup_MY_inits.BQ}
 }
 \keyword{internal}

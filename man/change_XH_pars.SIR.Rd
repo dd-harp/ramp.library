@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{change_XH_pars.SIR}
 \alias{change_XH_pars.SIR}
-\title{Get parameters for \code{SIR} (\strong{XH})}
+\title{Change parameters for \code{SIR} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIR}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,21 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIR} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIR} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+\link{make_XH_obj_SIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SIR}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+}
+}
+
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{change_XH_pars.SIRS}
 \alias{change_XH_pars.SIRS}
-\title{Get parameters for \code{SIRS} (\strong{XH})}
+\title{Change parameters for \code{SIRS} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIRS}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,22 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIRS} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIRS} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+\link{make_XH_obj_SIRS} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SIRS}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{gamma}}{rate of waning immunity (loss of \eqn{R})}
+}
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

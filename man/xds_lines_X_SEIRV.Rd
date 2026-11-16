@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{xds_lines_X_SEIRV}
 \alias{xds_lines_X_SEIRV}
-\title{Add lines for the density of infected individuals for the SEIRV model}
+\title{Add lines for the density of infected individuals for the \code{SEIRV} model}
 \usage{
 xds_lines_X_SEIRV(
   time,
@@ -24,6 +24,9 @@ xds_lines_X_SEIRV(
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
-Add lines for the density of infected individuals for the SEIRV model
+Add lines for the density of infected individuals for the \code{SEIRV} model
+}
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

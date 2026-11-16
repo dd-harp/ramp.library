@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{get_XH_pars.SIP}
 \alias{get_XH_pars.SIP}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{SIP} (\strong{XH})}
 \usage{
 \method{get_XH_pars}{SIP}(xds_obj, i = 1)
 }
@@ -19,7 +19,22 @@ Parameter values for the \eqn{i^{th}} host are
 stored as \code{xds_obj$XH_obj[[i]]}. This returns the stored parameter
 values as a list.
 }
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SIP} and modifiable by
+\link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{sigma} or \eqn{\sigma}}{additional treatment rate for infectious individuals}
+\item{\code{eta}}{rate of chemoprotection waning}
+}
+}
+
 \seealso{
-\link{make_XH_obj_SIP}
+\link{SIP}, \link{make_XH_obj_SIP}
 }
 \keyword{internal}

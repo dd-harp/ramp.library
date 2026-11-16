@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{xds_plot_X.SIPd}
 \alias{xds_plot_X.SIPd}
-\title{Plot the density of infected individuals for the SIPd model}
+\title{Plot the density of infected individuals for the \code{SIPd} model}
 \usage{
 \method{xds_plot_X}{SIPd}(
   xds_obj,
@@ -24,6 +24,9 @@
 \item{add}{plot axes only if FALSE}
 }
 \description{
-Plot the density of infected individuals for the SIPd model
+Plot the density of infected individuals for the \code{SIPd} model
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

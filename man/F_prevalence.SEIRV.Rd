@@ -15,6 +15,17 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SEIRV model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SEIRV} model.
+}
+\section{Prevalence}{
+
+\link{F_prevalence.SEIRV} returns \eqn{x=I/H}. In contrast,
+\link{parse_XH_orbits.SEIRV} stores \code{true_pr} as \eqn{(E+I)/H}.
+This module has no diagnostic sensitivity parameters or module-specific
+light microscopy, RDT, or PCR prevalence methods.
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

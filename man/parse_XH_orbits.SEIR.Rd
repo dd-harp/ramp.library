@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{parse_XH_orbits.SEIR}
 \alias{parse_XH_orbits.SEIR}
-\title{parse the output of deSolve and return variables for the SEIR model}
+\title{Parse outputs for \code{SEIR} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SEIR}(outputs, xds_obj, i)
 }
@@ -14,9 +14,23 @@
 \item{i}{the host species index}
 }
 \value{
-none
+a named list of module variables
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SEIR model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SEIR} model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{S=H-E-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

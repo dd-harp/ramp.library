@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{get_HTC.SIPd}
 \alias{get_HTC.SIPd}
-\title{Compute the HTC for the SIPd model}
+\title{Compute the HTC for the \code{SIPd} model}
 \usage{
 \method{get_HTC}{SIPd}(xds_obj, i)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:get_HTC]{get_HTC} for the SIPd model with demography.
+Implements \link[ramp.xds:get_HTC]{get_HTC} for the \code{SIPd} model with demography.
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

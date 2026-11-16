@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{steady_state_X.SIPd}
 \alias{steady_state_X.SIPd}
-\title{Compute the steady states for the  dts SIPd model as a function of the daily EIR}
+\title{Compute the steady states for the  dts \code{SIPd} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SIPd}(foi, H, xds_obj, i = 1)
 
@@ -20,11 +20,14 @@
 \value{
 the steady states as a named vector
 
-the steady states as a named vector
+the steady states as a named list
 }
 \description{
-Compute the steady state of the  dts SIPd model as a function of the daily eir.
+Compute the steady state of the  dts \code{SIPd} model as a function of the daily eir.
 
-Compute the steady state of the SIPd model as a function of the daily eir.
+Compute the steady state of the \code{SIPd} model as a function of the daily eir.
+}
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

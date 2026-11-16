@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{dXHdt.SIP}
 \alias{dXHdt.SIP}
-\title{Derivatives for the \code{SIP} Module (\strong{XH} Component)}
+\title{Compute derivatives for \code{SIP} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIP}(t, y, xds_obj, i)
 }
@@ -19,26 +19,68 @@
 a \link{numeric} vector
 }
 \description{
-Compute the derivatives for SIP compartmental model:
+Computes derivatives for the \code{SIP} module (\strong{XH}).
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Infection Dynamics}{
+
+Infections clear naturally at rate \eqn{r}, returning individuals to
+susceptibility. Treatment instead moves individuals into chemoprotection.
+A fraction \eqn{\rho} of incident infections \eqn{hS} are treated immediately.
+Define \eqn{\xi_t = \xi + mda(t)} and \eqn{\sigma_t = \sigma + msat(t)}.
 \deqn{
 \begin{array}{rl}
-dH/dt =& B(t,H) + D \cdot H \\
-dI/dt =& (1-\rho) h S  - (r+\xi+\sigma ) I + D \cdot I \\
-dP/dt =& \rho h S + \xi (S+I)  + \sigma I - \eta P + D \cdot P
-\end{array}
-}
-where \eqn{S = H-I-P}; \eqn{B(t, H)} is the
-time-dependent birth rate; and \eqn{D} the demographic matrix.
-
-The model sets up ports for mass treatment:
-\itemize{
-\item the parameter \code{xi_t} is computed as \eqn{\xi'(t) = \xi + \mbox{mda}(t)}
-\item the parameter \code{sigma_t} is computed as \eqn{\sigma'(t) = \sigma + \mbox{msat}(t)}
+dI/dt &= (1-\rho)hS - (r + \xi_t + \sigma_t)I - \mathbf{D}(I) \\
+dP/dt &= \rho hS + \xi_t(S+I) + \sigma_t I - \eta P - \mathbf{D}(P) \\
+\end{array}}
+where \eqn{h} is the force of infection and \eqn{S = H - I - P}.
+The mortality function uses the same model for \eqn{I} and \eqn{P} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
 }
 
-The functions \code{mda} and \code{msat} are set to zero. To configure mass treatment, see \code{ramp.control}
+\section{Mass Treatment}{
+
+
+
+Mass treatment clears infections. At basic setup
+\eqn{\Xi(t)=0}. To set up mass treatment, see \link[ramp.xds]{setup_mass_treatment}.
+Mass treatment is either:
+
+\describe{
+\item{\code{mda(t)} or \eqn{\Xi(t)}}{mass drug administration}
+\item{\code{msat(t)} or \eqn{\Xi(t)}}{mass screen and treat}
 }
+
+}
+
 \seealso{
-The parameters are defined in \link{make_XH_obj_SIP}
+\link{SIP}, \link{make_XH_obj_SIP}
 }
 \keyword{internal}

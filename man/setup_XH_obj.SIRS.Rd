@@ -18,7 +18,7 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} object
 }
 \description{
 This sets up an \code{SIRS} model object for the \strong{XH} module for the \eqn{i^{th}} host species
@@ -31,6 +31,28 @@ This sets up an \code{SIRS} model object for the \strong{XH} module for the \eqn
 \note{
 The module object is stored at \code{xds_obj$XH_obj[[i]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered (temporarily immune) humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\section{Parameters}{
+
+\link{make_XH_obj_SIRS} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SIRS}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{gamma}}{rate of waning immunity (loss of \eqn{R})}
+}
+}
+
 \seealso{
 \link{SIRS}, \link{make_XH_obj_SIRS}
 }

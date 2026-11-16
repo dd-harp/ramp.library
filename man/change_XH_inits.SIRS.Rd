@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{change_XH_inits.SIRS}
 \alias{change_XH_inits.SIRS}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SIRS} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SIRS}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,20 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIRS} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIRS} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered (temporarily immune) humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

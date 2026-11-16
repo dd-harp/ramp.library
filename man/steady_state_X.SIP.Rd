@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{steady_state_X.SIP}
 \alias{steady_state_X.SIP}
-\title{Compute the steady states for the SIP model as a function of the daily foi}
+\title{Compute the steady states for the \code{SIP} model as a function of the daily foi}
 \usage{
 \method{steady_state_X}{SIP}(foi, H, xds_obj, i = 1)
 }
@@ -16,9 +16,12 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
+the steady states as a named list
 }
 \description{
-Compute the steady state of the SIP model as a function of the daily eir.
+Compute the steady state of the \code{SIP} model as a function of the daily eir.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

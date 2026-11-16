@@ -143,9 +143,104 @@ options is passed to both to override the defaults
     <h2>Note</h2>
     <p>The module object is stored at <code>xds_obj$MY_obj[[s]]</code></p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>Su</code>, <code>Bu</code>, <code>Ru</code>, <code>Qu</code></dt>
+<dd><p>uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states</p></dd>
+
+<dt><code>Sy</code>, <code>By</code>, <code>Ry</code>, <code>Qy</code></dt>
+<dd><p>exposed mosquitoes in each behavioral state</p></dd>
+
+<dt><code>Sz</code>, <code>Bz</code>, <code>Rz</code>, <code>Qz</code></dt>
+<dd><p>infectious mosquitoes in each behavioral state</p></dd>
+
+<dt><code>S</code>, <code>B</code>, <code>R</code>, <code>Q</code></dt>
+<dd><p>total mosquitoes in each behavioral state, derived by <a href="get_MY_vars.BRQS.html">get_MY_vars.BRQS</a></p></dd>
+
+<dt><code>M</code></dt>
+<dd><p>total adult mosquito density, derived during parsing</p></dd>
+
+<dt><code>Y</code></dt>
+<dd><p>total exposed and infectious mosquito density, derived during parsing</p></dd>
+
+<dt><code>Z</code></dt>
+<dd><p>total infectious mosquito density, derived during parsing</p></dd>
+
+
+</dl></div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<dl><dt><code>f</code></dt>
+<dd><p>blood feeding rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_f</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_blood_feeding_rates</a></p></dd>
+
+<dt><code>q</code></dt>
+<dd><p>human fraction — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_q</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_human_fractions</a></p></dd>
+
+<dt><code>g_b</code>, <code>g_q</code>, <code>g_s</code>, <code>g_r</code></dt>
+<dd><p>mortality rates in the blood-feeding, gravid, sugar-feeding, and resting states</p></dd>
+
+<dt><code>rho</code></dt>
+<dd><p>rate of leaving the sugar-feeding state to blood-feed</p></dd>
+
+<dt><code>zeta</code></dt>
+<dd><p>rate at which blood-feeding mosquitoes take a sugar meal</p></dd>
+
+<dt><code>xi</code></dt>
+<dd><p>rate of leaving the resting state</p></dd>
+
+<dt><code>eta</code></dt>
+<dd><p>rate of transition from resting to gravid</p></dd>
+
+<dt><code>nu</code>, <code>theta</code></dt>
+<dd><p>parameters governing the egg-laying / gravid state</p></dd>
+
+<dt><code>delta</code></dt>
+<dd><p>fraction of gravid mosquitoes returning to blood feeding</p></dd>
+
+<dt><code>omega</code></dt>
+<dd><p>fraction of emerging mosquitoes entering the sugar-feeding state</p></dd>
+
+<dt><code>tau</code></dt>
+<dd><p>rate of progression from exposed to infectious</p></dd>
+
+<dt><code>eip</code></dt>
+<dd><p>extrinsic incubation period; \(\tau\) is its reciprocal</p></dd>
+
+<dt><code>sigma_b</code>, <code>sigma_q</code>, <code>sigma_s</code></dt>
+<dd><p>emigration rates in the blood-feeding, gravid, and sugar-feeding states</p></dd>
+
+<dt><code>mu_b</code>, <code>mu_q</code>, <code>mu_s</code></dt>
+<dd><p>fraction of emigrants lost in each dispersal state</p></dd>
+
+<dt><code>K_b</code>, <code>K_q</code>, <code>K_s</code></dt>
+<dd><p>dispersal matrices for the blood-feeding, gravid, and sugar-feeding states</p></dd>
+
+<dt><code>eggsPerBatch</code></dt>
+<dd><p>number of eggs per batch</p></dd>
+
+
+</dl><p>After basic setup, <a href="change_MY_pars.BRQS.html">change_MY_pars.BRQS</a> can be used to change parameter
+values. The model routes emergence between the blood-feeding and
+sugar-feeding states using \(\omega\); behavioral transition rates
+\(\rho\), \(\zeta\), \(\xi\), \(\eta\), \(\nu\), and \(\theta\)
+govern movement among the four behavioral states.</p>
+    </div>
+    <div id="dynamics">
+    <h2>Dynamics</h2>
+
+
+<p>The derivative method tracks the twelve state variables listed above.
+Mosquitoes move among the four behavioral states, acquire infection during
+human blood feeding, and progress from exposed to infectious at rate
+\(\tau\). The implementation is <a href="dMYdt.BRQS.html">dMYdt.BRQS</a>.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="BRQS.html">BRQS</a>, <a href="make_MY_obj_BRQS.html">make_MY_obj_BRQS</a></p></div>
+    <div class="dont-index"><p><a href="BRQS.html">BRQS</a>, <a href="make_MY_obj_BRQS.html">make_MY_obj_BRQS</a>, <a href="setup_MY_inits.BRQS.html">setup_MY_inits.BRQS</a></p></div>
     </div>
 
   </div>

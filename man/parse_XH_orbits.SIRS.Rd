@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{parse_XH_orbits.SIRS}
 \alias{parse_XH_orbits.SIRS}
-\title{parse the output of deSolve and return variables for the SIRS model}
+\title{Parse outputs for \code{SIRS} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SIRS}(outputs, xds_obj, i)
 }
@@ -14,9 +14,22 @@
 \item{i}{the host species index}
 }
 \value{
-none
+a named list of module variables
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the SIRS model
+Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SIRS} model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered (temporarily immune) humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIRS}
 }
 \keyword{internal}

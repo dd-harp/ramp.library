@@ -2,10 +2,12 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{SEI}
 \alias{SEI}
-\title{The \code{SEI} module for the MY component}
+\title{The \code{SEI} module for the \strong{MY} component}
 \description{
 Implements the \strong{MY} component using a Susceptible-Exposed-Infectious
-(SEI) compartmental model of adult mosquito infection dynamics.
+(SEI) compartmental model of adult mosquito infection dynamics. Mosquito
+abundance, exposed mosquitoes, and infectious mosquitoes are tracked
+separately across patches.
 }
 \section{State Variables}{
 
@@ -16,30 +18,94 @@ Implements the \strong{MY} component using a Susceptible-Exposed-Infectious
 }
 }
 
+\section{Dynamical Terms}{
+
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
+}
+}
+
 \section{Parameters}{
 
 \describe{
-\item{\code{f}}{blood feeding rate}
-\item{\code{q}}{human blood fraction}
-\item{\code{g}}{mosquito mortality rate}
-\item{\code{sigma}}{patch emigration rate}
-\item{\code{mu}}{emigration-related loss}
-\item{\code{eip}}{extrinsic incubation period (\eqn{\tau})}
-\item{\code{nu}}{oviposition rate (per mosquito)}
-\item{\code{eggsPerBatch}}{eggs laid per oviposition bout}
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_emigration_rates]{ramp.xds::setup_emigration_rates}}
+\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
+\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
+\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
+After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{Survival and Dispersal}{
+
+Mosquito survival and dispersal are described by the demographic matrix
+\eqn{\Omega}. The parameter \eqn{g} is the per-capita mortality rate while
+mosquitoes are in a patch. Mosquitoes emigrate from patches at per-capita
+rates \eqn{\sigma}, and a fraction \eqn{\mu} of emigrating mosquitoes is
+lost. The total rate of loss from a patch is \deqn{g+\mu\sigma.}
+The columns of the dispersal matrix \eqn{K} sum to zero. For non-trivial
+dispersal matrices, \eqn{\mbox{diag}(K)=-1}; its off-diagonal elements
+describe the fractions of surviving emigrants that arrive in other patches.
+The demographic matrix is
+\deqn{\Omega=\mbox{diag}(g+\sigma\mu)-K\cdot\mbox{diag}(\sigma(1-\mu)).}
+}
+
+\section{Blood Feeding}{
+
+The blood feeding rate \eqn{f} and human fraction \eqn{q} determine the
+rate of human blood feeding, \eqn{fq}. Natural constraints are
+\eqn{f=0} when no blood hosts are available, \eqn{q=0} when no humans are
+available, and \eqn{q=1} when humans are the only available hosts.
 }
 
 \section{Dynamics}{
 
+Adult mosquitoes emerge from aquatic habitats at rate \eqn{\Lambda}.
+Mosquitoes become exposed when they take an infectious human blood meal;
+exposed mosquitoes progress to the infectious class at rate
+\eqn{1/\tau}, where \eqn{\tau} is the EIP. The model equations are
 \deqn{
 \begin{array}{rl}
-dM/dt &= \Lambda - \Omega \cdot M \\
-dY/dt &= fq\kappa(M-Y) - \Omega \cdot Y \\
-dZ/dt &= (Y-Z)/\tau - \Omega \cdot Z \\
+dM/dt &= \Lambda-\Omega\cdot M \\\\
+dY/dt &= fq\kappa(M-Y)-\Omega\cdot Y \\\\
+dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
 \end{array}
 }
-where \eqn{\Omega} is the demographic matrix encoding mortality and dispersal,
-and \eqn{\kappa} is the net infectiousness of humans.
 }
 
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is \eqn{f q M}; the
+infective biting density, \code{fqZ}, is \eqn{f q Z}. \link{F_fqM.SEI} and
+\link{F_fqZ.SEI} compute these quantities from the total and infectious mosquito
+densities, respectively. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the
+biting distribution matrix and resident-bite fraction to compute
+stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level
+\code{HBR}.
+}
+
+\section{Egg Laying}{
+
+The egg batch rate \eqn{\nu} and the number of eggs per batch
+\eqn{\Gamma} determine the egg production rate per patch:
+\deqn{G=\nu\Gamma M.}
+\link{F_eggs.SEI} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}
+for distribution among aquatic habitats.
+}
+
+\seealso{
+\itemize{
+\item Basic setup: \link{make_MY_obj_SEI}, \link{setup_MY_obj.SEI}
+\item Dynamics: \link{dMYdt.SEI}, \link{Update_MYt.SEI}
+\item Biting and eggs: \link{F_fqZ.SEI}, \link{F_fqM.SEI}, \link{F_eggs.SEI}
+\item Parameters: \link{get_MY_pars.SEI}, \link{change_MY_pars.SEI}
+\item Variables: \link{make_MY_inits_SEI}, \link{setup_MY_inits.SEI}, \link{parse_MY_orbits.SEI}
+}
+}

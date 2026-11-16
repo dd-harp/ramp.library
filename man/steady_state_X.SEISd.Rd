@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{steady_state_X.SEISd}
 \alias{steady_state_X.SEISd}
-\title{Compute the steady states for the SEISd model as a function of the daily EIR}
+\title{Compute the steady states for the \code{SEISd} model as a function of the daily EIR}
 \usage{
 \method{steady_state_X}{SEISd}(foi, H, xds_obj, i = 1)
 }
@@ -19,6 +19,13 @@
 the steady states as a named vector
 }
 \description{
-Compute the steady state of the SEISd model as a function of the daily eir.
+Compute the steady state of the \code{SEISd} model as a function of the daily eir.
+}
+\note{
+Assumes no demographic change or mass treatment and constant exposure
+history after the delay. Includes \code{rho} and \code{sigma}.
+}
+\seealso{
+\link{SEISd}
 }
 \keyword{internal}

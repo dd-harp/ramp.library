@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{F_fqM.SEI}
 \alias{F_fqM.SEI}
-\title{The net blood feeding rate of the infective mosquito population in a patch}
+\title{Mosquito biting rate for \code{SEI}}
 \usage{
 \method{F_fqM}{SEI}(t, y, xds_obj, s)
 }
@@ -19,6 +19,21 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_fqM]{F_fqM} for the SEI model.
+Returns \code{fqM}, the daily mosquito biting density on humans
+for each patch in the SEI model.
+}
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is \eqn{f q M}; the
+infective biting density, \code{fqZ}, is \eqn{f q Z}. \link{F_fqM.SEI} and
+\link{F_fqZ.SEI} compute these quantities from the total and infectious mosquito
+densities, respectively. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the
+biting distribution matrix and resident-bite fraction to compute
+stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level
+\code{HBR}.
+}
+
+\seealso{
+\link{SEI}, \link[ramp.xds:F_hbr]{ramp.xds::F_hbr}
 }
 \keyword{internal}

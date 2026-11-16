@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{Update_XHt.SEIS}
 \alias{Update_XHt.SEIS}
-\title{DTS updating for the SEIS model for human / vertebrate host infections}
+\title{DTS updating for the \code{SEIS} model for human / vertebrate host infections}
 \usage{
 \method{Update_XHt}{SEIS}(t, y, xds_obj, i)
 }
@@ -19,6 +19,9 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the SEIS model
+Implements \link[ramp.xds:Update_XHt]{Update_XHt} for the \code{SEIS} model
+}
+\seealso{
+\link{SEIS}
 }
 \keyword{internal}

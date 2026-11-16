@@ -17,4 +17,7 @@ an \strong{\code{xds}} object
 \description{
 Run checks before solving (\strong{XH})
 }
+\seealso{
+\link{SEISd}
+}
 \keyword{internal}

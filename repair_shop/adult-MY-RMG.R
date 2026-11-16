@@ -136,7 +136,7 @@ setup_MY_obj.RMG = function(MYname, xds_obj, s, options=list()){
 
 #' @title Make parameters for RM ODE adult mosquito model
 #' @param nPatches is the number of patches, an integer
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
@@ -244,24 +244,24 @@ setup_MY_inits.RMG = function(xds_obj, options=list(), s=1){
 
 #' @title Make inits for RMG adult mosquito model
 #' @param nPatches the number of patches in the model
-#' @param options a [list] of values that overwrites the defaults
-#' @param U_b0 total uninfected, not gravid mosquito density at each patch
-#' @param U_g0 total uninfected, gravid mosquito density at each patch
-#' @param Y_b0 infected, not gravid mosquito density at each patch
-#' @param Y_g0 infected, gravid mosquito density at each patch
-#' @param Z_b0 infectious, not gravid mosquito density at each patch
-#' @param Z_g0 infectious, gravid mosquito density at each patch
+#' @param options a [list] of values that overrides the defaults
+#' @param U_b total uninfected, not gravid mosquito density at each patch
+#' @param U_g total uninfected, gravid mosquito density at each patch
+#' @param Y_b infected, not gravid mosquito density at each patch
+#' @param Y_g infected, gravid mosquito density at each patch
+#' @param Z_b infectious, not gravid mosquito density at each patch
+#' @param Z_g infectious, gravid mosquito density at each patch
 #' @return a [list]
 #' @export
 make_MY_inits_RMG = function(nPatches, options = list(),
-                             U_b0=5, U_g0=1, Y_b0=1, Y_g0=1, Z_b0=1, Z_g0=1){
+                             U_b=5, U_g=1, Y_b=1, Y_g=1, Z_b=1, Z_g=1){
   with(options,{
-    U_b = checkIt(U_b0, nPatches)
-    U_g = checkIt(U_g0, nPatches)
-    Y_b = checkIt(Y_b0, nPatches)
-    Y_g = checkIt(Y_g0, nPatches)
-    Z_b = checkIt(Z_b0, nPatches)
-    Z_g = checkIt(Z_g0, nPatches)
+    U_b = checkIt(U_b, nPatches)
+    U_g = checkIt(U_g, nPatches)
+    Y_b = checkIt(Y_b, nPatches)
+    Y_g = checkIt(Y_g, nPatches)
+    Z_b = checkIt(Z_b, nPatches)
+    Z_g = checkIt(Z_g, nPatches)
 
     return(list(U_b=U_b, U_g=U_g, Y_b=Y_b, Y_g=Y_g, Z_b=Z_b, Z_g=Z_g))
   })}

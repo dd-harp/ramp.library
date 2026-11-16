@@ -21,9 +21,18 @@ Set initial values for all the variables in the \code{SEI} module
 (\strong{MY}) for the \eqn{s^{th}} species.
 \itemize{
 \item \link{make_MY_inits_SEI} supplies default values
-\item The values in \code{options} overwrite the defaults
+\item The values in \code{options} override the defaults
 \item To inspect variable names, use \link[ramp.xds:get_MY_inits]{get_MY_inits} or
 see the inline module documentation.
 }
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
 \keyword{internal}

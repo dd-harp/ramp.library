@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{change_XH_inits.SEIR}
 \alias{change_XH_inits.SEIR}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SEIR} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SEIR}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,21 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SEIR} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SEIR} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{R}}{density of recovered humans}
+\item{\code{S=H-E-I-R}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

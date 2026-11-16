@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{F_ni.SIP}
 \alias{F_ni.SIP}
-\title{Compute the "true" prevalence of infection / parasite rate}
+\title{Compute the net infectiousness}
 \usage{
 \method{F_ni}{SIP}(vars, XH_obj)
 }
@@ -15,6 +15,9 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_ni]{F_ni} for the SIP model.
+Implements \link[ramp.xds:F_ni]{F_ni} for the \code{SIP} model.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

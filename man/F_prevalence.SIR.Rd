@@ -15,6 +15,16 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the SIR model.
+Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SIR} model.
+}
+\section{Prevalence}{
+
+\link{F_prevalence.SIR} returns \eqn{x=I/H}. The parsed \code{true_pr} output
+also uses \eqn{I/H}. This module has no diagnostic sensitivity parameters
+or module-specific light microscopy, RDT, or PCR prevalence methods.
+}
+
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

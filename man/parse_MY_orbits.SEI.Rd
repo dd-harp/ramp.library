@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{parse_MY_orbits.SEI}
 \alias{parse_MY_orbits.SEI}
-\title{parse the output of deSolve and return variables for the SEI model}
+\title{Parse outputs for \code{SEI} (\strong{MY})}
 \usage{
 \method{parse_MY_orbits}{SEI}(outputs, xds_obj, s)
 }
@@ -18,5 +18,28 @@ a \link{list}
 }
 \description{
 Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the SEI model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
+\section{Infective Biting}{
+
+The patch-level human biting density, \code{fqM}, is \eqn{f q M}; the
+infective biting density, \code{fqZ}, is \eqn{f q Z}. \link{F_fqM.SEI} and
+\link{F_fqZ.SEI} compute these quantities from the total and infectious mosquito
+densities, respectively. \link[ramp.xds:compute_EIR]{ramp.xds::compute_EIR} combines \code{fqZ} with the
+biting distribution matrix and resident-bite fraction to compute
+stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM} to compute stratum-level
+\code{HBR}.
+}
+
+\seealso{
+\link{SEI}, \link{get_MY_vars.SEI}
 }
 \keyword{internal}

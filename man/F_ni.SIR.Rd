@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{F_ni.SIR}
 \alias{F_ni.SIR}
-\title{Infection blocking pre-erythrocytic immunity}
+\title{Compute the net infectiousness}
 \usage{
 \method{F_ni}{SIR}(vars, XH_obj)
 }
@@ -15,6 +15,16 @@
 a \link{numeric} vector of length \code{nStrata}
 }
 \description{
-Implements \link[ramp.xds:F_ni]{F_ni} for the SIR model.
+Implements \link[ramp.xds:F_ni]{F_ni} for the \code{SIR} model.
+}
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

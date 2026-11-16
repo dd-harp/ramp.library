@@ -21,9 +21,24 @@ Set initial values for all the variables in the \code{BQ} module
 (\strong{MY}) for the \eqn{s^{th}} species.
 \itemize{
 \item \link{make_MY_inits_BQ} supplies default values
-\item The values in \code{options} overwrite the defaults
+\item The values in \code{options} override the defaults
 \item To inspect variable names, use \link[ramp.xds:get_MY_inits]{get_MY_inits} or
 see the inline module documentation.
 }
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Bu}}{density of uninfected, blood-feeding mosquitoes}
+\item{\code{Qu}}{density of uninfected, gravid (egg-laying) mosquitoes}
+\item{\code{By}}{density of infected (exposed), blood-feeding mosquitoes}
+\item{\code{Qy}}{density of infected (exposed), gravid mosquitoes}
+\item{\code{Bz}}{density of infectious, blood-feeding mosquitoes}
+\item{\code{Qz}}{density of infectious, gravid mosquitoes}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total infected and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
 \keyword{internal}

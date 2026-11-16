@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{change_XH_inits.SIP}
 \alias{change_XH_inits.SIP}
-\title{Return the parameters as a list}
+\title{Change initial values for \code{SIP} (\strong{XH})}
 \usage{
 \method{change_XH_inits}{SIP}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,23 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIP} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIP} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change initial values named in \code{options} leaving other values unchanged.
+}
+\note{
+This method changes \code{I} and \code{P}; it leaves \code{H} unchanged.
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{I}}{density of infectious humans}
+\item{\code{P}}{density of humans under chemoprotection}
+\item{\code{S=H-I-P}}{density of susceptible humans or hosts}
+}
+}
+
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

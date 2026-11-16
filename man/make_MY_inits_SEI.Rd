@@ -7,9 +7,9 @@
 make_MY_inits_SEI(nPatches, options = list(), M = 5, Y = 1, Z = 0)
 }
 \arguments{
-\item{nPatches}{the number of patches in the model}
+\item{nPatches}{the number of patches}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
 \item{M}{total mosquito density at each patch}
 
@@ -22,5 +22,17 @@ a \link{list}
 }
 \description{
 Make inits for SEI adult mosquito model
+}
+\section{State Variables}{
+
+\describe{
+\item{\code{M}}{density of adult mosquitoes}
+\item{\code{Y}}{density of infected (exposed) adult mosquitoes}
+\item{\code{Z}}{density of infectious adult mosquitoes}
+}
+}
+
+\seealso{
+\link{SEI}, \link{setup_MY_inits.SEI}
 }
 \keyword{internal}

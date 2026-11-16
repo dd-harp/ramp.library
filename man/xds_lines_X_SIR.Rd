@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{xds_lines_X_SIR}
 \alias{xds_lines_X_SIR}
-\title{Add lines for the density of infected individuals for the SIR model}
+\title{Add lines for the density of infected individuals for the \code{SIR} model}
 \usage{
 xds_lines_X_SIR(
   time,
@@ -24,6 +24,9 @@ xds_lines_X_SIR(
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
-Add lines for the density of infected individuals for the SIR model
+Add lines for the density of infected individuals for the \code{SIR} model
+}
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

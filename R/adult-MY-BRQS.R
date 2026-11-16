@@ -1,25 +1,35 @@
 # specialized methods for the adult mosquito BRQS model
 
-#' @title The `BRQS` module for the MY component
+#' @title The `BRQS` module for the **MY** component
 #' @description
 #' Implements the **MY** component using a BRQS (Blood-feeding / Resting /
 #' gravid Queue / Sugar-feeding) model of adult mosquito ecology and infection
-#' dynamics. Mosquitoes cycle through four behavioural states, and infection
-#' is tracked across all states with rate \eqn{\tau} governing progression from
-#' exposed (**y**) to infectious (**z**).
+#' dynamics. Mosquitoes cycle through sugar-feeding (**S**), blood-feeding
+#' (**B**), resting (**R**), and gravid (**Q**) states. Each behavioral state
+#' is tracked as uninfected (**u**), exposed (**y**), or infectious (**z**).
 #'
 #' @section State Variables:
 #' \describe{
 #'   \item{`Su`, `Bu`, `Ru`, `Qu`}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
-#'   \item{`Sy`, `By`, `Ry`, `Qy`}{infected (exposed) mosquitoes in each behavioural state}
-#'   \item{`Sz`, `Bz`, `Rz`, `Qz`}{infectious mosquitoes in each behavioural state}
+#'   \item{`Sy`, `By`, `Ry`, `Qy`}{exposed mosquitoes in each behavioral state}
+#'   \item{`Sz`, `Bz`, `Rz`, `Qz`}{infectious mosquitoes in each behavioral state}
+#'   \item{`S`, `B`, `R`, `Q`}{total mosquitoes in each behavioral state, derived by [get_MY_vars.BRQS]}
+#'   \item{`M`}{total adult mosquito density, derived during parsing}
+#'   \item{`Y`}{total exposed and infectious mosquito density, derived during parsing}
+#'   \item{`Z`}{total infectious mosquito density, derived during parsing}
+#' }
+#'
+#' @section Dynamical Terms:
+#' \describe{
+#'   \item{`Lambda` or \eqn{\Lambda}}{adult mosquito emergence rate, supplied by [ramp.xds::Emergence]}
+#'   \item{`kappa` or \eqn{\kappa}}{net infectiousness, supplied by [ramp.xds::Transmission]}
 #' }
 #'
 #' @section Parameters:
 #' \describe{
-#'   \item{`f`}{blood feeding rate}
-#'   \item{`q`}{human blood fraction}
-#'   \item{`g`}{background mortality rate}
+#'   \item{`f`}{blood feeding rate --- use [ramp.xds::setup_f] or [ramp.xds::setup_blood_feeding_rates]}
+#'   \item{`q`}{human fraction --- use [ramp.xds::setup_q] or [ramp.xds::setup_human_fractions]}
+#'   \item{`g_b`, `g_q`, `g_s`, `g_r`}{mortality rates in the blood-feeding, gravid, sugar-feeding, and resting states}
 #'   \item{`rho`}{rate of leaving the sugar-feeding state to blood-feed}
 #'   \item{`zeta`}{rate at which blood-feeding mosquitoes take a sugar meal}
 #'   \item{`xi`}{rate of leaving the resting state}
@@ -27,21 +37,58 @@
 #'   \item{`nu`, `theta`}{parameters governing the egg-laying / gravid state}
 #'   \item{`delta`}{fraction of gravid mosquitoes returning to blood feeding}
 #'   \item{`omega`}{fraction of emerging mosquitoes entering the sugar-feeding state}
-#'   \item{`tau`}{rate of progression from exposed to infectious (\eqn{1/\tau} = EIP)}
-#'   \item{`sigma_b`, `sigma_q`, `sigma_s`}{emigration rates in each state}
+#'   \item{`tau`}{rate of progression from exposed to infectious}
+#'   \item{`eip`}{extrinsic incubation period; \eqn{\tau} is its reciprocal}
+#'   \item{`sigma_b`, `sigma_q`, `sigma_s`}{emigration rates in the blood-feeding, gravid, and sugar-feeding states}
+#'   \item{`mu_b`, `mu_q`, `mu_s`}{fraction of emigrants lost in each dispersal state}
+#'   \item{`K_b`, `K_q`, `K_s`}{dispersal matrices for the blood-feeding, gravid, and sugar-feeding states}
+#'   \item{`eggsPerBatch`}{number of eggs per batch}
 #' }
 #'
+#' After basic setup, [change_MY_pars.BRQS] can be used to change parameter
+#' values. The model routes emergence between the blood-feeding and
+#' sugar-feeding states using \eqn{\omega}; behavioral transition rates
+#' \eqn{\rho}, \eqn{\zeta}, \eqn{\xi}, \eqn{\eta}, \eqn{\nu}, and \eqn{\theta}
+#' govern movement among the four behavioral states.
+#'
+#' @section Survival and Dispersal:
+#' Blood-feeding, gravid, and sugar-feeding mosquitoes have separate
+#' demographic matrices, \eqn{\Omega_b}, \eqn{\Omega_q}, and \eqn{\Omega_s}.
+#' Each combines its state-specific mortality, emigration rate, emigration-loss
+#' fraction, and dispersal matrix.
+#'
+#' @section Blood Feeding:
+#' Blood feeding occurs from the blood-feeding state at rate \eqn{f}. A
+#' human blood meal transmits infection to a susceptible mosquito with
+#' probability \eqn{\kappa}; the force of infection is \eqn{fq\kappa}.
+#'
 #' @section Dynamics:
-#' \deqn{
-#' \begin{array}{rl}
-#' dB_u/dt &= (1-\omega)\Lambda + \rho S_u + (\nu+\theta)\delta Q_u + \xi R - (f+\zeta) B_u - \Omega_b \cdot B_u \\
-#' dR_u/dt &= f(1-q\kappa) B_u - (\xi + \eta + g) R_u \\
-#' dQ_u/dt &= \eta R_u - (\nu + \theta) Q_u - \Omega_q \cdot Q_u \\
-#' dS_u/dt &= \omega\Lambda + \zeta B_u + (\nu+\theta)(1-\delta) Q_u - \rho S_u - \Omega_s \cdot S_u \\
-#' \end{array}
-#' }
-#' with analogous equations for the infected (**y**) and infectious (**z**) classes,
-#' where the term \eqn{\tau} governs progression between infection stages.
+#' The derivative method tracks the twelve state variables listed above.
+#' Mosquitoes move among the four behavioral states, acquire infection during
+#' human blood feeding, and progress from exposed to infectious at rate
+#' \eqn{\tau}. The implementation is [dMYdt.BRQS].
+#'
+#' @section Infective Biting:
+#' The patch-level human biting density, `fqM`, is based on blood-feeding
+#' mosquitoes; infective biting density, `fqZ`, is based on infectious
+#' blood-feeding mosquitoes. [F_fqM.BRQS] and [F_fqZ.BRQS] compute these
+#' quantities. [ramp.xds::compute_EIR] combines `fqZ` with the biting
+#' distribution matrix and resident-bite fraction to compute stratum-level
+#' `EIR`; [ramp.xds::F_hbr] uses `fqM` to compute stratum-level `HBR`.
+#'
+#' @section Egg Laying:
+#' Gravid mosquitoes lay eggs at rate \eqn{\nu}; egg production is the number
+#' of gravid mosquitoes multiplied by the egg batch rate and eggs per batch:
+#' \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
+#' [F_eggs.BRQS] computes \eqn{G}, which is passed to [ramp.xds::EggLaying]
+#' for distribution among aquatic habitats.
+#'
+#' @seealso
+#' + Basic setup: [make_MY_obj_BRQS], [setup_MY_obj.BRQS]
+#' + Dynamics: [dMYdt.BRQS]
+#' + Biting and eggs: [F_fqZ.BRQS], [F_fqM.BRQS], [F_eggs.BRQS]
+#' + Parameters: [get_MY_pars.BRQS], [change_MY_pars.BRQS]
+#' + Variables: [make_MY_inits_BRQS], [setup_MY_inits.BRQS], [parse_MY_orbits.BRQS]
 #'
 #' @name BRQS
 #' @rdname BRQS
@@ -65,7 +112,12 @@ setup_skillset_MY.BRQS = function(xds_obj, s){
 
 #' @title Compute derivatives for `BRQS` (**MY**)
 #' @description Implements [dMYdt] for the BRQS ODE model.
+#' @inheritSection BRQS State Variables
+#' @inheritSection BRQS Dynamical Terms
+#' @inheritSection BRQS Parameters
+#' @inheritSection BRQS Dynamics
 #' @inheritParams ramp.xds::dMYdt
+#' @seealso [BRQS], [F_fqZ.BRQS], [F_eggs.BRQS]
 #' @return a [numeric] vector
 #' @keywords internal
 #' @export
@@ -101,8 +153,10 @@ dMYdt.BRQS <- function(t, y, xds_obj, s){
 
 #' @title Return the variables as a list
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
+#' @inheritSection BRQS State Variables
 #' @inheritParams ramp.xds::get_MY_vars
 #' @return a [list]
+#' @seealso [BRQS], [setup_MY_obj.BRQS]
 #' @keywords internal
 #' @export
 get_MY_vars.BRQS<- function(y, xds_obj, s){
@@ -128,7 +182,11 @@ get_MY_vars.BRQS<- function(y, xds_obj, s){
 
 #' @title Mosquito bionomics for `BRQS` (**MY**)
 #' @description Implements [MBionomics] for the BRQS model
+#' @inheritSection BRQS Parameters
+#' @inheritSection BRQS Survival and Dispersal
+#' @inheritSection BRQS Blood Feeding
 #' @inheritParams ramp.xds::MBionomics
+#' @seealso [BRQS], [MEffectSizes.BRQS]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -153,7 +211,10 @@ MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 
 #' @title Apply effect sizes for `BRQS` (**MY**)
 #' @description Implements [MEffectSizes] for the BRQS model
+#' @inheritSection BRQS Parameters
+#' @inheritSection BRQS Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
+#' @seealso [BRQS], [MBionomics.BRQS]
 #' @return an **`xds`** object
 #' @keywords internal
 #' @export
@@ -171,9 +232,11 @@ MEffectSizes.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
   return(pars)
 })}
 
-#' @title Blood feeding rate of the infective mosquito population
+#' @title Infective mosquito biting rate for `BRQS`
 #' @description Implements [F_fqZ] for the BRQS model.
+#' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::F_fqZ
+#' @seealso [BRQS], [F_fqM.BRQS]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -184,9 +247,12 @@ F_fqZ.BRQS <- function(t, y, xds_obj, s) {
   return(fqZ)
 }
 
-#' @title Blood feeding rate of the infective mosquito population
-#' @description Implements [F_fqM] for the BRQS model.
+#' @title Mosquito biting rate for `BRQS`
+#' @description Returns `fqM`, the daily mosquito biting density on humans
+#' for each patch in the BRQS model.
+#' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::F_fqM
+#' @seealso [BRQS], [ramp.xds::F_hbr]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -198,9 +264,11 @@ F_fqM.BRQS <- function(t, y, xds_obj, s) {
   return(fqM)
 }
 
-#' @title Number of eggs laid by adult mosquitoes
+#' @title Egg production rate for `BRQS`
 #' @description Implements [F_eggs] for the BRQS model.
+#' @inheritSection BRQS Egg Laying
 #' @inheritParams ramp.xds::F_eggs
+#' @seealso [BRQS], [ramp.xds::EggLaying]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
@@ -222,7 +290,10 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 #' + the initial conditions are set by [setup_MY_inits]
 #' + `options` is passed to both to override the defaults
 #'
-#' @seealso [BRQS], [make_MY_obj_BRQS]
+#' @inheritSection BRQS State Variables
+#' @inheritSection BRQS Parameters
+#' @inheritSection BRQS Dynamics
+#' @seealso [BRQS], [make_MY_obj_BRQS], [setup_MY_inits.BRQS]
 #'
 #' @note The module object is stored at `xds_obj$MY_obj[[s]]`
 #'
@@ -242,9 +313,9 @@ setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
   return(xds_obj)
 }
 
-#' @title Make parameters for RM ODE adult mosquito model
+#' @title Make parameters for `BRQS` (**MY**)
 #' @param nPatches is the number of patches, an integer
-#' @param options a [list] of values that overwrites the defaults
+#' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
 #' @param g mosquito mortality rate
 #' @param sigma_b emigration rate while blood feeding
@@ -340,9 +411,11 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
 
 #' @title Return the parameters as a list
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+#' @inheritSection BRQS Parameters
 #' @param xds_obj an **`xds`** object
 #' @param s the vector species index
 #' @return a [list]
+#' @seealso [BRQS], [change_MY_pars.BRQS]
 #' @keywords internal
 #' @export
 get_MY_pars.BRQS <- function(xds_obj, s=1) {
@@ -352,9 +425,10 @@ get_MY_pars.BRQS <- function(xds_obj, s=1) {
   ))
 }
 
-#' @title Return the parameters as a list
+#' @title Change parameters for `BRQS` (**MY**)
 #' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
 #' change parameter values named in `options` leaving other values unchanged.
+#' @inheritSection BRQS Parameters
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** object
 #' @keywords internal
@@ -400,9 +474,10 @@ change_MY_pars.BRQS <- function(xds_obj, options=list(), s=1) {
 #' @description Set initial values for all the variables in the `BRQS` module
 #' (**MY**) for the \eqn{s^{th}} species.
 #' + [make_MY_inits_BRQS] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_MY_inits] or
 #' see the inline module documentation.
+#' @inheritSection BRQS State Variables
 #' @inheritParams ramp.xds::setup_MY_inits
 #' @return a [list]
 #' @keywords internal
@@ -412,9 +487,11 @@ setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
   return(xds_obj)
 }
 
-#' @title Make inits for BRQS adult mosquito model
-#' @param nPatches the number of patches in the model
-#' @param options a [list] of values that overwrites the defaults
+#' @title Make initial values for `BRQS` (**MY**)
+#' @inheritSection BRQS State Variables
+#' @seealso [BRQS], [setup_MY_inits.BRQS]
+#' @param nPatches the number of patches
+#' @param options a [list] of values that overrides the defaults
 #' @param Su uninfected, sugar feeding mosquitoes
 #' @param Bu uninfected, blood feeding mosquitoes
 #' @param Ru uninfected, resting mosquitoes
@@ -457,6 +534,7 @@ make_MY_inits_BRQS = function(nPatches, options = list(),
 
 #' @title Add indices for adult mosquitoes to parameter list
 #' @description Implements [setup_MY_ix] for the BRQS model.
+#' @inheritSection BRQS State Variables
 #' @inheritParams ramp.xds::setup_MY_ix
 #' @return none
 #' @importFrom utils tail
@@ -511,9 +589,12 @@ setup_MY_ix.BRQS <- function(xds_obj, s) {with(xds_obj,{
 })}
 
 
-#' @title Parse the output of deSolve and return variables for the BRQS model
+#' @title Parse outputs for `BRQS` (**MY**)
 #' @description Implements [parse_MY_orbits] for the BRQS model
+#' @inheritSection BRQS State Variables
+#' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::parse_MY_orbits
+#' @seealso [BRQS], [get_MY_vars.BRQS]
 #' @return none
 #' @keywords internal
 #' @export
@@ -541,9 +622,11 @@ parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$ix$MY[[s]],{
     Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz, M=M, Y=Y, Z=Z, y=y, z=z))
 })}
 
-#' @title Make inits for BRQS adult mosquito model
+#' @title Change initial values for `BRQS` (**MY**)
 #' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
 #' change initial values named in `options` leaving other values unchanged.
+#' @inheritSection BRQS State Variables
+#' @seealso [BRQS], [setup_MY_inits.BRQS]
 #' @inheritParams ramp.xds::change_MY_inits
 #' @return none
 #' @keywords internal

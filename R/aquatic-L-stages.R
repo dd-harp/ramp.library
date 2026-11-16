@@ -464,7 +464,7 @@ change_L_pars.stages <- function(xds_obj, options = list(), s = 1) {
 #' @description Set initial values for all the variables in the `stages` module
 #' (**L**) for the \eqn{s^{th}} species.
 #' + [make_L_inits_stages] supplies default values
-#' + The values in `options` overwrite the defaults
+#' + The values in `options` override the defaults
 #' + To inspect variable names, use [get_L_inits] or
 #' see the inline module documentation.
 #'
@@ -484,7 +484,7 @@ setup_L_inits.stages = function(xds_obj, options = list(), s=1){
 #' @description Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be
 #' set by passing the corresponding names in `options`.
 #' @param nHabitats the number of habitats in the model
-#' @param options a [list] that overwrites default values
+#' @param options a [list] that overrides default values
 #' @param E initial egg density
 #' @param L1 initial first instar density
 #' @param L2 initial second instar density

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{add_lines_X_SIP}
 \alias{add_lines_X_SIP}
-\title{Add lines for the density of infected individuals for the SIP model}
+\title{Add lines for the density of infected individuals for the \code{SIP} model}
 \usage{
 add_lines_X_SIP(
   time,
@@ -24,6 +24,9 @@ add_lines_X_SIP(
 \item{llty}{an integer (or integers) to set the \code{lty} for plotting}
 }
 \description{
-Add lines for the density of infected individuals for the SIP model
+Add lines for the density of infected individuals for the \code{SIP} model
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

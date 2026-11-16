@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{dXHdt.SEIR}
 \alias{dXHdt.SEIR}
-\title{Compute the derivatives for parasite infection dynamics in human population strata}
+\title{Compute derivatives for \code{SEIR} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEIR}(t, y, xds_obj, i)
 }
@@ -19,6 +19,53 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the SEIR model
+Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEIR} model
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Infection Dynamics}{
+
+Exposed individuals become infectious at the per-capita rate \eqn{\tau}.
+Infections clear at the per-capita rate \eqn{r}, moving individuals into
+the recovered class with lasting immunity.
+The current implementation uses the following equations, adding \code{\link[ramp.xds:Deaths]{Deaths}}:
+\deqn{
+\begin{array}{rl}
+dE/dt &= hS - \tau E + \mathbf{D}(E) \\
+dI/dt &= \tau E - rI + \mathbf{D}(I) \\
+dR/dt &= rI + \mathbf{D}(R) \\
+\end{array}}
+where \eqn{h} is the force of infection and \eqn{S = H - E - I - R}.
+Susceptible density is redundant and is computed after solving.
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

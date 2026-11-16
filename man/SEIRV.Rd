@@ -2,11 +2,13 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{SEIRV}
 \alias{SEIRV}
-\title{The \code{SEIRV} module for the XH component}
+\title{The \code{SEIRV} module for the \strong{XH} component}
 \description{
 Implements the \strong{XH} component using a Susceptible-Exposed-Infectious-Recovered-Vaccinated
-(SEIRV) compartmental model of human infection dynamics, extending SEIR with a
+(\code{SEIRV}) compartmental model of human infection dynamics, extending \code{SEIR} with a
 vaccinated compartment.
+This implementation includes human demographic change and support for
+progressive stratification.
 }
 \section{State Variables}{
 
@@ -16,12 +18,23 @@ vaccinated compartment.
 \item{\code{I}}{density of infectious humans}
 \item{\code{R}}{density of recovered humans}
 \item{\code{V}}{density of vaccinated humans}
+\item{\code{S=H-E-I-R-V}}{density of susceptible humans or hosts}
 }
-Note: susceptible density \eqn{S = H - E - I - R - V}.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+\link{make_XH_obj_SEIRV} supplies defaults for all parameters.
+\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, and \code{gamma};
+it leaves \code{alpha} and \code{varepsilon} unchanged.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
@@ -30,21 +43,84 @@ Note: susceptible density \eqn{S = H - E - I - R - V}.
 \item{\code{alpha}}{proportion of births that are vaccinated}
 \item{\code{varepsilon}}{proportion of recovered individuals that gain vaccine-like protection}
 \item{\code{gamma}}{rate of loss of immunity in \eqn{R}}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Exposed individuals become infectious at rate \eqn{\tau}.
+Infections clear at rate \eqn{r}; a fraction \eqn{\varepsilon} enter
+the vaccinated class, while the rest enter the recovered class.
+Recovered immunity wanes at rate \eqn{\gamma}. A fraction \eqn{\alpha}
+of births enter the vaccinated class, which has no waning term.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dE/dt &= hS - \tau E + D \cdot E \\
-dI/dt &= \tau E - rI + D \cdot I \\
-dR/dt &= (1-\varepsilon)rI - \gamma R + D \cdot R \\
-dV/dt &= \alpha B(t,H) + \varepsilon rI + D \cdot V \\
+dE/dt &= hS - \tau E - \mathbf{D}(E) \\
+dI/dt &= \tau E - rI - \mathbf{D}(I) \\
+dR/dt &= (1-\varepsilon)rI - \gamma R - \mathbf{D}(R) \\
+dV/dt &= \alpha\mathbf{B}(t,H) + \varepsilon rI - \mathbf{D}(V) \\
 \end{array}}
 where \eqn{h} is the force of infection.
+The mortality function uses the same model for each compartment as for
+\eqn{H}. Susceptible density \eqn{S=H-E-I-R-V} is redundant and is
+computed after solving.
 }
 
+\section{Prevalence}{
+
+\link{F_prevalence.SEIRV} returns \eqn{x=I/H}. In contrast,
+\link{parse_XH_orbits.SEIRV} stores \code{true_pr} as \eqn{(E+I)/H}.
+This module has no diagnostic sensitivity parameters or module-specific
+light microscopy, RDT, or PCR prevalence methods.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+This implementation does not initialize or use \code{mda(t)} or \code{msat(t)},
+and has no treatment parameters \code{rho} or \code{sigma}.
+}
+
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SEIRV}, \link{setup_XH_obj.SEIRV}
+\item Dynamics: \link{dXHdt.SEIRV}
+\item Parameters: \link{change_XH_pars.SEIRV}
+\item Variables: \link{make_XH_inits_SEIRV}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SEIRV}, \link{setup_XH_inits.SEIRV}
+\item \link{SEIR}, \link{SIRS}
+}
+}

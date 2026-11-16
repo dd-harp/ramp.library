@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{parse_XH_orbits.SIP}
 \alias{parse_XH_orbits.SIP}
-\title{Parse Solutions Matrix for the SIP model}
+\title{Parse outputs for \code{SIP} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{SIP}(outputs, xds_obj, i)
 }
@@ -14,15 +14,16 @@
 \item{i}{the host species index}
 }
 \value{
-SIP module variables as a named list
+\code{SIP} module variables as a named list
 }
 \description{
-Parse Solutions Matrix for the SIP model
-
 In \link[ramp.xds:xds_solve]{xds_solve}, after solving a system of equations,
 the orbits for \eqn{H}, \eqn{I} and \eqn{P} are
 pulled from the solutions matrix, and the model
 also computes \eqn{S=H-I-P}. The variables are returned
 as a named list.
+}
+\seealso{
+\link{SIP}
 }
 \keyword{internal}

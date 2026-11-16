@@ -21,9 +21,22 @@ Set initial values for all the variables in the \code{BRQS} module
 (\strong{MY}) for the \eqn{s^{th}} species.
 \itemize{
 \item \link{make_MY_inits_BRQS} supplies default values
-\item The values in \code{options} overwrite the defaults
+\item The values in \code{options} override the defaults
 \item To inspect variable names, use \link[ramp.xds:get_MY_inits]{get_MY_inits} or
 see the inline module documentation.
 }
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{Su}, \code{Bu}, \code{Ru}, \code{Qu}}{uninfected mosquitoes in the sugar-feeding, blood-feeding, resting, and gravid states}
+\item{\code{Sy}, \code{By}, \code{Ry}, \code{Qy}}{exposed mosquitoes in each behavioral state}
+\item{\code{Sz}, \code{Bz}, \code{Rz}, \code{Qz}}{infectious mosquitoes in each behavioral state}
+\item{\code{S}, \code{B}, \code{R}, \code{Q}}{total mosquitoes in each behavioral state, derived by \link{get_MY_vars.BRQS}}
+\item{\code{M}}{total adult mosquito density, derived during parsing}
+\item{\code{Y}}{total exposed and infectious mosquito density, derived during parsing}
+\item{\code{Z}}{total infectious mosquito density, derived during parsing}
+}
+}
+
 \keyword{internal}

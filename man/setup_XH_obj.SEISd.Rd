@@ -18,7 +18,7 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} object
 }
 \description{
 This sets up an \code{SEISd} model object for the \strong{XH} module for the \eqn{i^{th}} host species
@@ -31,6 +31,38 @@ This sets up an \code{SEISd} model object for the \strong{XH} module for the \eq
 \note{
 The module object is stored at \code{xds_obj$XH_obj[[i]]}
 }
+\section{State Variables}{
+
+\describe{
+\item{\code{H}}{total human (or host) population density}
+\item{\code{E}}{density of exposed (infected but not yet infectious) humans}
+\item{\code{I}}{density of infectious humans}
+\item{\code{S=H-E-I}}{density of susceptible humans or hosts}
+\item{\code{cases}}{cumulative exposures used to track delayed progression}
+}
+This implementation includes human demographic change, progressive
+stratification, and parameters to model detection by diagnostic methods.
+It also includes parameters for treating and curing infections and functions
+to model mass treatment.
+}
+
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SEISd} and modifiable by
+\link{change_XH_pars.SEISd} describe the dynamics or detection by diagnostic methods.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{nu}}{intrinsic incubation period (fixed delay, in days)}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{the fraction of incident infections that are treated and cured}
+\item{\code{sigma} or \eqn{\sigma}}{the rate that prevalent infections are treated and cured}
+\item{\code{q_lm}}{test positivity by light microscopy}
+\item{\code{q_rdt}}{test positivity by RDT}
+\item{\code{q_pcr}}{test positivity by PCR}
+}
+}
+
 \seealso{
 \link{SEISd}, \link{make_XH_obj_SEISd}
 }

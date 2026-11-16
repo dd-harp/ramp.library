@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{make_XH_obj_SEIR}
 \alias{make_XH_obj_SEIR}
-\title{Make parameters for SEIR human model, with defaults}
+\title{Make a \code{SEIR} \strong{XH} model object}
 \usage{
 make_XH_obj_SEIR(
   nStrata,
@@ -16,20 +16,35 @@ make_XH_obj_SEIR(
 \arguments{
 \item{nStrata}{is the number of population strata}
 
-\item{options}{a \link{list} that could overwrite defaults}
+\item{options}{a \link{list} that could override defaults}
 
 \item{b}{the proportion of infective bites that cause an infection}
 
-\item{r}{the the duration of an infection}
+\item{r}{the clearance rate for infections}
 
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
 
 \item{tau}{incubation rate}
 }
 \value{
-a \link{list}
+an \strong{XH} model object
 }
 \description{
-Make parameters for SEIR human model, with defaults
+Make a \code{SEIR} \strong{XH} model object
+}
+\section{Parameters}{
+
+\link{make_XH_obj_SEIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SEIR}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+}
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}

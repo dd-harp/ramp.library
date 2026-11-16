@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{make_MY_obj_BQ}
 \alias{make_MY_obj_BQ}
-\title{Make parameters for RM ODE adult mosquito model}
+\title{Make parameters for \code{BQ} (\strong{MY})}
 \usage{
 make_MY_obj_BQ(
   nPatches,
@@ -21,7 +21,7 @@ make_MY_obj_BQ(
 \arguments{
 \item{nPatches}{is the number of patches, an integer}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
 \item{eip}{extrinsic incubation period}
 
@@ -45,6 +45,9 @@ make_MY_obj_BQ(
 a \link{list}
 }
 \description{
-Make parameters for RM ODE adult mosquito model
+Make parameters for \code{BQ} (\strong{MY})
+}
+\seealso{
+\link{BQ}, \link{setup_MY_obj.BQ}
 }
 \keyword{internal}

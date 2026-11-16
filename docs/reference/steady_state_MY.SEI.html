@@ -132,6 +132,76 @@
     <h2>Value</h2>
     <p>none</p>
     </div>
+    <div id="state-variables">
+    <h2>State Variables</h2>
+
+
+<dl><dt><code>M</code></dt>
+<dd><p>density of adult mosquitoes</p></dd>
+
+<dt><code>Y</code></dt>
+<dd><p>density of infected (exposed) adult mosquitoes</p></dd>
+
+<dt><code>Z</code></dt>
+<dd><p>density of infectious adult mosquitoes</p></dd>
+
+
+</dl></div>
+    <div id="parameters">
+    <h2>Parameters</h2>
+
+
+<dl><dt><code>f</code></dt>
+<dd><p>blood feeding rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_f</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_f.html" class="external-link">ramp.xds::setup_blood_feeding_rates</a></p></dd>
+
+<dt><code>q</code></dt>
+<dd><p>human fraction — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_q</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_q.html" class="external-link">ramp.xds::setup_human_fractions</a></p></dd>
+
+<dt><code>g</code></dt>
+<dd><p>mosquito mortality rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_g</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_g.html" class="external-link">ramp.xds::setup_mosquito_mortality</a></p></dd>
+
+<dt><code>sigma</code> or \(\sigma\)</dt>
+<dd><p>emigration rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_sigma.html" class="external-link">ramp.xds::setup_sigma</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_sigma.html" class="external-link">ramp.xds::setup_emigration_rates</a></p></dd>
+
+<dt><code>mu</code> or \(\mu\)</dt>
+<dd><p>fraction of emigrating mosquitoes lost — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_mu.html" class="external-link">ramp.xds::setup_mu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_mu.html" class="external-link">ramp.xds::setup_emigration_loss</a></p></dd>
+
+<dt><code>K</code> or <code>K_matrix</code></dt>
+<dd><p>mosquito dispersal matrix — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_K_matrix.html" class="external-link">ramp.xds::setup_K_matrix</a></p></dd>
+
+<dt><code>eip</code> or \(\tau\)</dt>
+<dd><p>extrinsic incubation period — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_eip.html" class="external-link">ramp.xds::setup_eip</a></p></dd>
+
+<dt><code>nu</code> or \(\nu\)</dt>
+<dd><p>egg batch rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
+
+<dt><code>eggsPerBatch</code> or \(\Gamma\)</dt>
+<dd><p>number of eggs per batch</p></dd>
+
+
+</dl><p>After basic setup, <a href="change_MY_pars.SEI.html">change_MY_pars.SEI</a> can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.</p>
+    </div>
+    <div id="dynamics">
+    <h2>Dynamics</h2>
+
+
+<p>Adult mosquitoes emerge from aquatic habitats at rate \(\Lambda\).
+Mosquitoes become exposed when they take an infectious human blood meal;
+exposed mosquitoes progress to the infectious class at rate
+\(1/\tau\), where \(\tau\) is the EIP. The model equations are
+$$
+\begin{array}{rl}
+dM/dt &amp;= \Lambda-\Omega\cdot M \\\\
+dY/dt &amp;= fq\kappa(M-Y)-\Omega\cdot Y \\\\
+dZ/dt &amp;= (Y-Z)/\tau-\Omega\cdot Z
+\end{array}
+$$</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="SEI.html">SEI</a></p></div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

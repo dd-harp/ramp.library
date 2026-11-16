@@ -12,9 +12,12 @@
 \item{i}{the host species index}
 }
 \value{
-none
+an \strong{\code{xds}} object
 }
 \description{
-Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the SIR model.
+Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the \code{SIR} model.
+}
+\seealso{
+\link{SIR}
 }
 \keyword{internal}

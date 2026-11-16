@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{make_MY_obj_SEI}
 \alias{make_MY_obj_SEI}
-\title{Make parameters for SEI ODE adult mosquito model}
+\title{Make parameters for \code{SEI} (\strong{MY})}
 \usage{
 make_MY_obj_SEI(
   nPatches,
@@ -20,7 +20,7 @@ make_MY_obj_SEI(
 \arguments{
 \item{nPatches}{is the number of patches, an integer}
 
-\item{options}{a \link{list} of values that overwrites the defaults}
+\item{options}{a \link{list} of values that overrides the defaults}
 
 \item{eip}{the extrinsic incubation period}
 
@@ -42,6 +42,9 @@ make_MY_obj_SEI(
 a \link{list}
 }
 \description{
-Make parameters for SEI ODE adult mosquito model
+Make parameters for \code{SEI} (\strong{MY})
+}
+\seealso{
+\link{SEI}, \link{setup_MY_obj.SEI}
 }
 \keyword{internal}

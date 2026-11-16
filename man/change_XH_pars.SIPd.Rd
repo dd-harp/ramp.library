@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{change_XH_pars.SIPd}
 \alias{change_XH_pars.SIPd}
-\title{Get parameters for \code{SIPd} (\strong{XH})}
+\title{Change parameters for \code{SIPd} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SIPd}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,24 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+The parameters returned by \link{get_XH_pars.SIPd} and modifiable by
+\link{change_XH_pars.SIPd} describe infection, treatment, and chemoprotection.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{r}}{clearance rate for infections}
+\item{\code{rho} or \eqn{\rho}}{fraction of incident infections treated and cured, entering \eqn{P}}
+\item{\code{xi} or \eqn{\xi}}{background treatment rate for susceptible and infectious individuals}
+\item{\code{eta}}{chemoprotection duration (fixed delay, in days)}
+}
+}
+
+\seealso{
+\link{SIPd}
 }
 \keyword{internal}

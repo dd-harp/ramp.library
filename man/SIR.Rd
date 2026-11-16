@@ -2,10 +2,13 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{SIR}
 \alias{SIR}
-\title{The \code{SIR} module for the XH component}
+\title{The \code{SIR} module for the \strong{XH} component}
 \description{
 Implements the \strong{XH} component using a Susceptible-Infectious-Recovered
-(SIR) compartmental model of human infection dynamics.
+(\code{SIR}) compartmental model of human infection dynamics.
+Infections clear naturally, and recovered individuals have lasting immunity.
+This implementation includes human demographic change and support for
+progressive stratification.
 }
 \section{State Variables}{
 
@@ -13,29 +16,98 @@ Implements the \strong{XH} component using a Susceptible-Infectious-Recovered
 \item{\code{H}}{total human (or host) population density}
 \item{\code{I}}{density of infectious humans}
 \item{\code{R}}{density of recovered humans}
+\item{\code{S=H-I-R}}{density of susceptible humans or hosts}
 }
-Note: susceptible density \eqn{S = H - I - R}.
+}
+
+\section{Dynamical Term}{
+
+\describe{
+\item{\eqn{h} or \code{foi}}{The force of infection is computed and stored by \link[ramp.xds:Exposure]{Exposure} as \code{FoI}}
+}
+A constant fraction of infectious bites causes an infection: the parameter \eqn{b}.
 }
 
 \section{Parameters}{
 
+\link{make_XH_obj_SIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SIR}.
 \describe{
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
-\item{\code{B}}{time-dependent birth rate function \eqn{B(t, H)}}
-\item{\code{D}}{linear operator (matrix) for mortality, migration, aging, and transfers}
 }
 }
 
-\section{Dynamics}{
+\section{Infection Dynamics}{
 
+Susceptible individuals become infectious at rate \eqn{hS}.
+Infections clear at the per-capita rate \eqn{r}, moving individuals into
+the recovered class. Recovered individuals do not lose immunity.
 \deqn{
 \begin{array}{rl}
-dH/dt &= B(t,H) + D \cdot H \\
-dI/dt &= hS - rI + D \cdot I \\
-dR/dt &= rI + D \cdot R \\
+dI/dt &= hS - rI - \mathbf{D}(I) \\
+dR/dt &= rI - \mathbf{D}(R) \\
 \end{array}}
 where \eqn{h} is the force of infection and \eqn{S = H - I - R}.
+The mortality function uses the same model for \eqn{I} and \eqn{R} as for
+\eqn{H}. Susceptible density is redundant and is computed after solving.
 }
 
+\section{Prevalence}{
+
+\link{F_prevalence.SIR} returns \eqn{x=I/H}. The parsed \code{true_pr} output
+also uses \eqn{I/H}. This module has no diagnostic sensitivity parameters
+or module-specific light microscopy, RDT, or PCR prevalence methods.
+}
+
+\section{Infectiousness}{
+
+The probability that a mosquito becomes infected after feeding on an
+infectious host is \eqn{c}. Infectious density is \eqn{cI}, and net
+infectiousness is \eqn{cI/H}.
+}
+
+\section{Mass Treatment}{
+
+This implementation does not initialize or use \code{mda(t)} or \code{msat(t)},
+and has no treatment parameters \code{rho} or \code{sigma}.
+}
+
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\seealso{
+\itemize{
+\item Basic Setup: \link{make_XH_obj_SIR}, \link{setup_XH_obj.SIR}
+\item Dynamics: \link{dXHdt.SIR}
+\item Parameters: \link{change_XH_pars.SIR}
+\item Variables: \link{make_XH_inits_SIR}, \link[ramp.xds:get_XH_inits]{get_XH_inits}, \link{change_XH_inits.SIR}, \link{setup_XH_inits.SIR}
+\item \link[ramp.xds:SIS]{SIS}
+}
+}

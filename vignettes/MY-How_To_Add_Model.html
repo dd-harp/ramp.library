@@ -492,7 +492,7 @@ that define state transitions in <code>dMYdt</code> or
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Make parameters for newMYname human model, with defaults</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches is the number of population strata</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could overwrite defaults</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could override defaults</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @param p1 the first parameter </span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @param p2 the second parameter </span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
@@ -647,16 +647,16 @@ this function.</p>
 <h3>make_MY_inits</h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for the XHname human model, with defaults</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches the number of strata in the model</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to overwrite defaults</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @param M0 the initial value for M </span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @param Y0 the initial value for M </span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to override defaults</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @param M the initial value for M </span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @param Y the initial value for M </span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_MY_inits_newMYname <span class="ot">=</span> <span class="cf">function</span>(nPatches, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">M0=</span><span class="cn">NULL</span>, <span class="at">Y0=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(M0))</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(Y0))</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  M <span class="ot">=</span> <span class="fu">checkIt</span>(M0, nPatches)</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">checkIt</span>(Y0, nPatches)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>make_MY_inits_newMYname <span class="ot">=</span> <span class="cf">function</span>(nPatches, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">M=</span><span class="cn">NULL</span>, <span class="at">Y=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(M))</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(Y))</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  M <span class="ot">=</span> <span class="fu">checkIt</span>(M, nPatches)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">checkIt</span>(Y, nPatches)</span>
 <span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">M=</span>M, <span class="at">Y=</span>Y, ...))</span>
 <span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>})}</span></code></pre></div>
 </div>

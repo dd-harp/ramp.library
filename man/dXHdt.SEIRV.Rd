@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{dXHdt.SEIRV}
 \alias{dXHdt.SEIRV}
-\title{Compute the derivatives for parasite infection dynamics in human population strata}
+\title{Compute derivatives for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEIRV}(t, y, xds_obj, i)
 }
@@ -19,6 +19,57 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the SEIRV model
+Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEIRV} model
+}
+\section{Demography}{
+
+
+
+Demographic changes (\strong{H}) are given by the equation:
+
+\deqn{
+dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
+
+This model has no parameter
+or terms to describe disease-induced mortality.
+
+\describe{
+\item{\code{\link[ramp.xds]{Births}} or \eqn{\mathbf{B}}}{the births function}
+\item{\code{\link[ramp.xds]{Deaths}} or \eqn{\mathbf{D}}}{the deaths function}
+}
+
+\strong{Setup:}
+\itemize{
+\item The defaults are no births and no deaths
+\item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
+\item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
+}
+
+Also, see \link[ramp.xds]{xds_info_demographic_change}.
+
+}
+
+\section{Infection Dynamics}{
+
+Exposed individuals become infectious at rate \eqn{\tau}.
+Infections clear at rate \eqn{r}; a fraction \eqn{\varepsilon} enter
+the vaccinated class, while the rest enter the recovered class.
+Recovered immunity wanes at rate \eqn{\gamma}. A fraction \eqn{\alpha}
+of births enter the vaccinated class, which has no waning term.
+\deqn{
+\begin{array}{rl}
+dE/dt &= hS - \tau E - \mathbf{D}(E) \\
+dI/dt &= \tau E - rI - \mathbf{D}(I) \\
+dR/dt &= (1-\varepsilon)rI - \gamma R - \mathbf{D}(R) \\
+dV/dt &= \alpha\mathbf{B}(t,H) + \varepsilon rI - \mathbf{D}(V) \\
+\end{array}}
+where \eqn{h} is the force of infection.
+The mortality function uses the same model for each compartment as for
+\eqn{H}. Susceptible density \eqn{S=H-E-I-R-V} is redundant and is
+computed after solving.
+}
+
+\seealso{
+\link{SEIRV}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{change_XH_pars.SEIR}
 \alias{change_XH_pars.SEIR}
-\title{Get parameters for \code{SEIR} (\strong{XH})}
+\title{Change parameters for \code{SEIR} (\strong{XH})}
 \usage{
 \method{change_XH_pars}{SEIR}(xds_obj, options = list(), i = 1)
 }
@@ -17,7 +17,22 @@
 an \strong{\code{xds}} object
 }
 \description{
-For the \code{SEIR} module (\strong{XH}) for the \eqn{i^{th}} species,
+For the \code{SEIR} module (\strong{XH}) for the \eqn{i^{th}} host species,
 change parameter values named in \code{options} leaving other values unchanged.
+}
+\section{Parameters}{
+
+\link{make_XH_obj_SEIR} supplies defaults for the parameters, which can be changed
+using \link{change_XH_pars.SEIR}.
+\describe{
+\item{\code{b}}{transmission probability from mosquito to human}
+\item{\code{c}}{transmission probability from human to mosquito}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{r}}{clearance rate for infections}
+}
+}
+
+\seealso{
+\link{SEIR}
 }
 \keyword{internal}
