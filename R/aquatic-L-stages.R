@@ -72,7 +72,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_L
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #'
 #' @keywords internal
 #' @export
@@ -90,7 +90,7 @@ setup_skillset_L.stages = function(xds_obj, s){
 #' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 check_L.stages = function(xds_obj, s){
@@ -179,7 +179,7 @@ F_emerge.stages <- function(t, y, xds_obj, s) {
 #' [change_L_pars.stages] and persist until explicitly updated.
 #' @inheritParams ramp.xds::LBionomics
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 LBionomics.stages <- function(t, y, xds_obj, s) {
@@ -213,7 +213,7 @@ LBionomics.stages <- function(t, y, xds_obj, s) {
 #' Computes effective parameter values as the product of each time-varying
 #' baseline (`_t`) and its corresponding effect size (`es_`).
 #' @inheritParams ramp.xds::LEffectSizes
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 LEffectSizes.stages <- function(t, y, xds_obj, s) {
@@ -255,7 +255,7 @@ LEffectSizes.stages <- function(t, y, xds_obj, s) {
 #' @note The module object is stored at `xds_obj$L_obj[[s]]`
 #'
 #' @inheritParams ramp.xds::setup_L_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
@@ -430,7 +430,7 @@ get_L_pars.stages <- function(xds_obj, s = 1) {
 #' `phi1`–`phi4`, `theta1`–`theta4`, `phi_P`, `psi_P`.
 #' @inheritParams ramp.xds::change_L_pars
 #' @seealso [dLdt.stages] or [make_L_obj_stages]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_L_pars.stages <- function(xds_obj, options = list(), s = 1) {
@@ -472,7 +472,7 @@ change_L_pars.stages <- function(xds_obj, options = list(), s = 1) {
 #' by name.
 #' @inheritParams ramp.xds::setup_L_inits
 #' @seealso [make_L_inits_stages]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_L_inits.stages = function(xds_obj, options = list(), s=1){
@@ -535,7 +535,7 @@ get_L_vars.stages <- function(y, xds_obj, s) {
 #' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
 #' if they are passed as named components of `options`.
 #' @inheritParams ramp.xds::change_L_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_L_inits.stages <- function(xds_obj, options = list(), s = 1) {
@@ -555,7 +555,7 @@ change_L_inits.stages <- function(xds_obj, options = list(), s = 1) {
 #' variables for the `stages` module. Indices are allocated in the order
 #' \eqn{E, L_1, L_2, L_3, L_4, P}, each block of length `nHabitats`.
 #' @inheritParams ramp.xds::setup_L_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @export

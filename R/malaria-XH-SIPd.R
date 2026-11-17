@@ -93,7 +93,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SIPd]
@@ -115,7 +115,7 @@ setup_skillset_XH.SIPd = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIPd]
 #' @export
@@ -145,7 +145,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
         treated_eta = lagderiv(t=t-eta, nr=xds_obj$ix$X[[i]]$treated_ix)
       }
 
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dI <- (1-rho)*foi*S - (r+xi)*I - Deaths(t, I, xds_obj, i)
       dP <- rho*foi*S + xi*(S+I) - treated_eta - Deaths(t, P, xds_obj, i)
       dtreated <- (rho*foi+xi)*S + xi*I
@@ -170,7 +170,7 @@ dXHdt.SIPd <- function(t, y, xds_obj, i){
 #' @inheritSection SIPd Parameters
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_XH_obj.SIPd = function(XHname, residence, xds_obj, options=list(), i=1){
@@ -227,7 +227,7 @@ make_XH_obj_SIPd = function(nStrata, options=list(),
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @inheritSection SIPd Parameters
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIPd]
 #' @export
@@ -249,7 +249,7 @@ change_XH_pars.SIPd <- function(xds_obj, options=list(), i=1) {
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @inheritSection SIPd State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIPd]
 #' @export
@@ -294,7 +294,7 @@ Update_XHt.SIPd <- function(t, y, xds_obj, i){
       It <- (1-r)*I + attack*(1-rho)*(S+r*I) - xi*I
       Pt <- xi*(S+I) + attack*rho*(S+r*I) + (1-eta)*P
 
-      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, xds_obj, i)
+      St <- dHdt(t, St, xds_obj$Hpar[[i]]) + Births(t, y, xds_obj, i)
       It <- dHdt(t, It, xds_obj$Hpar[[i]])
       Pt <- dHdt(t, Pt, xds_obj$Hpar[[i]])
 
@@ -395,7 +395,7 @@ get_HTC.SIPd <- function(xds_obj, i) {
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @inheritSection SIPd State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIPd]
 #' @export
@@ -449,7 +449,7 @@ parse_XH_orbits.SIPd <- function(outputs, xds_obj, i) {
 #' @title Add indices for human population to parameter list
 #' @description Implements [setup_XH_ix] for the `SIPd` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SIPd]

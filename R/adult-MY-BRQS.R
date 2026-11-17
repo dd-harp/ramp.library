@@ -98,7 +98,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_MY
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #'
 #' @keywords internal
 #' @export
@@ -187,7 +187,7 @@ get_MY_vars.BRQS<- function(y, xds_obj, s){
 #' @inheritSection BRQS Blood Feeding
 #' @inheritParams ramp.xds::MBionomics
 #' @seealso [BRQS], [MEffectSizes.BRQS]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
@@ -215,7 +215,7 @@ MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 #' @inheritSection BRQS Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
 #' @seealso [BRQS], [MBionomics.BRQS]
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 MEffectSizes.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
@@ -412,7 +412,7 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
 #' @title Return the parameters as a list
 #' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
 #' @inheritSection BRQS Parameters
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return a [list]
 #' @seealso [BRQS], [change_MY_pars.BRQS]
@@ -430,7 +430,7 @@ get_MY_pars.BRQS <- function(xds_obj, s=1) {
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritSection BRQS Parameters
 #' @inheritParams ramp.xds::change_MY_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_pars.BRQS <- function(xds_obj, options=list(), s=1) {
@@ -643,7 +643,7 @@ change_MY_inits.BRQS <- function(xds_obj, options = list(), s=1) {
 
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return a [numeric] vector
 #' @keywords internal
@@ -653,7 +653,7 @@ get_f.BRQS = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -663,7 +663,7 @@ get_q.BRQS = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal
@@ -673,7 +673,7 @@ get_g.BRQS = function(xds_obj, s=1){
 }
 
 #' @title Get the feeding rate
-#' @param xds_obj an **`xds`** object
+#' @param xds_obj an **`xds`** model object
 #' @param s the vector species index
 #' @return y a [numeric] vector assigned the class "dynamic"
 #' @keywords internal

@@ -105,7 +105,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SEIS]
@@ -127,7 +127,7 @@ setup_skillset_XH.SEIS = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIS]
 #' @export
@@ -150,7 +150,7 @@ dXHdt.SEIS <- function(t, y, xds_obj, i) {
 
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dE <- foi*S - nu*E - Deaths(t, E, xds_obj, i)
       dI <- (1-rho)*nu*E - (r+sigma)*I - Deaths(t, I, xds_obj, i)
       dI <- dI - mda(t)*I - msat(t)*I
@@ -173,7 +173,7 @@ Update_XHt.SEIS <- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      Ht <- Births(t, xds_obj, i) +
+      Ht <- Births(t, y, xds_obj, i) +
       Et <- ar*S + (1-nr)*ar*I + nu*E + dHdt(t, E, Hpar)
       It <- nr*I + (1-nu)*E + dHdt(t, I, Hpar)
 
@@ -214,7 +214,7 @@ steady_state_X.SEIS_dts = function(foi, H, xds_obj, i=1){
 #' @inheritSection SEIS Parameters
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_XH_obj.SEIS = function(XHname, residence, xds_obj, options=list(), i=1){
@@ -275,7 +275,7 @@ make_XH_obj_SEIS = function(nStrata, options=list(),
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @inheritSection SEIS Parameters
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIS]
 #' @export
@@ -370,7 +370,7 @@ make_XH_inits_SEIS = function(nStrata, options = list(), H=1000, E=0, I=1){with(
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @inheritSection SEIS State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIS]
 #' @export
@@ -411,7 +411,7 @@ get_XH_vars.SEIS <- function(y, xds_obj, i) {
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @inheritSection SEIS State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIS]
 #' @export

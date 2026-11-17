@@ -18,7 +18,7 @@
 \item{i}{the host species index}
 }
 \value{
-an \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 This sets up an \code{SEIS} model object for the \strong{XH} module for the \eqn{i^{th}} host species

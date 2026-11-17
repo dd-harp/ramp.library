@@ -14,7 +14,7 @@
 \item{s}{the vector species index}
 }
 \value{
-an \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 For the \code{stages} module (\strong{L}) for the \eqn{s^{th}} species,

@@ -14,7 +14,7 @@
 \item{i}{the host species index}
 }
 \value{
-an \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} host species,

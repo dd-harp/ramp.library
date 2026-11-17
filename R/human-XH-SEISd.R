@@ -94,7 +94,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SEISd]
@@ -116,7 +116,7 @@ setup_skillset_XH.SEISd = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEISd]
 #' @export
@@ -149,7 +149,7 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
         cases = lagderiv(t=t-nu, nr=ix$cases_ix)
       }
 
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dE <- foi*S - cases - Deaths(t, E, xds_obj, i)
       dI <- (1-rho)*cases - (r+sigma)*I - Deaths(t, I, xds_obj, i)
       dI <- dI - mda(t)*I - msat(t)*I
@@ -175,7 +175,7 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
 #' @inheritSection SEISd Parameters
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 setup_XH_obj.SEISd = function(XHname, residence, xds_obj, options=list(), i=1){
@@ -237,7 +237,7 @@ make_XH_obj_SEISd = function(nStrata, options=list(),
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
 #' @inheritSection SEISd Parameters
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEISd]
 #' @export
@@ -261,7 +261,7 @@ change_XH_pars.SEISd <- function(xds_obj, options=list(), i=1) {
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
 #' @inheritSection SEISd State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEISd]
 #' @export
@@ -379,7 +379,7 @@ get_XH_vars.SEISd <- function(y, xds_obj, i) {
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
 #' @inheritSection SEISd State Variables
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEISd]
 #' @export

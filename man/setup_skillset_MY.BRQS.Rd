@@ -12,7 +12,7 @@
 \item{s}{the species index}
 }
 \value{
-the \strong{\code{xds}} object
+an \strong{\code{xds}} model object
 }
 \description{
 The skill set

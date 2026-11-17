@@ -338,620 +338,363 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Developing L Modules</h1>
-<h3 class="subtitle">Developing New Modules for Aquatic Mosquito
-Ecology</h3>
+<h3 class="subtitle">Adding Models for Aquatic Mosquito Ecology</h3>
 
 
 
-<p>This vignette discusses how to add a new <strong>L</strong> module to
-<a href="https://github.com/dd-harp/ramp.library"><code>ramp.library</code></a>.
-As background, we strongly recommend reading the
-<strong><code>ramp.xds</code></strong> vignette about the <a href="https://dd-harp.github.io/ramp.xds/articles/L-interface.html"><strong>L</strong>
-Interface.</a></p>
-<p>Each <strong>L</strong> module implements a unique model family
-describing human/host infection dynamics and immunity that can be used
-by <a href="https://github.com/dd-harp/ramp.xds"><code>ramp.xds</code></a>.
-Before writing a new module, please check and see if the model family is
-already part of the SimBA library.</p>
-<p>If you need help, please contact <a href="mailto:smitdave@gmail.com">Professor David L Smith</a></p>
-<hr />
-<p>We have written this vignette to produce a new template file using
-<code>knitr::purl.</code> The template can be modified to build a new
-<strong>L</strong> module.</p>
-<p>Do this:</p>
-<ol style="list-style-type: decimal">
-<li><p>Download the markdown file that created this document <a href="https://github.com/dd-harp/ramp.library/blob/main/vignettes/X-How_To_Add_Lodel.Rmd">“X-How_To_Add_Lodel.Rmd.”</a></p></li>
-<li><p>Set your working directory to the location of the downloaded copy
-of “X-How_To_Add_Lodel.Rmd”</p></li>
-<li><p>Execute these commands:</p></li>
-</ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">&quot;L-How_To_Add_Model.Rmd&quot;</span>, </span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>            <span class="at">output =</span> <span class="st">&quot;Lmodule-newLname.R&quot;</span>, </span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>            <span class="at">documentation =</span> <span class="dv">0</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>            <span class="at">quiet=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<ol start="4" style="list-style-type: decimal">
-<li><p>You should see a new file called <code>Lmodule-newLname.R</code>
-in the working directory. You can now move and rename it.</p></li>
-<li><p>Open the file and do a global search for <code>newLname</code>
-and replace it with the a short string that will define the model as its
-<code>XHname.</code></p></li>
-<li><p>Edit the functions following the directions below.</p></li>
-</ol>
-<div id="style-guide" class="section level2">
-<h2>Style Guide</h2>
-<p>We recommend that new models conform to a set of style
-guidelines:</p>
+<p>This vignette describes how to add a model of aquatic mosquito
+ecology to <a href="https://github.com/dd-harp/ramp.library"><code>ramp.library</code></a>.
+Read the <a href="https://dd-harp.github.io/ramp.xds/articles/L-interface.html"><code>ramp.xds</code>
+L interface vignette</a> first for an overview of how L modules connect
+to egg laying and emergence. Before adding a module, check whether the
+model is already available in the SimBA library.</p>
+<p>An L module describes aquatic mosquito states in larval habitats. Its
+methods operate on the habitat dimension, <code>nHabitats</code>, and
+use <code>s</code> as the vector-species index. The habitat-to-patch
+<code>membership</code> vector is provided when the module is set
+up.</p>
+<div id="creating-a-module-template" class="section level2">
+<h2>Creating a module template</h2>
+<p>The code chunks below can be extracted to create a starting R file.
+From the directory containing this vignette, run:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="st">&quot;L-How_To_Add_Model.Rmd&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;Lmodule-newLname.R&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">documentation =</span> <span class="dv">0</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>The resulting file contains code examples that must be adapted before
+the module is used. Replace <code>newLname</code> with a short,
+model-specific name. When rendered, the chunks define the example
+functions but do not call them.</p>
+</div>
+<div id="general-conventions" class="section level2">
+<h2>General conventions</h2>
 <ul>
-<li><p>All the names of the variables by name using the indices attached
-to <code>L_obj</code></p></li>
-<li><p>All documentation is written in <code>roxygen2</code></p></li>
-<li><p>Functions should use <code>with(*,{...})</code> to make the code
-easier to read.</p></li>
-<li><p>A vignette should accompany each model, including citations to
-the relevant publications, and proposed tests of the code.</p></li>
-<li><p>The functions should easy to relate to the equations defining a
-model, following notation defined in an accompanying vignette.</p></li>
+<li>Implement model methods as S3 methods named with the module class,
+such as <code>dLdt.newLname</code>.</li>
+<li>Use <code>s</code> to access the module at
+<code>xds_obj$L_obj[[s]]</code>.</li>
+<li>Store state indices in <code>xds_obj$L_obj[[s]]$ix</code>, with one
+index per habitat for each habitat-level state.</li>
+<li>Keep state variables, derivatives, and discrete updates in the same
+order.</li>
+<li>Document model equations, states, parameters, inputs, outputs, and
+references with roxygen.</li>
+<li>Add tests for the module’s equations, dimensions, and setup
+behavior.</li>
 </ul>
 </div>
-<div id="dynamics" class="section level2">
-<h2>Dynamics</h2>
-<div id="dldt" class="section level3">
-<h3>dLdt</h3>
-<p>The sections that need to be modified are marked
-<code># Change this</code></p>
-<ul>
-<li><p>Replace <code>L</code> with the your first variable
-(<em>e.g.</em> mosquito population density), and replace
-<code>F_L</code> with the formula that computes the derivatives. Do the
-same with <code>Y</code> and add lines for each variable.</p></li>
-<li><p>Lodify <code>derivs = c(dL, dY, ...)</code> to return the LHS of
-the derivative equations you just wrote.</p></li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [dLdt] for the newLname model</span></span>
+<div id="module-dynamics" class="section level2">
+<h2>Module dynamics</h2>
+<p>Implement <code>dLdt.newLname</code> for a continuous-time model, or
+<code>Update_Lt.newLname</code> for a discrete-time model. Both receive
+time <code>t</code>, the dependent-variable vector <code>y</code>, the
+<strong><code>xds</code></strong> model object, and the species index
+<code>s</code>. A continuous-time method returns derivatives; a
+discrete-time method returns updated states. They are alternative solver
+interfaces, not interchangeable equations.</p>
+<p>The habitat-level egg input is available as
+<code>xds_obj$terms$eta[[s]]</code>. Extract the module states with
+<code>get_L_vars</code> and use the indices and parameter values stored
+on the module object.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#&#39; @title Compute derivatives for `newLname` (**L**)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::dLdt] for `newLname`.</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::dLdt</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of derivatives, in state-variable order</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>dLdt.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, i) {</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="co"># do not change this</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>eta[[i]]</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="co"># do not change this</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="co"># attach the variables by name </span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_L_vars</span>(y, xds_obj, i),{</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="co"># do not change this</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="co"># attach the parameters by name </span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]], {</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>      <span class="co"># Do not change this </span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>      dL <span class="ot">&lt;-</span> <span class="fu">F_L</span>(eta, L) </span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>      ... </span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>      </span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>      <span class="co"># Change this </span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>      derivs <span class="ot">=</span> <span class="fu">c</span>(dL, ...) </span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>      </span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>      <span class="co"># return the derivatives </span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>      <span class="fu">return</span>(derivs)</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    })</span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>  })</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div id="update_lt" class="section level3">
-<h3>Update_Lt</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [UpdateLt] for the newLname model</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::UpdateLt</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>dLdt.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>eta[[s]]</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="fu">with</span>(ramp.xds<span class="sc">::</span><span class="fu">get_L_vars</span>(y, xds_obj, s), {</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>      <span class="co"># Replace this expression with the model&#39;s derivative equation.</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>      dL <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>      derivatives <span class="ot">&lt;-</span> <span class="fu">c</span>(dL)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>      <span class="fu">return</span>(derivatives)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    })</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  })</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>}</span></code></pre></div>
+<p>If the model has multiple states, extract each state in
+<code>get_L_vars.newLname</code>, compute each derivative here, and
+concatenate them in the same order used by
+<code>setup_L_ix.newLname</code>.</p>
+<p>The discrete-time method has the same arguments and returns updated
+states in that order. Write the model’s discrete update equations
+directly; do not substitute the continuous-time derivative or an Euler
+step unless that is the model being implemented.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&#39; @title Update states for `newLname` (**L**)</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::Update_Lt] for `newLname`.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::Update_Lt</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of updated states, in state-variable order</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>Update_Lt.newLname<span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  </span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="co"># do not change this</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>eta[[i]]</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>   <span class="co"># do not change this</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="co"># attach the variables by name </span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_L_vars</span>(y, xds_obj, i),{</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="co"># do not change this</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="co"># attach the parameters by name </span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]], {</span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>      <span class="co"># Change this</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>      Lt <span class="ot">&lt;-</span> L <span class="sc">+</span> Lambda <span class="sc">+</span> <span class="fu">F_L</span>(L) </span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>      ... </span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>      </span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>      <span class="co"># Change this </span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>      states <span class="ot">=</span> <span class="fu">c</span>(Lt, ...) </span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>      </span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>      <span class="co"># return the derivatives </span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>      <span class="fu">return</span>(states)</span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    })</span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>  })</span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>Update_Lt.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>eta[[s]]</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">with</span>(ramp.xds<span class="sc">::</span><span class="fu">get_L_vars</span>(y, xds_obj, s), {</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>      <span class="co"># Replace this expression with the model&#39;s discrete update.</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>      Lt <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>      states <span class="ot">&lt;-</span> <span class="fu">c</span>(Lt)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>      <span class="fu">return</span>(states)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    })</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  })</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-</div>
-<div id="bionomics" class="section level2">
-<h2>Bionomics</h2>
-<p>Two functions update bionomic parameter values at each time step,
-called in sequence before the dynamics are computed.</p>
-<div id="lbionomics" class="section level3">
-<h3>LBionomics</h3>
-<p><code>LBionomics.newLname</code> computes the current bionomic
-parameter values by calling the forcing function for each parameter. It
-also resets all effect sizes to 1.</p>
-<ul>
-<li><p>Replace <code>p1</code>, <code>p2</code>, … with the names of the
-bionomic parameters in your model. Add a call to a forcing function for
-each one.</p></li>
-<li><p>For each parameter <code>p1</code>, add a matching effect size
-reset: <code>es_p1 &lt;- rep(1, nHabitats)</code>.</p></li>
-</ul>
+<div id="bionomics-and-effect-sizes" class="section level2">
+<h2>Bionomics and effect sizes</h2>
+<p><code>LBionomics.newLname</code> updates baseline parameter values at
+time <code>t</code> and resets effect sizes.
+<code>LEffectSizes.newLname</code> applies the configured effect sizes
+to those baseline values. Implement these methods for parameters that
+use time-varying forcing or vector-control effects; use the existing
+bionomics forcing functions where they match the parameter.</p>
+<p>For each affected parameter <code>p1</code>, store its baseline as
+<code>p1_t</code>, its effect size as <code>es_p1</code>, and its
+effective value as <code>p1</code>. The example assumes
+<code>p1_t</code> and <code>p2_t</code> have already been initialized on
+the module object.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Mosquito bionomics for `newLname` (**L**)</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [LBionomics] for the newLname model</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @description Update baseline parameters and reset effect sizes.</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::LBionomics</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** object</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>LBionomics.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="co"># Change this: call the forcing function for each bionomic parameter</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p1_t <span class="ot">&lt;-</span> <span class="fu">F_p1</span>(t, xds_obj, s)</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p2_t <span class="ot">&lt;-</span> <span class="fu">F_p2</span>(t, xds_obj, s)</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="co"># Change this: reset one effect size for each bionomic parameter</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>es_p1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, nHabitats)</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>es_p2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, nHabitats)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="co"># Replace these assignments with the appropriate forcing functions.</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p1_t <span class="ot">&lt;-</span> p1</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p2_t <span class="ot">&lt;-</span> p2</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>es_p1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>es_p2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">return</span>(xds_obj)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  })</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>}</span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="fu">return</span>(xds_obj)</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  })}</span></code></pre></div>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&#39; @title Apply effect sizes for `newLname` (**L**)</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&#39; @description Apply vector-control effect sizes to baseline parameters.</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::LEffectSizes</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>LEffectSizes.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p1 <span class="ot">&lt;-</span> p1_t <span class="sc">*</span> es_p1</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p2 <span class="ot">&lt;-</span> p2_t <span class="sc">*</span> es_p2</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>    <span class="fu">return</span>(xds_obj)</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>  })</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="leffectsizes" class="section level3">
-<h3>LEffectSizes</h3>
-<p><code>LEffectSizes.newLname</code> applies vector control effect
-sizes to the bionomic parameters set by <code>LBionomics</code>. For
-each parameter, the effective value is the baseline times the effect
-size.</p>
-<ul>
-<li>For each parameter <code>p1</code> with baseline <code>p1_t</code>
-and effect size <code>es_p1</code>, add a line:
-<code>xds_obj$L_obj[[s]]$p1 &lt;- p1_t * es_p1</code>.</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Apply effect sizes for `newLname` (**L**)</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [LEffectSizes] for the newLname model</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::LEffectSizes</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** object</span></span>
+<div id="module-object-and-setup" class="section level2">
+<h2>Module object and setup</h2>
+<p><code>make_L_obj_newLname</code> creates the module object and
+initializes its parameters. <code>setup_L_obj.newLname</code> attaches
+the object at <code>xds_obj$L_obj[[s]]</code>, sets up initial values,
+and configures habitat search weights using the supplied
+<code>membership</code> vector.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Make the `newLname` module object</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @param nHabitats the number of habitats in the model</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @param options a named list of parameter values</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; @return an L module object</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>LEffectSizes.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="co"># Change this: multiply each baseline parameter by its effect size</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p1 <span class="ot">&lt;-</span> p1_t <span class="sc">*</span> es_p1</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p2 <span class="ot">&lt;-</span> p2_t <span class="sc">*</span> es_p2</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="fu">return</span>(xds_obj)</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  })}</span></code></pre></div>
-</div>
-</div>
-<div id="l-lodel-object" class="section level2">
-<h2>L Lodel Object</h2>
-<div id="make_l_obj" class="section level3">
-<h3>make_L_obj</h3>
-<ul>
-<li><p>In the following, replace <code>p1</code> with the first
-parameter, <code>p2</code> with the second, and so on.</p></li>
-<li><p>Unless you know what you’re doing, leave the “Ports for human /
-host demography” unchanged.</p></li>
-<li><p>If you don’t want to add ports for mass treatment, delete the
-line with <code>mda</code> and <code>msat</code> and leave
-<code>mda=FALSE</code> and <code>msat=FALSE</code> in
-<code>skill_set_L.newLname.</code> If you do want your module to have
-that functionality, add the effects of mass treatment to the parameters
-that define state transitions in <code>dLdt</code> or
-<code>Update_Lt</code> and set <code>mda=TRUE</code> and
-<code>msat=TRUE</code> in the skill set.</p></li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Lake parameters for newLname human model, with defaults</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches is the number of population strata</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] that could override defaults</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @param p1 the first parameter </span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @param p2 the second parameter </span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @param p3 the third parameter </span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>make_L_obj_newLname <span class="ot">=</span> <span class="cf">function</span>(nPatches, <span class="at">options=</span><span class="fu">list</span>(),</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                         <span class="at">p1=</span><span class="dv">1</span>, <span class="at">p2=</span><span class="dv">2</span>, <span class="at">p3=</span><span class="dv">3</span>){</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">with</span>(options,{</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    L_obj <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    <span class="fu">class</span>(L_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newLname&quot;</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>    <span class="co"># Change this</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>    L_obj<span class="sc">$</span>p1 <span class="ot">=</span> <span class="fu">checkIt</span>(p1, nPatches)</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>    L_obj<span class="sc">$</span>p2 <span class="ot">=</span> <span class="fu">checkIt</span>(p2, nPatches)</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>    L_obj<span class="sc">$</span>p3 <span class="ot">=</span> <span class="fu">checkIt</span>(p3, nPatches)</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>    <span class="co"># Don&#39;t change this</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>     L_obj <span class="ot">&lt;-</span> <span class="fu">setup_K_obj</span>(nPatches, L_obj) </span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>    </span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>    <span class="fu">return</span>(L_obj)</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  })}</span></code></pre></div>
-</div>
-<div id="setup_l_obj" class="section level3">
-<h3>setup_L_obj</h3>
-<p>If you did a global search and replace on <code>newLname,</code> this
-function will not need to be modified</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title Setup L_obj.newLname</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_L_obj] for the newLname model</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_obj</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @return a [list] vector</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>setup_L_obj.newLname <span class="ot">=</span> <span class="cf">function</span>(Lname, membership, xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">s=</span><span class="dv">1</span>){</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]] <span class="ot">=</span> <span class="fu">make_L_obj_newLname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>}</span></code></pre></div>
-</div>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>make_L_obj_newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(nHabitats, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">p1 =</span> <span class="dv">1</span>, <span class="at">p2 =</span> <span class="dv">1</span>) {</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    L_obj <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>      <span class="at">p1 =</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(p1, nHabitats),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>      <span class="at">p2 =</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(p2, nHabitats),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>      <span class="at">p1_t =</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(p1, nHabitats),</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>      <span class="at">p2_t =</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(p2, nHabitats),</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>      <span class="at">es_p1 =</span> <span class="fu">rep</span>(<span class="dv">1</span>, nHabitats),</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>      <span class="at">es_p2 =</span> <span class="fu">rep</span>(<span class="dv">1</span>, nHabitats),</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>      <span class="at">nHabitats =</span> nHabitats</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    )</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>    <span class="fu">class</span>(L_obj) <span class="ot">&lt;-</span> <span class="st">&quot;newLname&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>    <span class="fu">return</span>(L_obj)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  })</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>}</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&#39; @title Set up `newLname` (**L**)</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::setup_L_obj] for `newLname`.</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_obj</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>setup_L_obj.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(Lname, membership, xds_obj,</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>                                 <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>  L_obj <span class="ot">&lt;-</span> <span class="fu">make_L_obj_newLname</span>(xds_obj<span class="sc">$</span>nHabitats, options)</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>  <span class="fu">class</span>(L_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newLname&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;newLname_&quot;</span>, xds_obj<span class="sc">$</span>xds))</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]] <span class="ot">&lt;-</span> L_obj</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_L_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_habitat_search_weights</span>(</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>    <span class="st">&quot;setup&quot;</span>, xds_obj, <span class="fu">list</span>(<span class="at">membership =</span> membership), <span class="at">s =</span> s</span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>  )</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
+<p>Implement <code>get_L_pars.newLname</code> to return the module
+parameters as a named list, and <code>change_L_pars.newLname</code> to
+update the parameters named in <code>options</code> while leaving other
+parameters unchanged. Check supplied values against
+<code>xds_obj$nHabitats</code>; parameter vectors should match the
+habitat dimension.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Get parameters for `newLname` (**L**)</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_L_pars</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @return a named list of parameters</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>get_L_pars.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">p1 =</span> p1, <span class="at">p2 =</span> p2))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  })</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>}</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&#39; @title Change parameters for `newLname` (**L**)</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_L_pars</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>change_L_pars.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  nHabitats <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>nHabitats</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&quot;p1&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(options)) {</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p1_t <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(options<span class="sc">$</span>p1, nHabitats)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  }</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&quot;p2&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(options)) {</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>    xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>p2_t <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(options<span class="sc">$</span>p2, nHabitats)</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  }</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="variables" class="section level2">
-<h2>Variables</h2>
-<div id="setup_l_ix" class="section level3">
-<h3>setup_L_ix</h3>
-<p>In the following, each variable in your model gets its own pair of
-lines. Replace <code>L</code> in <code>L_ix</code> with the first
-variable name, <code>Y</code> in <code>Y_ix</code> with the second, and
-add lines for each variable by copying and pasting and editing the pair
-of lines. Be sure the replacement gets applied to all four
-instances.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title Add indices for human population to parameter list</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [setup_L_ix] for the newLname model.</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_ix</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @return none</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>setup_L_ix.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {<span class="fu">with</span>(xds_obj,{</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  </span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  L_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>xds_obj<span class="sc">$</span>nPatches[i])</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(L_ix, <span class="dv">1</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  Y_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix<span class="sc">+</span><span class="dv">1</span>, <span class="at">length.out=</span>xds_obj<span class="sc">$</span>nPatches[i])</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(Y_ix, <span class="dv">1</span>)</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  ... </span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  </span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  xds_obj<span class="sc">$</span>max_ix <span class="ot">=</span> max_ix</span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[i]]<span class="sc">$</span>ix <span class="ot">=</span> <span class="fu">list</span>(<span class="at">L_ix=</span>L_ix, <span class="at">Y_ix=</span>Y_ix, ...)</span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>})}</span></code></pre></div>
-</div>
-<div id="get_l_vars" class="section level3">
-<h3>get_L_vars</h3>
-<p>In the following, each variable in your model gets its own pair of
-lines.</p>
-<ul>
-<li><p>Leave <code>H</code> as-is</p></li>
-<li><p>Replace <code>L</code> in <code>L</code> and <code>L_ix</code>
-with the first variable name.</p></li>
-<li><p>Replace <code>Y</code> in <code>Y</code> and <code>Y_ix</code>
-with the second variable name.</p></li>
-<li><p>Copy the form for every other variable</p></li>
-<li><p>The variable <code>X0</code> is the class that gets newborns. If
-you use it or if you want to have it available, compute it and add it to
-the returned list.</p></li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Return the variables as a list</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description This method dispatches on the type of `xds_obj$L_obj`</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_L_vars</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>get_L_vars.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]]<span class="sc">$</span>ix,{</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>      H <span class="ot">=</span> y[H_ix]</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>      L <span class="ot">=</span> y[L_ix]</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>      Y <span class="ot">=</span> y[Y_ix]</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>      ...</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>      X0 <span class="ot">=</span> H<span class="sc">-</span>L<span class="sc">-</span>Y </span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">H=</span>H, <span class="at">L=</span>L, <span class="at">Y=</span>Y,...,<span class="at">X0=</span>X0))})</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div id="parse_l_orbits" class="section level3">
-<h3>parse_L_orbits</h3>
-<p>In the following, each variable in your model gets its own pair of
-lines.</p>
-<ul>
-<li><p>Leave <code>H</code> as-is</p></li>
-<li><p>Replace <code>L</code> in <code>L</code> and <code>L_ix</code>
-with the first variable name.</p></li>
-<li><p>Replace <code>Y</code> in <code>Y</code> and <code>Y_ix</code>
-with the second variable name.</p></li>
-<li><p>Copy the form for every other variable</p></li>
-<li><p>The variable <code>X0</code> is the class that gets newborns. If
-you use it or if you want to have it available, compute it and add it to
-the returned list.</p></li>
-</ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title parse the output of deSolve and return variables for the newLname model</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [parse_L_orbits] for the newLname model</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::parse_L_orbits</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @return a named list  </span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>parse_L_orbits.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, i) {</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]]<span class="sc">$</span>ix,{</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>    H <span class="ot">&lt;-</span> outputs[,H_ix]</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>    L <span class="ot">&lt;-</span> outputs[,L_ix]</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>    Y <span class="ot">&lt;-</span> outputs[,Y_ix]</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>    X0 <span class="ot">&lt;-</span> H<span class="sc">-</span>L<span class="sc">-</span>Y</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>    vars <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">H=</span>H, <span class="at">L=</span>L, <span class="at">Y=</span>Y, <span class="at">X0=</span>X0)</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>    <span class="fu">return</span>(vars)</span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>})}</span></code></pre></div>
-</div>
+<div id="state-indices-and-extraction" class="section level2">
+<h2>State indices and extraction</h2>
+<p><code>setup_L_ix.newLname</code> assigns a contiguous range of
+indices to each state. Allocate one index per habitat for each
+habitat-level state, and update <code>max_ix</code> after each range.
+<code>get_L_vars.newLname</code> extracts named states from the
+dependent-variable vector <code>y</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title Set up state indices for `newLname` (**L**)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_ix</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>setup_L_ix.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  L_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> xds_obj<span class="sc">$</span>max_ix <span class="sc">+</span> <span class="dv">1</span>, <span class="at">length.out =</span> xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  xds_obj<span class="sc">$</span>max_ix <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">tail</span>(L_ix, <span class="dv">1</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>ix <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">L_ix =</span> L_ix)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&#39; @title Extract states for `newLname` (**L**)</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_L_vars</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&#39; @return a named list of state variables</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>get_L_vars.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, s) {</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>ix, {</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>    L <span class="ot">&lt;-</span> y[L_ix]</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">L =</span> L))</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  })</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>}</span></code></pre></div>
+<p>If the module has more than one state variable, create an index range
+for each one and include each named state in the returned list.</p>
 </div>
 <div id="initial-values" class="section level2">
-<h2>Initial Values</h2>
-<div id="setup_l_inits" class="section level3">
-<h3>setup_L_inits</h3>
-<p>If you did the global search and replace, you won’t need to change
-this function.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co">#&#39; @title Setup initial values for *newLname*</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&#39; </span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_inits</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&#39; </span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&#39; @return a **`ramp.xds`** object </span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&#39; </span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>setup_L_inits.newLname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">s=</span><span class="dv">1</span>){</span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>inits <span class="ot">=</span> <span class="fu">make_L_inits_newLname</span>(xds_obj<span class="sc">$</span>nPatches[s], <span class="at">H=</span>options<span class="sc">$</span>H, <span class="at">options=</span>options)</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>}</span></code></pre></div>
+<h2>Initial values</h2>
+<p><code>make_L_inits_newLname</code> returns defaults as a named list
+with one value per habitat for each state.
+<code>setup_L_inits.newLname</code> stores the list on the module
+object; users can inspect it with <code>get_L_inits</code> and update it
+with <code>change_L_inits.newLname</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for `newLname` (**L**)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @param nHabitats the number of habitats in the model</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @param options a named list of initial values</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @param L the initial value for state `L`</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @return a named list of initial values</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>make_L_inits_newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(nHabitats, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">L =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    L <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(L, nHabitats)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">L =</span> L))</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  })</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&#39; @title Set up initial values for `newLname` (**L**)</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_inits</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>setup_L_inits.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>inits <span class="ot">&lt;-</span> <span class="fu">make_L_inits_newLname</span>(</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    xds_obj<span class="sc">$</span>nHabitats, options</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  )</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>}</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&#39; @title Change initial values for `newLname` (**L**)</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_L_inits</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>change_L_inits.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(L)) {</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>      xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>inits<span class="sc">$</span>L <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">checkIt</span>(</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>        L, xds_obj<span class="sc">$</span>nHabitats</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>      )</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>    }</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>  })</span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="make_l_inits" class="section level3">
-<h3>make_L_inits</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&#39; @title Lake initial values for the XHname human model, with defaults</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches the number of strata in the model</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @param options a [list] to override defaults</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @param L the initial value for L </span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @param Y the initial value for L </span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>make_L_inits_newLname <span class="ot">=</span> <span class="cf">function</span>(nPatches, H, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">L=</span><span class="cn">NULL</span>, <span class="at">Y=</span><span class="dv">1</span>){<span class="fu">with</span>(options,{</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(L))</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(Y))</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  L <span class="ot">=</span> <span class="fu">checkIt</span>(L, nPatches)</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">checkIt</span>(Y, nPatches)</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">L=</span>L, <span class="at">Y=</span>Y, ...))</span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>})}</span></code></pre></div>
+<div id="emergence" class="section level2">
+<h2>Emergence</h2>
+<p><code>F_emerge.newLname</code> returns a habitat-level vector of
+adult emergence, usually a rate for a continuous-time model or a number
+for a discrete-time model. The shared emergence interface aggregates
+these values to patches using habitat membership.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Compute emergence for `newLname` (**L**)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_emerge</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of length `nHabitats`</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>F_emerge.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">with</span>(ramp.xds<span class="sc">::</span><span class="fu">get_L_vars</span>(y, xds_obj, s), {</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]], {</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>      <span class="co"># Replace this expression with the model&#39;s emergence equation.</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>      alpha <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, xds_obj<span class="sc">$</span>nHabitats)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>      <span class="fu">return</span>(alpha)</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    })</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  })</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="change_l_inits" class="section level3">
-<h3>change_L_inits</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co">#&#39; @title Return the parameters as a list</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&#39; </span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_L_inits </span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&#39; </span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** object</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>change_L_inits.SIS <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options=</span><span class="fu">list</span>(), <span class="at">s=</span><span class="dv">1</span>) {</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_L_inits</span>(xds_obj, s), <span class="fu">with</span>(options,{</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>    xds_obj <span class="ot">=</span> <span class="fu">change_H</span>(H, xds_obj, s)</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>    xds_obj<span class="sc">$</span>Xinits[[s]]<span class="sc">$</span>L <span class="ot">=</span> L </span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>    xds_obj<span class="sc">$</span>Xinits[[s]]<span class="sc">$</span>Y <span class="ot">=</span> Y </span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>    ... </span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>    <span class="fu">return</span>(xds_obj)</span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>  }))}</span></code></pre></div>
+<div id="parsing-outputs-and-optional-methods" class="section level2">
+<h2>Parsing outputs and optional methods</h2>
+<p><code>parse_L_orbits.newLname</code> extracts each state from the
+solver output matrix, using the indices stored on the module object, and
+returns a named list. Add derived quantities only when they are useful
+model outputs.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Parse outputs for `newLname` (**L**)</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::parse_L_orbits</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @return a named list of state-variable orbits</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>parse_L_orbits.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, s) {</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>ix, {</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    L <span class="ot">&lt;-</span> outputs[, L_ix]</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">L =</span> L))</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  })</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>steady_state_L.newLname</code> is optional and applies to
+continuous-time models when a steady-state solution is available. It
+receives habitat-level egg input <code>eta</code> and returns a named
+list of steady-state values. The shared <code>get_L_orbits</code>,
+<code>xds_plot_L</code>, and <code>xds_lines_L</code> functions provide
+access to and visualization of parsed model output; a module-specific
+plotting method is not required.</p>
 </div>
-</div>
-<div id="dynamical-terms" class="section level2">
-<h2>Dynamical Terms</h2>
-<div id="f_emerge" class="section level3">
-<h3>F_emerge</h3>
-<p>In the following, replace … with a formula to compute the effective
-density of infectious humans: it is population density by strata
-weighted by the probability of transmitting.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_emerge] for the SIS model.</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_emerge</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>F_emerge.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_L_vars</span>(y, xds_obj, i), </span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]], {</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>      emerge <span class="ot">=</span> ...  </span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>      <span class="fu">return</span>(emerge)</span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>}))}</span></code></pre></div>
-</div>
-<div id="f_l" class="section level3">
-<h3>F_L</h3>
-<p>In the following, replace … with a formula to compute the effective
-density of infectious humans: it is population density by strata
-weighted by the probability of transmitting.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Size of effective infectious human population</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [F_L] for the SIS model.</span></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_L</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>F_L.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, i) {</span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_L_vars</span>(y, xds_obj, i), </span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>L_obj[[i]], {</span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>      L <span class="ot">=</span> ...  </span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>      <span class="fu">return</span>(L)</span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>}))}</span></code></pre></div>
-</div>
-</div>
-<div id="other-outputs" class="section level2">
-<h2>Other Outputs</h2>
-<p>To make <code>ramp.xds</code> easy to use, we provide some functions
-that parse the outputs and compute some standard metrics.</p>
-<div id="f_capacity" class="section level3">
-<h3>F_capacity</h3>
-<p>Replace <code>L/H</code> with the formula to compute prevalence.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the true prevalence of infection / parasite rate</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&#39; @description Implements F_pr for the newLname model.</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams F_pr</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>F_capacity.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(vars, L_obj) {</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">with</span>(vars, </span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>    <span class="fu">with</span>(L_obj,</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>       <span class="fu">return</span>(...)</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  ))</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-</div>
-<div id="internal-consistency" class="section level2">
-<h2>Internal Consistency</h2>
-</div>
-<div id="optional-functions" class="section level2">
-<h2>Optional Functions</h2>
-<div id="plotting" class="section level3">
-<h3>Plotting</h3>
-</div>
-<div id="xds_lines_x" class="section level3">
-<h3>16. xds_lines_X</h3>
-<div id="xds_lines_x_sis" class="section level4">
-<h4>xds_lines_X_SIS</h4>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the SIS model</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&#39; @param L a list with the outputs of parse_deout_X_SIS</span></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&#39; @param nPatches the number of population strata</span></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>xds_lines_X_SIS <span class="ot">=</span> <span class="cf">function</span>(L, nPatches, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>  <span class="fu">with</span>(L,{</span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>    <span class="cf">if</span>(nPatches<span class="sc">==</span><span class="dv">1</span>) {</span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>      <span class="fu">lines</span>(time, S, <span class="at">col=</span>clrs[<span class="dv">1</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>      <span class="fu">lines</span>(time, I, <span class="at">col=</span>clrs[<span class="dv">2</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>    }</span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>    <span class="cf">if</span>(nPatches<span class="sc">&gt;</span><span class="dv">1</span>){</span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(clrs)<span class="sc">==</span><span class="dv">2</span>) clrs<span class="ot">=</span><span class="fu">matrix</span>(clrs, <span class="dv">2</span>, nPatches)</span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(llty)<span class="sc">==</span><span class="dv">1</span>) llty<span class="ot">=</span><span class="fu">rep</span>(llty, nPatches)</span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a></span>
-<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nPatches){</span>
-<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>        <span class="fu">lines</span>(time, S[,i], <span class="at">col=</span>clrs[<span class="dv">1</span>,i], <span class="at">lty =</span> llty[i])</span>
-<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>        <span class="fu">lines</span>(time, I[,i], <span class="at">col=</span>clrs[<span class="dv">2</span>,i], <span class="at">lty =</span> llty[i])</span>
-<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>      }</span>
-<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>    }</span>
-<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a>  })}</span></code></pre></div>
-</div>
-<div id="xds_lines_x_newlname" class="section level4">
-<h4>xds_lines_X_newLname</h4>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&#39; Add lines for the density of infected individuals for the newLname model</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&#39; @param L a list with the outputs of parse_deout_X_newLname</span></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&#39; @param nPatches the number of population strata</span></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>xds_lines_X_newLname <span class="ot">=</span> <span class="cf">function</span>(L, nPatches, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>){</span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="fu">with</span>(L,{</span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>    <span class="cf">if</span>(nPatches<span class="sc">==</span><span class="dv">1</span>) {</span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>      <span class="fu">lines</span>(time, S, <span class="at">col=</span>clrs[<span class="dv">1</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>      <span class="fu">lines</span>(time, I, <span class="at">col=</span>clrs[<span class="dv">2</span>], <span class="at">lty =</span> llty[<span class="dv">1</span>])</span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>    }</span>
-<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>    <span class="cf">if</span>(nPatches<span class="sc">&gt;</span><span class="dv">1</span>){</span>
-<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(clrs)<span class="sc">==</span><span class="dv">2</span>) clrs<span class="ot">=</span><span class="fu">matrix</span>(clrs, <span class="dv">2</span>, nPatches)</span>
-<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(llty)<span class="sc">==</span><span class="dv">1</span>) llty<span class="ot">=</span><span class="fu">rep</span>(llty, nPatches)</span>
-<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nPatches){</span>
-<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>        <span class="fu">lines</span>(time, S[,i], <span class="at">col=</span>clrs[<span class="dv">1</span>,i], <span class="at">lty =</span> llty[i])</span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a>        <span class="fu">lines</span>(time, I[,i], <span class="at">col=</span>clrs[<span class="dv">2</span>,i], <span class="at">lty =</span> llty[i])</span>
-<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a>      }</span>
-<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a>    }</span>
-<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a>  })}</span></code></pre></div>
-</div>
-</div>
-<div id="xds_plot_x" class="section level3">
-<h3>17. xds_plot_X</h3>
-<p>We provide a basic plotting function. The function
-<code>xds_lines_X_*</code> does not have an <code>S3</code> version.
-Instead, it is called by the <code>S3</code> function
-<code>xds_plot_X</code></p>
-<div id="generic" class="section level4">
-<h4>Generic</h4>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co">#&#39; Basic plotting for epidemiological models</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&#39; @param xds_obj a list that defines an `ramp.xds` model (*e.g.*,  generated by `xde_setup()`)</span></span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&#39; @param i the host species index</span></span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&#39; @param clrs a vector of colors</span></span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&#39; @param llty an integer (or integers) to set the `lty` for plotting</span></span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&#39; @param stable a logical: set to FALSE for `orbits` and TRUE for `stable_orbits`</span></span>
-<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&#39; @param add_axes a logical: plot axes only if TRUE</span></span>
-<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>xds_plot_X <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="st">&quot;black&quot;</span>, <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
-<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="fu">UseLethod</span>(<span class="st">&quot;xds_plot_X&quot;</span>, xds_obj<span class="sc">$</span>L_obj[[i]])</span>
-<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div id="xds_plot_x.sis" class="section level4">
-<h4>xds_plot_X.SIS</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newLname model</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::xds_plot_X</span></span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>xds_plot_X.SIS <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
-<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  vars<span class="ot">=</span><span class="fu">with</span>(xds_obj<span class="sc">$</span>outputs,<span class="cf">if</span>(stable<span class="sc">==</span><span class="cn">TRUE</span>){stable_orbits}<span class="cf">else</span>{orbits})</span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="cf">if</span>(add_axes<span class="sc">==</span><span class="cn">TRUE</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>    <span class="fu">with</span>(vars<span class="sc">$</span>L[[i]],</span>
-<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>         <span class="fu">plot</span>(time, <span class="dv">0</span><span class="sc">*</span>time, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(H)),</span>
-<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;# Infected&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>))</span>
-<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a></span>
-<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a>  <span class="fu">xds_lines_X_SIS</span>(vars<span class="sc">$</span>L[[i]], xds_obj<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nPatches, clrs, llty)</span>
-<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div id="xds_plot_x.newlname" class="section level4">
-<h4>xds_plot_X.newLname</h4>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#&#39; Plot the density of infected individuals for the newLname model</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::xds_plot_X</span></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>xds_plot_X.newLname <span class="ot">=</span> <span class="cf">function</span>(xds_obj, <span class="at">i=</span><span class="dv">1</span>, <span class="at">clrs=</span><span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>,<span class="st">&quot;darkred&quot;</span>), <span class="at">llty=</span><span class="dv">1</span>, <span class="at">stable=</span><span class="cn">FALSE</span>, <span class="at">add_axes=</span><span class="cn">TRUE</span>){</span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  vars<span class="ot">=</span><span class="fu">with</span>(xds_obj<span class="sc">$</span>outputs,<span class="cf">if</span>(stable<span class="sc">==</span><span class="cn">TRUE</span>){stable_orbits}<span class="cf">else</span>{orbits})</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="cf">if</span>(add_axes<span class="sc">==</span><span class="cn">TRUE</span>)</span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>    <span class="fu">with</span>(vars<span class="sc">$</span>L[[i]],</span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>         <span class="fu">plot</span>(time, <span class="dv">0</span><span class="sc">*</span>time, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(H)),</span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;# Infected&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>))</span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  <span class="fu">xds_lines_X_newLname</span>(vars<span class="sc">$</span>L[[i]], xds_obj<span class="sc">$</span>Hpar[[i]]<span class="sc">$</span>nPatches, clrs, llty)</span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-</div>
-</div>
-<div id="reusable-code" class="section level2">
-<h2>Reusable Code</h2>
-<p><strong><code>ramp.xds</code></strong> has a modular design. The
-modular design makes it possible to break down published models to serve
-as dynamical components in new models for malaria, a kind of
-plug-and-play functionality for two kinds of systems:</p>
-<ul>
-<li><p>systems of ordinary and delay differential equations models for
-malaria and other mosquito-transmitted pathogens.</p></li>
-<li><p>stochastic and deterministic discrete time systems for malaria
-and other mosquito-transmitted pathogens.</p></li>
-</ul>
-<p>This package – <code>ramp.library</code> – is a collection of models
-to implement a large number of dynamical model families and other
-algorithms taken from the literature describing malaria and other
-mosquito-transmitted pathogens (see Reiner, <em>et al.</em> 2013)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Those
-models have been implemented here as code that has undergone rigorous
-testing and that can be used to build models for simulation-based
-analytics.</p>
-<p>The mathematics supporting this framework were explained in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010684" target="_blank">Spatial Dynamics of Lalaria Transmission</a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<p>This vignette was written to help add new modules to
-<code>ramp.library.</code></p>
-</div>
-<div class="footnotes footnotes-end-of-document">
-<hr />
-<ol>
-<li id="fn1"><p>Reiner RC Jr, Perkins TA, Barker CL, Niu T, Chaves LF,
-Ellis AL, et al. A systematic review of mathematical models of
-mosquito-borne pathogen transmission: 1970-2010. J R Soc Interface.
-2013;10: 20120921.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Wu SL, Henry JL, Citron DT, Lbabazi Ssebuliba D,
-Nakakawa Nsumba J, Sánchez C. HM, et al. (2023) Spatial dynamics of
-malaria transmission. PLoS Comput Biol 19(6): e1010684. <a href="https://doi.org/10.1371/journal.pcbi.1010684" class="uri">https://doi.org/10.1371/journal.pcbi.1010684</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-</ol>
+<div id="the-basicl-reference-model" class="section level2">
+<h2>The <code>basicL</code> reference model</h2>
+<p>The <code>basicL</code> module in <code>ramp.xds</code> is an example
+of a habitat-level model. It tracks larval density <span class="math inline">\(L\)</span> and implements</p>
+<p><span class="math display">\[\frac{dL}{dt}
+= \eta - \left(\psi e^{-\xi L} + \phi + \theta L\right)L,
+\qquad
+\alpha = \psi e^{-\xi L}L.\]</span></p>
+<p>Its states and parameters each have one value per habitat. Consult
+<code>aquatic-L-basicL.R</code> in the <code>ramp.xds</code> source for
+a complete implementation of its setup, parameter, dynamics,
+initial-value, emergence, and output methods.</p>
 </div>
 
 

@@ -79,7 +79,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SIR]
@@ -101,7 +101,7 @@ setup_skillset_XH.SIR = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIR]
 #' @export
@@ -126,7 +126,7 @@ dXHdt.SIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, xds_obj, i) - Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) - Deaths(t, H, xds_obj, i)
       dI <- foi*S - r*I - Deaths(t, I, xds_obj, i)
       dR <- r*I - Deaths(t, R, xds_obj, i)
 
@@ -149,7 +149,7 @@ Update_XHt.SIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      Ht <- Births(t, xds_obj, i) + D_matrix %*% H
+      Ht <- Births(t, y, xds_obj, i) + D_matrix %*% H
       It <- (1-r)*I + ar*S + D_matrix %*% I
       Rt <- R + r*I + D_matrix %*% R
 
@@ -185,7 +185,7 @@ make_XH_inits_SIR = function(nStrata, options = list(), H=1000, I=1, R=0){with(o
 #' @description For the `SIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SIR State Variables
 #' @seealso [SIR]
@@ -207,7 +207,7 @@ change_XH_inits.SIR <- function(xds_obj, options=list(), i=1) {
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SIR State Variables
 #' @seealso [SIR]
@@ -222,7 +222,7 @@ setup_XH_inits.SIR = function(xds_obj, options=list(), i=1){
 #' @title Add indices for human population to parameter list
 #' @description Implements [setup_XH_ix] for the `SIR` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SIR]
@@ -300,7 +300,7 @@ make_XH_obj_SIR = function(nStrata, options=list(),
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SIR State Variables
 #' @inheritSection SIR Parameters
@@ -322,7 +322,7 @@ setup_XH_obj.SIR = function(XHname, residence, xds_obj, options=list(), i=1){
 #' @description For the `SIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SIR Parameters
 #' @seealso [SIR]

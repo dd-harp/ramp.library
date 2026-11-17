@@ -88,7 +88,7 @@ NULL
 #'
 #' @inheritParams ramp.xds::setup_skillset_XH
 #'
-#' @return the **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #'
 #' @seealso [SEIR]
@@ -111,7 +111,7 @@ setup_skillset_XH.SEIR = function(xds_obj,i){
 #'
 #' @inheritParams ramp.xds::check_XH
 #'
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SEIR]
 #' @export
@@ -136,7 +136,7 @@ dXHdt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      dH <- Births(t, xds_obj, i) + Deaths(t, H, xds_obj, i)
+      dH <- Births(t, y, xds_obj, i) + Deaths(t, H, xds_obj, i)
       dE <- foi*S - tau*E + Deaths(t, E, xds_obj, i)
       dI <- tau*E - r*I + Deaths(t, I, xds_obj, i)
       dR <- r*I + Deaths(t, R, xds_obj, i)
@@ -164,7 +164,7 @@ Update_XHt.SEIR<- function(t, y, xds_obj, i) {
   with(get_XH_vars(y, xds_obj, i),{
     with(xds_obj$XH_obj[[i]], {
 
-      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, xds_obj, i)
+      St <- (1-ar)*S  + dHdt(t, S, Hpar) + Births(t, y, xds_obj, i)
       Et <- a*S +(1-tau)*E + D_matrix %*% E
       It <- (1-r)*I + tau*E + D_matrix %*% I
       Rt <- R + r*I + D_matrix %*% R
@@ -216,7 +216,7 @@ steady_state_X.SEIR = function(foi, H,  xds_obj, i=1){
 #' + To inspect variable names, use [get_XH_inits] or
 #' see the inline module documentation.
 #' @inheritParams ramp.xds::setup_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIR State Variables
 #' @seealso [SEIR]
@@ -253,7 +253,7 @@ make_XH_inits_SEIR = function(nStrata, options=list(), H=1000, I=1, E=0, R=1){
 #' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change parameter values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIR Parameters
 #' @seealso [SEIR]
@@ -273,7 +273,7 @@ change_XH_pars.SEIR <- function(xds_obj, options=list(), i=1) {
 #' @description For the `SEIR` module (**XH**) for the \eqn{i^{th}} host species,
 #' change initial values named in `options` leaving other values unchanged.
 #' @inheritParams ramp.xds::change_XH_inits
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIR State Variables
 #' @seealso [SEIR]
@@ -294,7 +294,7 @@ change_XH_inits.SEIR <- function(xds_obj, options=list(), i=1) {
 #' @title Add indices for human population to parameter list
 #' @description Implements [setup_XH_ix] for the `SEIR` model.
 #' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SEIR]
@@ -383,7 +383,7 @@ make_XH_obj_SEIR = function(nStrata, options=list(),
 #' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #'
 #' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @inheritSection SEIR State Variables
 #' @inheritSection SEIR Parameters
