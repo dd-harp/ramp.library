@@ -87,11 +87,6 @@ and has no treatment parameters \code{rho} or \code{sigma}.
 
 
 
-Demographic changes (\strong{H}) are given by the equation:
-
-\deqn{
-dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)}
-
 This model has no parameter
 or terms to describe disease-induced mortality.
 
@@ -101,8 +96,10 @@ or terms to describe disease-induced mortality.
 }
 
 \strong{Setup:}
+
+The default is a constant population model: birth
+and death rates are set to zero
 \itemize{
-\item The defaults are no births and no deaths
 \item Use \link[ramp.xds]{setup_births} to configure \code{\link[ramp.xds]{Births}}
 \item Use \link[ramp.xds]{setup_deaths} to configure \code{\link[ramp.xds]{Deaths}}
 }
