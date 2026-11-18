@@ -95,18 +95,18 @@ NULL
 
 #' @title The skill set
 #'
-#' @inheritParams ramp.xds::setup_skillset_MY
+#' @inheritParams ramp.xds::get_skillset_MY
 #'
-#' @return an **`xds`** model object
+#' @return the **MY** module skill set, as a list
 #'
 #' @keywords internal
 #' @export
-setup_skillset_MY.SEI = function(xds_obj, s){
+get_skillset_MY.SEI = function(xds_obj, s){
   skills = list(
+    delay = FALSE,
     not_implemented = TRUE
   )
-  xds_obj$MY_obj[[s]]$skill_set = skills
-  return(xds_obj)
+  return(skills)
 }
 
 #' Run a check before solving
@@ -196,6 +196,7 @@ setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)

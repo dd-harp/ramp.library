@@ -21,6 +21,7 @@ make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
 #' @export
 setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
   xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
   xds_obj
 }
@@ -193,13 +194,12 @@ F_eggs.newMYname <- function(t, y, xds_obj, s) {
 }
 
 ## ----eval=TRUE, purl=TRUE-----------------------------------------------------
-#' @title Set up newMYname skill set
-#' @inheritParams ramp.xds::setup_skillset_MY
-#' @return an **`xds`** model object
+#' @title Get newMYname skill set
+#' @inheritParams ramp.xds::get_skillset_MY
+#' @return the **MY** module skill set, as a list
 #' @export
-setup_skillset_MY.newMYname <- function(xds_obj, s) {
-  xds_obj$MY_obj[[s]]$skill_set <- list()
-  xds_obj
+get_skillset_MY.newMYname <- function(xds_obj, s) {
+  list(delay=FALSE)
 }
 
 #' @title Check newMYname setup

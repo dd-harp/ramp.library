@@ -492,7 +492,7 @@ ports in <code>make_XH_obj</code>.</p></li>
 <li><p>If the module supports mass drug administration or mass screen
 and treat, include the corresponding treatment terms in its state
 updates and record that capability in
-<code>setup_skillset_XH.newXHname</code>.</p></li>
+<code>get_skillset_XH.newXHname</code>.</p></li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Make a `newXHname` **XH** model object</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @param nStrata is the number of population strata</span></span>
@@ -529,7 +529,7 @@ the setup sequence used by existing modules.</p>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XHname <span class="ot">=</span> <span class="st">&quot;newXHname&quot;</span></span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]] <span class="ot">=</span> <span class="fu">make_XH_obj_newXHname</span>(xds_obj<span class="sc">$</span>nStrata[i], options)</span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_XH_inits</span>(xds_obj, <span class="at">options=</span>options, <span class="at">i=</span>i)</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_skillset_XH</span>(xds_obj, i)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">get_skillset_XH</span>(xds_obj, i)</span>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_blood_search_weights</span>(<span class="st">&quot;setup&quot;</span>, xds_obj, <span class="at">i=</span>i)</span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_timespent</span>(<span class="st">&quot;setup&quot;</span>, xds_obj, <span class="fu">list</span>(<span class="at">residence=</span>residence), i)</span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_mass_treatment</span>(xds_obj, <span class="at">i=</span>i)</span>
@@ -810,20 +810,21 @@ infectiousness.</p>
 <div id="internal-consistency" class="section level2">
 <h2>Internal Consistency</h2>
 <p>Every model provides a skill-set method and a check method. The
-former records supported capabilities; the latter can check or update
-the model before solving.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co">#&#39; @title Set the skill set for `newXHname` (**XH**)</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_skillset_XH</span></span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** object</span></span>
+former returns supported capabilities as a list; setup stores that list
+on the module object. The latter can check or update the model before
+solving.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co">#&#39; @title Get the skill set for `newXHname` (**XH**)</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_skillset_XH</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&#39; @return the **XH** module skill set, as a list</span></span>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>setup_skillset_XH.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {</span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  xds_obj<span class="sc">$</span>XH_obj[[i]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>    <span class="at">demography=</span><span class="cn">TRUE</span>,</span>
-<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>    <span class="at">prevalence=</span><span class="cn">TRUE</span>,</span>
-<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>    <span class="at">malaria=</span><span class="cn">TRUE</span>,</span>
-<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>    <span class="at">diagnostics=</span><span class="st">&quot;linear&quot;</span></span>
-<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>  )</span>
-<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  xds_obj</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>get_skillset_XH.newXHname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, i) {</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>    <span class="at">delay=</span><span class="cn">FALSE</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>    <span class="at">demography=</span><span class="cn">TRUE</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>    <span class="at">prevalence=</span><span class="cn">TRUE</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>    <span class="at">malaria=</span><span class="cn">TRUE</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>    <span class="at">diagnostics=</span><span class="st">&quot;linear&quot;</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  )</span>
 <span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>}</span>
 <span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a></span>
 <span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&#39; @title Check `newXHname` before solving</span></span>

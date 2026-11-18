@@ -70,18 +70,18 @@ NULL
 #' @description The **L** skill set is a list of
 #' a module's capabilities
 #'
-#' @inheritParams ramp.xds::setup_skillset_L
+#' @inheritParams ramp.xds::get_skillset_L
 #'
-#' @return an **`xds`** model object
+#' @return the **L** module skill set, as a list
 #'
 #' @keywords internal
 #' @export
-setup_skillset_L.stages = function(xds_obj, s){
+get_skillset_L.stages = function(xds_obj, s){
   skills = list(
+    delay = FALSE,
     not_implemented = TRUE
   )
-  xds_obj$L_obj[[s]]$skill_set = skills
-  return(xds_obj)
+  return(skills)
 }
 
 #' @title Check the `stages` module
@@ -262,6 +262,7 @@ setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
   L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
   class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
   xds_obj$L_obj[[s]] = L_obj
+  xds_obj$L_obj[[s]]$skill_set <- get_skillset_L(xds_obj, s)
   xds_obj <- setup_L_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_habitat_search_weights("setup", xds_obj, list(membership=membership), s=s)
   return(xds_obj)

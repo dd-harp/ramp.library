@@ -92,15 +92,16 @@ NULL
 #'
 #' @note This method dispatches on `class(xds_obj$XH_obj)`
 #'
-#' @inheritParams ramp.xds::setup_skillset_XH
+#' @inheritParams ramp.xds::get_skillset_XH
 #'
-#' @return an **`xds`** model object
+#' @return the **XH** module skill set, as a list
 #' @keywords internal
 #'
 #' @seealso [SEISd]
 #' @export
-setup_skillset_XH.SEISd = function(xds_obj,i){
+get_skillset_XH.SEISd = function(xds_obj,i){
   skills =   list(
+    delay       = TRUE,
     demography  = TRUE,
     prevalence  = TRUE,
     malaria     = TRUE,
@@ -108,8 +109,7 @@ setup_skillset_XH.SEISd = function(xds_obj,i){
     mda         = TRUE,
     msat        = TRUE
   )
-  xds_obj$XH_obj[[i]]$skill_set = skills
-  return(xds_obj)
+  return(skills)
 }
 
 #' Run checks before solving (**XH**)
@@ -179,11 +179,10 @@ dXHdt.SEISd <- function(t, y, xds_obj, i) {
 #' @keywords internal
 #' @export
 setup_XH_obj.SEISd = function(XHname, residence, xds_obj, options=list(), i=1){
-  xds_obj = ode_to_dde(xds_obj)
   xds_obj$XHname = "SEISd"
   xds_obj$XH_obj[[i]] = make_XH_obj_SEISd(xds_obj$nStrata[1], options)
   xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_demog_obj(xds_obj, i)

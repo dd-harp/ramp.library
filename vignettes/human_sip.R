@@ -21,7 +21,7 @@ H <- c(100, 500, 250)
 nPatches <- 3
 residence <- 1:3 
 membership=1
-params <- make_xds_object_template("ode", "human", nPatches, membership, residence) 
+params <- make_xds_object_template("xde", "human", nPatches, membership, residence)
 
 ## -----------------------------------------------------------------------------
 b <- 0.5
