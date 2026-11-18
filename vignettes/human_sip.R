@@ -48,8 +48,8 @@ MYo = list(
 )
 
 ## -----------------------------------------------------------------------------
-params = setup_MY_obj("trivial", params, options=MYo, s=1)
-params = setup_L_obj("trivial", membership, params, s=1)
+params = setup_MY_obj("trivialMY", params, options=MYo, s=1)
+params = setup_L_obj("trivialL", membership, params, s=1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)

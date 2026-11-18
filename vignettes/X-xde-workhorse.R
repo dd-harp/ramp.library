@@ -13,7 +13,7 @@ library(ramp.library)
 #  wh <- xds_setup(dlay = 'dde',
 #                  XHname = "workhorse",
 #                  HPop=1000,
-#                  Lname = "trivial",
+#                  Lname = "trivialL",
 #                  Lopts = list(
 #                    Lambda = 3000,
 #                    season = function(t){1+sin(2*pi*t/365)}

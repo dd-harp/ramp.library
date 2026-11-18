@@ -64,7 +64,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   foi <- b*eir
 
   params <- xds_setup(MYname = "macdonald", MYoptions = MYo,
-                      Lname = "trivial", XHoptions = Xo,
+                      Lname = "trivialL", XHoptions = Xo,
                       XHname = "SIP",
                       TSoptions = list(name = TaR), Koptions=K_matrix,
                       HPop=H, membership=membership,
