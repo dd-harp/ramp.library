@@ -211,6 +211,7 @@ corresponding <code>ramp.xds</code> helpers.</p>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">setup_MY_obj.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">MYname</span>, <span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span>, <span class="va">options</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">skill_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_skillset_MY.html" class="external-link">get_skillset_MY</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
 <span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_inits.html" class="external-link">setup_MY_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, options <span class="op">=</span> <span class="va">options</span>, s <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span>
 <span>  <span class="va">xds_obj</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -457,18 +458,17 @@ among habitats.</li>
 <div class="section level2">
 <h2 id="skill-set-and-checks">Skill set and checks<a class="anchor" aria-label="anchor" href="#skill-set-and-checks"></a>
 </h2>
-<p>Implement <code>setup_skillset_MY.newMYname</code> to record the
-module’s capabilities and limitations. Implement
-<code>check_MY.newMYname</code> for model-specific setup checks that
-should run before solving.</p>
+<p>Implement <code>get_skillset_MY.newMYname</code> to return the
+module’s capabilities and limitations as a list. Store this list on the
+module object during setup. Implement <code>check_MY.newMYname</code>
+for model-specific setup checks that should run before solving.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Set up newMYname skill set</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_skillset_MY</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
+<code class="sourceCode R"><span><span class="co">#' @title Get newMYname skill set</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_skillset_MY</span></span>
+<span><span class="co">#' @return the **MY** module skill set, as a list</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">setup_skillset_MY.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">skill_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span></span>
+<span><span class="va">get_skillset_MY.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>delay<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' @title Check newMYname setup</span></span>
