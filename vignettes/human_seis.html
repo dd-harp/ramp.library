@@ -383,31 +383,29 @@ by the force of infection, denoted <span class="math inline">\(h(t)\)</span>, wh
 = F_h(E);\)</span> here, we assume that exposure is Poisson, so we
 let:</p>
 <p><span class="math display">\[h = bE\]</span></p>
-<p><span class="math display">\[
-\frac{dS}{dt} = - h S + r I \\
+<p><span class="math display">\[\frac{dS}{dt} = - h S + r I \\
 \frac{dE}{dt} = h S - \nu E \\
 \frac{dI}{dt} = \nu E - r I\\
 \]</span></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>HPop <span class="ot">=</span> <span class="dv">1000</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>MYo <span class="ot">=</span> <span class="fu">list</span>(<span class="at">Z =</span> <span class="dv">2000</span><span class="sc">/</span><span class="dv">365</span>, <span class="at">f=</span><span class="dv">1</span>, <span class="at">q=</span><span class="dv">1</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>Xo <span class="ot">=</span> <span class="fu">list</span>(<span class="at">b=</span> <span class="fl">0.5</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>seis <span class="ot">=</span> <span class="fu">xds_setup</span>(<span class="at">XHname =</span> <span class="st">&quot;SEIS&quot;</span>, <span class="at">MYname =</span> <span class="st">&quot;trivial&quot;</span>, <span class="at">MYoptions =</span> MYo, <span class="at">XHoptions=</span>Xo, <span class="at">HPop=</span>HPop)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>seis <span class="ot">=</span> <span class="fu">xds_setup</span>(<span class="at">XHname =</span> <span class="st">&quot;SEIS&quot;</span>, <span class="at">MYname =</span> <span class="st">&quot;trivialMY&quot;</span>, <span class="at">MYoptions =</span> MYo, <span class="at">XHoptions=</span>Xo, <span class="at">HPop=</span>HPop)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>seis <span class="ot">=</span> <span class="fu">xds_solve</span>(seis, <span class="dv">3650</span>, <span class="dv">15</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">get_XH_vars</span>(seis<span class="sc">$</span>outputs<span class="sc">$</span>last_y, seis, <span class="dv">1</span>)) <span class="ot">-&gt;</span> seis_inf</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>seis_inf</span></code></pre></div>
 <pre><code>##          S          E          I          H 
 ##  652.95170   25.04472  322.00358 1000.00000</code></pre>
 <p>This model has the steady state…</p>
-<p><span class="math display">\[
-\bar E = H \frac {hr}{h(r+\nu) + r \nu} \\
+<p><span class="math display">\[\bar E = H \frac {hr}{h(r+\nu) + r \nu}
+\\
 \bar I = H \frac {h\nu}{h(r+\nu) + r \nu} \\
-\bar S = H - \bar E - \bar I
-\]</span></p>
+\bar S = H - \bar E - \bar I\]</span></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">steady_state_X</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">365</span>, <span class="dv">1000</span>, seis, <span class="dv">1</span>) <span class="ot">-&gt;</span> seis_ss</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>seis_ss</span></code></pre></div>
 <pre><code>##          S          E          I          H 
 ##  652.95170   25.04472  322.00358 1000.00000</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">sum</span>((seis_inf<span class="sc">-</span>seis_ss)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="fl">1e-9</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">sum</span>((seis_inf<span class="sc">-</span>seis_ss)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">9</span></span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 </div>
 <div id="compartment-model-as-an-dde" class="section level3">
@@ -415,18 +413,15 @@ let:</p>
 <p>In the delay differential equation model, we let <span class="math inline">\(\nu\)</span> denote the duration of the incubation
 period, and we let <span class="math inline">\(h_\nu =
 h(t-\nu).\)</span></p>
-<p><span class="math display">\[
-\frac{dS}{dt} = - h S + r I \\
+<p><span class="math display">\[\frac{dS}{dt} = - h S + r I \\
 \frac{dE}{dt} = h S - h_\nu S_\nu \\
 \frac{dI}{dt} = h_\nu S_\nu - r I\\
 \]</span> and <span class="math inline">\(H = S+E+I.\)</span> At steady
 state, <span class="math inline">\(h=h_{v}\)</span>, so</p>
-<p><span class="math display">\[
-\bar S = \frac{H}{1+h \nu + h/r} \\
+<p><span class="math display">\[\bar S = \frac{H}{1+h \nu + h/r} \\
 \bar E = h \bar S \nu \\
-\bar I = \frac hr \bar S \\
-\]</span></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>SEISd <span class="ot">=</span> <span class="fu">xds_setup</span>(<span class="at">XHname =</span> <span class="st">&quot;SEISd&quot;</span>, <span class="at">MYname =</span> <span class="st">&quot;trivial&quot;</span>, <span class="at">MYoptions =</span> MYo, <span class="at">XHoptions=</span>Xo, <span class="at">HPop=</span>HPop)</span>
+\bar I = \frac hr \bar S \\ \]</span></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>SEISd <span class="ot">=</span> <span class="fu">xds_setup</span>(<span class="at">XHname =</span> <span class="st">&quot;SEISd&quot;</span>, <span class="at">MYname =</span> <span class="st">&quot;trivialMY&quot;</span>, <span class="at">MYoptions =</span> MYo, <span class="at">XHoptions=</span>Xo, <span class="at">HPop=</span>HPop)</span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>SEISd <span class="ot">=</span> <span class="fu">xds_solve</span>(SEISd, <span class="at">Tmax =</span> <span class="dv">3650</span>, <span class="at">dt=</span><span class="dv">15</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">get_XH_vars</span>(SEISd<span class="sc">$</span>outputs<span class="sc">$</span>last_y, SEISd, <span class="dv">1</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">-&gt;</span> seisd_inf</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>seisd_inf</span></code></pre></div>
@@ -436,7 +431,7 @@ state, <span class="math inline">\(h=h_{v}\)</span>, so</p>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>seisd_ss</span></code></pre></div>
 <pre><code>##          S          E          I          H 
 ##  652.95170   25.04472  322.00358 1000.00000</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">sum</span>((seisd_inf<span class="sc">-</span>seisd_ss)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="fl">1e-5</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">sum</span>((seisd_inf<span class="sc">-</span>seisd_ss)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">5</span></span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 </div>
 </div>

@@ -21,7 +21,7 @@ H <- c(100, 500, 250)
 nPatches <- 3
 residence <- 1:3 
 membership=1
-params <- make_xds_object_template("ode", "human", nPatches, membership, residence) 
+params <- make_xds_object_template("xde", "human", nPatches, membership, residence)
 
 ## -----------------------------------------------------------------------------
 b <- 0.5
@@ -48,8 +48,8 @@ MYo = list(
 )
 
 ## -----------------------------------------------------------------------------
-params = setup_MY_obj("trivial", params, options=MYo, s=1)
-params = setup_L_obj("trivial", membership, params, s=1)
+params = setup_MY_obj("trivialMY", params, options=MYo, s=1)
+params = setup_L_obj("trivialL", membership, params, s=1)
 
 ## -----------------------------------------------------------------------------
 params = make_indices(params)

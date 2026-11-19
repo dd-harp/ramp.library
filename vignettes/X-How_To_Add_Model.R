@@ -93,7 +93,7 @@ setup_XH_obj.newXHname = function(XHname, residence, xds_obj, options=list(), i=
   xds_obj$XHname = "newXHname"
   xds_obj$XH_obj[[i]] = make_XH_obj_newXHname(xds_obj$nStrata[i], options)
   xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
@@ -297,18 +297,18 @@ get_HTC.newXHname <- function(xds_obj, i) {
 }
 
 ## -----------------------------------------------------------------------------
-#' @title Set the skill set for `newXHname` (**XH**)
-#' @inheritParams ramp.xds::setup_skillset_XH
-#' @return an **`xds`** object
+#' @title Get the skill set for `newXHname` (**XH**)
+#' @inheritParams ramp.xds::get_skillset_XH
+#' @return the **XH** module skill set, as a list
 #' @export
-setup_skillset_XH.newXHname <- function(xds_obj, i) {
-  xds_obj$XH_obj[[i]]$skill_set <- list(
+get_skillset_XH.newXHname <- function(xds_obj, i) {
+  list(
+    delay=FALSE,
     demography=TRUE,
     prevalence=TRUE,
     malaria=TRUE,
     diagnostics="linear"
   )
-  xds_obj
 }
 
 #' @title Check `newXHname` before solving

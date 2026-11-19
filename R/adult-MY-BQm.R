@@ -105,18 +105,18 @@ dMYdt.BQm <- function(t, y, xds_obj, s){
 
 #' @title The skill set
 #'
-#' @inheritParams ramp.xds::setup_skillset_MY
+#' @inheritParams ramp.xds::get_skillset_MY
 #'
-#' @return an **`xds`** model object
+#' @return the **MY** module skill set, as a list
 #'
 #' @keywords internal
 #' @export
-setup_skillset_MY.BQm = function(xds_obj, s){
+get_skillset_MY.BQm = function(xds_obj, s){
   skills = list(
+    delay = FALSE,
     not_implemented = TRUE
   )
-  xds_obj$MY_obj[[s]]$skill_set = skills
-  return(xds_obj)
+  return(skills)
 }
 
 #' Run a check before solving
@@ -252,7 +252,7 @@ setup_MY_obj.BQm = function(MYname, xds_obj, options=list(), s=1){
   xds_obj$MYname <- "BQm"
   xds_obj$MY_obj[[s]] = make_MY_obj_BQm(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
-  xds_obj <- setup_skillset_MY(xds_obj, s)
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
   xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)

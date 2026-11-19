@@ -397,7 +397,7 @@ fully worked example</a> to run a full simulation.</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>nPatches <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>residence <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>membership<span class="ot">=</span><span class="dv">1</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">make_xds_object_template</span>(<span class="st">&quot;ode&quot;</span>, <span class="st">&quot;human&quot;</span>, nPatches, membership, residence) </span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">make_xds_object_template</span>(<span class="st">&quot;xde&quot;</span>, <span class="st">&quot;human&quot;</span>, nPatches, membership, residence)</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fl">0.15</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">200</span></span>
@@ -414,8 +414,8 @@ fully worked example</a> to run a full simulation.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>MYo <span class="ot">=</span> <span class="fu">list</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">Z =</span> eir<span class="sc">*</span>H, <span class="at">f=</span><span class="dv">1</span>, <span class="at">q=</span><span class="dv">1</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">setup_MY_obj</span>(<span class="st">&quot;trivial&quot;</span>, params, <span class="at">options=</span>MYo, <span class="at">s=</span><span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">setup_L_obj</span>(<span class="st">&quot;trivial&quot;</span>, membership, params, <span class="at">s=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">setup_MY_obj</span>(<span class="st">&quot;trivialMY&quot;</span>, params, <span class="at">options=</span>MYo, <span class="at">s=</span><span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">setup_L_obj</span>(<span class="st">&quot;trivialL&quot;</span>, membership, params, <span class="at">s=</span><span class="dv">1</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">make_indices</span>(params)</span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">steady_state_X</span>(eir<span class="sc">*</span>b, H, params, <span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; $H</span></span>

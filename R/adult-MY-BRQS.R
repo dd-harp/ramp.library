@@ -96,18 +96,18 @@ NULL
 
 #' @title The skill set
 #'
-#' @inheritParams ramp.xds::setup_skillset_MY
+#' @inheritParams ramp.xds::get_skillset_MY
 #'
-#' @return an **`xds`** model object
+#' @return the **MY** module skill set, as a list
 #'
 #' @keywords internal
 #' @export
-setup_skillset_MY.BRQS = function(xds_obj, s){
+get_skillset_MY.BRQS = function(xds_obj, s){
   skills = list(
+    delay = FALSE,
     not_implemented = TRUE
   )
-  xds_obj$MY_obj[[s]]$skill_set = skills
-  return(xds_obj)
+  return(skills)
 }
 
 #' @title Compute derivatives for `BRQS` (**MY**)
@@ -305,7 +305,7 @@ setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
   xds_obj$MYname <- "BRQS"
   xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
-  xds_obj <- setup_skillset_MY(xds_obj, s)
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
   xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Ks"), s=s)

@@ -141,7 +141,7 @@ Update_XHt.newXHname <- function(t, y, xds_obj, i) {
 + In the following, replace `p1` with the first parameter, `p2` with the second, and so on.
 
 + Shared demographic and mass-treatment features are initialized by `setup_XH_obj` using the `ramp.xds` setup functions; do not create a separate demographic matrix or replace these ports in `make_XH_obj`.
-+ If the module supports mass drug administration or mass screen and treat, include the corresponding treatment terms in its state updates and record that capability in `setup_skillset_XH.newXHname`.
++ If the module supports mass drug administration or mass screen and treat, include the corresponding treatment terms in its state updates and record that capability in `get_skillset_XH.newXHname`.
 
 ```{r}
 #' @title Make a `newXHname` **XH** model object
@@ -182,7 +182,7 @@ setup_XH_obj.newXHname = function(XHname, residence, xds_obj, options=list(), i=
   xds_obj$XHname = "newXHname"
   xds_obj$XH_obj[[i]] = make_XH_obj_newXHname(xds_obj$nStrata[i], options)
   xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj <- setup_skillset_XH(xds_obj, i)
+  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
   xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
   xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
   xds_obj <- setup_mass_treatment(xds_obj, i=i)
@@ -482,21 +482,21 @@ get_HTC.newXHname <- function(xds_obj, i) {
 
 ## Internal Consistency
 
-Every model provides a skill-set method and a check method. The former records supported capabilities; the latter can check or update the model before solving.
+Every model provides a skill-set method and a check method. The former returns supported capabilities as a list; setup stores that list on the module object. The latter can check or update the model before solving.
 
 ```{r}
-#' @title Set the skill set for `newXHname` (**XH**)
-#' @inheritParams ramp.xds::setup_skillset_XH
-#' @return an **`xds`** object
+#' @title Get the skill set for `newXHname` (**XH**)
+#' @inheritParams ramp.xds::get_skillset_XH
+#' @return the **XH** module skill set, as a list
 #' @export
-setup_skillset_XH.newXHname <- function(xds_obj, i) {
-  xds_obj$XH_obj[[i]]$skill_set <- list(
+get_skillset_XH.newXHname <- function(xds_obj, i) {
+  list(
+    delay=FALSE,
     demography=TRUE,
     prevalence=TRUE,
     malaria=TRUE,
     diagnostics="linear"
   )
-  xds_obj
 }
 
 #' @title Check `newXHname` before solving

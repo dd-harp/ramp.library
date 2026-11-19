@@ -416,9 +416,10 @@ corresponding <code>ramp.xds</code> helpers.</p>
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
 <span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>setup_MY_obj.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(MYname, xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
 <span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]] <span class="ot">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  xds_obj</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">get_skillset_MY</span>(xds_obj, s)</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  xds_obj</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>}</span></code></pre></div>
 <div id="state-variable-indices" class="section level3">
 <h3>State-variable indices</h3>
 <p><code>setup_MY_ix.newMYname</code> assigns a contiguous index range
@@ -646,26 +647,25 @@ among habitats.</li>
 </div>
 <div id="skill-set-and-checks" class="section level2">
 <h2>Skill set and checks</h2>
-<p>Implement <code>setup_skillset_MY.newMYname</code> to record the
-module’s capabilities and limitations. Implement
-<code>check_MY.newMYname</code> for model-specific setup checks that
-should run before solving.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Set up newMYname skill set</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_skillset_MY</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<p>Implement <code>get_skillset_MY.newMYname</code> to return the
+module’s capabilities and limitations as a list. Store this list on the
+module object during setup. Implement <code>check_MY.newMYname</code>
+for model-specific setup checks that should run before solving.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Get newMYname skill set</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_skillset_MY</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @return the **MY** module skill set, as a list</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>setup_skillset_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  xds_obj</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>}</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&#39; @title Check newMYname setup</span></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_MY</span></span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>check_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  xds_obj</span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>get_skillset_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">delay=</span><span class="cn">FALSE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&#39; @title Check newMYname setup</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_MY</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>check_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  xds_obj</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="optional-methods-and-tests" class="section level2">
 <h2>Optional methods and tests</h2>
