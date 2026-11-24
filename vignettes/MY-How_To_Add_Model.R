@@ -205,7 +205,6 @@ make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
 #' @description Set up a `newMYname` module object for the **MY** component
 #' and the \eqn{s^{th}} vector species.
 #' + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.
-#' + Set the skill set using [ramp.xds::get_skillset_MY].
 #' + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.
 #' + Return the updated **`xds`** model object.
 #' @note The module object is stored at `xds_obj$MY_obj[[s]]`.
@@ -214,7 +213,6 @@ make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
 #' @export
 setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
   xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
-  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
   xds_obj
 }

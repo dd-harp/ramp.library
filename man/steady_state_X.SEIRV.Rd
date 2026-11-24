@@ -27,3 +27,4 @@ Compute steady states given daily FoI \code{foi} and fixed host density \code{H}
 \note{
 Delegate to \link{steady_state_X_SEIRV}, which dispatches on \code{xds_obj$xds}.
 }
+\keyword{internal}

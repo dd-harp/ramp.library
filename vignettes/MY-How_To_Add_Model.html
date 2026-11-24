@@ -408,16 +408,17 @@ order.</li>
 <code>@note</code>. Describe generic dispatch on the generic rather than
 repeating it on methods.</li>
 <li>List setup actions in code order, including the constructor with
-<code>nPatches</code> and <code>options</code>, skill set, initial
-values, and any shared ports. End with “Return the updated
+<code>nPatches</code> and <code>options</code>, initial values, and any
+shared ports. End with “Return the updated
 <strong><code>xds</code></strong> model object.”</li>
 <li>Use method-specific helper links for circadian and dispersal
 initialization, qualified with <code>ramp.xds::</code>, and end complete
 bullets with periods. Only list interfaces the method actually sets
 up.</li>
-<li>Describe skill sets as capabilities and compatibilities, and
-explicitly include <code>dts = FALSE</code> when no discrete-time update
-method is defined.</li>
+<li>Describe skill sets as capabilities and compatibilities returned on
+demand by <code>get_skillset_MY</code>; do not store them on the module
+object. Explicitly include <code>dts = FALSE</code> when no
+discrete-time update method is defined.</li>
 <li>Document any checks actually performed. A no-op check returns the
 model unchanged; it does not validate the setup.</li>
 </ul>
@@ -775,19 +776,17 @@ corresponding <code>ramp.xds</code> helpers.</p>
 <span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&#39; @description Set up a `newMYname` module object for the **MY** component</span></span>
 <span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&#39; and the \eqn{s^{th}} vector species.</span></span>
 <span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&#39; + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.</span></span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&#39; + Set the skill set using [ramp.xds::get_skillset_MY].</span></span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&#39; + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.</span></span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&#39; + Return the updated **`xds`** model object.</span></span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&#39; @note The module object is stored at `xds_obj$MY_obj[[s]]`.</span></span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_obj</span></span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>setup_MY_obj.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(MYname, xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]] <span class="ot">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">get_skillset_MY</span>(xds_obj, s)</span>
-<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
-<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>  xds_obj</span>
-<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&#39; + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&#39; + Return the updated **`xds`** model object.</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&#39; @note The module object is stored at `xds_obj$MY_obj[[s]]`.</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_obj</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>setup_MY_obj.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(MYname, xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]] <span class="ot">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>  xds_obj</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
@@ -1019,9 +1018,10 @@ output-processing pipeline stores them at
 <div id="checks-and-skill-set" class="section level2">
 <h2>Checks and skill set</h2>
 <p>Implement <code>get_skillset_MY.newMYname</code> to return the
-module’s capabilities and limitations as a list. Store this list on the
-module object during setup. Implement <code>check_MY.newMYname</code>
-for model-specific setup checks that should run before solving.</p>
+module’s capabilities and limitations as a list when queried. Do not
+store it on the module object during setup. Implement
+<code>check_MY.newMYname</code> for model-specific setup checks that
+should run before solving.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Check `newMYname` (**MY**)</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Return the model unchanged; no checks are implemented in this template.</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_MY</span></span>

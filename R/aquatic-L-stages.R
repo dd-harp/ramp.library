@@ -296,7 +296,6 @@ setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
   L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
   class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
   xds_obj$L_obj[[s]] = L_obj
-  xds_obj$L_obj[[s]]$skill_set <- get_skillset_L(xds_obj, s)
   xds_obj <- setup_L_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_habitat_search_weights("setup", xds_obj, list(membership=membership), s=s)
   return(xds_obj)

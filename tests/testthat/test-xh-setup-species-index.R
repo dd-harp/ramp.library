@@ -1,27 +1,15 @@
 testthat::test_that("XH setup passes the selected host's stratum count to its constructor", {
-  modules <- c(
-    SEIR = "host-xde-SEIR.R",
-    SEIRV = "host-xde-SEIRV.R",
-    SIR = "host-xde-SIR.R",
-    SIRS = "host-xde-SIRS.R",
-    SEIS = "human-XH-SEIS.R",
-    SEISd = "human-XH-SEISd.R",
-    SIP = "malaria-XH-SIP.R",
-    SIPd = "malaria-XH-SIPd.R",
-    garki = "malaria-garki.R"
-  )
+  modules <- c("SEIR", "SEIRV", "SIR", "SIRS", "SEIS", "SEISd",
+               "SIP", "SIPd", "garki")
 
-  for (module in names(modules)) {
+  for (module in modules) {
     method_name <- paste0("setup_XH_obj.", module)
-    expressions <- parse(testthat::test_path("..", "..", "R", modules[[module]]))
-    definition <- Filter(function(expr) {
-      is.call(expr) &&
-        as.character(expr[[1]])[1] %in% c("<-", "=") &&
-        identical(expr[[2]], as.name(method_name))
-    }, expressions)
-    testthat::expect_length(definition, 1L)
+    method <- getFromNamespace(method_name, "ramp.library")
     env <- new.env(parent = baseenv())
-    eval(definition[[1]], env)
+    env[[method_name]] <- eval(
+      call("function", formals(method), body(method)),
+      envir = env
+    )
 
     # Isolate constructor arguments from unrelated interface setup.
     env[[paste0("make_XH_obj_", module)]] <- function(nStrata, options) {
@@ -49,6 +37,8 @@ testthat::test_that("XH setup passes the selected host's stratum count to its co
                                 info = paste(module, i))
       testthat::expect_identical(result$XH_obj[[i]]$options, options,
                                 info = paste(module, i))
+      testthat::expect_false("skill_set" %in% names(result$XH_obj[[i]]),
+                            info = paste(module, i))
       testthat::expect_identical(result$XH_obj[[3L - i]], model$XH_obj[[3L - i]],
                                 info = paste(module, i))
     }

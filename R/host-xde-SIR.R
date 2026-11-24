@@ -513,6 +513,7 @@ get_skillset_XH.SIR = function(xds_obj,i){
 #' @note Delegate to [steady_state_X_SIR], which dispatches on `xds_obj$xds`.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return a named [numeric] vector containing `S`, `I`, and `R`
+#' @keywords internal
 #' @export
 steady_state_X.SIR = function(foi, H, xds_obj, i=1){
   steady_state_X_SIR(foi, H, xds_obj, i)

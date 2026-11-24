@@ -601,6 +601,7 @@ get_skillset_XH.SIPd = function(xds_obj,i){
 #' @inheritParams ramp.xds::steady_state_X
 #' @return a named [list] for `xde` or a named [numeric] vector for `dts`,
 #' each containing `S`, `I`, and `P`
+#' @keywords internal
 #' @export
 steady_state_X.SIPd = function(foi, H, xds_obj, i=1){
   steady_state_X_SIPd(foi, H, xds_obj, i)

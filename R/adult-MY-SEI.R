@@ -31,7 +31,7 @@
 #'   \item{`f`}{blood feeding rate --- use [ramp.xds::setup_f] or [ramp.xds::setup_blood_feeding_rates]}
 #'   \item{`q`}{human fraction --- use [ramp.xds::setup_q] or [ramp.xds::setup_human_fractions]}
 #'   \item{`g`}{mosquito mortality rate --- use [ramp.xds::setup_g] or [ramp.xds::setup_mosquito_mortality]}
-#'   \item{`sigma` or \eqn{\sigma}}{emigration rate --- use [ramp.xds::setup_sigma] or [ramp.xds::setup_emigration_rates]}
+#'   \item{`sigma` or \eqn{\sigma}}{emigration rate --- use [ramp.xds::setup_sigma] or [ramp.xds::setup_mosy_emigration]}
 #'   \item{`mu` or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use [ramp.xds::setup_mu] or [ramp.xds::setup_emigration_loss]}
 #'   \item{`K` or `K_matrix`}{mosquito dispersal matrix --- use [ramp.xds::setup_K_matrix]}
 #'   \item{`eip` or \eqn{\tau}}{extrinsic incubation period --- use [ramp.xds::setup_eip]}
@@ -426,7 +426,6 @@ setup_MY_obj.SEI = function(MYname, xds_obj, options=list(), s=1){
   MY_obj <- make_MY_obj_SEI(xds_obj$nPatches, options)
   class(MY_obj) <- c("SEI", paste("SEI_", xds_obj$xds, sep=""))
   xds_obj$MY_obj[[s]] <- MY_obj
-  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
   xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
   xds_obj <- setup_Omega_obj("xde", "static", xds_obj, s=s)

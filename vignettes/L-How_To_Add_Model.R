@@ -198,7 +198,6 @@ make_L_obj_newLname <- function(nHabitats, options = list(), p1 = 1, p2 = 1) {
 #' @description Set up a `newLname` module object for the **L** component
 #' and the \eqn{s^{th}} vector species.
 #' + Create the module object with [make_L_obj_newLname], passing `nHabitats` and `options`.
-#' + Set the skill set using [ramp.xds::get_skillset_L].
 #' + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.
 #' + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].
 #' + Return the updated **`xds`** model object.
@@ -212,7 +211,6 @@ setup_L_obj.newLname <- function(Lname, membership, xds_obj,
   L_obj <- make_L_obj_newLname(xds_obj$nHabitats, options)
   class(L_obj) <- c("newLname", paste0("newLname_", xds_obj$xds))
   xds_obj$L_obj[[s]] <- L_obj
-  xds_obj$L_obj[[s]]$skill_set <- ramp.xds::get_skillset_L(xds_obj, s)
   xds_obj <- ramp.xds::setup_L_inits(xds_obj, options = options, s = s)
   xds_obj <- ramp.xds::setup_habitat_search_weights(
     "setup", xds_obj, list(membership = membership), s = s

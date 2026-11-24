@@ -594,6 +594,7 @@ get_skillset_XH.SEIRV = function(xds_obj,i){
 #' @note Delegate to [steady_state_X_SEIRV], which dispatches on `xds_obj$xds`.
 #' @inheritParams ramp.xds::steady_state_X
 #' @return a named [numeric] vector containing `S`, `E`, `I`, `R`, and `V`
+#' @keywords internal
 #' @export
 steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
   steady_state_X_SEIRV(foi, H, xds_obj, i)

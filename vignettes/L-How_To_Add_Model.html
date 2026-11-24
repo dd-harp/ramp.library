@@ -407,16 +407,18 @@ any accessory variables and branches.</li>
 <code>@note</code>. Explain dispatch on the generic, not repeatedly on
 each method.</li>
 <li>List setup actions in implementation order: construction using
-<code>nHabitats</code> and <code>options</code>, skill set, initial
-values, habitat search weights, and return of the updated
+<code>nHabitats</code> and <code>options</code>, initial values, habitat
+search weights, and return of the updated
 <strong><code>xds</code></strong> model object.</li>
 <li>Describe the habitat step as “Initialize habitat search weights
 using <code>[ramp.xds::setup_habitat_search_weights.setup]</code>.” End
 complete bullets with periods and qualify links to shared helpers with
 <code>ramp.xds::</code>.</li>
-<li>Describe the skill set as capabilities and compatibilities. Include
-<code>dts = FALSE</code> if no discrete-time update method is defined;
-only advertise supported and tested solver pathways.</li>
+<li>Describe skill sets as capabilities and compatibilities returned on
+demand by <code>get_skillset_L</code>; do not store them on the module
+object. Include <code>dts = FALSE</code> if no discrete-time update
+method is defined; only advertise supported and tested solver
+pathways.</li>
 <li>State when a check method returns the model unchanged without
 checks.</li>
 </ul>
@@ -726,27 +728,25 @@ and configures habitat search weights using the supplied
 <span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&#39; @description Set up a `newLname` module object for the **L** component</span></span>
 <span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&#39; and the \eqn{s^{th}} vector species.</span></span>
 <span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&#39; + Create the module object with [make_L_obj_newLname], passing `nHabitats` and `options`.</span></span>
-<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&#39; + Set the skill set using [ramp.xds::get_skillset_L].</span></span>
-<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&#39; + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.</span></span>
-<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="co">#&#39; + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].</span></span>
-<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&#39; + Return the updated **`xds`** model object.</span></span>
-<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&#39; @note The module object is stored at `xds_obj$L_obj[[s]]`.</span></span>
-<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&#39; Its classes are `newLname` and `newLname_` followed by `xds_obj$xds`.</span></span>
-<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_obj</span></span>
-<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a>setup_L_obj.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(Lname, membership, xds_obj,</span>
-<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a>                                 <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
-<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a>  L_obj <span class="ot">&lt;-</span> <span class="fu">make_L_obj_newLname</span>(xds_obj<span class="sc">$</span>nHabitats, options)</span>
-<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a>  <span class="fu">class</span>(L_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newLname&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;newLname_&quot;</span>, xds_obj<span class="sc">$</span>xds))</span>
-<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]] <span class="ot">&lt;-</span> L_obj</span>
-<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">get_skillset_L</span>(xds_obj, s)</span>
-<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_L_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
-<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_habitat_search_weights</span>(</span>
-<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a>    <span class="st">&quot;setup&quot;</span>, xds_obj, <span class="fu">list</span>(<span class="at">membership =</span> membership), <span class="at">s =</span> s</span>
-<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a>  )</span>
-<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
-<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&#39; + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.</span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&#39; + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].</span></span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="co">#&#39; + Return the updated **`xds`** model object.</span></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&#39; @note The module object is stored at `xds_obj$L_obj[[s]]`.</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&#39; Its classes are `newLname` and `newLname_` followed by `xds_obj$xds`.</span></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_L_obj</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a>setup_L_obj.newLname <span class="ot">&lt;-</span> <span class="cf">function</span>(Lname, membership, xds_obj,</span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a>                                 <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a>  L_obj <span class="ot">&lt;-</span> <span class="fu">make_L_obj_newLname</span>(xds_obj<span class="sc">$</span>nHabitats, options)</span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a>  <span class="fu">class</span>(L_obj) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;newLname&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;newLname_&quot;</span>, xds_obj<span class="sc">$</span>xds))</span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a>  xds_obj<span class="sc">$</span>L_obj[[s]] <span class="ot">&lt;-</span> L_obj</span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_L_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">setup_habitat_search_weights</span>(</span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a>    <span class="st">&quot;setup&quot;</span>, xds_obj, <span class="fu">list</span>(<span class="at">membership =</span> membership), <span class="at">s =</span> s</span>
+<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a>  )</span>
+<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a>  <span class="fu">return</span>(xds_obj)</span>
+<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
@@ -963,12 +963,12 @@ output-processing pipeline stores them at
 </div>
 <div id="checks-and-skill-set" class="section level2">
 <h2>Checks and skill set</h2>
-<p>Setup stores the capabilities and compatibilities returned by
-<code>get_skillset_L.newLname</code> on the module object. Adapt the
-flags to the implemented solver pathways; the example advertises
-continuous-time support only. The check method below performs no checks.
-Add explicit checks when the module requires them, and describe those
-checks accurately.</p>
+<p><code>get_skillset_L.newLname</code> returns the module’s
+capabilities and compatibilities when queried; setup does not store them
+on the module object. Adapt the flags to the implemented solver
+pathways; the example advertises continuous-time support only. The check
+method below performs no checks. Add explicit checks when the module
+requires them, and describe those checks accurately.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Check `newLname` (**L**)</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Return the model unchanged; no checks are implemented in this template.</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_L</span></span>

@@ -587,6 +587,7 @@ get_skillset_XH.SEIS = function(xds_obj,i){
 #' @inheritParams ramp.xds::steady_state_X
 #' @return a named [numeric] vector containing `S`, `E`, and `I`; the `xde`
 #' method additionally returns `H`
+#' @keywords internal
 #' @export
 steady_state_X.SEIS = function(foi, H, xds_obj, i=1){
   steady_state_X_SEIS(foi, H, xds_obj, i)

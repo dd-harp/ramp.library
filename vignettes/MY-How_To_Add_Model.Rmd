@@ -71,12 +71,13 @@ These vignettes are the public style reference for both packages.
 - Keep storage, class assignments, and dispatch mechanics in `@note`.
   Describe generic dispatch on the generic rather than repeating it on methods.
 - List setup actions in code order, including the constructor with
-  `nPatches` and `options`, skill set, initial values, and any shared ports.
+  `nPatches` and `options`, initial values, and any shared ports.
   End with "Return the updated **`xds`** model object."
 - Use method-specific helper links for circadian and dispersal
   initialization, qualified with `ramp.xds::`, and end complete bullets
   with periods. Only list interfaces the method actually sets up.
-- Describe skill sets as capabilities and compatibilities, and explicitly
+- Describe skill sets as capabilities and compatibilities returned on demand
+  by `get_skillset_MY`; do not store them on the module object. Explicitly
   include `dts = FALSE` when no discrete-time update method is defined.
 - Document any checks actually performed. A no-op check returns the model
   unchanged; it does not validate the setup.
@@ -435,7 +436,6 @@ make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
 #' @description Set up a `newMYname` module object for the **MY** component
 #' and the \eqn{s^{th}} vector species.
 #' + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.
-#' + Set the skill set using [ramp.xds::get_skillset_MY].
 #' + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.
 #' + Return the updated **`xds`** model object.
 #' @note The module object is stored at `xds_obj$MY_obj[[s]]`.
@@ -444,7 +444,6 @@ make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
 #' @export
 setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
   xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
-  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
   xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
   xds_obj
 }
@@ -690,7 +689,8 @@ parse_MY_orbits.newMYname <- function(outputs, xds_obj, s) {
 ## Checks and skill set
 
 Implement `get_skillset_MY.newMYname` to return the module's capabilities
-and limitations as a list. Store this list on the module object during setup.
+and limitations as a list when queried. Do not store it on the module object
+during setup.
 Implement `check_MY.newMYname` for model-specific setup
 checks that should run before solving.
 

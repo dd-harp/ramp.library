@@ -72,12 +72,13 @@ These vignettes are the public style reference for both packages.
 - Keep storage, class assignments, and dispatch mechanics in `@note`.
   Explain dispatch on the generic, not repeatedly on each method.
 - List setup actions in implementation order: construction using
-  `nHabitats` and `options`, skill set, initial values, habitat search
-  weights, and return of the updated **`xds`** model object.
+  `nHabitats` and `options`, initial values, habitat search weights, and
+  return of the updated **`xds`** model object.
 - Describe the habitat step as "Initialize habitat search weights using
   `[ramp.xds::setup_habitat_search_weights.setup]`." End complete bullets
   with periods and qualify links to shared helpers with `ramp.xds::`.
-- Describe the skill set as capabilities and compatibilities. Include
+- Describe skill sets as capabilities and compatibilities returned on demand
+  by `get_skillset_L`; do not store them on the module object. Include
   `dts = FALSE` if no discrete-time update method is defined; only advertise
   supported and tested solver pathways.
 - State when a check method returns the model unchanged without checks.
@@ -400,7 +401,6 @@ make_L_obj_newLname <- function(nHabitats, options = list(), p1 = 1, p2 = 1) {
 #' @description Set up a `newLname` module object for the **L** component
 #' and the \eqn{s^{th}} vector species.
 #' + Create the module object with [make_L_obj_newLname], passing `nHabitats` and `options`.
-#' + Set the skill set using [ramp.xds::get_skillset_L].
 #' + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.
 #' + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].
 #' + Return the updated **`xds`** model object.
@@ -414,7 +414,6 @@ setup_L_obj.newLname <- function(Lname, membership, xds_obj,
   L_obj <- make_L_obj_newLname(xds_obj$nHabitats, options)
   class(L_obj) <- c("newLname", paste0("newLname_", xds_obj$xds))
   xds_obj$L_obj[[s]] <- L_obj
-  xds_obj$L_obj[[s]]$skill_set <- ramp.xds::get_skillset_L(xds_obj, s)
   xds_obj <- ramp.xds::setup_L_inits(xds_obj, options = options, s = s)
   xds_obj <- ramp.xds::setup_habitat_search_weights(
     "setup", xds_obj, list(membership = membership), s = s
@@ -643,11 +642,12 @@ parse_L_orbits.newLname <- function(outputs, xds_obj, s) {
 
 ## Checks and skill set
 
-Setup stores the capabilities and compatibilities returned by
-`get_skillset_L.newLname` on the module object. Adapt the flags to the
-implemented solver pathways; the example advertises continuous-time
-support only. The check method below performs no checks. Add explicit
-checks when the module requires them, and describe those checks accurately.
+`get_skillset_L.newLname` returns the module's capabilities and
+compatibilities when queried; setup does not store them on the module object.
+Adapt the flags to the implemented solver pathways; the example advertises
+continuous-time support only. The check method below performs no checks. Add
+explicit checks when the module requires them, and describe those checks
+accurately.
 
 ```{r, eval=TRUE, purl=TRUE}
 #' @title Check `newLname` (**L**)
