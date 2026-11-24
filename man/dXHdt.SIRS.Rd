@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{dXHdt.SIRS}
 \alias{dXHdt.SIRS}
-\title{Compute derivatives for \code{SIRS} (\strong{XH})}
+\title{Compute the derivatives for \code{SIRS} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIRS}(t, y, xds_obj, i)
 }
@@ -19,13 +19,21 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SIRS} model
+The derivatives for the \code{SIRS} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dI/dt &= hS-rI-\mathbf{D}(t,I) \\
+dR/dt &= rI-\gamma R-\mathbf{D}(t,R)
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{S=H-I-R},
+\eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

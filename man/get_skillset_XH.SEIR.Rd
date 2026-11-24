@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{get_skillset_XH.SEIR}
 \alias{get_skillset_XH.SEIR}
-\title{The \strong{XH} module skill set}
+\title{Get the skill set for \code{SEIR} (\strong{XH})}
 \usage{
 \method{get_skillset_XH}{SEIR}(xds_obj, i)
 }
@@ -15,11 +15,7 @@
 the \strong{XH} module skill set, as a list
 }
 \description{
-The \strong{XH} skill set is a list of
-a module's capabilities.
-}
-\note{
-This method dispatches on \code{class(xds_obj$XH_obj)}
+Return the capabilities and compatibilities of the \code{SEIR} module as a list.
 }
 \seealso{
 \link{SEIR}

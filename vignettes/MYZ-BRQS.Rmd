@@ -84,7 +84,7 @@ Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and
     
 + *Egg Laying Parameters* 
 
-    + $\nu$ is the egg laying rate; 
+    + $\nu$ is the oviposition rate: the number of egg batches laid in each patch, per mosquito, per day;
 
     + $\theta$ is rate gravid mosquitoes resorb their eggs, reverting to a blood feeding state; while we do not explicitly model opportunistic sugar feeding while laying eggs, we assume mosquitoes would remain in the egg laying state if sugar was readily available, so $\theta$ could be described using a functional response to available sugar 
 

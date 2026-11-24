@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{Update_XHt.SIPd}
 \alias{Update_XHt.SIPd}
-\title{Derivatives for human population}
+\title{Update states for \code{SIPd} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SIPd}(t, y, xds_obj, i)
 }

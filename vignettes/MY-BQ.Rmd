@@ -63,7 +63,7 @@ Two parameters describe the behavioral state transitions:
 
 + $f$ - the blood feeding rate(s) 
 
-+ $\nu$ - the egg laying rate(s) 
++ $\nu$ - the oviposition rate: the number of egg batches laid in each patch, per mosquito, per day
 
 In these models, patterns can emerge as mosquitoes respond to the availability of resources. Both parameters are thus implemented as *ports:* the default implementation is a model with no forcing, but the parameters could also be a function of resource availability, weather, or something else. In these models, the parameters affecting mosquito survival and dispersal. To compute these, we formulate demographic matrices for each behavioral state that are, potentially, site-specific: $\Omega_b$ and $\Omega_q.$ 
 
@@ -205,6 +205,5 @@ xds_plot_Z(model, add = T)
 xds_plot_Y_fracs(model)
 xds_plot_Z_fracs(model, add=T)
 ```
-
 
 

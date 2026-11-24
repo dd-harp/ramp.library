@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{F_fqM.SEI}
 \alias{F_fqM.SEI}
-\title{Mosquito biting rate for \code{SEI}}
+\title{Compute mosquito biting density for \code{SEI} (\strong{MY})}
 \usage{
 \method{F_fqM}{SEI}(t, y, xds_obj, s)
 }
@@ -19,8 +19,9 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Returns \code{fqM}, the daily mosquito biting density on humans
-for each patch in the SEI model.
+Return the daily mosquito biting density on humans,
+\code{fqM}, for each patch in the \code{SEI} module.
+Compute \code{fqM = f*q*M}.
 }
 \section{Infective Biting}{
 
@@ -34,6 +35,6 @@ stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM}
 }
 
 \seealso{
-\link{SEI}, \link[ramp.xds:F_hbr]{ramp.xds::F_hbr}
+\link{SEI}, \link[ramp.xds:F_hbr]{ramp.xds::F_hbr}, \link{F_fqZ.SEI}
 }
 \keyword{internal}

@@ -17,8 +17,13 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SIPd} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{SIPd}
+module, leaving other values unchanged.
+Supported values are \code{H}, \code{I}, and \code{P}; \code{cfoi} is left unchanged.
+}
+\note{
+Stored initial values for this module are at
+\code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -35,5 +40,7 @@ returns this auxiliary initial value under the name \code{cfoi}.
 
 \seealso{
 \link{SIPd}
+
+\link{make_XH_inits_SIPd}, \link{setup_XH_inits.SIPd}
 }
 \keyword{internal}

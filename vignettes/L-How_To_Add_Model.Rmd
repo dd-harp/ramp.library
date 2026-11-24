@@ -51,6 +51,64 @@ rendered, the chunks define the example functions but do not call them.
   references with roxygen.
 - Add tests for the module's equations, dimensions, and setup behavior.
 
+### Documentation policy
+
+Follow the shared [function order](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order)
+in module files and guide implementation sections. Move functions with their
+documentation, keep file-level review/TODO notes at the top, and preserve
+definitions and behavior when reordering.
+
+Follow the shared [documentation conventions](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions)
+and the [L setup wording](https://dd-harp.github.io/ramp.xds/articles/L-interface.html#setup-documentation).
+These vignettes are the public style reference for both packages.
+
+- Use the approved family titles with a backticked module name and the
+  **L** tag, including "Compute the derivatives for `module` (**L**)",
+  "Mosquito bionomics for `module` (**L**)", and
+  "Apply effect sizes for `module` (**L**)".
+- Show the equations actually implemented, matching the returned state
+  order. Describe derivative and updating equations separately, including
+  any accessory variables and branches.
+- Keep storage, class assignments, and dispatch mechanics in `@note`.
+  Explain dispatch on the generic, not repeatedly on each method.
+- List setup actions in implementation order: construction using
+  `nHabitats` and `options`, initial values, habitat search weights, and
+  return of the updated **`xds`** model object.
+- Describe the habitat step as "Initialize habitat search weights using
+  `[ramp.xds::setup_habitat_search_weights.setup]`." End complete bullets
+  with periods and qualify links to shared helpers with `ramp.xds::`.
+- Describe skill sets as capabilities and compatibilities returned on demand
+  by `get_skillset_L`; do not store them on the module object. Include
+  `dts = FALSE` if no discrete-time update method is defined; only advertise
+  supported and tested solver pathways.
+- State when a check method returns the model unchanged without checks.
+
+Both dynamics methods below are placeholders. Keep the methods required
+by the new module, replace the equations and their documentation together,
+and update the skill set accordingly.
+
+## Module overview
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title The `newLname` module for the **L** component
+#' @section State Variables:
+#' Describe the module's actual states and their habitat-level interpretation.
+#' @section Dynamical Terms:
+#' Describe the shared inputs used by the implemented equations, including `eta`.
+#' @section Parameters:
+#' Describe the parameters used by the implemented model and their units.
+#' @section ODE:
+#' Replace this placeholder with the continuous-time model equations.
+#' @section DTS:
+#' Replace this placeholder with the discrete-time updating equations.
+#' @section Emergence:
+#' Replace this placeholder with the module's adult female emergence equation.
+#' [F_emerge.newLname] returns habitat-level emergence before aggregation
+#' to patches by [ramp.xds::Emergence].
+#' @name newLname
+NULL
+```
+
 ## Module dynamics
 
 Implement `dLdt.newLname` for a continuous-time model, or
@@ -64,11 +122,29 @@ The habitat-level egg input is available as
 `xds_obj$terms$eta[[s]]`. Extract the module states with `get_L_vars` and
 use the indices and parameter values stored on the module object.
 
+Retain "Compute the derivatives for `module` (**L**)" as the method title.
+Begin descriptions "Compute the derivatives for the `module` module:"
+and show the equations immediately below. Inherit the module NULL anchor's
+state, input-term, parameter, and ODE or Dynamics sections. Use the actual
+section names for existing modules; basicL uses `Dynamical Term` and stages
+uses `Egg Laying` for its input. Document returned block order and length,
+with each habitat-level block in habitat order. Keep dispatch on the shared
+generic and storage details in `@note`.
+
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Compute derivatives for `newLname` (**L**)
-#' @description Implements [ramp.xds::dLdt] for `newLname`.
+#' @title Compute the derivatives for `newLname` (**L**)
+#' @description Compute the derivatives for the `newLname` module:
+#' \deqn{dL/dt = 0}
+#' Replace this equation and the derivative code together.
+#' @inheritSection newLname State Variables
+#' @inheritSection newLname Dynamical Terms
+#' @inheritSection newLname Parameters
+#' @inheritSection newLname ODE
 #' @inheritParams ramp.xds::dLdt
-#' @return a numeric vector of derivatives, in state-variable order
+#' @note Derivatives for `L` are returned in habitat order.
+#' The egg input is read from `xds_obj$terms$eta[[s]]`.
+#' @return a [numeric] vector of derivatives in the module's state-variable
+#' order, with length `nHabitats`
 #' @export
 dLdt.newLname <- function(t, y, xds_obj, s) {
   eta <- xds_obj$terms$eta[[s]]
@@ -93,11 +169,26 @@ in that order. Write the model's discrete update equations directly; do not
 substitute the continuous-time derivative or an Euler step unless that is
 the model being implemented.
 
+Use "Update states for `module` (**L**)" for the title and
+"Update the state variables for the `module` module:" for the description,
+followed by the updating equations in `\deqn{}`. Inherit the same NULL-anchor
+sections as the derivative method, with `DTS` replacing `ODE`.
+Document habitat ordering, return length, and egg-input storage as below.
+
 ```{r, eval=TRUE, purl=TRUE}
 #' @title Update states for `newLname` (**L**)
-#' @description Implements [ramp.xds::Update_Lt] for `newLname`.
+#' @description Update the state variables for the `newLname` module:
+#' \deqn{L_{t+1} = 0}
+#' Replace this equation and the updating code together.
+#' @inheritSection newLname State Variables
+#' @inheritSection newLname Dynamical Terms
+#' @inheritSection newLname Parameters
+#' @inheritSection newLname DTS
 #' @inheritParams ramp.xds::Update_Lt
-#' @return a numeric vector of updated states, in state-variable order
+#' @note Updated values for `L` are returned in habitat order.
+#' The egg input is read from `xds_obj$terms$eta[[s]]`.
+#' @return a [numeric] vector of updated states in the module's state-variable
+#' order, with length `nHabitats`
 #' @export
 Update_Lt.newLname <- function(t, y, xds_obj, s) {
   eta <- xds_obj$terms$eta[[s]]
@@ -113,6 +204,27 @@ Update_Lt.newLname <- function(t, y, xds_obj, s) {
 }
 ```
 
+## State-variable extraction
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get the state variables for `newLname` (**L**)
+#' @description Extract the state variables for the `newLname` module
+#' from `y` and return them by name in a list for use during model solving.
+#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.
+#' @inheritParams ramp.xds::get_L_vars
+#' @return a named [list] of state variables and module-specific derived quantities
+#' @export
+get_L_vars.newLname <- function(y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]]$ix, {
+    L <- y[L_ix]
+    return(list(L = L))
+  })
+}
+```
+
+If the module has more than one state variable, create an index range for
+each one and include each named state in the returned list.
+
 ## Bionomics and effect sizes
 
 `LBionomics.newLname` updates baseline parameter values at time `t` and
@@ -121,42 +233,138 @@ sizes to those baseline values. Implement these methods for parameters that
 use time-varying forcing or vector-control effects; use the existing
 bionomics forcing functions where they match the parameter.
 
-For each affected parameter `p1`, store its baseline as `p1_t`, its effect
-size as `es_p1`, and its effective value as `p1`. The example assumes
-`p1_t` and `p2_t` have already been initialized on the module object.
+For each parameter `x` configured as a port, store its baseline as `x_t`,
+its effect size as `es_x`, and its effective value as `x`. Parameters
+without ports are stored directly as `x` and are not modified by effect
+sizes. The example assumes `p1` has a configured port and that
+`F_p1(t, xds_obj, s)` evaluates it; `p2` is a direct parameter without a port.
+
+Inherit the module NULL anchor's `Parameters` section and link the paired
+methods reciprocally and to the module. Describe baseline evaluation and
+effect-size application separately, keeping stored fields and assignments
+in `@note`. For modules without ports, such as stages, describe the actual
+no-op behavior rather than claiming that parameters or effects are updated.
+Keep dispatch documentation on the shared generics.
 
 ```{r, eval=TRUE, purl=TRUE}
+#' @title Compute the baseline p1 parameter
+#' @inheritParams ramp.xds::F_psi
+#' @return a numeric vector of length `nHabitats`
+#' @export
+F_p1 <- function(t, xds_obj, s) {
+  UseMethod("F_p1", xds_obj$L_obj[[s]]$p1_obj)
+}
+
+#' @rdname F_p1
+#' @export
+F_p1.static <- function(t, xds_obj, s) {
+  xds_obj$L_obj[[s]]$p1_obj$p1
+}
+
 #' @title Mosquito bionomics for `newLname` (**L**)
 #' @description Update baseline parameters and reset effect sizes.
+#' @inheritSection newLname Parameters
+#' @note Store the evaluated baseline as `p1_t` and reset `es_p1` to 1
+#' per habitat at `xds_obj$L_obj[[s]]`. Leave the direct parameter `p2` unchanged.
 #' @inheritParams ramp.xds::LBionomics
+#' @seealso [newLname], [LEffectSizes.newLname]
 #' @return an **`xds`** model object
 #' @export
 LBionomics.newLname <- function(t, y, xds_obj, s) {
   with(xds_obj$L_obj[[s]], {
     # Replace these assignments with the appropriate forcing functions.
-    xds_obj$L_obj[[s]]$p1_t <- p1
-    xds_obj$L_obj[[s]]$p2_t <- p2
+    xds_obj$L_obj[[s]]$p1_t <- F_p1(t, xds_obj, s)
+    xds_obj$L_obj[[s]]$p2 <- p2
     xds_obj$L_obj[[s]]$es_p1 <- rep(1, xds_obj$nHabitats)
-    xds_obj$L_obj[[s]]$es_p2 <- rep(1, xds_obj$nHabitats)
     return(xds_obj)
   })
 }
 
 #' @title Apply effect sizes for `newLname` (**L**)
 #' @description Apply vector-control effect sizes to baseline parameters.
+#' @inheritSection newLname Parameters
+#' @note Set `p1 = p1_t * es_p1` at `xds_obj$L_obj[[s]]`.
+#' Do not evaluate ports, reset effect sizes, or change the direct parameter `p2`.
 #' @inheritParams ramp.xds::LEffectSizes
+#' @seealso [newLname], [LBionomics.newLname]
 #' @return an **`xds`** model object
 #' @export
 LEffectSizes.newLname <- function(t, y, xds_obj, s) {
   with(xds_obj$L_obj[[s]], {
     xds_obj$L_obj[[s]]$p1 <- p1_t * es_p1
-    xds_obj$L_obj[[s]]$p2 <- p2_t * es_p2
     return(xds_obj)
   })
 }
 ```
 
+## Emergence
+
+`F_emerge.newLname` returns a habitat-level vector of adult emergence,
+usually a rate for a continuous-time model or a number for a discrete-time
+model. The shared emergence interface aggregates these values to patches
+using habitat membership.
+
+Use "Compute adult mosquito emergence for `module` (**L**)" and the short
+description below. Inherit the `Emergence` section from the module NULL
+anchor for formulas and biological details; keep it consistent with the
+implementation. Return "a [numeric] vector of length `nHabitats`" and link
+to the module and `ramp.xds::Emergence`. The shared generic documents dispatch
+on `xds_obj$L_obj[[s]]`.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Compute adult mosquito emergence for `newLname` (**L**)
+#' @description Return adult female mosquito emergence per habitat.
+#' @inheritSection newLname Emergence
+#' @inheritParams ramp.xds::F_emerge
+#' @seealso [newLname], [ramp.xds::Emergence]
+#' @return a [numeric] vector of length `nHabitats`
+#' @export
+F_emerge.newLname <- function(t, y, xds_obj, s) {
+  with(ramp.xds::get_L_vars(y, xds_obj, s), {
+    with(xds_obj$L_obj[[s]], {
+      # Replace this expression with the model's emergence equation.
+      alpha <- rep(0, xds_obj$nHabitats)
+      return(alpha)
+    })
+  })
+}
+```
+
+## Dynamical parameter accessors
+
+Implement `get_psi`, `get_phi`, `get_xi`, and `get_theta` only when the module
+supports these parameter queries. The current methods are provided by `basicL`,
+not `stages`. These accessors return stored realized values per habitat;
+they do not evaluate ports or apply effect sizes.
+
+Use "Get the parameter for `module` (**L**)" for method titles, replacing
+"parameter" with its full name. Describe the stored realized parameter per
+habitat, inherit the module NULL anchor's `Parameters` section, and return
+"a [numeric] vector of length `nHabitats`". Keep dispatch on
+`xds_obj$L_obj[[s]]` in the shared generic documentation. Link to the module
+and the corresponding shared parameter changer.
+
+For example, if the module stores a realized maturation rate in `psi`:
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get the maturation rate for `newLname` (**L**)
+#' @description Return the stored realized maturation rate per habitat.
+#' @inheritSection newLname Parameters
+#' @inheritParams ramp.xds::get_psi
+#' @seealso [newLname], [ramp.xds::change_psi]
+#' @return a [numeric] vector of length `nHabitats`
+#' @export
+get_psi.newLname <- function(xds_obj, s = 1) {
+  xds_obj$L_obj[[s]]$psi
+}
+```
+
 ## Module object and setup
+
+Use the constructor title "Make a module object for `module` (**L**)".
+Describe parameter initialization and `options` overrides. The constructor,
+parameter getter, and parameter changer each link to the other two in
+`@seealso`; describe any differences in their parameter coverage.
 
 `make_L_obj_newLname` creates the module object and initializes its
 parameters. `setup_L_obj.newLname` attaches the object at
@@ -164,7 +372,11 @@ parameters. `setup_L_obj.newLname` attaches the object at
 weights using the supplied `membership` vector.
 
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Make the `newLname` module object
+#' @title Make a module object for `newLname` (**L**)
+#' @description Create a `newLname` module object and initialize its parameters.
+#' Inspect parameters with [get_L_pars.newLname] and change supported values
+#' with [change_L_pars.newLname]. Values in `options` override parameter arguments.
+#' @seealso [get_L_pars.newLname], [change_L_pars.newLname]
 #' @param nHabitats the number of habitats in the model
 #' @param options a named list of parameter values
 #' @return an L module object
@@ -175,9 +387,9 @@ make_L_obj_newLname <- function(nHabitats, options = list(), p1 = 1, p2 = 1) {
       p1 = ramp.xds::checkIt(p1, nHabitats),
       p2 = ramp.xds::checkIt(p2, nHabitats),
       p1_t = ramp.xds::checkIt(p1, nHabitats),
-      p2_t = ramp.xds::checkIt(p2, nHabitats),
       es_p1 = rep(1, nHabitats),
-      es_p2 = rep(1, nHabitats),
+      p1_obj = structure(list(p1 = ramp.xds::checkIt(p1, nHabitats)),
+                         class = "static"),
       nHabitats = nHabitats
     )
     class(L_obj) <- "newLname"
@@ -185,8 +397,15 @@ make_L_obj_newLname <- function(nHabitats, options = list(), p1 = 1, p2 = 1) {
   })
 }
 
-#' @title Set up `newLname` (**L**)
-#' @description Implements [ramp.xds::setup_L_obj] for `newLname`.
+#' @title Set up the module object for `newLname` (**L**)
+#' @description Set up a `newLname` module object for the **L** component
+#' and the \eqn{s^{th}} vector species.
+#' + Create the module object with [make_L_obj_newLname], passing `nHabitats` and `options`.
+#' + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.
+#' + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].
+#' + Return the updated **`xds`** model object.
+#' @note The module object is stored at `xds_obj$L_obj[[s]]`.
+#' Its classes are `newLname` and `newLname_` followed by `xds_obj$xds`.
 #' @inheritParams ramp.xds::setup_L_obj
 #' @return an **`xds`** model object
 #' @export
@@ -205,6 +424,23 @@ setup_L_obj.newLname <- function(Lname, membership, xds_obj,
 
 ## Parameters
 
+The shared `ramp.xds::change_psi`, `ramp.xds::change_phi`,
+`ramp.xds::change_xi`, and `ramp.xds::change_theta` helpers are intended for
+individual static `basicL` parameters, not arbitrary module-specific fields.
+They accept numeric scalars or values of length `nHabitats`, expand scalars
+across habitats, and error on invalid types or lengths.
+For parameter `x`, they update `xds_obj$L_obj[[s]]$x` and, when `x_obj`
+is present, also `x_t` and `x_obj$x`. They leave the port class and `es_x`
+unchanged, do not evaluate ports or apply effect sizes, and return the
+updated model object. They do not dispatch on module or port class and
+should not be used to reconfigure dynamic ports.
+
+Their titles retain "Change the parameter (**L**)", using the full parameter
+name. Descriptions identify the static `basicL` scope, inherit its
+`Parameters` section, and link to the matching getter. Keep storage and
+port-field updates in `@note`. New modules should implement their own
+`change_L_pars` method for their supported parameters.
+
 Implement `get_L_pars.newLname` to return the module parameters as a named
 list, and `change_L_pars.newLname` to update the parameters named in
 `options` while leaving other parameters unchanged. Check supplied values
@@ -213,8 +449,10 @@ dimension.
 
 ```{r, eval=TRUE, purl=TRUE}
 #' @title Get parameters for `newLname` (**L**)
+#' @description Return the parameters for the `newLname` module as a named list.
+#' @seealso [make_L_obj_newLname], [change_L_pars.newLname]
 #' @inheritParams ramp.xds::get_L_pars
-#' @return a named list of parameters
+#' @return a named [list] of parameter values
 #' @export
 get_L_pars.newLname <- function(xds_obj, s = 1) {
   with(xds_obj$L_obj[[s]], {
@@ -223,69 +461,66 @@ get_L_pars.newLname <- function(xds_obj, s = 1) {
 }
 
 #' @title Change parameters for `newLname` (**L**)
+#' @description Change parameter values named in `options` for the `newLname`
+#' module, leaving other values unchanged.
+#' Update the `p1` port and the direct parameter `p2`.
+#' The effective `p1` value is set by [LEffectSizes.newLname].
+#' Call [ramp.xds::LBionomics] at time zero after the updates,
+#' without calling [ramp.xds::LEffectSizes].
+#' @seealso [make_L_obj_newLname], [get_L_pars.newLname]
 #' @inheritParams ramp.xds::change_L_pars
 #' @return an **`xds`** model object
 #' @export
 change_L_pars.newLname <- function(xds_obj, options = list(), s = 1) {
   nHabitats <- xds_obj$nHabitats
   if ("p1" %in% names(options)) {
-    xds_obj$L_obj[[s]]$p1_t <- ramp.xds::checkIt(options$p1, nHabitats)
+    xds_obj$L_obj[[s]]$p1_obj$p1 <- ramp.xds::checkIt(options$p1, nHabitats)
   }
   if ("p2" %in% names(options)) {
-    xds_obj$L_obj[[s]]$p2_t <- ramp.xds::checkIt(options$p2, nHabitats)
+    xds_obj$L_obj[[s]]$p2 <- ramp.xds::checkIt(options$p2, nHabitats)
   }
+  y <- ramp.xds::get_inits(xds_obj, flatten = TRUE)
+  xds_obj <- ramp.xds::LBionomics(0, y, xds_obj, s)
   return(xds_obj)
 }
 ```
-
-## State indices and extraction
-
-`setup_L_ix.newLname` assigns a contiguous range of indices to each state.
-Allocate one index per habitat for each habitat-level state, and update
-`max_ix` after each range. `get_L_vars.newLname` extracts named states from
-the dependent-variable vector `y`.
-
-```{r, eval=TRUE, purl=TRUE}
-#' @title Set up state indices for `newLname` (**L**)
-#' @inheritParams ramp.xds::setup_L_ix
-#' @return an **`xds`** model object
-#' @importFrom utils tail
-#' @export
-setup_L_ix.newLname <- function(xds_obj, s) {
-  L_ix <- seq(from = xds_obj$max_ix + 1, length.out = xds_obj$nHabitats)
-  xds_obj$max_ix <- utils::tail(L_ix, 1)
-  xds_obj$L_obj[[s]]$ix <- list(L_ix = L_ix)
-  return(xds_obj)
-}
-
-#' @title Extract states for `newLname` (**L**)
-#' @inheritParams ramp.xds::get_L_vars
-#' @return a named list of state variables
-#' @export
-get_L_vars.newLname <- function(y, xds_obj, s) {
-  with(xds_obj$L_obj[[s]]$ix, {
-    L <- y[L_ix]
-    return(list(L = L))
-  })
-}
-```
-
-If the module has more than one state variable, create an index range for
-each one and include each named state in the returned list.
 
 ## Initial values
+
+Use the shared `ramp.xds::get_L_inits` function to return stored initial
+values for the selected vector species; do not implement a module-specific
+getter. It returns the `inits` field directly as a named list, preserves an
+empty list (as in `trivialL` after setup), and returns `NULL` if absent.
+Getter documentation uses "Get initial values (**L**)", describes returning
+stored values, puts storage in `@note`, and links to setup/change functions.
 
 `make_L_inits_newLname` returns defaults as a named list with one value per
 habitat for each state. `setup_L_inits.newLname` stores the list on the
 module object; users can inspect it with `get_L_inits` and update it with
 `change_L_inits.newLname`.
 
+Use the constructor title and description below, preserving any
+model-specific explanation. Its return description is "a named [list] of
+initial values". The constructor, setup method, and change method each
+link to the other two in `@seealso`.
+Document numeric scalar expansion to `nHabitats` and the required length
+for non-scalar initial values.
+For changers, document supported values and special behavior, put storage
+explanations in `@note`, and return "an **`xds`** model object". Check
+preservation of unspecified values and other species; report implementation
+discrepancies separately during documentation alignment.
+
 ```{r, eval=TRUE, purl=TRUE}
 #' @title Make initial values for `newLname` (**L**)
+#' @description Create a named list of initial values for the `newLname` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nHabitats`.
+#' Scalars are expanded to that length.
 #' @param nHabitats the number of habitats in the model
 #' @param options a named list of initial values
 #' @param L the initial value for state `L`
-#' @return a named list of initial values
+#' @return a named [list] of initial values
+#' @seealso [setup_L_inits.newLname], [change_L_inits.newLname]
 #' @export
 make_L_inits_newLname <- function(nHabitats, options = list(), L = 1) {
   with(options, {
@@ -295,7 +530,11 @@ make_L_inits_newLname <- function(nHabitats, options = list(), L = 1) {
 }
 
 #' @title Set up initial values for `newLname` (**L**)
+#' @description Set up initial values for the `newLname` module using
+#' [make_L_inits_newLname]. Values in `options` override the defaults.
+#' @note Initial values are stored at `xds_obj$L_obj[[s]]$inits`.
 #' @inheritParams ramp.xds::setup_L_inits
+#' @seealso [make_L_inits_newLname], [change_L_inits.newLname]
 #' @return an **`xds`** model object
 #' @export
 setup_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
@@ -306,7 +545,12 @@ setup_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
 }
 
 #' @title Change initial values for `newLname` (**L**)
+#' @description Change initial values named in `options` for the `newLname`
+#' module, leaving other values unchanged.
+#' @note Stored initial values for this module are at
+#' `xds_obj$L_obj[[s]]$inits`.
 #' @inheritParams ramp.xds::change_L_inits
+#' @seealso [make_L_inits_newLname], [setup_L_inits.newLname]
 #' @return an **`xds`** model object
 #' @export
 change_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
@@ -321,39 +565,72 @@ change_L_inits.newLname <- function(xds_obj, options = list(), s = 1) {
 }
 ```
 
-## Emergence
+## State indices
 
-`F_emerge.newLname` returns a habitat-level vector of adult emergence,
-usually a rate for a continuous-time model or a number for a discrete-time
-model. The shared emergence interface aggregates these values to patches
-using habitat membership.
+Retrieve stored indices with the shared `ramp.xds::get_L_ix(xds_obj, s = 1)`;
+do not implement a module-specific getter. It returns the `ix` field directly:
+a named list of variable indices, an empty list if stored, or `NULL` if absent.
+Getter documentation uses "Get variable indices (**L**)", describes returning
+stored indices for the selected vector species, puts storage in `@note`, and
+links to `setup_L_ix`.
+
+`setup_L_ix.newLname` assigns a contiguous range of indices to each state.
+Allocate one index per habitat for each habitat-level state, and update
+`max_ix` after each range. `get_L_vars.newLname` extracts named states from
+the dependent-variable vector `y`.
+
+Use the title and description below, documenting actual block order and
+lengths. Put index storage and the updated maximum in `@note`, and return
+the model object rather than the index list. Record implementation
+exceptions separately during documentation alignment.
 
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Compute emergence for `newLname` (**L**)
-#' @inheritParams ramp.xds::F_emerge
-#' @return a numeric vector of length `nHabitats`
+#' @title Set up variable indices for `newLname` (**L**)
+#' @description Assign consecutive variable indices for the `newLname` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate the `L_ix` block with length `nHabitats`.
+#' @note Indices are stored at `xds_obj$L_obj[[s]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
+#' @inheritParams ramp.xds::setup_L_ix
+#' @return an **`xds`** model object
+#' @importFrom utils tail
 #' @export
-F_emerge.newLname <- function(t, y, xds_obj, s) {
-  with(ramp.xds::get_L_vars(y, xds_obj, s), {
-    with(xds_obj$L_obj[[s]], {
-      # Replace this expression with the model's emergence equation.
-      alpha <- rep(0, xds_obj$nHabitats)
-      return(alpha)
-    })
-  })
+setup_L_ix.newLname <- function(xds_obj, s) {
+  L_ix <- seq(from = xds_obj$max_ix + 1, length.out = xds_obj$nHabitats)
+  xds_obj$max_ix <- utils::tail(L_ix, 1)
+  xds_obj$L_obj[[s]]$ix <- list(L_ix = L_ix)
+  return(xds_obj)
 }
+
 ```
 
-## Parsing outputs and optional methods
+## Parsing outputs
+
+After solving, retrieve the saved results with the shared
+`ramp.xds::get_L_orbits(xds_obj, s = 1)`; do not implement a module-specific
+orbit getter. Its title is "Get orbits (**L**)". It returns a list of
+module-specific orbits (trajectories) for **L** for the selected species
+from `xds_obj$outputs$orbits$L[[s]]`, with
+`time` added from `xds_obj$outputs$time`. It neither parses outputs nor
+modifies the model object. Link its documentation to `parse_L_orbits`
+and `xds_solve`.
 
 `parse_L_orbits.newLname` extracts each state from the solver output
 matrix, using the indices stored on the module object, and returns a named
 list. Add derived quantities only when they are useful model outputs.
 
+This method processes trajectories after solving. Document derived quantities
+and index storage in its Roxygen block, and use "a [list]" for returns.
+It returns results without modifying the model object; the output-processing
+pipeline stores them at `xds_obj$outputs$orbits$L[[s]]`.
+
 ```{r, eval=TRUE, purl=TRUE}
 #' @title Parse outputs for `newLname` (**L**)
+#' @description Extract the model state outputs for the `newLname` module
+#' from `outputs` and return them by name in a list.
+#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.
 #' @inheritParams ramp.xds::parse_L_orbits
-#' @return a named list of state-variable orbits
+#' @return a [list]
 #' @export
 parse_L_orbits.newLname <- function(outputs, xds_obj, s) {
   with(xds_obj$L_obj[[s]]$ix, {
@@ -363,9 +640,45 @@ parse_L_orbits.newLname <- function(outputs, xds_obj, s) {
 }
 ```
 
-`steady_state_L.newLname` is optional and applies to continuous-time models
-when a steady-state solution is available. It receives habitat-level egg
-input `eta` and returns a named list of steady-state values. The shared
+## Checks and skill set
+
+`get_skillset_L.newLname` returns the module's capabilities and
+compatibilities when queried; setup does not store them on the module object.
+Adapt the flags to the implemented solver pathways; the example advertises
+continuous-time support only. The check method below performs no checks. Add
+explicit checks when the module requires them, and describe those checks
+accurately.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Check `newLname` (**L**)
+#' @description Return the model unchanged; no checks are implemented in this template.
+#' @inheritParams ramp.xds::check_L
+#' @return an **`xds`** model object
+#' @export
+check_L.newLname <- function(xds_obj, s) {
+  return(xds_obj)
+}
+
+#' @title Get the skill set for `newLname` (**L**)
+#' @description Return the capabilities and compatibilities of the `newLname` module as a list.
+#' @inheritParams ramp.xds::get_skillset_L
+#' @return the **L** module skill set, as a list
+#' @export
+get_skillset_L.newLname <- function(xds_obj, s) {
+  list(dts = FALSE, xde = TRUE, delay = FALSE)
+}
+```
+
+## Optional methods
+
+`steady_state_L.newLname` is optional when a steady-state calculation is
+available. It receives habitat-level daily egg input `eta` and returns a
+named list of steady-state values. Use "Compute steady states for `module`
+(**L**)" for method titles, describe the supported equation system, and
+name the returned states. The generic dispatches on `xds_obj$L_obj[[s]]`.
+To support both differential-equation and discrete-time calculations, follow
+basicL's second-stage dispatch on `xds_obj$xds`; do not assume every module
+implements both. Return values are not stored on the model object. The shared
 `get_L_orbits`, `xds_plot_L`, and `xds_lines_L` functions provide access
 to and visualization of parsed model output; a module-specific plotting
 method is not required.

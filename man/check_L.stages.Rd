@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{check_L.stages}
 \alias{check_L.stages}
-\title{Check the \code{stages} module}
+\title{Check \code{stages} (\strong{L})}
 \usage{
 \method{check_L}{stages}(xds_obj, s)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{get_XH_vars.SEISd}
 \alias{get_XH_vars.SEISd}
-\title{List variables for \code{SEISd} (\strong{XH})}
+\title{Get the state variables for \code{SEISd} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SEISd}(y, xds_obj, i)
 }
@@ -14,10 +14,15 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list}
+a named \link{list} of state variables and module-specific derived quantities
 }
 \description{
-This method dispatches on the type of \code{xds_obj$XH_obj}
+Extract the state variables for the \code{SEISd} module
+from \code{y} and return them by name in a list for use during model solving.
+Also compute susceptible density \code{S = H - E - I} and extract \code{cases}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \seealso{
 \link{SEISd}

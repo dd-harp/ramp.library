@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{setup_XH_ix.SEISd}
 \alias{setup_XH_ix.SEISd}
-\title{Add indices for human population to parameter list}
+\title{Set up variable indices for \code{SEISd} (\strong{XH})}
 \usage{
 \method{setup_XH_ix}{SEISd}(xds_obj, i)
 }
@@ -12,10 +12,17 @@
 \item{i}{the host species index}
 }
 \value{
-none
+an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the \code{SEISd} model.
+Assign consecutive variable indices for the \code{SEISd} module,
+starting after \code{xds_obj$max_ix}, and update the maximum index.
+Allocate blocks in the order \code{H_ix}, \code{E_ix}, \code{I_ix}, \code{cases_ix}.
+Each block has length \code{nStrata[i]}.
+}
+\note{
+Indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
+The maximum index is stored at \code{xds_obj$max_ix}.
 }
 \seealso{
 \link{SEISd}

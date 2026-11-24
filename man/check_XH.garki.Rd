@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{check_XH.garki}
 \alias{check_XH.garki}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{garki} (\strong{XH})}
 \usage{
 \method{check_XH}{garki}(xds_obj, i)
 }
@@ -15,6 +15,6 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{garki} (\strong{XH})
 }
 \keyword{internal}

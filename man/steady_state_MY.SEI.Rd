@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{steady_state_MY.SEI}
 \alias{steady_state_MY.SEI}
-\title{Steady States: MY-SEI}
+\title{Compute steady states for \code{SEI} (\strong{MY})}
 \usage{
 \method{steady_state_MY}{SEI}(Lambda, kappa, xds_obj, s = 1)
 }
@@ -16,10 +16,17 @@
 \item{s}{the vector species index}
 }
 \value{
-none
+a named \link{numeric} vector containing \code{M} followed by \code{Z}, once the
+undefined \code{M_eq} reference is repaired
 }
 \description{
-This method dispatches on the type of \code{MY_obj}.
+Compute steady-state mosquito densities for the \code{SEI} module
+given adult mosquito emergence \code{Lambda} and net infectiousness \code{kappa}
+for the differential-equation system.
+}
+\note{
+The current implementation references undefined \code{M_eq} and requires
+repair before use. Its intended return includes \code{M} and \code{Z} but not \code{Y}.
 }
 \section{State Variables}{
 
@@ -36,11 +43,11 @@ This method dispatches on the type of \code{MY_obj}.
 \item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
 \item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
 \item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
-\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_emigration_rates]{ramp.xds::setup_emigration_rates}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_mosy_emigration]{ramp.xds::setup_mosy_emigration}}
 \item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
 \item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.SEI} can be used to change parameter

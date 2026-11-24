@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{check_XH.SEIRV}
 \alias{check_XH.SEIRV}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SEIRV} (\strong{XH})}
 \usage{
 \method{check_XH}{SEIRV}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SEIRV} (\strong{XH})
 }
 \seealso{
 \link{SEIRV}

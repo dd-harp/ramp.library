@@ -33,9 +33,10 @@ A constant fraction of infectious bites causes an infection: the parameter \eqn{
 \section{Parameters}{
 
 \link{make_XH_obj_SEIRV} supplies defaults for all parameters.
-\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, and \code{gamma};
+\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, \code{gamma}, and \code{q};
 it leaves \code{alpha} and \code{varepsilon} unchanged.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{tau}}{rate of progression from exposed to infectious}
@@ -68,6 +69,8 @@ computed after solving.
 
 \section{Prevalence}{
 
+\link{F_pr_obs.SEIRV} returns observed prevalence \eqn{x_q=qI/H}.
+
 \link{F_prevalence.SEIRV} returns \eqn{x=I/H}. In contrast,
 \link{parse_XH_orbits.SEIRV} stores \code{true_pr} as \eqn{(E+I)/H}.
 This module has no diagnostic sensitivity parameters or module-specific
@@ -91,7 +94,7 @@ and has no treatment parameters \code{rho} or \code{sigma}.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

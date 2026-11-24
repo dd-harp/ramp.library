@@ -17,8 +17,12 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SIR} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{SIR}
+module, leaving other values unchanged.
+}
+\note{
+Stored initial values for this module are at
+\code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -32,5 +36,7 @@ change initial values named in \code{options} leaving other values unchanged.
 
 \seealso{
 \link{SIR}
+
+\link{make_XH_inits_SIR}, \link{setup_XH_inits.SIR}
 }
 \keyword{internal}

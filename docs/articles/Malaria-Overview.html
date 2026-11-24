@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -125,7 +125,7 @@
       <h1 data-toc-skip>Models for Malaria Epidemiology</h1>
             <h3 data-toc-skip class="subtitle">An Overview</h3>
             
-            <h4 data-toc-skip class="date">November 18, 2026</h4>
+            <h4 data-toc-skip class="date">November 24, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/HEAD/vignettes/Malaria-Overview.Rmd" class="external-link"><code>vignettes/Malaria-Overview.Rmd</code></a></small>
       <div class="hidden name"><code>Malaria-Overview.Rmd</code></div>
@@ -138,6 +138,14 @@
 <strong><code>ramp.library</code></strong> there are several modules
 that would be considered suitable for modeling some aspects of malaria
 epidemiology.</p>
+<p>Except for <code>hMoI</code>, all XH modules support observed
+prevalence through <code>F_pr_obs</code>, using test positivity
+<code>q</code> (default <code>0.8</code>) times true prevalence. Set
+<code>q</code> through <code>XHoptions</code> at setup or
+<code>change_XH_pars</code> afterward; retrieve the output with
+<code>get_PR(model, method = "obs")</code> after solving. The existing
+diagnostic-specific parameters and methods in library modules are
+unchanged.</p>
 <ul>
 <li>
 <p><strong><code>ramp.xds</code></strong></p>

@@ -7,7 +7,7 @@
 \method{parse_MY_orbits}{SEI}(outputs, xds_obj, s)
 }
 \arguments{
-\item{outputs}{a \link{matrix} of outputs from deSolve}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
@@ -17,7 +17,12 @@
 a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the SEI model
+Extract the model state outputs for the \code{SEI} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{y = Y/M}, \code{z = Z/M}, \code{fqZ = f*q*Z}, and \code{fqM = f*q*M}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$MY_obj[[s]]$ix}.
 }
 \section{State Variables}{
 

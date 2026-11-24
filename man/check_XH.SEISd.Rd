@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{check_XH.SEISd}
 \alias{check_XH.SEISd}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SEISd} (\strong{XH})}
 \usage{
 \method{check_XH}{SEISd}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SEISd} (\strong{XH})
 }
 \seealso{
 \link{SEISd}

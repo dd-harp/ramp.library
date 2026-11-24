@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{dMYdt.BQm}
 \alias{dMYdt.BQm}
-\title{Compute derivatives for \code{BQm} (\strong{MY})}
+\title{Compute the derivatives for \code{BQm} (\strong{MY})}
 \usage{
 \method{dMYdt}{BQm}(t, y, xds_obj, s)
 }
@@ -16,10 +16,17 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{numeric} vector
+a \link{numeric} vector of derivatives in the module's state-variable order
 }
 \description{
-Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQm ODE model.
+Compute the derivatives for the \code{BQm} module:
+\deqn{\begin{array}{rl}
+dB/dt &= \Lambda+\nu Q-fB-\Omega_b\cdot B \\
+dQ/dt &= fB-\nu Q-\Omega_q\cdot Q
+\end{array}}
+}
+\note{
+Derivatives are returned in blocks for \code{B}, then \code{Q}, each in patch order.
 }
 \section{State Variables}{
 
@@ -50,7 +57,7 @@ Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQm ODE model.
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.BQm} can be used to change parameter

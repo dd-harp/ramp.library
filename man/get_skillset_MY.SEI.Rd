@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{get_skillset_MY.SEI}
 \alias{get_skillset_MY.SEI}
-\title{The skill set}
+\title{Get the skill set for \code{SEI} (\strong{MY})}
 \usage{
 \method{get_skillset_MY}{SEI}(xds_obj, s)
 }
@@ -15,6 +15,6 @@
 the \strong{MY} module skill set, as a list
 }
 \description{
-The skill set
+Return the capabilities and compatibilities of the \code{SEI} module as a list.
 }
 \keyword{internal}

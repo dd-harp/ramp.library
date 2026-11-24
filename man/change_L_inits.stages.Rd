@@ -17,10 +17,17 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{stages} module (\strong{L}) for the \eqn{s^{th}} species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{stages}
+module, leaving other values unchanged.
 
 Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
 if they are passed as named components of \code{options}.
+}
+\note{
+Stored initial values for this module are at
+\code{xds_obj$L_obj[[s]]$inits}.
+}
+\seealso{
+\link{make_L_inits_stages}, \link{setup_L_inits.stages}
 }
 \keyword{internal}

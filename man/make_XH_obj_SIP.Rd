@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{make_XH_obj_SIP}
 \alias{make_XH_obj_SIP}
-\title{Make a \code{SIP} \strong{XH} model object}
+\title{Make a module object for \code{SIP} (\strong{XH})}
 \usage{
 make_XH_obj_SIP(
   nStrata,
@@ -13,7 +13,8 @@ make_XH_obj_SIP(
   rho = 0.1,
   eta = 1/25,
   xi = 1/365,
-  sigma = 1/365
+  sigma = 1/365,
+  q = 0.8
 )
 }
 \arguments{
@@ -34,18 +35,23 @@ make_XH_obj_SIP(
 \item{xi}{background treatment rate for susceptible and infectious individuals}
 
 \item{sigma}{additional treatment rate for infectious individuals}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 an \strong{XH} model object
 }
 \description{
-Make a \code{SIP} \strong{XH} model object
+Create an \code{SIP} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.SIP} and change supported values
+with \link{change_XH_pars.SIP}. Values in \code{options} override parameter arguments.
 }
 \section{Parameters}{
 
 The parameters returned by \link{get_XH_pars.SIP} and modifiable by
 \link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -57,6 +63,8 @@ The parameters returned by \link{get_XH_pars.SIP} and modifiable by
 }
 
 \seealso{
+\link{get_XH_pars.SIP}, \link{change_XH_pars.SIP}
+
 \link{SIP}
 }
 \keyword{internal}

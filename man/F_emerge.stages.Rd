@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{F_emerge.stages}
 \alias{F_emerge.stages}
-\title{Compute emergent adults for \code{stages} (\strong{L} component)}
+\title{Compute adult mosquito emergence for \code{stages} (\strong{L})}
 \usage{
 \method{F_emerge}{stages}(t, y, xds_obj, s)
 }
@@ -19,11 +19,20 @@
 a \link{numeric} vector of length \code{nHabitats}
 }
 \description{
-The number of female adults emerging from the habitats,
-per day, is:
-\deqn{\psi_P P/2 }
+Return adult female mosquito emergence per habitat.
 }
+\note{
+The implementation returns \code{psi_P*P/2}, whereas the inherited
+Emergence section gives \code{psi_P*P}; the factor of two requires review.
+}
+\section{Emergence}{
+
+
+The emergence rate of adult, female mosquitoes from each habitat is:
+\deqn{\alpha = \psi_P P}
+}
+
 \seealso{
-\link{dLdt.stages}
+\link{stages}, \link{dLdt.stages}, \link[ramp.xds:Emergence]{ramp.xds::Emergence}
 }
 \keyword{internal}

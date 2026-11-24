@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{Update_XHt.SEIR}
 \alias{Update_XHt.SEIR}
-\title{DTS updating for \code{SEIR} (\strong{XH})}
+\title{Update states for \code{SEIR} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SEIR}(t, y, xds_obj, i)
 }

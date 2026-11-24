@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{make_MY_inits_BQm}
 \alias{make_MY_inits_BQm}
-\title{Make inits for BQm adult mosquito model}
+\title{Make initial values for \code{BQm} (\strong{MY})}
 \usage{
 make_MY_inits_BQm(
   nPatches,
@@ -33,10 +33,15 @@ make_MY_inits_BQm(
 \item{Qz}{infectious, gravid mosquito density at each patch}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make inits for BQm adult mosquito model
+Create a named list of initial values for the \code{BQm} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nPatches}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -51,5 +56,7 @@ Make inits for BQm adult mosquito model
 
 \seealso{
 \link{BQm}, \link{setup_MY_inits.BQm}
+
+\link{change_MY_inits.BQm}
 }
 \keyword{internal}

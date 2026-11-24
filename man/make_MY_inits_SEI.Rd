@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{make_MY_inits_SEI}
 \alias{make_MY_inits_SEI}
-\title{Make inits for SEI adult mosquito model}
+\title{Make initial values for \code{SEI} (\strong{MY})}
 \usage{
 make_MY_inits_SEI(nPatches, options = list(), M = 5, Y = 1, Z = 0)
 }
@@ -18,10 +18,15 @@ make_MY_inits_SEI(nPatches, options = list(), M = 5, Y = 1, Z = 0)
 \item{Z}{infectious mosquito density at each patch}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make inits for SEI adult mosquito model
+Create a named list of initial values for the \code{SEI} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nPatches}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -34,5 +39,7 @@ Make inits for SEI adult mosquito model
 
 \seealso{
 \link{SEI}, \link{setup_MY_inits.SEI}
+
+\link{change_MY_inits.SEI}
 }
 \keyword{internal}

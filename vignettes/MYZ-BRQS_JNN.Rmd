@@ -78,7 +78,7 @@ Mosquitoes emerge from aquatic habitat at the patch-specific rate $\Lambda,$ and
 
 + $f$ is the overall blood feeding rate; 
 
-+ $\nu$ is the egg laying rate; 
++ $\nu$ is the oviposition rate: the number of egg batches laid in each patch, per mosquito, per day;
 
 + $\delta$ is the fraction of mosquitoes that transition into a sugar feeding state after laying eggs; the remaining $\hat \delta = 1-\delta$ transition into a blood feeding state. In some models, we let $\delta$ be a function of the local availability of sugar.  
 

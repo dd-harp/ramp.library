@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{setup_XH_obj.SEIS}
 \alias{setup_XH_obj.SEIS}
-\title{Set up \code{SEIS} (\strong{XH})}
+\title{Set up the module object for \code{SEIS} (\strong{XH})}
 \usage{
 \method{setup_XH_obj}{SEIS}(XHname, residence, xds_obj, options = list(), i = 1)
 }
@@ -21,11 +21,18 @@
 an \strong{\code{xds}} model object
 }
 \description{
-This sets up an \code{SEIS} model object for the \strong{XH} module for the \eqn{i^{th}} host species
+Set up an \code{SEIS} module object for the \strong{XH} component and the \eqn{i^{th}} host species.
 \itemize{
-\item the object is created by \link{make_XH_obj_SEIS}
-\item the initial conditions are set by \link[ramp.xds:setup_XH_inits]{setup_XH_inits}
-\item \code{options} is passed to both to override the defaults
+\item Set the module name to \code{SEIS}.
+\item Create the module object with \link{make_XH_obj_SEIS}, passing \code{nStrata[i]} and \code{options}.
+\item Set initial values using \link[ramp.xds:setup_XH_inits]{ramp.xds::setup_XH_inits}, passing \code{options} to override defaults.
+\item Initialize mass-treatment functions using \link[ramp.xds:setup_mass_treatment]{ramp.xds::setup_mass_treatment}.
+\item Initialize the time-spent matrix using \link[ramp.xds:setup_timespent.setup]{ramp.xds::setup_timespent.setup}.
+\item Initialize birth and death rates using \link[ramp.xds:setup_demog_obj]{ramp.xds::setup_demog_obj}.
+\item Initialize blood search weights using \link[ramp.xds:setup_blood_search_weights.setup]{ramp.xds::setup_blood_search_weights.setup}.
+\item Initialize time away using \link[ramp.xds:setup_time_away.setup]{ramp.xds::setup_time_away.setup}.
+\item Initialize travel EIR using \link[ramp.xds:setup_travel_eir.no_travel]{ramp.xds::setup_travel_eir.no_travel}.
+\item Return the updated \strong{\code{xds}} model object.
 }
 }
 \note{
@@ -46,6 +53,7 @@ The module object is stored at \code{xds_obj$XH_obj[[i]]}
 The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 \link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{rate of progression from exposed to infectious}

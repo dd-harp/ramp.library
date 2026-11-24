@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{setup_MY_ix.BRQS}
 \alias{setup_MY_ix.BRQS}
-\title{Add indices for adult mosquitoes to parameter list}
+\title{Set up variable indices for \code{BRQS} (\strong{MY})}
 \usage{
 \method{setup_MY_ix}{BRQS}(xds_obj, s)
 }
@@ -12,10 +12,17 @@
 \item{s}{the vector species index}
 }
 \value{
-none
+an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:setup_MY_ix]{setup_MY_ix} for the BRQS model.
+Assign consecutive variable indices for the \code{BRQS} module,
+starting after \code{xds_obj$max_ix}, and update the maximum index.
+Allocate blocks in the order \code{Su_ix}, \code{Bu_ix}, \code{Ru_ix}, \code{Qu_ix}, \code{Sy_ix}, \code{By_ix}, \code{Ry_ix}, \code{Qy_ix}, \code{Sz_ix}, \code{Bz_ix}, \code{Rz_ix}, \code{Qz_ix}.
+Each block has length \code{nPatches}.
+}
+\note{
+Indices are stored at \code{xds_obj$MY_obj[[s]]$ix}.
+The maximum index is stored at \code{xds_obj$max_ix}.
 }
 \section{State Variables}{
 

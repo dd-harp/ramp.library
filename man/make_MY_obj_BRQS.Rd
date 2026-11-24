@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{make_MY_obj_BRQS}
 \alias{make_MY_obj_BRQS}
-\title{Make parameters for \code{BRQS} (\strong{MY})}
+\title{Make a module object for \code{BRQS} (\strong{MY})}
 \usage{
 make_MY_obj_BRQS(
   nPatches,
@@ -37,7 +37,8 @@ make_MY_obj_BRQS(
 
 \item{q}{human blood fraction}
 
-\item{nu}{oviposition rate, per mosquito}
+\item{nu}{the oviposition rate: the number of egg batches laid in each patch,
+per mosquito, per day}
 
 \item{eggsPerBatch}{eggs laid per oviposition}
 }
@@ -45,6 +46,11 @@ make_MY_obj_BRQS(
 a \link{list}
 }
 \description{
-Make parameters for \code{BRQS} (\strong{MY})
+Create a \code{BRQS} module object and initialize its parameters.
+Inspect parameters with \link{get_MY_pars.BRQS} and change supported values
+with \link{change_MY_pars.BRQS}. Values in \code{options} override parameter arguments.
+}
+\seealso{
+\link{get_MY_pars.BRQS}, \link{change_MY_pars.BRQS}
 }
 \keyword{internal}

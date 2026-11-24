@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{Update_XHt.SEIRV}
 \alias{Update_XHt.SEIRV}
-\title{DTS updating for \code{SEIRV} (\strong{XH})}
+\title{Update states for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SEIRV}(t, y, xds_obj, i)
 }

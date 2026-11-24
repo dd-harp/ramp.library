@@ -2,14 +2,14 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{F_pfpr_by_pcr.SEIS}
 \alias{F_pfpr_by_pcr.SEIS}
-\title{Compute the prevalence of infection by PCR}
+\title{Compute observed prevalence by PCR}
 \usage{
 \method{F_pfpr_by_pcr}{SEIS}(vars, XH_obj)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{XH_obj}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for humans}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

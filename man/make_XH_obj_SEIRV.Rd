@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{make_XH_obj_SEIRV}
 \alias{make_XH_obj_SEIRV}
-\title{Make a \code{SEIRV} \strong{XH} model object}
+\title{Make a module object for \code{SEIRV} (\strong{XH})}
 \usage{
 make_XH_obj_SEIRV(
   nStrata,
@@ -13,7 +13,8 @@ make_XH_obj_SEIRV(
   c = 0.15,
   tau = 0.5,
   varepsilon = 0.5,
-  gamma = 0.5
+  gamma = 0.5,
+  q = 0.8
 )
 }
 \arguments{
@@ -34,19 +35,24 @@ make_XH_obj_SEIRV(
 \item{varepsilon}{proportion of recovered humans that are protected from the pathogen}
 
 \item{gamma}{loss of immunity rate}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 an \strong{XH} model object
 }
 \description{
-Make a \code{SEIRV} \strong{XH} model object
+Create an \code{SEIRV} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.SEIRV} and change supported values
+with \link{change_XH_pars.SEIRV}. Values in \code{options} override parameter arguments.
 }
 \section{Parameters}{
 
 \link{make_XH_obj_SEIRV} supplies defaults for all parameters.
-\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, and \code{gamma};
+\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, \code{gamma}, and \code{q};
 it leaves \code{alpha} and \code{varepsilon} unchanged.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{tau}}{rate of progression from exposed to infectious}
@@ -58,6 +64,8 @@ it leaves \code{alpha} and \code{varepsilon} unchanged.
 }
 
 \seealso{
+\link{get_XH_pars.SEIRV}, \link{change_XH_pars.SEIRV}
+
 \link{SEIRV}
 }
 \keyword{internal}

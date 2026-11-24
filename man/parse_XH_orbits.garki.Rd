@@ -2,21 +2,26 @@
 % Please edit documentation in R/malaria-garki.R
 \name{parse_XH_orbits.garki}
 \alias{parse_XH_orbits.garki}
-\title{parse the output of deSolve and return variables for the garki model}
+\title{Parse outputs for \code{garki} (\strong{XH})}
 \usage{
 \method{parse_XH_orbits}{garki}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }
 \value{
-none
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the garki model
+Extract the model state outputs for the \code{garki} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{x1 = H-x2-x3-x4-y1-y2-y3}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \keyword{internal}

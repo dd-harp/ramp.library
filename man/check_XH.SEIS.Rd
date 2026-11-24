@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{check_XH.SEIS}
 \alias{check_XH.SEIS}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SEIS} (\strong{XH})}
 \usage{
 \method{check_XH}{SEIS}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SEIS} (\strong{XH})
 }
 \seealso{
 \link{SEIS}

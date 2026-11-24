@@ -12,18 +12,21 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list}
+a named \link{list} of parameter values
 }
 \description{
+Return the parameters for the \code{SEISd} module as a named list.
+}
+\note{
 Parameter values for the \eqn{i^{th}} host are
-stored as \code{xds_obj$XH_obj[[i]]}. This returns the stored parameter
-values as a list.
+stored as \code{xds_obj$XH_obj[[i]]}.
 }
 \section{Parameters}{
 
 The parameters returned by \link{get_XH_pars.SEISd} and modifiable by
 \link{change_XH_pars.SEISd} describe the dynamics or detection by diagnostic methods.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{intrinsic incubation period (fixed delay, in days)}
@@ -37,6 +40,8 @@ The parameters returned by \link{get_XH_pars.SEISd} and modifiable by
 }
 
 \seealso{
+\link{make_XH_obj_SEISd}, \link{change_XH_pars.SEISd}
+
 \link{SEISd}, \link{make_XH_obj_SEISd}
 }
 \keyword{internal}

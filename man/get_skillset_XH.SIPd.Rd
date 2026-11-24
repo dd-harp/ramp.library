@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{get_skillset_XH.SIPd}
 \alias{get_skillset_XH.SIPd}
-\title{The \strong{XH} module skill set}
+\title{Get the skill set for \code{SIPd} (\strong{XH})}
 \usage{
 \method{get_skillset_XH}{SIPd}(xds_obj, i)
 }
@@ -15,11 +15,7 @@
 the \strong{XH} module skill set, as a list
 }
 \description{
-The \strong{XH} skill set is a list of
-a module's capabilities.
-}
-\note{
-This method dispatches on \code{class(xds_obj$XH_obj)}
+Return the capabilities and compatibilities of the \code{SIPd} module as a list.
 }
 \seealso{
 \link{SIPd}

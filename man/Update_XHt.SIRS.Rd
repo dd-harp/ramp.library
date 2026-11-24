@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{Update_XHt.SIRS}
 \alias{Update_XHt.SIRS}
-\title{DTS updating for \code{SIRS} (\strong{XH})}
+\title{Update states for \code{SIRS} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SIRS}(t, y, xds_obj, i)
 }

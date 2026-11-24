@@ -1,3 +1,8 @@
+# TODO: Reconcile parameter coverage: make_L_obj_stages initializes w1, w2,
+# and w3, and get_L_pars.stages returns them, but change_L_pars.stages does
+# not update them. Decide whether to support changes or document the restriction.
+# TODO: Reconcile the Emergence anchor formula psi_P*P with F_emerge.stages,
+# which returns psi_P*P/2. Confirm the intended female-emergence convention.
 
 #' @title The `stages` module for the **L** component
 #' @description
@@ -63,58 +68,9 @@
 #' @rdname stages
 NULL
 
-# the aquatic mosquito `stages` model
-
-#' @title The **L** module skill set
+#' @title Compute the derivatives for `stages` (**L**)
 #'
-#' @description The **L** skill set is a list of
-#' a module's capabilities
-#'
-#' @inheritParams ramp.xds::get_skillset_L
-#'
-#' @return the **L** module skill set, as a list
-#'
-#' @keywords internal
-#' @export
-get_skillset_L.stages = function(xds_obj, s){
-  skills = list(
-    delay = FALSE,
-    not_implemented = TRUE
-  )
-  return(skills)
-}
-
-#' @title Check the `stages` module
-#' @description Run no consistency checks
-#'
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#'
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-check_L.stages = function(xds_obj, s){
-  return(xds_obj)
-}
-
-#' @title Compute derivatives for `stages` (**L**)
-#'
-#' @description
-#' Implements the staged aquatic development model with four larval instars.
-#' Density-dependent effects act through the weighted mean crowding index
-#' \eqn{L = w_1 L_1 + w_2 L_2 + w_3 L_3 + L_4.}
-#'
-#' **Variables:**
-#'
-#' - \eqn{E}: egg density per habitat
-#' - \eqn{L_1, L_2, L_3, L_4}: larval instar densities per habitat
-#' - \eqn{P}: pupal density per habitat
-#'
-#' **Input Term:**
-#'
-#' - \eqn{\eta} or `eta`: egg deposition rate (from [F_eggs])
-#'
-#' **Dynamical System:**
+#' @description Compute the derivatives for the `stages` module:
 #'
 #' \deqn{dE/dt = \eta - (\psi_E + \phi_E) E}
 #' \deqn{dL_1/dt = \psi_E E - \psi_1 L_1 e^{-\xi_1 L} - (\phi_1 + \theta_1 L) L_1}
@@ -123,15 +79,18 @@ check_L.stages = function(xds_obj, s){
 #' \deqn{dL_4/dt = \psi_3 L_3 e^{-\xi_3 L} - \psi_4 L_4 e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4}
 #' \deqn{dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P}
 #'
-#' **Output Term:**
-#'
-#' - The function [F_emerge] computes the net emergence rate (\eqn{\alpha}):
-#'
-#' \deqn{\alpha = \psi_P P}
-#'
+#' @inheritSection stages State Variables
+#' @inheritSection stages Egg Laying
+#' @inheritSection stages Parameters
+#' @inheritSection stages Mean Crowding
+#' @inheritSection stages Dynamics
 #' @inheritParams ramp.xds::dLdt
-#' @return a [numeric] vector
-#' @seealso [make_L_obj_stages]
+#' @note Derivatives are returned in blocks for `E`, `L1`, `L2`, `L3`,
+#' `L4`, and `P`, each in habitat order.
+#' The egg input is read from `xds_obj$terms$eta[[s]]`.
+#' @return a [numeric] vector of derivatives in the module's state-variable
+#' order, with length `6 * nHabitats`
+#' @seealso [stages], [make_L_obj_stages], [ramp.xds::EggLaying]
 #' @keywords internal
 #' @export
 dLdt.stages <- function(t, y, xds_obj, s) {
@@ -154,13 +113,64 @@ dLdt.stages <- function(t, y, xds_obj, s) {
   })
 }
 
-#' @title Compute emergent adults for `stages` (**L** component)
-#' @description The number of female adults emerging from the habitats,
-#' per day, is:
-#' \deqn{\psi_P P/2 }
+#' @title Get the state variables for `stages` (**L**)
+#' @description Extract the state variables for the `stages` module
+#' from `y` and return them by name in a list for use during model solving.
+#' @inheritParams ramp.xds::get_L_vars
+#' @return a named [list] of state variables and module-specific derived quantities
+#' @keywords internal
+#' @export
+#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.
+get_L_vars.stages <- function(y, xds_obj, s) {
+  with(xds_obj$L_obj[[s]]$ix, {
+    list(
+      E  = y[E_ix],
+      L1 = y[L1_ix],
+      L2 = y[L2_ix],
+      L3 = y[L3_ix],
+      L4 = y[L4_ix],
+      P  = y[P_ix]
+    )
+  })
+}
+
+#' @title Mosquito bionomics for `stages` (**L**)
+#'
+#' @description Leave directly stored parameters unchanged. This module
+#' does not configure bionomic parameter ports.
+#' @inheritSection stages Parameters
+#' @inheritParams ramp.xds::LBionomics
+#' @seealso [stages], [LEffectSizes.stages]
+#'
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+LBionomics.stages <- function(t, y, xds_obj, s) {
+  return(xds_obj)
+}
+
+
+#' @title Apply effect sizes for `stages` (**L**)
+#' @description Leave directly stored parameters unchanged. This module
+#' does not configure bionomic parameter ports or apply effect sizes.
+#' @inheritSection stages Parameters
+#' @inheritParams ramp.xds::LEffectSizes
+#' @seealso [stages], [LBionomics.stages]
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+LEffectSizes.stages <- function(t, y, xds_obj, s) {
+  return(xds_obj)
+}
+
+#' @title Compute adult mosquito emergence for `stages` (**L**)
+#' @description Return adult female mosquito emergence per habitat.
+#' @inheritSection stages Emergence
+#' @note The implementation returns `psi_P*P/2`, whereas the inherited
+#' Emergence section gives `psi_P*P`; the factor of two requires review.
 #' @inheritParams ramp.xds::F_emerge
 #' @return a [numeric] vector of length `nHabitats`
-#' @seealso [dLdt.stages]
+#' @seealso [stages], [dLdt.stages], [ramp.xds::Emergence]
 #' @keywords internal
 #' @export
 F_emerge.stages <- function(t, y, xds_obj, s) {
@@ -170,106 +180,13 @@ F_emerge.stages <- function(t, y, xds_obj, s) {
   })
 }
 
-#' @title Mosquito bionomics for `stages` (**L**)
-#'
-#' @description Resets all effect sizes
-#' (`es_psi_E`, `es_phi_E`, `es_psi1`–`es_psi4`, `es_xi1`–`es_xi4`,
-#' `es_phi1`–`es_phi4`, `es_theta1`–`es_theta4`, `es_phi_P`, `es_psi_P`)
-#' to 1. The time-varying baseline values (`_t` fields) are set by
-#' [change_L_pars.stages] and persist until explicitly updated.
-#' @inheritParams ramp.xds::LBionomics
-#'
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-LBionomics.stages <- function(t, y, xds_obj, s) {
-  with(xds_obj$L_obj[[s]], {
-    xds_obj$L_obj[[s]]$es_psi_E  <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi_E  <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_psi1   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_xi1    <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi1   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_theta1 <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_psi2   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_xi2    <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi2   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_theta2 <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_psi3   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_xi3    <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi3   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_theta3 <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_psi4   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_xi4    <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi4   <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_theta4 <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_phi_P  <- rep(1, nHabitats)
-    xds_obj$L_obj[[s]]$es_psi_P  <- rep(1, nHabitats)
-    return(xds_obj)
-  })
-}
 
-#' @title Apply effect sizes for `stages` (**L**)
-#' @description Implements [LEffectSizes] for the `stages` model.
-#' Computes effective parameter values as the product of each time-varying
-#' baseline (`_t`) and its corresponding effect size (`es_`).
-#' @inheritParams ramp.xds::LEffectSizes
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-LEffectSizes.stages <- function(t, y, xds_obj, s) {
-  with(xds_obj$L_obj[[s]], {
-    xds_obj$L_obj[[s]]$psi_E  <- psi_E_t  * es_psi_E
-    xds_obj$L_obj[[s]]$phi_E  <- phi_E_t  * es_phi_E
-    xds_obj$L_obj[[s]]$psi1   <- psi1_t   * es_psi1
-    xds_obj$L_obj[[s]]$xi1    <- xi1_t    * es_xi1
-    xds_obj$L_obj[[s]]$phi1   <- phi1_t   * es_phi1
-    xds_obj$L_obj[[s]]$theta1 <- theta1_t * es_theta1
-    xds_obj$L_obj[[s]]$psi2   <- psi2_t   * es_psi2
-    xds_obj$L_obj[[s]]$xi2    <- xi2_t    * es_xi2
-    xds_obj$L_obj[[s]]$phi2   <- phi2_t   * es_phi2
-    xds_obj$L_obj[[s]]$theta2 <- theta2_t * es_theta2
-    xds_obj$L_obj[[s]]$psi3   <- psi3_t   * es_psi3
-    xds_obj$L_obj[[s]]$xi3    <- xi3_t    * es_xi3
-    xds_obj$L_obj[[s]]$phi3   <- phi3_t   * es_phi3
-    xds_obj$L_obj[[s]]$theta3 <- theta3_t * es_theta3
-    xds_obj$L_obj[[s]]$psi4   <- psi4_t   * es_psi4
-    xds_obj$L_obj[[s]]$xi4    <- xi4_t    * es_xi4
-    xds_obj$L_obj[[s]]$phi4   <- phi4_t   * es_phi4
-    xds_obj$L_obj[[s]]$theta4 <- theta4_t * es_theta4
-    xds_obj$L_obj[[s]]$phi_P  <- phi_P_t  * es_phi_P
-    xds_obj$L_obj[[s]]$psi_P  <- psi_P_t  * es_psi_P
-    return(xds_obj)
-  })
-}
-
-#' @title Set up `stages` (**L**)
-#' @description
+#' @title Make a module object for `stages` (**L**)
+#' @description Create a `stages` module object and initialize its parameters.
+#' Inspect parameters with [get_L_pars.stages] and change supported values
+#' with [change_L_pars.stages]. Values in `options` override parameter arguments.
 #'
-#' This sets up a `stages` model object for the **L** module for the \eqn{s^{th}} vector species
-#' + the object is created by [make_L_obj_stages]
-#' + the initial conditions are set by [setup_L_inits]
-#' + `options` is passed to both to override the defaults
-#'
-#' @seealso [stages], [make_L_obj_stages]
-#'
-#' @note The module object is stored at `xds_obj$L_obj[[s]]`
-#'
-#' @inheritParams ramp.xds::setup_L_obj
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
-  L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
-  class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
-  xds_obj$L_obj[[s]] = L_obj
-  xds_obj$L_obj[[s]]$skill_set <- get_skillset_L(xds_obj, s)
-  xds_obj <- setup_L_inits(xds_obj, options=options, s=s)
-  xds_obj <- setup_habitat_search_weights("setup", xds_obj, list(membership=membership), s=s)
-  return(xds_obj)
-}
-
-#' @title Make `L_obj` for `stages` (**L** component)
-#' @description The following parameters will be set to the values in
+#' The following parameters will be set to the values in
 #' `options`. If they are not found, default values will be used.
 #'
 #' - \eqn{\psi_E} or `psi_E`: egg maturation (hatching) rate
@@ -310,6 +227,7 @@ setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
 #' @param w3 contribution of \eqn{L_3} to mean crowding
 #'
 #' @seealso Called by: [setup_L_obj.stages]. Related: [dLdt.stages]
+#' @seealso [get_L_pars.stages], [change_L_pars.stages]
 #' @return **`L_obj`** an **L** component object
 #' @keywords internal
 #' @export
@@ -326,7 +244,6 @@ make_L_obj_stages = function(nHabitats, options = list(),
     class(L_obj) <- "stages"
     L_obj$nHabitats <- nHabitats
 
-    # effective parameter values (updated each step by LEffectSizes)
     L_obj$psi_E  <- checkIt(psi_E,  nHabitats)
     L_obj$phi_E  <- checkIt(phi_E,  nHabitats)
     L_obj$psi1   <- checkIt(psi1,   nHabitats)
@@ -351,59 +268,45 @@ make_L_obj_stages = function(nHabitats, options = list(),
     L_obj$w2     <- checkIt(w2,     nHabitats)
     L_obj$w3     <- checkIt(w3,     nHabitats)
 
-    # time-varying baselines (updated by change_L_pars)
-    L_obj$psi_E_t  <- L_obj$psi_E
-    L_obj$phi_E_t  <- L_obj$phi_E
-    L_obj$psi1_t   <- L_obj$psi1
-    L_obj$xi1_t    <- L_obj$xi1
-    L_obj$phi1_t   <- L_obj$phi1
-    L_obj$theta1_t <- L_obj$theta1
-    L_obj$psi2_t   <- L_obj$psi2
-    L_obj$xi2_t    <- L_obj$xi2
-    L_obj$phi2_t   <- L_obj$phi2
-    L_obj$theta2_t <- L_obj$theta2
-    L_obj$psi3_t   <- L_obj$psi3
-    L_obj$xi3_t    <- L_obj$xi3
-    L_obj$phi3_t   <- L_obj$phi3
-    L_obj$theta3_t <- L_obj$theta3
-    L_obj$psi4_t   <- L_obj$psi4
-    L_obj$xi4_t    <- L_obj$xi4
-    L_obj$phi4_t   <- L_obj$phi4
-    L_obj$theta4_t <- L_obj$theta4
-    L_obj$phi_P_t  <- L_obj$phi_P
-    L_obj$psi_P_t  <- L_obj$psi_P
-
-    # effect sizes (reset to 1 by LBionomics each step)
-    L_obj$es_psi_E  <- rep(1, nHabitats)
-    L_obj$es_phi_E  <- rep(1, nHabitats)
-    L_obj$es_psi1   <- rep(1, nHabitats)
-    L_obj$es_xi1    <- rep(1, nHabitats)
-    L_obj$es_phi1   <- rep(1, nHabitats)
-    L_obj$es_theta1 <- rep(1, nHabitats)
-    L_obj$es_psi2   <- rep(1, nHabitats)
-    L_obj$es_xi2    <- rep(1, nHabitats)
-    L_obj$es_phi2   <- rep(1, nHabitats)
-    L_obj$es_theta2 <- rep(1, nHabitats)
-    L_obj$es_psi3   <- rep(1, nHabitats)
-    L_obj$es_xi3    <- rep(1, nHabitats)
-    L_obj$es_phi3   <- rep(1, nHabitats)
-    L_obj$es_theta3 <- rep(1, nHabitats)
-    L_obj$es_psi4   <- rep(1, nHabitats)
-    L_obj$es_xi4    <- rep(1, nHabitats)
-    L_obj$es_phi4   <- rep(1, nHabitats)
-    L_obj$es_theta4 <- rep(1, nHabitats)
-    L_obj$es_phi_P  <- rep(1, nHabitats)
-    L_obj$es_psi_P  <- rep(1, nHabitats)
-
     return(L_obj)
   })
 }
 
+#' @title Set up the module object for `stages` (**L**)
+#' @description
+#'
+#' Set up a `stages` module object for the **L** component and the \eqn{s^{th}} vector species.
+#'
+#' + Create the module object with [make_L_obj_stages], passing `nHabitats` and `options`.
+#' + Set the skill set using [ramp.xds::get_skillset_L].
+#' + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.
+#' + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].
+#' + Return the updated **`xds`** model object.
+#'
+#' @seealso [stages], [make_L_obj_stages]
+#'
+#' @note The module object is stored at `xds_obj$L_obj[[s]]`
+#' Its classes are `stages` and `stages_` followed by `xds_obj$xds`.
+#'
+#' @inheritParams ramp.xds::setup_L_obj
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+setup_L_obj.stages = function(Lname, membership, xds_obj, options=list(), s=1){
+  L_obj <- make_L_obj_stages(xds_obj$nHabitats, options)
+  class(L_obj) <- c("stages", paste("stages_", xds_obj$xds, sep=""))
+  xds_obj$L_obj[[s]] = L_obj
+  xds_obj <- setup_L_inits(xds_obj, options=options, s=s)
+  xds_obj <- setup_habitat_search_weights("setup", xds_obj, list(membership=membership), s=s)
+  return(xds_obj)
+}
+
 #' @title Get parameters for `stages` (**L**)
-#' @description Get the **L** component parameters
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return a [list]
+#' @seealso [make_L_obj_stages], [change_L_pars.stages]
+#' @description Return the parameters for the `stages` module as a named list.
+#' @inheritSection stages Parameters
+#' @inheritParams ramp.xds::get_L_pars
+#' @return a named [list] of parameter values
 #' @seealso [dLdt.stages] or [change_L_pars.stages]
 #' @keywords internal
 #' @export
@@ -420,15 +323,18 @@ get_L_pars.stages <- function(xds_obj, s = 1) {
 }
 
 #' @title Change parameters for `stages` (**L**)
-#' @description For the `stages` module (**L**) for the \eqn{s^{th}} species,
-#' change parameter values named in `options` leaving other values unchanged.
+#' @seealso [make_L_obj_stages], [get_L_pars.stages]
+#' @description Change parameter values named in `options` for the `stages`
+#' module, leaving other values unchanged.
 #'
 #' Named values passed in `options` update the corresponding
-#' time-varying baseline (`_t`) fields, which take effect at the
-#' next call to [LEffectSizes.stages].
+#' parameter fields directly; this module has no bionomic parameter ports.
+#' Call [ramp.xds::LBionomics] at time zero after updating the parameter fields,
+#' without calling [ramp.xds::LEffectSizes].
 #'
 #' Recognised names: `psi_E`, `phi_E`, `psi1`–`psi4`, `xi1`–`xi4`,
 #' `phi1`–`phi4`, `theta1`–`theta4`, `phi_P`, `psi_P`.
+#' @inheritSection stages Parameters
 #' @inheritParams ramp.xds::change_L_pars
 #' @seealso [dLdt.stages] or [make_L_obj_stages]
 #' @return an **`xds`** model object
@@ -437,53 +343,39 @@ get_L_pars.stages <- function(xds_obj, s = 1) {
 change_L_pars.stages <- function(xds_obj, options = list(), s = 1) {
   nHabitats <- xds_obj$nHabitats
   with(xds_obj$L_obj[[s]], with(options, {
-    xds_obj$L_obj[[s]]$psi_E_t  <- checkIt(psi_E,  nHabitats)
-    xds_obj$L_obj[[s]]$phi_E_t  <- checkIt(phi_E,  nHabitats)
-    xds_obj$L_obj[[s]]$psi1_t   <- checkIt(psi1,   nHabitats)
-    xds_obj$L_obj[[s]]$xi1_t    <- checkIt(xi1,    nHabitats)
-    xds_obj$L_obj[[s]]$phi1_t   <- checkIt(phi1,   nHabitats)
-    xds_obj$L_obj[[s]]$theta1_t <- checkIt(theta1, nHabitats)
-    xds_obj$L_obj[[s]]$psi2_t   <- checkIt(psi2,   nHabitats)
-    xds_obj$L_obj[[s]]$xi2_t    <- checkIt(xi2,    nHabitats)
-    xds_obj$L_obj[[s]]$phi2_t   <- checkIt(phi2,   nHabitats)
-    xds_obj$L_obj[[s]]$theta2_t <- checkIt(theta2, nHabitats)
-    xds_obj$L_obj[[s]]$psi3_t   <- checkIt(psi3,   nHabitats)
-    xds_obj$L_obj[[s]]$xi3_t    <- checkIt(xi3,    nHabitats)
-    xds_obj$L_obj[[s]]$phi3_t   <- checkIt(phi3,   nHabitats)
-    xds_obj$L_obj[[s]]$theta3_t <- checkIt(theta3, nHabitats)
-    xds_obj$L_obj[[s]]$psi4_t   <- checkIt(psi4,   nHabitats)
-    xds_obj$L_obj[[s]]$xi4_t    <- checkIt(xi4,    nHabitats)
-    xds_obj$L_obj[[s]]$phi4_t   <- checkIt(phi4,   nHabitats)
-    xds_obj$L_obj[[s]]$theta4_t <- checkIt(theta4, nHabitats)
-    xds_obj$L_obj[[s]]$phi_P_t  <- checkIt(phi_P,  nHabitats)
-    xds_obj$L_obj[[s]]$psi_P_t  <- checkIt(psi_P,  nHabitats)
+    xds_obj$L_obj[[s]]$psi_E  <- checkIt(psi_E,  nHabitats)
+    xds_obj$L_obj[[s]]$phi_E  <- checkIt(phi_E,  nHabitats)
+    xds_obj$L_obj[[s]]$psi1   <- checkIt(psi1,   nHabitats)
+    xds_obj$L_obj[[s]]$xi1    <- checkIt(xi1,    nHabitats)
+    xds_obj$L_obj[[s]]$phi1   <- checkIt(phi1,   nHabitats)
+    xds_obj$L_obj[[s]]$theta1 <- checkIt(theta1, nHabitats)
+    xds_obj$L_obj[[s]]$psi2   <- checkIt(psi2,   nHabitats)
+    xds_obj$L_obj[[s]]$xi2    <- checkIt(xi2,    nHabitats)
+    xds_obj$L_obj[[s]]$phi2   <- checkIt(phi2,   nHabitats)
+    xds_obj$L_obj[[s]]$theta2 <- checkIt(theta2, nHabitats)
+    xds_obj$L_obj[[s]]$psi3   <- checkIt(psi3,   nHabitats)
+    xds_obj$L_obj[[s]]$xi3    <- checkIt(xi3,    nHabitats)
+    xds_obj$L_obj[[s]]$phi3   <- checkIt(phi3,   nHabitats)
+    xds_obj$L_obj[[s]]$theta3 <- checkIt(theta3, nHabitats)
+    xds_obj$L_obj[[s]]$psi4   <- checkIt(psi4,   nHabitats)
+    xds_obj$L_obj[[s]]$xi4    <- checkIt(xi4,    nHabitats)
+    xds_obj$L_obj[[s]]$phi4   <- checkIt(phi4,   nHabitats)
+    xds_obj$L_obj[[s]]$theta4 <- checkIt(theta4, nHabitats)
+    xds_obj$L_obj[[s]]$phi_P  <- checkIt(phi_P,  nHabitats)
+    xds_obj$L_obj[[s]]$psi_P  <- checkIt(psi_P,  nHabitats)
+    y <- get_inits(xds_obj, flatten=TRUE)
+    xds_obj <- LBionomics(0, y, xds_obj, s)
     return(xds_obj)
   }))
 }
 
-#' @title Setup initial values for `stages` (**L**)
-#' @description Set initial values for all the variables in the `stages` module
-#' (**L**) for the \eqn{s^{th}} species.
-#' + [make_L_inits_stages] supplies default values
-#' + The values in `options` override the defaults
-#' + To inspect variable names, use [get_L_inits] or
-#' see the inline module documentation.
-#'
-#' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be passed in `options`
-#' by name.
-#' @inheritParams ramp.xds::setup_L_inits
-#' @seealso [make_L_inits_stages]
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-setup_L_inits.stages = function(xds_obj, options = list(), s=1){
-  xds_obj$L_obj[[s]]$inits = make_L_inits_stages(xds_obj$nHabitats, options)
-  return(xds_obj)
-}
-
-#' @title Make initial values for `stages` (**L** component)
-#' @description Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be
+#' @title Make initial values for `stages` (**L**)
+#' @description Create a named list of initial values for the `stages` module.
+#' Values in `options` override the defaults.
+#' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be
 #' set by passing the corresponding names in `options`.
+#' @details Initial values must be numeric scalars or have length `nHabitats`.
+#' Scalars are expanded to that length.
 #' @param nHabitats the number of habitats in the model
 #' @param options a [list] that overrides default values
 #' @param E initial egg density
@@ -492,9 +384,10 @@ setup_L_inits.stages = function(xds_obj, options = list(), s=1){
 #' @param L3 initial third instar density
 #' @param L4 initial fourth instar density
 #' @param P initial pupal density
-#' @return a [list] with initial conditions
+#' @return a named [list] of initial values
 #' @keywords internal
 #' @export
+#' @seealso [setup_L_inits.stages], [change_L_inits.stages]
 make_L_inits_stages = function(nHabitats, options = list(),
     E = 1, L1 = 1, L2 = 1, L3 = 1, L4 = 1, P = 1) {
   with(options, {
@@ -509,29 +402,28 @@ make_L_inits_stages = function(nHabitats, options = list(),
   })
 }
 
-#' @title List variables for `stages` (**L**)
-#' @description Extract the **L** component variables from the
-#' vector of state variables (`y`) and return them as a named list.
-#' @inheritParams ramp.xds::get_L_vars
-#' @return a named [list]
+#' @title Set up initial values for `stages` (**L**)
+#' @description Set up initial values for the `stages` module using
+#' [make_L_inits_stages]. Values in `options` override the defaults.
+#'
+#' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be passed in `options`
+#' by name.
+#' @inheritParams ramp.xds::setup_L_inits
+#' @seealso [make_L_inits_stages]
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @export
-get_L_vars.stages <- function(y, xds_obj, s) {
-  with(xds_obj$L_obj[[s]]$ix, {
-    list(
-      E  = y[E_ix],
-      L1 = y[L1_ix],
-      L2 = y[L2_ix],
-      L3 = y[L3_ix],
-      L4 = y[L4_ix],
-      P  = y[P_ix]
-    )
-  })
+#' @seealso [change_L_inits.stages]
+#' @note Initial values are stored at `xds_obj$L_obj[[s]]$inits`.
+#' @seealso [ramp.xds::get_L_inits]
+setup_L_inits.stages = function(xds_obj, options = list(), s=1){
+  xds_obj$L_obj[[s]]$inits = make_L_inits_stages(xds_obj$nHabitats, options)
+  return(xds_obj)
 }
 
 #' @title Change initial values for `stages` (**L**)
-#' @description For the `stages` module (**L**) for the \eqn{s^{th}} species,
-#' change initial values named in `options` leaving other values unchanged.
+#' @description Change initial values named in `options` for the `stages`
+#' module, leaving other values unchanged.
 #'
 #' Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} are reset
 #' if they are passed as named components of `options`.
@@ -539,6 +431,9 @@ get_L_vars.stages <- function(y, xds_obj, s) {
 #' @return an **`xds`** model object
 #' @keywords internal
 #' @export
+#' @seealso [make_L_inits_stages], [setup_L_inits.stages]
+#' @note Stored initial values for this module are at
+#' `xds_obj$L_obj[[s]]$inits`.
 change_L_inits.stages <- function(xds_obj, options = list(), s = 1) {
   with(xds_obj$L_obj[[s]]$inits, with(options, {
     xds_obj$L_obj[[s]]$inits$E  <- E
@@ -551,15 +446,18 @@ change_L_inits.stages <- function(xds_obj, options = list(), s = 1) {
   }))
 }
 
-#' @title Setup variable indices for `stages` (**L** component)
-#' @description Set the values of the indices for the **L** component
-#' variables for the `stages` module. Indices are allocated in the order
-#' \eqn{E, L_1, L_2, L_3, L_4, P}, each block of length `nHabitats`.
+#' @title Set up variable indices for `stages` (**L**)
+#' @description Assign consecutive variable indices for the `stages` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `E_ix`, `L1_ix`, `L2_ix`, `L3_ix`, `L4_ix`, `P_ix`.
+#' Each block has length `nHabitats`.
 #' @inheritParams ramp.xds::setup_L_ix
 #' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @export
+#' @note Indices are stored at `xds_obj$L_obj[[s]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
 setup_L_ix.stages <- function(xds_obj, s) {
   with(xds_obj, {
     E_ix  <- seq(from = max_ix + 1,          length.out = nHabitats)
@@ -583,11 +481,12 @@ setup_L_ix.stages <- function(xds_obj, s) {
 }
 
 #' @title Parse outputs for `stages` (**L**)
-#' @description Returns the columns representing \eqn{E, L_1, L_2, L_3,
-#' L_4, P} from a matrix where each column is a state variable. The
-#' variables are returned as a named list.
+#' @description Extract the model state outputs for the `stages` module
+#' from `outputs` and return them by name in a list.
+#' Return `E`, `L1`, `L2`, `L3`, `L4`, and `P`.
+#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.
 #' @inheritParams ramp.xds::parse_L_orbits
-#' @return a named [list]
+#' @return a [list]
 #' @keywords internal
 #' @export
 parse_L_orbits.stages <- function(outputs, xds_obj, s) {
@@ -603,9 +502,46 @@ parse_L_orbits.stages <- function(outputs, xds_obj, s) {
   })
 }
 
-#' @title Compute the steady state of `dLdt.stages` (**L** component)
-#' @description Given an egg deposition rate `eta`,
-#' return a steady state value for the equations in [dLdt.stages].
+#' @title Check `stages` (**L**)
+#' @description Run no consistency checks
+#'
+#' @inheritParams ramp.xds::check_L
+#'
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+check_L.stages = function(xds_obj, s){
+  return(xds_obj)
+}
+
+# the aquatic mosquito `stages` model
+
+#' @title Get the skill set for `stages` (**L**)
+#'
+#' @description Return the capabilities and compatibilities of the `stages` module as a list.
+#'
+#' @inheritParams ramp.xds::get_skillset_L
+#'
+#' @return the **L** module skill set, as a list
+#'
+#' @keywords internal
+#' @export
+get_skillset_L.stages = function(xds_obj, s){
+  skills = list(
+    psi_is_port = FALSE,
+    phi_is_port = FALSE,
+    xi_is_port = FALSE,
+    theta_is_port = FALSE,
+    dts = FALSE,
+    delay = FALSE
+  )
+  return(skills)
+}
+
+#' @title Compute steady states for `stages` (**L**)
+#' @description Compute steady-state aquatic mosquito densities for the `stages`
+#' module given the daily egg input `eta` in each habitat for the
+#' differential-equation system in [dLdt.stages].
 #' Uses [stats::nlm] to minimise the sum of squared derivatives.
 #' @note This function does not use deSolve
 #' @inheritParams ramp.xds::steady_state_L

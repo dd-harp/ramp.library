@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{get_g.BQm}
 \alias{get_g.BQm}
-\title{Get the feeding rate}
+\title{Get the adult mosquito mortality rate for \code{BQm} (\strong{MY})}
 \usage{
 \method{get_g}{BQm}(xds_obj, s = 1)
 }
@@ -12,9 +12,32 @@
 \item{s}{the vector species index}
 }
 \value{
-y a \link{numeric} vector assigned the class "dynamic"
+a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Get the feeding rate
+Return the stored realized adult mosquito mortality rate per patch.
+}
+\details{
+Read \code{g} without evaluating ports or applying effect sizes.
+}
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma_b}}{emigration rate during blood feeding}
+\item{\code{sigma_q}}{emigration rate during egg laying}
+\item{\code{mu}}{fraction of emigrating mosquitoes lost}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.BQm} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\seealso{
+\link{BQm}
 }
 \keyword{internal}

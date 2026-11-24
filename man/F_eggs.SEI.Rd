@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{F_eggs.SEI}
 \alias{F_eggs.SEI}
-\title{Egg production rate for \code{SEI}}
+\title{Compute egg production for \code{SEI} (\strong{MY})}
 \usage{
 \method{F_eggs}{SEI}(t, y, xds_obj, s)
 }
@@ -19,11 +19,11 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_eggs]{F_eggs} for the SEI model.
+Return the number of eggs laid by the adult mosquito population, per patch
 }
 \section{Egg Laying}{
 
-The egg batch rate \eqn{\nu} and the number of eggs per batch
+The oviposition rate \eqn{\nu} and the number of eggs per batch
 \eqn{\Gamma} determine the egg production rate per patch:
 \deqn{G=\nu\Gamma M.}
 \link{F_eggs.SEI} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}

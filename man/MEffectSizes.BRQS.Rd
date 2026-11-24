@@ -19,7 +19,8 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the BRQS model
+Leave directly stored parameters unchanged. This module
+does not configure bionomic parameter ports or apply effect sizes.
 }
 \section{Parameters}{
 

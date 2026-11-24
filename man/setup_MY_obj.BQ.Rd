@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{setup_MY_obj.BQ}
 \alias{setup_MY_obj.BQ}
-\title{Set up \code{BQ} (\strong{MY})}
+\title{Set up the module object for \code{BQ} (\strong{MY})}
 \usage{
 \method{setup_MY_obj}{BQ}(MYname, xds_obj, options = list(), s = 1)
 }
@@ -16,18 +16,23 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} model object
 }
 \description{
-This sets up a \code{BQ} model object for the \strong{MY} module for the \eqn{s^{th}} vector species
+Set up a \code{BQ} module object for the \strong{MY} component and the \eqn{s^{th}} vector species.
 \itemize{
-\item the object is created by \link{make_MY_obj_BQ}
-\item the initial conditions are set by \link[ramp.xds:setup_MY_inits]{setup_MY_inits}
-\item \code{options} is passed to both to override the defaults
+\item Set the module name to \code{BQ}.
+\item Create the module object with \link{make_MY_obj_BQ}, passing \code{nPatches} and \code{options}.
+\item Initialize the circadian function using \link[ramp.xds:setup_F_circadian.setup]{ramp.xds::setup_F_circadian.setup}.
+\item Set the skill set using \link[ramp.xds:get_skillset_MY]{ramp.xds::get_skillset_MY}.
+\item Initialize the mosquito dispersal matrices using \link[ramp.xds:setup_K_matrix.zero]{ramp.xds::setup_K_matrix.zero},
+with \code{which_K = "Kb"} and \code{which_K = "Kq"}.
+\item Set initial values using \link[ramp.xds:setup_MY_inits]{ramp.xds::setup_MY_inits}, passing \code{options} to override defaults.
+\item Return the updated \strong{\code{xds}} model object.
 }
 }
 \note{
-The module object is stored at \code{xds_obj$MY_obj[[s]]}
+The module object is stored at \code{xds_obj$MY_obj[[s]]}.
 }
 \section{State Variables}{
 
@@ -54,7 +59,7 @@ The module object is stored at \code{xds_obj$MY_obj[[s]]}
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 

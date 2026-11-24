@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{setup_XH_ix.SIPd}
 \alias{setup_XH_ix.SIPd}
-\title{Add indices for human population to parameter list}
+\title{Set up variable indices for \code{SIPd} (\strong{XH})}
 \usage{
 \method{setup_XH_ix}{SIPd}(xds_obj, i)
 }
@@ -15,7 +15,14 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:setup_XH_ix]{setup_XH_ix} for the \code{SIPd} model.
+Assign consecutive variable indices for the \code{SIPd} module,
+starting after \code{xds_obj$max_ix}, and update the maximum index.
+Allocate blocks in the order \code{S_ix}, \code{I_ix}, \code{P_ix}, \code{treated_ix}.
+Each block has length \code{nStrata[i]}.
+}
+\note{
+Indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
+The maximum index is stored at \code{xds_obj$max_ix}.
 }
 \seealso{
 \link{SIPd}

@@ -18,10 +18,15 @@ make_XH_inits_SEIS(nStrata, options = list(), H = 1000, E = 0, I = 1)
 \item{I}{the initial number of infectious humans}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{SEIS} (\strong{XH})
+Create a named list of initial values for the \code{SEIS} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -35,5 +40,7 @@ Make initial values for \code{SEIS} (\strong{XH})
 
 \seealso{
 \link{SEIS}
+
+\link{setup_XH_inits.SEIS}, \link{change_XH_inits.SEIS}
 }
 \keyword{internal}

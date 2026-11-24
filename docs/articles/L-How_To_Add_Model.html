@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -179,6 +179,72 @@ references with roxygen.</li>
 <li>Add tests for the module’s equations, dimensions, and setup
 behavior.</li>
 </ul>
+<div class="section level3">
+<h3 id="documentation-policy">Documentation policy<a class="anchor" aria-label="anchor" href="#documentation-policy"></a>
+</h3>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order" class="external-link">function
+order</a> in module files and guide implementation sections. Move
+functions with their documentation, keep file-level review/TODO notes at
+the top, and preserve definitions and behavior when reordering.</p>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions" class="external-link">documentation
+conventions</a> and the <a href="https://dd-harp.github.io/ramp.xds/articles/L-interface.html#setup-documentation" class="external-link">L
+setup wording</a>. These vignettes are the public style reference for
+both packages.</p>
+<ul>
+<li>Use the approved family titles with a backticked module name and the
+<strong>L</strong> tag, including “Compute the derivatives for
+<code>module</code> (<strong>L</strong>)”, “Mosquito bionomics for
+<code>module</code> (<strong>L</strong>)”, and “Apply effect sizes for
+<code>module</code> (<strong>L</strong>)”.</li>
+<li>Show the equations actually implemented, matching the returned state
+order. Describe derivative and updating equations separately, including
+any accessory variables and branches.</li>
+<li>Keep storage, class assignments, and dispatch mechanics in
+<code>@note</code>. Explain dispatch on the generic, not repeatedly on
+each method.</li>
+<li>List setup actions in implementation order: construction using
+<code>nHabitats</code> and <code>options</code>, initial values, habitat
+search weights, and return of the updated
+<strong><code>xds</code></strong> model object.</li>
+<li>Describe the habitat step as “Initialize habitat search weights
+using <code>[ramp.xds::setup_habitat_search_weights.setup]</code>.” End
+complete bullets with periods and qualify links to shared helpers with
+<code>ramp.xds::</code>.</li>
+<li>Describe skill sets as capabilities and compatibilities returned on
+demand by <code>get_skillset_L</code>; do not store them on the module
+object. Include <code>dts = FALSE</code> if no discrete-time update
+method is defined; only advertise supported and tested solver
+pathways.</li>
+<li>State when a check method returns the model unchanged without
+checks.</li>
+</ul>
+<p>Both dynamics methods below are placeholders. Keep the methods
+required by the new module, replace the equations and their
+documentation together, and update the skill set accordingly.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="module-overview">Module overview<a class="anchor" aria-label="anchor" href="#module-overview"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title The `newLname` module for the **L** component</span></span>
+<span><span class="co">#' @section State Variables:</span></span>
+<span><span class="co">#' Describe the module's actual states and their habitat-level interpretation.</span></span>
+<span><span class="co">#' @section Dynamical Terms:</span></span>
+<span><span class="co">#' Describe the shared inputs used by the implemented equations, including `eta`.</span></span>
+<span><span class="co">#' @section Parameters:</span></span>
+<span><span class="co">#' Describe the parameters used by the implemented model and their units.</span></span>
+<span><span class="co">#' @section ODE:</span></span>
+<span><span class="co">#' Replace this placeholder with the continuous-time model equations.</span></span>
+<span><span class="co">#' @section DTS:</span></span>
+<span><span class="co">#' Replace this placeholder with the discrete-time updating equations.</span></span>
+<span><span class="co">#' @section Emergence:</span></span>
+<span><span class="co">#' Replace this placeholder with the module's adult female emergence equation.</span></span>
+<span><span class="co">#' [F_emerge.newLname] returns habitat-level emergence before aggregation</span></span>
+<span><span class="co">#' to patches by [ramp.xds::Emergence].</span></span>
+<span><span class="co">#' @name newLname</span></span>
+<span><span class="cn">NULL</span></span></code></pre></div>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="module-dynamics">Module dynamics<a class="anchor" aria-label="anchor" href="#module-dynamics"></a>
@@ -194,11 +260,30 @@ interfaces, not interchangeable equations.</p>
 <code>xds_obj$terms$eta[[s]]</code>. Extract the module states with
 <code>get_L_vars</code> and use the indices and parameter values stored
 on the module object.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute derivatives for `newLname` (**L**)</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::dLdt] for `newLname`.</span></span>
+<p>Retain “Compute the derivatives for <code>module</code>
+(<strong>L</strong>)” as the method title. Begin descriptions “Compute
+the derivatives for the <code>module</code> module:” and show the
+equations immediately below. Inherit the module NULL anchor’s state,
+input-term, parameter, and ODE or Dynamics sections. Use the actual
+section names for existing modules; basicL uses
+<code>Dynamical Term</code> and stages uses <code>Egg Laying</code> for
+its input. Document returned block order and length, with each
+habitat-level block in habitat order. Keep dispatch on the shared
+generic and storage details in <code>@note</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Compute the derivatives for the `newLname` module:</span></span>
+<span><span class="co">#' \deqn{dL/dt = 0}</span></span>
+<span><span class="co">#' Replace this equation and the derivative code together.</span></span>
+<span><span class="co">#' @inheritSection newLname State Variables</span></span>
+<span><span class="co">#' @inheritSection newLname Dynamical Terms</span></span>
+<span><span class="co">#' @inheritSection newLname Parameters</span></span>
+<span><span class="co">#' @inheritSection newLname ODE</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::dLdt</span></span>
-<span><span class="co">#' @return a numeric vector of derivatives, in state-variable order</span></span>
+<span><span class="co">#' @note Derivatives for `L` are returned in habitat order.</span></span>
+<span><span class="co">#' The egg input is read from `xds_obj$terms$eta[[s]]`.</span></span>
+<span><span class="co">#' @return a [numeric] vector of derivatives in the module's state-variable</span></span>
+<span><span class="co">#' order, with length `nHabitats`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">dLdt.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">eta</span> <span class="op">&lt;-</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">eta</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span></span>
@@ -220,11 +305,27 @@ concatenate them in the same order used by
 states in that order. Write the model’s discrete update equations
 directly; do not substitute the continuous-time derivative or an Euler
 step unless that is the model being implemented.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>Use “Update states for <code>module</code> (<strong>L</strong>)” for
+the title and “Update the state variables for the <code>module</code>
+module:” for the description, followed by the updating equations in
+<code>\deqn{}</code>. Inherit the same NULL-anchor sections as the
+derivative method, with <code>DTS</code> replacing <code>ODE</code>.
+Document habitat ordering, return length, and egg-input storage as
+below.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Update states for `newLname` (**L**)</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::Update_Lt] for `newLname`.</span></span>
+<span><span class="co">#' @description Update the state variables for the `newLname` module:</span></span>
+<span><span class="co">#' \deqn{L_{t+1} = 0}</span></span>
+<span><span class="co">#' Replace this equation and the updating code together.</span></span>
+<span><span class="co">#' @inheritSection newLname State Variables</span></span>
+<span><span class="co">#' @inheritSection newLname Dynamical Terms</span></span>
+<span><span class="co">#' @inheritSection newLname Parameters</span></span>
+<span><span class="co">#' @inheritSection newLname DTS</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::Update_Lt</span></span>
-<span><span class="co">#' @return a numeric vector of updated states, in state-variable order</span></span>
+<span><span class="co">#' @note Updated values for `L` are returned in habitat order.</span></span>
+<span><span class="co">#' The egg input is read from `xds_obj$terms$eta[[s]]`.</span></span>
+<span><span class="co">#' @return a [numeric] vector of updated states in the module's state-variable</span></span>
+<span><span class="co">#' order, with length `nHabitats`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">Update_Lt.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">eta</span> <span class="op">&lt;-</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">terms</span><span class="op">$</span><span class="va">eta</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span></span>
@@ -240,6 +341,26 @@ step unless that is the model being implemented.</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="state-variable-extraction">State-variable extraction<a class="anchor" aria-label="anchor" href="#state-variable-extraction"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the state variables for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Extract the state variables for the `newLname` module</span></span>
+<span><span class="co">#' from `y` and return them by name in a list for use during model solving.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_L_vars</span></span>
+<span><span class="co">#' @return a named [list] of state variables and module-specific derived quantities</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_L_vars.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
+<span>    <span class="va">L</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">L_ix</span><span class="op">]</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L <span class="op">=</span> <span class="va">L</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>If the module has more than one state variable, create an index range
+for each one and include each named state in the returned list.</p>
+</div>
+<div class="section level2">
 <h2 id="bionomics-and-effect-sizes">Bionomics and effect sizes<a class="anchor" aria-label="anchor" href="#bionomics-and-effect-sizes"></a>
 </h2>
 <p><code>LBionomics.newLname</code> updates baseline parameter values at
@@ -248,51 +369,152 @@ time <code>t</code> and resets effect sizes.
 to those baseline values. Implement these methods for parameters that
 use time-varying forcing or vector-control effects; use the existing
 bionomics forcing functions where they match the parameter.</p>
-<p>For each affected parameter <code>p1</code>, store its baseline as
-<code>p1_t</code>, its effect size as <code>es_p1</code>, and its
-effective value as <code>p1</code>. The example assumes
-<code>p1_t</code> and <code>p2_t</code> have already been initialized on
-the module object.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Mosquito bionomics for `newLname` (**L**)</span></span>
+<p>For each parameter <code>x</code> configured as a port, store its
+baseline as <code>x_t</code>, its effect size as <code>es_x</code>, and
+its effective value as <code>x</code>. Parameters without ports are
+stored directly as <code>x</code> and are not modified by effect sizes.
+The example assumes <code>p1</code> has a configured port and that
+<code>F_p1(t, xds_obj, s)</code> evaluates it; <code>p2</code> is a
+direct parameter without a port.</p>
+<p>Inherit the module NULL anchor’s <code>Parameters</code> section and
+link the paired methods reciprocally and to the module. Describe
+baseline evaluation and effect-size application separately, keeping
+stored fields and assignments in <code>@note</code>. For modules without
+ports, such as stages, describe the actual no-op behavior rather than
+claiming that parameters or effects are updated. Keep dispatch
+documentation on the shared generics.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the baseline p1 parameter</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_psi</span></span>
+<span><span class="co">#' @return a numeric vector of length `nHabitats`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">F_p1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">UseMethod</a></span><span class="op">(</span><span class="st">"F_p1"</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_obj</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @rdname F_p1</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">F_p1.static</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_obj</span><span class="op">$</span><span class="va">p1</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Mosquito bionomics for `newLname` (**L**)</span></span>
 <span><span class="co">#' @description Update baseline parameters and reset effect sizes.</span></span>
+<span><span class="co">#' @inheritSection newLname Parameters</span></span>
+<span><span class="co">#' @note Store the evaluated baseline as `p1_t` and reset `es_p1` to 1</span></span>
+<span><span class="co">#' per habitat at `xds_obj$L_obj[[s]]`. Leave the direct parameter `p2` unchanged.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::LBionomics</span></span>
+<span><span class="co">#' @seealso [newLname], [LEffectSizes.newLname]</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">LBionomics.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
 <span>    <span class="co"># Replace these assignments with the appropriate forcing functions.</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_t</span> <span class="op">&lt;-</span> <span class="va">p1</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2_t</span> <span class="op">&lt;-</span> <span class="va">p2</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_t</span> <span class="op">&lt;-</span> <span class="fu">F_p1</span><span class="op">(</span><span class="va">t</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p2</span></span>
 <span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">es_p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">es_p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' @title Apply effect sizes for `newLname` (**L**)</span></span>
 <span><span class="co">#' @description Apply vector-control effect sizes to baseline parameters.</span></span>
+<span><span class="co">#' @inheritSection newLname Parameters</span></span>
+<span><span class="co">#' @note Set `p1 = p1_t * es_p1` at `xds_obj$L_obj[[s]]`.</span></span>
+<span><span class="co">#' Do not evaluate ports, reset effect sizes, or change the direct parameter `p2`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::LEffectSizes</span></span>
+<span><span class="co">#' @seealso [newLname], [LBionomics.newLname]</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">LEffectSizes.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
 <span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p1_t</span> <span class="op">*</span> <span class="va">es_p1</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p2_t</span> <span class="op">*</span> <span class="va">es_p2</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="emergence">Emergence<a class="anchor" aria-label="anchor" href="#emergence"></a>
+</h2>
+<p><code>F_emerge.newLname</code> returns a habitat-level vector of
+adult emergence, usually a rate for a continuous-time model or a number
+for a discrete-time model. The shared emergence interface aggregates
+these values to patches using habitat membership.</p>
+<p>Use “Compute adult mosquito emergence for <code>module</code>
+(<strong>L</strong>)” and the short description below. Inherit the
+<code>Emergence</code> section from the module NULL anchor for formulas
+and biological details; keep it consistent with the implementation.
+Return “a [numeric] vector of length <code>nHabitats</code>” and link to
+the module and <code><a href="https://dd-harp.github.io/ramp.xds/reference/Emergence.html" class="external-link">ramp.xds::Emergence</a></code>. The shared generic
+documents dispatch on <code>xds_obj$L_obj[[s]]</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute adult mosquito emergence for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Return adult female mosquito emergence per habitat.</span></span>
+<span><span class="co">#' @inheritSection newLname Emergence</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_emerge</span></span>
+<span><span class="co">#' @seealso [newLname], [ramp.xds::Emergence]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nHabitats`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">F_emerge.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_L_vars.html" class="external-link">get_L_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
+<span>      <span class="co"># Replace this expression with the model's emergence equation.</span></span>
+<span>      <span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="dynamical-parameter-accessors">Dynamical parameter accessors<a class="anchor" aria-label="anchor" href="#dynamical-parameter-accessors"></a>
+</h2>
+<p>Implement <code>get_psi</code>, <code>get_phi</code>,
+<code>get_xi</code>, and <code>get_theta</code> only when the module
+supports these parameter queries. The current methods are provided by
+<code>basicL</code>, not <code>stages</code>. These accessors return
+stored realized values per habitat; they do not evaluate ports or apply
+effect sizes.</p>
+<p>Use “Get the parameter for <code>module</code> (<strong>L</strong>)”
+for method titles, replacing “parameter” with its full name. Describe
+the stored realized parameter per habitat, inherit the module NULL
+anchor’s <code>Parameters</code> section, and return “a [numeric] vector
+of length <code>nHabitats</code>”. Keep dispatch on
+<code>xds_obj$L_obj[[s]]</code> in the shared generic documentation.
+Link to the module and the corresponding shared parameter changer.</p>
+<p>For example, if the module stores a realized maturation rate in
+<code>psi</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the maturation rate for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Return the stored realized maturation rate per habitat.</span></span>
+<span><span class="co">#' @inheritSection newLname Parameters</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_psi</span></span>
+<span><span class="co">#' @seealso [newLname], [ramp.xds::change_psi]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nHabitats`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_psi.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">psi</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="module-object-and-setup">Module object and setup<a class="anchor" aria-label="anchor" href="#module-object-and-setup"></a>
 </h2>
+<p>Use the constructor title “Make a module object for
+<code>module</code> (<strong>L</strong>)”. Describe parameter
+initialization and <code>options</code> overrides. The constructor,
+parameter getter, and parameter changer each link to the other two in
+<code>@seealso</code>; describe any differences in their parameter
+coverage.</p>
 <p><code>make_L_obj_newLname</code> creates the module object and
 initializes its parameters. <code>setup_L_obj.newLname</code> attaches
 the object at <code>xds_obj$L_obj[[s]]</code>, sets up initial values,
 and configures habitat search weights using the supplied
 <code>membership</code> vector.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make the `newLname` module object</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make a module object for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Create a `newLname` module object and initialize its parameters.</span></span>
+<span><span class="co">#' Inspect parameters with [get_L_pars.newLname] and change supported values</span></span>
+<span><span class="co">#' with [change_L_pars.newLname]. Values in `options` override parameter arguments.</span></span>
+<span><span class="co">#' @seealso [get_L_pars.newLname], [change_L_pars.newLname]</span></span>
 <span><span class="co">#' @param nHabitats the number of habitats in the model</span></span>
 <span><span class="co">#' @param options a named list of parameter values</span></span>
 <span><span class="co">#' @return an L module object</span></span>
@@ -303,9 +525,9 @@ and configures habitat search weights using the supplied
 <span>      p1 <span class="op">=</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
 <span>      p2 <span class="op">=</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
 <span>      p1_t <span class="op">=</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
-<span>      p2_t <span class="op">=</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
 <span>      es_p1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
-<span>      es_p2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">nHabitats</span><span class="op">)</span>,</span>
+<span>      p1_obj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nHabitats</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                         class <span class="op">=</span> <span class="st">"static"</span><span class="op">)</span>,</span>
 <span>      nHabitats <span class="op">=</span> <span class="va">nHabitats</span></span>
 <span>    <span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">L_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"newLname"</span></span>
@@ -313,8 +535,15 @@ and configures habitat search weights using the supplied
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Set up `newLname` (**L**)</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::setup_L_obj] for `newLname`.</span></span>
+<span><span class="co">#' @title Set up the module object for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Set up a `newLname` module object for the **L** component</span></span>
+<span><span class="co">#' and the \eqn{s^{th}} vector species.</span></span>
+<span><span class="co">#' + Create the module object with [make_L_obj_newLname], passing `nHabitats` and `options`.</span></span>
+<span><span class="co">#' + Set initial values using [ramp.xds::setup_L_inits], passing `options` to override defaults.</span></span>
+<span><span class="co">#' + Initialize habitat search weights using [ramp.xds::setup_habitat_search_weights.setup].</span></span>
+<span><span class="co">#' + Return the updated **`xds`** model object.</span></span>
+<span><span class="co">#' @note The module object is stored at `xds_obj$L_obj[[s]]`.</span></span>
+<span><span class="co">#' Its classes are `newLname` and `newLname_` followed by `xds_obj$xds`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::setup_L_obj</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
@@ -333,16 +562,37 @@ and configures habitat search weights using the supplied
 <div class="section level2">
 <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
 </h2>
+<p>The shared <code><a href="https://dd-harp.github.io/ramp.xds/reference/change_psi.html" class="external-link">ramp.xds::change_psi</a></code>,
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/change_phi.html" class="external-link">ramp.xds::change_phi</a></code>, <code><a href="https://dd-harp.github.io/ramp.xds/reference/change_xi.html" class="external-link">ramp.xds::change_xi</a></code>, and
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/change_theta.html" class="external-link">ramp.xds::change_theta</a></code> helpers are intended for individual
+static <code>basicL</code> parameters, not arbitrary module-specific
+fields. They accept numeric scalars or values of length
+<code>nHabitats</code>, expand scalars across habitats, and error on
+invalid types or lengths. For parameter <code>x</code>, they update
+<code>xds_obj$L_obj[[s]]$x</code> and, when <code>x_obj</code> is
+present, also <code>x_t</code> and <code>x_obj$x</code>. They leave the
+port class and <code>es_x</code> unchanged, do not evaluate ports or
+apply effect sizes, and return the updated model object. They do not
+dispatch on module or port class and should not be used to reconfigure
+dynamic ports.</p>
+<p>Their titles retain “Change the parameter (<strong>L</strong>)”,
+using the full parameter name. Descriptions identify the static
+<code>basicL</code> scope, inherit its <code>Parameters</code> section,
+and link to the matching getter. Keep storage and port-field updates in
+<code>@note</code>. New modules should implement their own
+<code>change_L_pars</code> method for their supported parameters.</p>
 <p>Implement <code>get_L_pars.newLname</code> to return the module
 parameters as a named list, and <code>change_L_pars.newLname</code> to
 update the parameters named in <code>options</code> while leaving other
 parameters unchanged. Check supplied values against
 <code>xds_obj$nHabitats</code>; parameter vectors should match the
 habitat dimension.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Get parameters for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Return the parameters for the `newLname` module as a named list.</span></span>
+<span><span class="co">#' @seealso [make_L_obj_newLname], [change_L_pars.newLname]</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::get_L_pars</span></span>
-<span><span class="co">#' @return a named list of parameters</span></span>
+<span><span class="co">#' @return a named [list] of parameter values</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">get_L_pars.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
@@ -351,68 +601,67 @@ habitat dimension.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' @title Change parameters for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Change parameter values named in `options` for the `newLname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' Update the `p1` port and the direct parameter `p2`.</span></span>
+<span><span class="co">#' The effective `p1` value is set by [LEffectSizes.newLname].</span></span>
+<span><span class="co">#' Call [ramp.xds::LBionomics] at time zero after the updates,</span></span>
+<span><span class="co">#' without calling [ramp.xds::LEffectSizes].</span></span>
+<span><span class="co">#' @seealso [make_L_obj_newLname], [get_L_pars.newLname]</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::change_L_pars</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">change_L_pars.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">nHabitats</span> <span class="op">&lt;-</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="st">"p1"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">options</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_t</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">options</span><span class="op">$</span><span class="va">p1</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1_obj</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">options</span><span class="op">$</span><span class="va">p1</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="st">"p2"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">options</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2_t</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">options</span><span class="op">$</span><span class="va">p2</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">options</span><span class="op">$</span><span class="va">p2</span>, <span class="va">nHabitats</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_inits.html" class="external-link">get_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/LBionomics.html" class="external-link">LBionomics</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="state-indices-and-extraction">State indices and extraction<a class="anchor" aria-label="anchor" href="#state-indices-and-extraction"></a>
-</h2>
-<p><code>setup_L_ix.newLname</code> assigns a contiguous range of
-indices to each state. Allocate one index per habitat for each
-habitat-level state, and update <code>max_ix</code> after each range.
-<code>get_L_vars.newLname</code> extracts named states from the
-dependent-variable vector <code>y</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Set up state indices for `newLname` (**L**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_L_ix</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
-<span><span class="co">#' @importFrom utils tail</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_L_ix.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">L_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">L_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L_ix <span class="op">=</span> <span class="va">L_ix</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Extract states for `newLname` (**L**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::get_L_vars</span></span>
-<span><span class="co">#' @return a named list of state variables</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">get_L_vars.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
-<span>    <span class="va">L</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">L_ix</span><span class="op">]</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L <span class="op">=</span> <span class="va">L</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>If the module has more than one state variable, create an index range
-for each one and include each named state in the returned list.</p>
 </div>
 <div class="section level2">
 <h2 id="initial-values">Initial values<a class="anchor" aria-label="anchor" href="#initial-values"></a>
 </h2>
+<p>Use the shared <code><a href="https://dd-harp.github.io/ramp.xds/reference/get_L_inits.html" class="external-link">ramp.xds::get_L_inits</a></code> function to return
+stored initial values for the selected vector species; do not implement
+a module-specific getter. It returns the <code>inits</code> field
+directly as a named list, preserves an empty list (as in
+<code>trivialL</code> after setup), and returns <code>NULL</code> if
+absent. Getter documentation uses “Get initial values
+(<strong>L</strong>)”, describes returning stored values, puts storage
+in <code>@note</code>, and links to setup/change functions.</p>
 <p><code>make_L_inits_newLname</code> returns defaults as a named list
 with one value per habitat for each state.
 <code>setup_L_inits.newLname</code> stores the list on the module
 object; users can inspect it with <code>get_L_inits</code> and update it
 with <code>change_L_inits.newLname</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Use the constructor title and description below, preserving any
+model-specific explanation. Its return description is “a named [list] of
+initial values”. The constructor, setup method, and change method each
+link to the other two in <code>@seealso</code>. Document numeric scalar
+expansion to <code>nHabitats</code> and the required length for
+non-scalar initial values. For changers, document supported values and
+special behavior, put storage explanations in <code>@note</code>, and
+return “an <strong><code>xds</code></strong> model object”. Check
+preservation of unspecified values and other species; report
+implementation discrepancies separately during documentation
+alignment.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Make initial values for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Create a named list of initial values for the `newLname` module.</span></span>
+<span><span class="co">#' Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @details Initial values must be numeric scalars or have length `nHabitats`.</span></span>
+<span><span class="co">#' Scalars are expanded to that length.</span></span>
 <span><span class="co">#' @param nHabitats the number of habitats in the model</span></span>
 <span><span class="co">#' @param options a named list of initial values</span></span>
 <span><span class="co">#' @param L the initial value for state `L`</span></span>
-<span><span class="co">#' @return a named list of initial values</span></span>
+<span><span class="co">#' @return a named [list] of initial values</span></span>
+<span><span class="co">#' @seealso [setup_L_inits.newLname], [change_L_inits.newLname]</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">make_L_inits_newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nHabitats</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">L</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
@@ -422,7 +671,11 @@ with <code>change_L_inits.newLname</code>.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' @title Set up initial values for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Set up initial values for the `newLname` module using</span></span>
+<span><span class="co">#' [make_L_inits_newLname]. Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @note Initial values are stored at `xds_obj$L_obj[[s]]$inits`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::setup_L_inits</span></span>
+<span><span class="co">#' @seealso [make_L_inits_newLname], [change_L_inits.newLname]</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">setup_L_inits.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
@@ -433,7 +686,12 @@ with <code>change_L_inits.newLname</code>.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' @title Change initial values for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Change initial values named in `options` for the `newLname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' @note Stored initial values for this module are at</span></span>
+<span><span class="co">#' `xds_obj$L_obj[[s]]$inits`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::change_L_inits</span></span>
+<span><span class="co">#' @seealso [make_L_inits_newLname], [setup_L_inits.newLname]</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">change_L_inits.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
@@ -448,38 +706,72 @@ with <code>change_L_inits.newLname</code>.</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="emergence">Emergence<a class="anchor" aria-label="anchor" href="#emergence"></a>
+<h2 id="state-indices">State indices<a class="anchor" aria-label="anchor" href="#state-indices"></a>
 </h2>
-<p><code>F_emerge.newLname</code> returns a habitat-level vector of
-adult emergence, usually a rate for a continuous-time model or a number
-for a discrete-time model. The shared emergence interface aggregates
-these values to patches using habitat membership.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute emergence for `newLname` (**L**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::F_emerge</span></span>
-<span><span class="co">#' @return a numeric vector of length `nHabitats`</span></span>
+<p>Retrieve stored indices with the shared
+<code>ramp.xds::get_L_ix(xds_obj, s = 1)</code>; do not implement a
+module-specific getter. It returns the <code>ix</code> field directly: a
+named list of variable indices, an empty list if stored, or
+<code>NULL</code> if absent. Getter documentation uses “Get variable
+indices (<strong>L</strong>)”, describes returning stored indices for
+the selected vector species, puts storage in <code>@note</code>, and
+links to <code>setup_L_ix</code>.</p>
+<p><code>setup_L_ix.newLname</code> assigns a contiguous range of
+indices to each state. Allocate one index per habitat for each
+habitat-level state, and update <code>max_ix</code> after each range.
+<code>get_L_vars.newLname</code> extracts named states from the
+dependent-variable vector <code>y</code>.</p>
+<p>Use the title and description below, documenting actual block order
+and lengths. Put index storage and the updated maximum in
+<code>@note</code>, and return the model object rather than the index
+list. Record implementation exceptions separately during documentation
+alignment.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Set up variable indices for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Assign consecutive variable indices for the `newLname` module,</span></span>
+<span><span class="co">#' starting after `xds_obj$max_ix`, and update the maximum index.</span></span>
+<span><span class="co">#' Allocate the `L_ix` block with length `nHabitats`.</span></span>
+<span><span class="co">#' @note Indices are stored at `xds_obj$L_obj[[s]]$ix`.</span></span>
+<span><span class="co">#' The maximum index is stored at `xds_obj$max_ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_L_ix</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @importFrom utils tail</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">F_emerge.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_L_vars.html" class="external-link">get_L_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span>, <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
-<span>      <span class="co"># Replace this expression with the model's emergence equation.</span></span>
-<span>      <span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">setup_L_ix.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">L_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">nHabitats</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">L_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L_ix <span class="op">=</span> <span class="va">L_ix</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="parsing-outputs-and-optional-methods">Parsing outputs and optional methods<a class="anchor" aria-label="anchor" href="#parsing-outputs-and-optional-methods"></a>
+<h2 id="parsing-outputs">Parsing outputs<a class="anchor" aria-label="anchor" href="#parsing-outputs"></a>
 </h2>
+<p>After solving, retrieve the saved results with the shared
+<code>ramp.xds::get_L_orbits(xds_obj, s = 1)</code>; do not implement a
+module-specific orbit getter. Its title is “Get orbits
+(<strong>L</strong>)”. It returns a list of module-specific orbits
+(trajectories) for <strong>L</strong> for the selected species from
+<code>xds_obj$outputs$orbits$L[[s]]</code>, with <code>time</code> added
+from <code>xds_obj$outputs$time</code>. It neither parses outputs nor
+modifies the model object. Link its documentation to
+<code>parse_L_orbits</code> and <code>xds_solve</code>.</p>
 <p><code>parse_L_orbits.newLname</code> extracts each state from the
 solver output matrix, using the indices stored on the module object, and
 returns a named list. Add derived quantities only when they are useful
 model outputs.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>This method processes trajectories after solving. Document derived
+quantities and index storage in its Roxygen block, and use “a [list]”
+for returns. It returns results without modifying the model object; the
+output-processing pipeline stores them at
+<code>xds_obj$outputs$orbits$L[[s]]</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Parse outputs for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Extract the model state outputs for the `newLname` module</span></span>
+<span><span class="co">#' from `outputs` and return them by name in a list.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$L_obj[[s]]$ix`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::parse_L_orbits</span></span>
-<span><span class="co">#' @return a named list of state-variable orbits</span></span>
+<span><span class="co">#' @return a [list]</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">parse_L_orbits.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">outputs</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">L_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
@@ -487,13 +779,52 @@ model outputs.</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>L <span class="op">=</span> <span class="va">L</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><code>steady_state_L.newLname</code> is optional and applies to
-continuous-time models when a steady-state solution is available. It
-receives habitat-level egg input <code>eta</code> and returns a named
-list of steady-state values. The shared <code>get_L_orbits</code>,
-<code>xds_plot_L</code>, and <code>xds_lines_L</code> functions provide
-access to and visualization of parsed model output; a module-specific
-plotting method is not required.</p>
+</div>
+<div class="section level2">
+<h2 id="checks-and-skill-set">Checks and skill set<a class="anchor" aria-label="anchor" href="#checks-and-skill-set"></a>
+</h2>
+<p><code>get_skillset_L.newLname</code> returns the module’s
+capabilities and compatibilities when queried; setup does not store them
+on the module object. Adapt the flags to the implemented solver
+pathways; the example advertises continuous-time support only. The check
+method below performs no checks. Add explicit checks when the module
+requires them, and describe those checks accurately.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Check `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Return the model unchanged; no checks are implemented in this template.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::check_L</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">check_L.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the skill set for `newLname` (**L**)</span></span>
+<span><span class="co">#' @description Return the capabilities and compatibilities of the `newLname` module as a list.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_skillset_L</span></span>
+<span><span class="co">#' @return the **L** module skill set, as a list</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_skillset_L.newLname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dts <span class="op">=</span> <span class="cn">FALSE</span>, xde <span class="op">=</span> <span class="cn">TRUE</span>, delay <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="optional-methods">Optional methods<a class="anchor" aria-label="anchor" href="#optional-methods"></a>
+</h2>
+<p><code>steady_state_L.newLname</code> is optional when a steady-state
+calculation is available. It receives habitat-level daily egg input
+<code>eta</code> and returns a named list of steady-state values. Use
+“Compute steady states for <code>module</code> (<strong>L</strong>)” for
+method titles, describe the supported equation system, and name the
+returned states. The generic dispatches on
+<code>xds_obj$L_obj[[s]]</code>. To support both differential-equation
+and discrete-time calculations, follow basicL’s second-stage dispatch on
+<code>xds_obj$xds</code>; do not assume every module implements both.
+Return values are not stored on the model object. The shared
+<code>get_L_orbits</code>, <code>xds_plot_L</code>, and
+<code>xds_lines_L</code> functions provide access to and visualization
+of parsed model output; a module-specific plotting method is not
+required.</p>
 </div>
 <div class="section level2">
 <h2 id="the-basicl-reference-model">The <code>basicL</code> reference model<a class="anchor" aria-label="anchor" href="#the-basicl-reference-model"></a>

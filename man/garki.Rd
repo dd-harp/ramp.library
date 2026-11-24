@@ -27,6 +27,7 @@ district of Nigeria.
 \section{Parameters}{
 
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{r1}, \code{r2}}{recovery rates for the two classes of infected individuals}
 \item{\code{alpha1}, \code{alpha2}}{progression rates between patent infection stages}
 \item{\code{nu}}{rate of progression from newly infected to patent infection}
@@ -35,11 +36,17 @@ district of Nigeria.
 }
 }
 
+\section{Prevalence}{
+
+\link{F_pr_obs.garki} returns observed prevalence \eqn{x_q=qx},
+where \link{F_prevalence.garki} returns \eqn{x=(y_1+y_2+y_3)/H}.
+}
+
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

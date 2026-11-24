@@ -2,12 +2,12 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{steady_state_L.stages}
 \alias{steady_state_L.stages}
-\title{Compute the steady state of \code{dLdt.stages} (\strong{L} component)}
+\title{Compute steady states for \code{stages} (\strong{L})}
 \usage{
 \method{steady_state_L}{stages}(eta, xds_obj, s = 1)
 }
 \arguments{
-\item{eta}{the egg-laying rate}
+\item{eta}{the number of eggs laid in each habitat, per day}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
@@ -17,8 +17,9 @@
 a named \link{list} with elements \code{E}, \code{L1}, \code{L2}, \code{L3}, \code{L4}, \code{P}
 }
 \description{
-Given an egg deposition rate \code{eta},
-return a steady state value for the equations in \link{dLdt.stages}.
+Compute steady-state aquatic mosquito densities for the \code{stages}
+module given the daily egg input \code{eta} in each habitat for the
+differential-equation system in \link{dLdt.stages}.
 Uses \link[stats:nlm]{stats::nlm} to minimise the sum of squared derivatives.
 }
 \note{

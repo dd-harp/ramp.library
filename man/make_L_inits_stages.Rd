@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{make_L_inits_stages}
 \alias{make_L_inits_stages}
-\title{Make initial values for \code{stages} (\strong{L} component)}
+\title{Make initial values for \code{stages} (\strong{L})}
 \usage{
 make_L_inits_stages(
   nHabitats,
@@ -33,10 +33,19 @@ make_L_inits_stages(
 \item{P}{initial pupal density}
 }
 \value{
-a \link{list} with initial conditions
+a named \link{list} of initial values
 }
 \description{
+Create a named list of initial values for the \code{stages} module.
+Values in \code{options} override the defaults.
 Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be
 set by passing the corresponding names in \code{options}.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nHabitats}.
+Scalars are expanded to that length.
+}
+\seealso{
+\link{setup_L_inits.stages}, \link{change_L_inits.stages}
 }
 \keyword{internal}

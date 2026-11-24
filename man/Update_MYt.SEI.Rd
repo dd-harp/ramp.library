@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{Update_MYt.SEI}
 \alias{Update_MYt.SEI}
-\title{Update state variables for \code{SEI} (\strong{MY})}
+\title{Update states for \code{SEI} (\strong{MY})}
 \usage{
 \method{Update_MYt}{SEI}(t, y, xds_obj, s)
 }
@@ -16,10 +16,17 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{numeric} vector
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:Update_MYt]{Update_MYt} for the SEI model.
+Update the state variables for the \code{SEI} module:
+\deqn{\begin{array}{rl}
+M_t &= c\Lambda D+\Omega\cdot M_{t-1} \\\\
+Z_t &= \Omega\cdot\left[(1-e^{-fq\kappa D})(M_{t-1}-Z_{t-1})\right]
+      +\Omega\cdot Z_{t-1}
+      +(1-e^{-c})(1-e^{-fq\kappa D})\Lambda cD
+\end{array}}
+Here \eqn{c} is \code{ccc} and \eqn{D} is \code{xds_obj$MYday}.
 }
 \section{State Variables}{
 
@@ -30,19 +37,36 @@ Implements \link[ramp.xds:Update_MYt]{Update_MYt} for the SEI model.
 }
 }
 
-\section{Dynamics}{
+\section{Dynamical Terms}{
 
-Adult mosquitoes emerge from aquatic habitats at rate \eqn{\Lambda}.
-Mosquitoes become exposed when they take an infectious human blood meal;
-exposed mosquitoes progress to the infectious class at rate
-\eqn{1/\tau}, where \eqn{\tau} is the EIP. The model equations are
-\deqn{
-\begin{array}{rl}
-dM/dt &= \Lambda-\Omega\cdot M \\\\
-dY/dt &= fq\kappa(M-Y)-\Omega\cdot Y \\\\
-dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
-\end{array}
+\describe{
+\item{\code{Lambda} or \eqn{\Lambda}}{adult mosquito emergence rate, computed by \link[ramp.xds:Emergence]{ramp.xds::Emergence}}
+\item{\code{kappa} or \eqn{\kappa}}{net infectiousness, computed by \link[ramp.xds:Transmission]{ramp.xds::Transmission}}
 }
+}
+
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_mosy_emigration]{ramp.xds::setup_mosy_emigration}}
+\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
+\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\section{DTS}{
+
+\link{Update_MYt.SEI} updates \code{M} and \code{Z} using the stored \code{Omega} directly.
+The updating equations use \code{D = xds_obj$MYday} and the module field \code{ccc}.
+The method returns these two updated states as a list; it does not update \code{Y}.
 }
 
 \seealso{

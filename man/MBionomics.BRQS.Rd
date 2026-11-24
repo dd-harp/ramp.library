@@ -19,7 +19,8 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:MBionomics]{MBionomics} for the BRQS model
+Leave directly stored parameters unchanged. This module
+does not configure bionomic parameter ports.
 }
 \section{Parameters}{
 

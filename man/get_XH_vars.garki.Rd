@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{get_XH_vars.garki}
 \alias{get_XH_vars.garki}
-\title{Return the variables as a list}
+\title{Get the state variables for \code{garki} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{garki}(y, xds_obj, i)
 }
@@ -14,9 +14,14 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list}
+a named \link{list} of state variables and module-specific derived quantities
 }
 \description{
-This method dispatches on the type of \code{xds_obj$XH_obj}
+Extract the state variables for the \code{garki} module
+from \code{y} and return them by name in a list for use during model solving.
+Also compute \code{x1 = H - x2 - x3 - x4 - y1 - y2 - y3}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \keyword{internal}

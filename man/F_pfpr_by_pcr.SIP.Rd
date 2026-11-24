@@ -2,14 +2,14 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{F_pfpr_by_pcr.SIP}
 \alias{F_pfpr_by_pcr.SIP}
-\title{Compute the prevalence of infection by PCR}
+\title{Compute observed prevalence by PCR}
 \usage{
 \method{F_pfpr_by_pcr}{SIP}(vars, XH_obj)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{XH_obj}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for humans}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

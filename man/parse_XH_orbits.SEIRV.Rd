@@ -7,17 +7,22 @@
 \method{parse_XH_orbits}{SEIRV}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }
 \value{
-a named list of module variables
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SEIRV} model
+Extract the model state outputs for the \code{SEIRV} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{S = H-E-I-R-V}, \code{ni = c*I/H}, and \code{true_pr = (E+I)/H}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \section{State Variables}{
 

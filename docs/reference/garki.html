@@ -24,7 +24,7 @@ district of Nigeria."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -152,7 +152,10 @@ district of Nigeria.</p>
     <h2>Parameters</h2>
 
 
-<dl><dt><code>r1</code>, <code>r2</code></dt>
+<dl><dt><code>q</code></dt>
+<dd><p>test positivity (default <code>0.8</code>)</p></dd>
+
+<dt><code>r1</code>, <code>r2</code></dt>
 <dd><p>recovery rates for the two classes of infected individuals</p></dd>
 
 <dt><code>alpha1</code>, <code>alpha2</code></dt>
@@ -169,16 +172,20 @@ district of Nigeria.</p>
 
 
 </dl></div>
+    <div id="prevalence">
+    <h2>Prevalence</h2>
+
+
+<p><a href="F_pr_obs.garki.html">F_pr_obs.garki</a> returns observed prevalence \(x_q=qx\),
+where <a href="F_prevalence.garki.html">F_prevalence.garki</a> returns \(x=(y_1+y_2+y_3)/H\).</p>
+    </div>
     <div id="demography">
     <h2>Demography</h2>
 
 
 
 
-<p>Demographic changes (<strong>H</strong>) are given by the equation:</p>
-<p>$$
-dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)$$</p>
-<p>This model has no parameter
+<p>This model has no parameters
 or terms to describe disease-induced mortality.</p>
 <dl><dt><code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code> or \(\mathbf{B}\)</dt>
 <dd><p>the births function</p></dd>
@@ -187,8 +194,9 @@ or terms to describe disease-induced mortality.</p>
 <dd><p>the deaths function</p></dd>
 
 
-</dl><p><strong>Setup:</strong></p><ul><li><p>The defaults are no births and no deaths</p></li>
-<li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_births.html" class="external-link">setup_births</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code></p></li>
+</dl><p><strong>Setup:</strong></p>
+<p>The default is a constant population model: birth
+and death rates are set to zero</p><ul><li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_births.html" class="external-link">setup_births</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code></p></li>
 <li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_deaths.html" class="external-link">setup_deaths</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Deaths.html" class="external-link">Deaths</a></code></p></li>
 </ul><p>Also, see <a href="https://dd-harp.github.io/ramp.xds/reference/xds_info_demographic_change.html" class="external-link">xds_info_demographic_change</a>.</p>
     </div>

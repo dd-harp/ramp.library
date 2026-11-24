@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{get_MY_pars.BQm}
 \alias{get_MY_pars.BQm}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{BQm} (\strong{MY})}
 \usage{
 \method{get_MY_pars}{BQm}(xds_obj, s = 1)
 }
@@ -12,10 +12,10 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list}
+a named \link{list} of parameter values
 }
 \description{
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+Return the parameters for the \code{BQm} module as a named list.
 }
 \section{Parameters}{
 
@@ -27,7 +27,7 @@ This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.BQm} can be used to change parameter
@@ -36,5 +36,7 @@ values. Bionomic parameters are configured as static baselines by default.
 
 \seealso{
 \link{BQm}, \link{change_MY_pars.BQm}
+
+\link{make_MY_obj_BQm}
 }
 \keyword{internal}

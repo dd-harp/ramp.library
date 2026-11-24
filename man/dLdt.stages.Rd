@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{dLdt.stages}
 \alias{dLdt.stages}
-\title{Compute derivatives for \code{stages} (\strong{L})}
+\title{Compute the derivatives for \code{stages} (\strong{L})}
 \usage{
 \method{dLdt}{stages}(t, y, xds_obj, s)
 }
@@ -16,26 +16,11 @@
 \item{s}{the species index}
 }
 \value{
-a \link{numeric} vector
+a \link{numeric} vector of derivatives in the module's state-variable
+order, with length \code{6 * nHabitats}
 }
 \description{
-Implements the staged aquatic development model with four larval instars.
-Density-dependent effects act through the weighted mean crowding index
-\eqn{L = w_1 L_1 + w_2 L_2 + w_3 L_3 + L_4.}
-
-\strong{Variables:}
-\itemize{
-\item \eqn{E}: egg density per habitat
-\item \eqn{L_1, L_2, L_3, L_4}: larval instar densities per habitat
-\item \eqn{P}: pupal density per habitat
-}
-
-\strong{Input Term:}
-\itemize{
-\item \eqn{\eta} or \code{eta}: egg deposition rate (from \link[ramp.xds:F_eggs]{F_eggs})
-}
-
-\strong{Dynamical System:}
+Compute the derivatives for the \code{stages} module:
 
 \deqn{dE/dt = \eta - (\psi_E + \phi_E) E}
 \deqn{dL_1/dt = \psi_E E - \psi_1 L_1 e^{-\xi_1 L} - (\phi_1 + \theta_1 L) L_1}
@@ -43,15 +28,67 @@ Density-dependent effects act through the weighted mean crowding index
 \deqn{dL_3/dt = \psi_2 L_2 e^{-\xi_2 L} - \psi_3 L_3 e^{-\xi_3 L} - (\phi_3 + \theta_3 L) L_3}
 \deqn{dL_4/dt = \psi_3 L_3 e^{-\xi_3 L} - \psi_4 L_4 e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4}
 \deqn{dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P}
+}
+\note{
+Derivatives are returned in blocks for \code{E}, \code{L1}, \code{L2}, \code{L3},
+\code{L4}, and \code{P}, each in habitat order.
+The egg input is read from \code{xds_obj$terms$eta[[s]]}.
+}
+\section{State Variables}{
 
-\strong{Output Term:}
-\itemize{
-\item The function \link[ramp.xds:F_emerge]{F_emerge} computes the net emergence rate (\eqn{\alpha}):
+\describe{
+\item{\code{E}}{egg density per habitat}
+\item{\code{L1}}{first instar larval density per habitat}
+\item{\code{L2}}{second instar larval density per habitat}
+\item{\code{L3}}{third instar larval density per habitat}
+\item{\code{L4}}{fourth instar larval density per habitat}
+\item{\code{P}}{pupal density per habitat}
+}
 }
 
-\deqn{\alpha = \psi_P P}
+\section{Egg Laying}{
+
+\describe{
+\item{\code{eta}}{the egg laying rate (\eqn{\eta})}
 }
+}
+
+\section{Parameters}{
+
+\describe{
+\item{\code{psi_E}}{egg maturation (hatching) rate (\eqn{\psi_E})}
+\item{\code{phi_E}}{egg mortality rate (\eqn{\phi_E})}
+\item{\code{psi1}, \code{psi2}, \code{psi3}, \code{psi4}}{larval instar maturation rates (\eqn{\psi_i})}
+\item{\code{xi1}, \code{xi2}, \code{xi3}, \code{xi4}}{delayed maturation responses to mean crowding (\eqn{\xi_i})}
+\item{\code{phi1}, \code{phi2}, \code{phi3}, \code{phi4}}{density-independent larval mortality rates (\eqn{\phi_i})}
+\item{\code{theta1}, \code{theta2}, \code{theta3}, \code{theta4}}{density-dependent larval mortality slopes (\eqn{\theta_i})}
+\item{\code{phi_P}}{pupal mortality rate (\eqn{\phi_P})}
+\item{\code{psi_P}}{pupal maturation (emergence) rate (\eqn{\psi_P})}
+\item{\code{w1}, \code{w2}, \code{w3}}{contributions of \eqn{L_1}, \eqn{L_2}, and \eqn{L_3} to mean crowding (\eqn{w_i})}
+}
+}
+
+\section{Mean Crowding}{
+
+
+\deqn{L = w_1 L_1 + w_2 L_2 + w_3 L_3 + L_4}
+
+The fourth instar \eqn{L_4} acts as the reference stage (\eqn{w_4 = 1}).
+Setting all \eqn{w_i = 1} recovers unweighted total larval density.
+}
+
+\section{Dynamics}{
+
+
+\deqn{dE/dt = \eta - (\psi_E + \phi_E) E}
+\deqn{dL_1/dt = \psi_E E - \psi_1 L_1 e^{-\xi_1 L} - (\phi_1 + \theta_1 L) L_1}
+\deqn{dL_2/dt = \psi_1 L_1 e^{-\xi_1 L} - \psi_2 L_2 e^{-\xi_2 L} - (\phi_2 + \theta_2 L) L_2}
+\deqn{dL_3/dt = \psi_2 L_2 e^{-\xi_2 L} - \psi_3 L_3 e^{-\xi_3 L} - (\phi_3 + \theta_3 L) L_3}
+\deqn{dL_4/dt = \psi_3 L_3 e^{-\xi_3 L} - \psi_4 L_4 e^{-\xi_4 L} - (\phi_4 + \theta_4 L) L_4}
+\deqn{dP/dt = \psi_4 L_4 e^{-\xi_4 L} - (\phi_P + \psi_P) P}
+}
+
 \seealso{
-\link{make_L_obj_stages}
+\link{stages}, \link{make_L_obj_stages}, \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}
 }
 \keyword{internal}

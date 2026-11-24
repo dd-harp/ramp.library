@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{check_MY.SEI}
 \alias{check_MY.SEI}
-\title{Run a check before solving}
+\title{Check \code{SEI} (\strong{MY})}
 \usage{
 \method{check_MY}{SEI}(xds_obj, s)
 }
@@ -15,6 +15,6 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run a check before solving
+Check \code{SEI} (\strong{MY})
 }
 \keyword{internal}

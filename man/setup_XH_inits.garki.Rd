@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{setup_XH_inits.garki}
 \alias{setup_XH_inits.garki}
-\title{Setup initial values for \code{garki} (\strong{XH})}
+\title{Set up initial values for \code{garki} (\strong{XH})}
 \usage{
 \method{setup_XH_inits}{garki}(xds_obj, options = list(), i = 1)
 }
@@ -14,16 +14,18 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} model object
 }
 \description{
-Set initial values for all the variables in the \code{garki} module
-(\strong{XH}) for the \eqn{i^{th}} species.
-\itemize{
-\item \link{make_XH_inits_garki} supplies default values
-\item The values in \code{options} override the defaults
-\item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
-see the inline module documentation.
+Set up initial values for the \code{garki} module using
+\link{make_XH_inits_garki}. Values in \code{options} override the defaults.
 }
+\note{
+Initial values are stored at \code{xds_obj$XH_obj[[i]]$inits}.
+}
+\seealso{
+\link{change_XH_inits.garki}
+
+\link[ramp.xds:get_XH_inits]{ramp.xds::get_XH_inits}
 }
 \keyword{internal}

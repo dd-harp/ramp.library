@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{get_skillset_MY.BQ}
 \alias{get_skillset_MY.BQ}
-\title{The skill set}
+\title{Get the skill set for \code{BQ} (\strong{MY})}
 \usage{
 \method{get_skillset_MY}{BQ}(xds_obj, s)
 }
@@ -15,6 +15,6 @@
 the \strong{MY} module skill set, as a list
 }
 \description{
-The skill set
+Return the capabilities and compatibilities of the \code{BQ} module as a list.
 }
 \keyword{internal}

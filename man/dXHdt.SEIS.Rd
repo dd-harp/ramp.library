@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{dXHdt.SEIS}
 \alias{dXHdt.SEIS}
-\title{Compute derivatives for \code{SEIS} (\strong{XH})}
+\title{Compute the derivatives for \code{SEIS} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEIS}(t, y, xds_obj, i)
 }
@@ -19,13 +19,22 @@
 a \link{numeric} vector
 }
 \description{
-Computes derivatives for the \code{SEIS} module (\strong{XH}).
+The derivatives for the \code{SEIS} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dE/dt &= hS-\nu E-\mathbf{D}(t,E) \\
+dI/dt &= (1-\rho)\nu E-(r+\sigma+\Xi(t))I-\mathbf{D}(t,I)
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{S=H-E-I},
+\eqn{\Xi(t)=mda(t)+msat(t)},
+\eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

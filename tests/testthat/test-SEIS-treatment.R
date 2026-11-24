@@ -18,8 +18,9 @@ test_that("SEIS modules configure and change treatment parameters without changi
     expect_equal(get_XH_pars(changed)$sigma, c(0.2, 0.6))
     expect_equal(get_XH_pars(changed)[setdiff(names(pars), c("rho", "sigma"))],
                  pars[setdiff(names(pars), c("rho", "sigma"))])
-    expect_true(model$XH_obj[[1]]$skill_set$mda)
-    expect_true(model$XH_obj[[1]]$skill_set$msat)
+    expect_false("skill_set" %in% names(model$XH_obj[[1]]))
+    expect_true(get_skillset_XH(model)$mda)
+    expect_true(get_skillset_XH(model)$msat)
     expect_equal(model$XH_obj[[1]]$mda(0), 0)
     expect_equal(model$XH_obj[[1]]$msat(0), 0)
   }

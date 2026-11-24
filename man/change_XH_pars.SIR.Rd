@@ -17,14 +17,15 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SIR} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{SIR}
+module, leaving other values unchanged.
 }
 \section{Parameters}{
 
 \link{make_XH_obj_SIR} supplies defaults for the parameters, which can be changed
 using \link{change_XH_pars.SIR}.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -32,6 +33,8 @@ using \link{change_XH_pars.SIR}.
 }
 
 \seealso{
+\link{make_XH_obj_SIR}, \link{get_XH_pars.SIR}
+
 \link{SIR}
 }
 \keyword{internal}

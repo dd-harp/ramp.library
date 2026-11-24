@@ -17,15 +17,16 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SEIRV} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{SEIRV}
+module, leaving other values unchanged.
 }
 \section{Parameters}{
 
 \link{make_XH_obj_SEIRV} supplies defaults for all parameters.
-\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, and \code{gamma};
+\link{change_XH_pars.SEIRV} currently changes \code{b}, \code{c}, \code{r}, \code{tau}, \code{gamma}, and \code{q};
 it leaves \code{alpha} and \code{varepsilon} unchanged.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{tau}}{rate of progression from exposed to infectious}
@@ -37,6 +38,8 @@ it leaves \code{alpha} and \code{varepsilon} unchanged.
 }
 
 \seealso{
+\link{make_XH_obj_SEIRV}, \link{get_XH_pars.SEIRV}
+
 \link{SEIRV}
 }
 \keyword{internal}

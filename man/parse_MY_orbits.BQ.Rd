@@ -7,17 +7,24 @@
 \method{parse_MY_orbits}{BQ}(outputs, xds_obj, s)
 }
 \arguments{
-\item{outputs}{a \link{matrix} of outputs from deSolve}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{s}{the vector species index}
 }
 \value{
-none
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_MY_orbits]{parse_MY_orbits} for the BQ model
+Extract the model state outputs for the \code{BQ} module
+from \code{outputs} and return them by name in a list.
+Sum behavioral states to compute total density \code{M}, infected density \code{Y}
+(exposed and infectious), and infectious density \code{Z}.
+Also compute \code{y = Y/M} and \code{z = Z/M}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$MY_obj[[s]]$ix}.
 }
 \section{State Variables}{
 

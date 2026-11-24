@@ -2,9 +2,12 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{steady_state_X.SIP}
 \alias{steady_state_X.SIP}
-\title{Compute the steady states for the \code{SIP} model as a function of the daily foi}
+\alias{steady_state_X_SIP}
+\title{Compute steady states for \code{SIP} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SIP}(foi, H, xds_obj, i = 1)
+
+steady_state_X_SIP(foi, H, xds_obj, i = 1)
 }
 \arguments{
 \item{foi}{the daily FoI}
@@ -16,12 +19,13 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named list
+a named \link{list} containing \code{H}, \code{I}, and \code{P} for \code{xde}, or a named
+\link{numeric} vector containing \code{S}, \code{I}, and \code{P} for \code{dts}
 }
 \description{
-Compute the steady state of the \code{SIP} model as a function of the daily eir.
+Compute steady states given daily FoI \code{foi} and fixed host density \code{H}.
 }
-\seealso{
-\link{SIP}
+\note{
+Delegate to \link{steady_state_X_SIP}, which dispatches on \code{xds_obj$xds}.
 }
 \keyword{internal}

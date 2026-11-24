@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{Update_XHt.SIP}
 \alias{Update_XHt.SIP}
-\title{Derivatives for human population}
+\title{Update states for \code{SIP} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SIP}(t, y, xds_obj, i)
 }

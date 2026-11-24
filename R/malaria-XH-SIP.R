@@ -1,5 +1,7 @@
 # specialized methods for the human SIP model
 
+
+
 #' @title The `SIP` module for the **XH** component
 #' @description
 #' Implements the **XH** component using a Susceptible-Infected-chemoProtected
@@ -34,6 +36,7 @@
 #' The parameters returned by [get_XH_pars.SIP] and modifiable by
 #' [change_XH_pars.SIP] describe infection, treatment, and chemoprotection.
 #' \describe{
+#'   \item{`q`}{test positivity (default `0.8`)}
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
 #'   \item{`r`}{clearance rate for infections}
@@ -58,6 +61,8 @@
 #' \eqn{H}. Susceptible density is redundant and is computed after solving.
 #'
 #' @section Prevalence:
+#' [F_pr_obs.SIP] returns observed prevalence \eqn{x_q=qI/H}.
+#'
 #' True prevalence is \eqn{x = I/H}. The light microscopy, RDT, and PCR
 #' prevalence functions currently also return \eqn{I/H}, without diagnostic
 #' sensitivity parameters.
@@ -86,49 +91,17 @@
 #' @rdname SIP
 NULL
 
-#' @title The **XH** module skill set
-#'
-#' @description The **XH** skill set is a list of
-#' a module's capabilities.
-#'
-#' @note This method dispatches on `class(xds_obj$XH_obj)`
-#'
-#' @inheritParams ramp.xds::get_skillset_XH
-#'
-#' @return the **XH** module skill set, as a list
-#' @keywords internal
-#'
-#' @seealso [SIP]
-#' @export
-get_skillset_XH.SIP = function(xds_obj,i){
-  skills =   list(
-    xde         = TRUE,
-    dts         = FALSE,
-    delay       = FALSE,
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = "linear",
-    mda         = TRUE,
-    msat        = TRUE
-  )
-  return(skills)
-}
-
-#' Run checks before solving (**XH**)
-#'
-#' @inheritParams ramp.xds::check_XH
-#'
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-check_XH.SIP = function(xds_obj, i){
-  return(xds_obj)
-}
-
-#' @title Compute derivatives for `SIP` (**XH**)
-#' @description Computes derivatives for the `SIP` module (**XH**).
+#' @title Compute the derivatives for `SIP` (**XH**)
+#' @description The derivatives for the `SIP` module are:
+#' \deqn{\begin{array}{rl}
+#' dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+#' dI/dt &= (1-\rho)hS-(r+\xi_t+\sigma_t)I-\mathbf{D}(t,I) \\
+#' dP/dt &= \rho hS+\xi_t(S+I)+\sigma_t I-\eta P-\mathbf{D}(t,P)
+#' \end{array}}
+#' Here \eqn{h} is `foi`, \eqn{S=H-I-P},
+#' \eqn{\xi_t=\xi+mda(t)}, and \eqn{\sigma_t=\sigma+msat(t)}.
+#' The term \eqn{\mathbf{B}(t,y)} is returned by [ramp.xds::Births], and
+#' \eqn{\mathbf{D}(t,X)} is returned by [ramp.xds::Deaths] for population \eqn{X}.
 #' @inheritSection SIP Demography
 #' @inheritSection SIP Infection Dynamics
 #' @inheritSection SIP Mass Treatment
@@ -157,135 +130,7 @@ dXHdt.SIP <- function(t, y, xds_obj, i){
   })
 }
 
-#' @title Set up `SIP` (**XH**)
-#' @description
-#'
-#' This sets up an `SIP` model object for the **XH** module for the \eqn{i^{th}} host species
-#' + the object is created by [make_XH_obj_SIP]
-#' + the initial conditions are set by [setup_XH_inits]
-#' + `options` is passed to both to override the defaults
-#'
-#' @seealso [SIP], [make_XH_obj_SIP]
-#'
-#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
-#' @inheritSection SIP State Variables
-#' @inheritSection SIP Parameters
-#'
-#' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @export
-setup_XH_obj.SIP = function(XHname, residence, xds_obj, options=list(), i=1){
-  xds_obj$XHname = "SIP"
-  xds_obj$XH_obj[[i]] = make_XH_obj_SIP(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
-  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_mass_treatment(xds_obj, i=i)
-  xds_obj <- setup_demog_obj(xds_obj, i)
-  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
-  xds_obj <- setup_time_away("setup", xds_obj, i=i)
-  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
-  return(xds_obj)
-}
-
-
-#' @title Make a `SIP` **XH** model object
-#' @inheritSection SIP Parameters
-#' @param nStrata the number of population strata
-#' @param options a [list] that could override defaults
-#' @param b transmission probability (efficiency) from mosquito to human
-#' @param c transmission probability (efficiency) from human to mosquito
-#' @param r recovery rate
-#' @param rho fraction of incident infections treated and cured, entering P
-#' @param eta chemoprotection waning rate
-#' @param xi background treatment rate for susceptible and infectious individuals
-#' @param sigma additional treatment rate for infectious individuals
-#' @importFrom ramp.xds F_zero checkIt
-#' @return an **XH** model object
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-make_XH_obj_SIP = function(nStrata, options=list(),
-                           b=0.55, r=1/180, c=0.15,
-                           rho =.1, eta=1/25,
-                           xi =1/365, sigma = 1/365){
-  with(options,{
-    XH_obj = list()
-    class(XH_obj) <- c("SIP")
-
-    XH_obj$b = checkIt(b, nStrata)
-    XH_obj$c = checkIt(c, nStrata)
-    XH_obj$r = checkIt(r, nStrata)
-    XH_obj$rho = checkIt(rho, nStrata)
-    XH_obj$eta = checkIt(eta, nStrata)
-    XH_obj$xi = checkIt(xi, nStrata)
-    XH_obj$sigma = checkIt(sigma, nStrata)
-
-
-    return(XH_obj)
-  })}
-
-
-
-#' @title Change parameters for `SIP` (**XH**)
-#' @description For the `SIP` module (**XH**) for the \eqn{i^{th}} host species,
-#' change parameter values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_pars
-#' @inheritSection SIP Parameters
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-change_XH_pars.SIP <- function(xds_obj, options=list(), i=1) {
-  nHabitats <- xds_obj$nHabitats
-  with(xds_obj$XH_obj[[i]], with(options,{
-    xds_obj$XH_obj[[i]]$b <- b
-    xds_obj$XH_obj[[i]]$c <- c
-    xds_obj$XH_obj[[i]]$r <- r
-    xds_obj$XH_obj[[i]]$rho <- rho
-    xds_obj$XH_obj[[i]]$eta <- eta
-    xds_obj$XH_obj[[i]]$xi <- xi
-    xds_obj$XH_obj[[i]]$sigma <- sigma
-    xds_obj$XH_obj[[i]]$mda <- mda
-    xds_obj$XH_obj[[i]]$msat <- msat
-    return(xds_obj)
-  }))}
-
-
-#' @title Change initial values for `SIP` (**XH**)
-#' @description For the `SIP` module (**XH**) for the \eqn{i^{th}} host species,
-#' change initial values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_inits
-#' @inheritSection SIP State Variables
-#' @note This method changes `I` and `P`; it leaves `H` unchanged.
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-change_XH_inits.SIP <- function(xds_obj, options=list(), i=1) {
-  with(get_XH_inits(xds_obj, i), with(options,{
-    xds_obj$XH_obj[[i]]$inits$I = I
-    xds_obj$XH_obj[[i]]$inits$P = P
-    return(xds_obj)
-  }))}
-
-
-#' @title Get parameters for `SIP` (**XH**)
-#' @description Parameter values for the \eqn{i^{th}} host are
-#' stored as `xds_obj$XH_obj[[i]]`. This returns the stored parameter
-#' values as a list.
-#' @inheritParams ramp.xds::get_XH_pars
-#' @inheritSection SIP Parameters
-#' @return a [list]
-#' @seealso [SIP], [make_XH_obj_SIP]
-#' @keywords internal
-#' @export
-get_XH_pars.SIP <- function(xds_obj, i=1) {
-  with(xds_obj$XH_obj[[i]],list(b=b, c=c, r=r, rho=rho, eta=eta, xi=xi, sigma=sigma))
-}
-
-#' @title Derivatives for human population
+#' @title Update states for `SIP` (**XH**)
 #' @description Implements [Update_XHt] for the `SIP` model.
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
@@ -312,21 +157,25 @@ Update_XHt.SIP <- function(t, y, xds_obj, i){
   })
 }
 
-#' @title Compute the steady states for the  dts `SIP` model as a function of the daily EIR
-#' @description Compute the steady state of the  dts `SIP` model as a function of the daily eir.
-#' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named vector
+
+#' @title Get the state variables for `SIP` (**XH**)
+#' @description Extract the state variables for the `SIP` module
+#' from `y` and return them by name in a list for use during model solving.
+#' Also compute susceptible density `S = H - I - P`.
+#' @inheritParams ramp.xds::get_XH_vars
+#' @return a named [list] of state variables and module-specific derived quantities
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
-steady_state_X.SIP_dts = function(foi, H, xds_obj, i=1){
-  ar = exp(-foi)
-  with(xds_obj$XH_obj[[i]],{
-    Iteq =(ar*H*eta*(1-rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
-    Pteq = (H*(xi*(ar+r*(1-ar)+xi)+ar*(1+xi)*rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
-    Steq = H-Iteq-Pteq
-    return(c(S=Steq, I=Iteq,P =Pteq))
-})}
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+get_XH_vars.SIP <- function(y, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]]$ix,{
+    H = y[H_ix]
+    I = y[I_ix]
+    P = y[P_ix]
+    S = H-I-P
+    return(list(S=S,I=I,P=P,H=H))})
+}
 
 #' @title Size of effective infectious human population
 #' @description Implements [F_I] for the `SIP` model.
@@ -365,65 +214,148 @@ F_infectivity.SIP <- function(y, xds_obj,i) {
 }
 
 
-#' @title List variables for `SIP` (**XH**)
-#' @description This method dispatches on the type of `xds_obj$XH_obj`
-#' @inheritParams ramp.xds::get_XH_vars
-#' @return a [list]
+#' @title Make a module object for `SIP` (**XH**)
+#' @description Create an `SIP` module object and initialize its parameters.
+#' Inspect parameters with [get_XH_pars.SIP] and change supported values
+#' with [change_XH_pars.SIP]. Values in `options` override parameter arguments.
+#' @seealso [get_XH_pars.SIP], [change_XH_pars.SIP]
+#' @inheritSection SIP Parameters
+#' @param nStrata the number of population strata
+#' @param options a [list] that could override defaults
+#' @param b transmission probability (efficiency) from mosquito to human
+#' @param c transmission probability (efficiency) from human to mosquito
+#' @param r recovery rate
+#' @param rho fraction of incident infections treated and cured, entering P
+#' @param eta chemoprotection waning rate
+#' @param xi background treatment rate for susceptible and infectious individuals
+#' @param sigma additional treatment rate for infectious individuals
+#' @importFrom ramp.xds F_zero checkIt
+#' @return an **XH** model object
 #' @keywords internal
 #' @seealso [SIP]
+#' @param q test positivity; a numeric scalar or input of length `nStrata`
 #' @export
-get_XH_vars.SIP <- function(y, xds_obj, i) {
-  with(xds_obj$XH_obj[[i]]$ix,{
-    H = y[H_ix]
-    I = y[I_ix]
-    P = y[P_ix]
-    S = H-I-P
-    return(list(S=S,I=I,P=P,H=H))})
-}
+make_XH_obj_SIP = function(nStrata, options=list(),
+                           b=0.55, r=1/180, c=0.15,
+                           rho =.1, eta=1/25,
+                           xi =1/365, sigma = 1/365, q=0.8){
+  with(options,{
+    XH_obj = list()
+    class(XH_obj) <- c("SIP")
+
+    XH_obj$b = checkIt(b, nStrata)
+    XH_obj$c = checkIt(c, nStrata)
+    XH_obj$r = checkIt(r, nStrata)
+    XH_obj$rho = checkIt(rho, nStrata)
+    XH_obj$eta = checkIt(eta, nStrata)
+    XH_obj$xi = checkIt(xi, nStrata)
+    XH_obj$sigma = checkIt(sigma, nStrata)
 
 
-#' @title Compute the HTC for the `SIP` model
-#' @description Implements [get_HTC] for the `SIP` model with demography.
-#' @inheritParams ramp.xds::get_HTC
-#' @return a [numeric] vector
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-get_HTC.SIP <- function(xds_obj, i) {
-  with(xds_obj$XH_obj[[i]],
-       return((1-rho)*b/(r+xi)*xi/(eta+xi))
-  )
-}
+    XH_obj$q = checkIt(q, nStrata)
 
-#' @title Setup initial values for `SIP` (**XH**)
-#' @description Set initial values for all the variables in the `SIP` module
-#' (**XH**) for the \eqn{i^{th}} host species.
-#' + [make_XH_inits_SIP] supplies default values
-#' + The values in `options` override the defaults
-#' + To inspect variable names, use [get_XH_inits] or
-#' see the inline module documentation.
-#' @inheritParams ramp.xds::setup_XH_inits
+    return(XH_obj)
+  })}
+
+#' @title Set up the module object for `SIP` (**XH**)
+#' @description
+#'
+#' Set up an `SIP` module object for the **XH** component and the \eqn{i^{th}} host species.
+#'
+#' + Set the module name to `SIP`.
+#' + Create the module object with [make_XH_obj_SIP], passing `nStrata[i]` and `options`.
+#' + Set initial values using [ramp.xds::setup_XH_inits], passing `options` to override defaults.
+#' + Initialize the time-spent matrix using [ramp.xds::setup_timespent.setup].
+#' + Initialize mass-treatment functions using [ramp.xds::setup_mass_treatment].
+#' + Initialize birth and death rates using [ramp.xds::setup_demog_obj].
+#' + Initialize blood search weights using [ramp.xds::setup_blood_search_weights.setup].
+#' + Initialize time away using [ramp.xds::setup_time_away.setup].
+#' + Initialize travel EIR using [ramp.xds::setup_travel_eir.no_travel].
+#' + Return the updated **`xds`** model object.
+#'
+#' @seealso [SIP], [make_XH_obj_SIP]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
 #' @inheritSection SIP State Variables
+#' @inheritSection SIP Parameters
+#'
+#' @inheritParams ramp.xds::setup_XH_obj
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+setup_XH_obj.SIP = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SIP"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SIP(xds_obj$nStrata[i], options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_mass_treatment(xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
+  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
+  xds_obj <- setup_time_away("setup", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
+  return(xds_obj)
+}
+
+
+#' @title Get parameters for `SIP` (**XH**)
+#' @seealso [make_XH_obj_SIP], [change_XH_pars.SIP]
+#' @description Return the parameters for the `SIP` module as a named list.
+#' @note Parameter values for the \eqn{i^{th}} host are
+#' stored as `xds_obj$XH_obj[[i]]`.
+#' @inheritParams ramp.xds::get_XH_pars
+#' @inheritSection SIP Parameters
+#' @return a named [list] of parameter values
+#' @seealso [SIP], [make_XH_obj_SIP]
+#' @keywords internal
+#' @export
+get_XH_pars.SIP <- function(xds_obj, i=1) {
+  with(xds_obj$XH_obj[[i]],list(q=q, b=b, c=c, r=r, rho=rho, eta=eta, xi=xi, sigma=sigma))
+}
+
+
+
+#' @title Change parameters for `SIP` (**XH**)
+#' @seealso [make_XH_obj_SIP], [get_XH_pars.SIP]
+#' @description Change parameter values named in `options` for the `SIP`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_pars
+#' @inheritSection SIP Parameters
 #' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
-setup_XH_inits.SIP = function(xds_obj, options=list(), i=1){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIP(xds_obj$nStrata[i], options)
-  return(xds_obj)
-}
+change_XH_pars.SIP <- function(xds_obj, options=list(), i=1) {
+  nHabitats <- xds_obj$nHabitats
+  with(xds_obj$XH_obj[[i]], with(options,{
+    xds_obj$XH_obj[[i]]$b <- b
+    xds_obj$XH_obj[[i]]$c <- c
+    xds_obj$XH_obj[[i]]$r <- r
+    xds_obj$XH_obj[[i]]$rho <- rho
+    xds_obj$XH_obj[[i]]$eta <- eta
+    xds_obj$XH_obj[[i]]$xi <- xi
+    xds_obj$XH_obj[[i]]$sigma <- sigma
+    xds_obj$XH_obj[[i]]$mda <- mda
+    xds_obj$XH_obj[[i]]$msat <- msat
+    xds_obj$XH_obj[[i]]$q <- q
+    return(xds_obj)
+  }))}
 
 #' @title Make initial values for `SIP` (**XH**)
+#' @description Create a named list of initial values for the `SIP` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nStrata`.
+#' Scalars are expanded to that length.
 #' @inheritSection SIP State Variables
 #' @param nStrata the number of population strata
 #' @param options a [list] that could override defaults
 #' @param H the initial human population density
 #' @param I the initial number of infectious humans
 #' @param P the initial number of humans under chemoprotection
-#' @return a [list]
+#' @return a named [list] of initial values
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
+#' @seealso [setup_XH_inits.SIP], [change_XH_inits.SIP]
 make_XH_inits_SIP = function(nStrata, options = list(),
                              H=1000, I=1, P=0){
 with(options,{
@@ -433,38 +365,57 @@ with(options,{
   return(list(H=H, I=I, P=P))
 })}
 
-#' @title Parse outputs for `SIP` (**XH**)
-#'
-#' @description In [xds_solve], after solving a system of equations,
-#' the orbits for \eqn{H}, \eqn{I} and \eqn{P} are
-#' pulled from the solutions matrix, and the model
-#' also computes \eqn{S=H-I-P}. The variables are returned
-#' as a named list.
-#'
-#' @inheritParams ramp.xds::parse_XH_orbits
-#'
-#' @return `SIP` module variables as a named list
+#' @title Set up initial values for `SIP` (**XH**)
+#' @description Set up initial values for the `SIP` module using
+#' [make_XH_inits_SIP]. Values in `options` override the defaults.
+#' @inheritParams ramp.xds::setup_XH_inits
+#' @inheritSection SIP State Variables
+#' @return an **`xds`** model object
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
-parse_XH_orbits.SIP <- function(outputs, xds_obj, i) {
-  with(xds_obj$XH_obj[[i]]$ix,{
-    H = outputs[,H_ix]
-    I = outputs[,I_ix]
-    P = outputs[,P_ix]
-    S = H-I-P
-    vars <- list(S=S, I=I, P=P, H=H)
-    return(vars)
-})}
+#' @seealso [change_XH_inits.SIP]
+#' @note Initial values are stored at `xds_obj$XH_obj[[i]]$inits`.
+#' @seealso [ramp.xds::get_XH_inits]
+setup_XH_inits.SIP = function(xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIP(xds_obj$nStrata[i], options)
+  return(xds_obj)
+}
 
-#' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the `SIP` model.
+
+#' @title Change initial values for `SIP` (**XH**)
+#' @description Change initial values named in `options` for the `SIP`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_inits
+#' @inheritSection SIP State Variables
+#' @note This method changes `I` and `P`; it leaves `H` unchanged.
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+#' @seealso [make_XH_inits_SIP], [setup_XH_inits.SIP]
+#' @note Stored initial values for this module are at
+#' `xds_obj$XH_obj[[i]]$inits`.
+change_XH_inits.SIP <- function(xds_obj, options=list(), i=1) {
+  with(get_XH_inits(xds_obj, i), with(options,{
+    xds_obj$XH_obj[[i]]$inits$I = I
+    xds_obj$XH_obj[[i]]$inits$P = P
+    return(xds_obj)
+  }))}
+
+#' @title Set up variable indices for `SIP` (**XH**)
+#' @description Assign consecutive variable indices for the `SIP` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `H_ix`, `I_ix`, `P_ix`.
+#' Each block has length `nStrata[i]`.
 #' @inheritParams ramp.xds::setup_XH_ix
 #' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
+#' @note Indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
 setup_XH_ix.SIP <- function(xds_obj, i) {with(xds_obj,{
 
   H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
@@ -481,18 +432,28 @@ setup_XH_ix.SIP <- function(xds_obj, i) {with(xds_obj,{
   return(xds_obj)
 })}
 
-
-#' @title Compute the net infectiousness
-#' @description Implements [F_ni] for the `SIP` model.
-#' @inheritParams ramp.xds::F_ni
-#' @return a [numeric] vector of length `nStrata`
+#' @title Parse outputs for `SIP` (**XH**)
+#'
+#' @description Extract the model state outputs for the `SIP` module
+#' from `outputs` and return them by name in a list.
+#' Also compute `S = H-I-P`.
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#'
+#' @inheritParams ramp.xds::parse_XH_orbits
+#'
+#' @return a [list]
 #' @keywords internal
 #' @seealso [SIP]
 #' @export
-F_ni.SIP <- function(vars, XH_obj) {
-  ni = with(vars, XH_obj$c*I/H)
-  return(ni)
-}
+parse_XH_orbits.SIP <- function(outputs, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]]$ix,{
+    H = outputs[,H_ix]
+    I = outputs[,I_ix]
+    P = outputs[,P_ix]
+    S = H-I-P
+    vars <- list(S=S, I=I, P=P, H=H)
+    return(vars)
+})}
 
 #' @title Compute the "true" prevalence of infection / parasite rate
 #' @description Implements [F_prevalence] for the `SIP` model.
@@ -506,9 +467,48 @@ F_prevalence.SIP <- function(vars, XH_obj) {
   return(pr)
 }
 
-#' @title Compute the prevalence of infection by light microscopy
+
+#' @title Compute observed prevalence
+#' @description Return observed prevalence for the `SIP` module as
+#' `q` times the true prevalence returned by [ramp.xds::F_prevalence].
+#' @inheritParams ramp.xds::F_pr_obs
+#' @return a [numeric] vector of length `nStrata`
+#' @seealso [SIP]
+#' @keywords internal
+#' @export
+F_pr_obs.SIP <- function(vars, XH_obj) {
+  XH_obj$q * ramp.xds::F_prevalence(vars, XH_obj)
+}
+
+#' @title Compute the net infectiousness
+#' @description Implements [F_ni] for the `SIP` model.
+#' @inheritParams ramp.xds::F_ni
+#' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+F_ni.SIP <- function(vars, XH_obj) {
+  ni = with(vars, XH_obj$c*I/H)
+  return(ni)
+}
+
+
+#' @title Compute the HTC for the `SIP` model
+#' @description Implements [get_HTC] for the `SIP` model with demography.
+#' @inheritParams ramp.xds::get_HTC
+#' @return a [numeric] vector
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+get_HTC.SIP <- function(xds_obj, i) {
+  with(xds_obj$XH_obj[[i]],
+       return((1-rho)*b/(r+xi)*xi/(eta+xi))
+  )
+}
+
+#' @title Compute observed prevalence by light microscopy
 #' @description Implements [F_prevalence] for the `SIP` model.
-#' @inheritParams ramp.xds::F_prevalence
+#' @inheritParams ramp.xds::F_pfpr_by_lm
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
 #' @seealso [SIP]
@@ -518,9 +518,9 @@ F_pfpr_by_lm.SIP <- function(vars, XH_obj) {
   return(pr)
 }
 
-#' @title Compute the prevalence of infection by RDT
+#' @title Compute observed prevalence by RDT
 #' @description Implements [F_prevalence] for the `SIP` model.
-#' @inheritParams ramp.xds::F_prevalence
+#' @inheritParams ramp.xds::F_pfpr_by_rdt
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
 #' @seealso [SIP]
@@ -530,9 +530,9 @@ F_pfpr_by_rdt.SIP <- function(vars, XH_obj) {
   return(pr)
 }
 
-#' @title Compute the prevalence of infection by PCR
+#' @title Compute observed prevalence by PCR
 #' @description Implements [F_prevalence] for the `SIP` model.
-#' @inheritParams ramp.xds::F_prevalence
+#' @inheritParams ramp.xds::F_pfpr_by_pcr
 #' @return a [numeric] vector of length `nStrata`
 #' @keywords internal
 #' @seealso [SIP]
@@ -541,6 +541,97 @@ F_pfpr_by_pcr.SIP <- function(vars, XH_obj) {
   pr = with(vars, I/H)
   return(pr)
 }
+
+#' @title Check `SIP` (**XH**)
+#'
+#' @inheritParams ramp.xds::check_XH
+#'
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+check_XH.SIP = function(xds_obj, i){
+  return(xds_obj)
+}
+
+#' @title Get the skill set for `SIP` (**XH**)
+#'
+#' @description Return the capabilities and compatibilities of the `SIP` module as a list.
+#'
+#' @inheritParams ramp.xds::get_skillset_XH
+#'
+#' @return the **XH** module skill set, as a list
+#' @keywords internal
+#'
+#' @seealso [SIP]
+#' @export
+get_skillset_XH.SIP = function(xds_obj,i){
+  skills =   list(
+    dts         = FALSE,
+    xde         = TRUE,
+    delay       = FALSE,
+    demography  = TRUE,
+    malaria     = TRUE,
+    pr_obs      = TRUE,
+    pf_lm       = TRUE,
+    pf_rdt      = TRUE,
+    pf_pcr      = TRUE,
+    mda         = TRUE,
+    msat        = TRUE
+  )
+  return(skills)
+}
+#' @title Compute steady states for `SIP` (**XH**)
+#' @description Compute steady states given daily FoI `foi` and fixed host density `H`.
+#' @note Delegate to [steady_state_X_SIP], which dispatches on `xds_obj$xds`.
+#' @inheritParams ramp.xds::steady_state_X
+#' @return a named [list] containing `H`, `I`, and `P` for `xde`, or a named
+#' [numeric] vector containing `S`, `I`, and `P` for `dts`
+#' @keywords internal
+#' @export
+steady_state_X.SIP = function(foi, H, xds_obj, i=1){
+  steady_state_X_SIP(foi, H, xds_obj, i)
+}
+
+#' @rdname steady_state_X.SIP
+#' @export
+steady_state_X_SIP = function(foi, H, xds_obj, i=1){
+  UseMethod("steady_state_X_SIP", xds_obj$xds)
+}
+
+#' @title Compute steady states for `SIP` (**XH**)
+#' @description Compute steady-state infection densities for the `SIP` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' differential-equation system.
+#' @inheritParams steady_state_X_SIP
+#' @return a named [list] with elements `H`, `I`, and `P`
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+steady_state_X_SIP.xde = function(foi, H, xds_obj, i=1){
+  with(xds_obj$XH_obj[[i]],{
+    Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
+    Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
+    return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))
+})}
+
+#' @title Compute steady states for `SIP` (**XH**)
+#' @description Compute steady-state infection densities for the `SIP` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' discrete-time system.
+#' @inheritParams steady_state_X_SIP
+#' @return a named [numeric] vector containing `S`, `I`, and `P`
+#' @keywords internal
+#' @seealso [SIP]
+#' @export
+steady_state_X_SIP.dts = function(foi, H, xds_obj, i=1){
+  ar = exp(-foi)
+  with(xds_obj$XH_obj[[i]],{
+    Iteq =(ar*H*eta*(1-rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
+    Pteq = (H*(xi*(ar+r*(1-ar)+xi)+ar*(1+xi)*rho))/((eta+xi)*(ar*(1-r)+(r+xi)+ar*(eta*(r-1)+r+xi)))
+    Steq = H-Iteq-Pteq
+    return(c(S=Steq, I=Iteq,P =Pteq))
+})}
 
 #' Plot the density of infected individuals for the `SIP` model
 #'
@@ -585,17 +676,3 @@ add_lines_X_SIP = function(time, XH, nStrata, clrs=c("darkblue", "darkred", "dar
       lines(time, P[,i], col=clrs[3], lty = llty[i])
     }})
 }
-
-#' @title Compute the steady states for the `SIP` model as a function of the daily foi
-#' @description Compute the steady state of the `SIP` model as a function of the daily eir.
-#' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named list
-#' @keywords internal
-#' @seealso [SIP]
-#' @export
-steady_state_X.SIP = function(foi, H, xds_obj, i=1){
-  with(xds_obj$XH_obj[[i]],{
-    Ieq = (foi*H*eta*(1-rho))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
-    Peq  = (H*xi*(foi+r+xi+sigma) + (foi*H*(r*rho + sigma)))/((foi+r+xi+sigma)*(eta+xi) +foi*((r-eta)*rho+sigma))
-    return(list(H=H, I=as.vector(Ieq), P = as.vector(Peq)))
-})}

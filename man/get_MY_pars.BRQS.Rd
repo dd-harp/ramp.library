@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{get_MY_pars.BRQS}
 \alias{get_MY_pars.BRQS}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{BRQS} (\strong{MY})}
 \usage{
 \method{get_MY_pars}{BRQS}(xds_obj, s = 1)
 }
@@ -12,10 +12,10 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list}
+a named \link{list} of parameter values
 }
 \description{
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+Return the parameters for the \code{BRQS} module as a named list.
 }
 \section{Parameters}{
 
@@ -47,5 +47,7 @@ govern movement among the four behavioral states.
 
 \seealso{
 \link{BRQS}, \link{change_MY_pars.BRQS}
+
+\link{make_MY_obj_BRQS}
 }
 \keyword{internal}

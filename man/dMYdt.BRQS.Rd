@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{dMYdt.BRQS}
 \alias{dMYdt.BRQS}
-\title{Compute derivatives for \code{BRQS} (\strong{MY})}
+\title{Compute the derivatives for \code{BRQS} (\strong{MY})}
 \usage{
 \method{dMYdt}{BRQS}(t, y, xds_obj, s)
 }
@@ -16,10 +16,28 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{numeric} vector
+a \link{numeric} vector of derivatives in the module's state-variable order
 }
 \description{
-Implements \link[ramp.xds:dMYdt]{dMYdt} for the BRQS ODE model.
+Compute the derivatives for the \code{BRQS} module:
+\deqn{\begin{array}{rl}
+dS_u/dt &= \omega\Lambda+\zeta B_u+(\nu+\theta)(1-\delta)Q_u-\rho S_u-\Omega_s\cdot S_u \\
+dB_u/dt &= (1-\omega)\Lambda+\rho S_u+(\nu+\theta)\delta Q_u+\xi R-(f+\zeta)B_u-\Omega_b\cdot B_u \\
+dR_u/dt &= f(1-q\kappa)B_u-(\xi+\eta+g)R_u \\
+dQ_u/dt &= \eta R_u-(\nu+\theta)Q_u-\Omega_q\cdot Q_u \\
+dS_y/dt &= \zeta B_y+(\nu+\theta)(1-\delta)Q_y-\rho S_y-\Omega_s\cdot S_y-\tau S_y \\
+dB_y/dt &= \rho S_y+(\nu+\theta)\delta Q_y+\xi R-(f+\zeta)B_y-\Omega_b\cdot B_y-\tau B_y \\
+dR_y/dt &= fq\kappa B_u+fB_y-(\xi+\eta+g)R_y-\tau R_y \\
+dQ_y/dt &= \eta R_y-(\nu+\theta)Q_y-\Omega_q\cdot Q_y-\tau Q_y \\
+dS_z/dt &= \zeta B_z+(\nu+\theta)(1-\delta)Q_z-\rho S_z-\Omega_s\cdot S_z+\tau S_y \\
+dB_z/dt &= \rho S_z+(\nu+\theta)\delta Q_z+\xi R-(f+\zeta)B_z-\Omega_b\cdot B_z+\tau B_y \\
+dR_z/dt &= fB_z-(\xi+\eta+g)R_z+\tau R_y \\
+dQ_z/dt &= \eta R_z-(\nu+\theta)Q_z-\Omega_q\cdot Q_z+\tau Q_y
+\end{array}}
+}
+\note{
+Derivatives are returned in blocks for \code{Su}, \code{Bu}, \code{Ru}, \code{Qu},
+\code{Sy}, \code{By}, \code{Ry}, \code{Qy}, \code{Sz}, \code{Bz}, \code{Rz}, and \code{Qz}, each in patch order.
 }
 \section{State Variables}{
 

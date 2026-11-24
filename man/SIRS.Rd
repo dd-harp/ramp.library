@@ -33,6 +33,7 @@ A constant fraction of infectious bites causes an infection: the parameter \eqn{
 \link{make_XH_obj_SIRS} supplies defaults for the parameters, which can be changed
 using \link{change_XH_pars.SIRS}.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -58,6 +59,8 @@ The mortality function uses the same model for \eqn{I} and \eqn{R} as for
 
 \section{Prevalence}{
 
+\link{F_pr_obs.SIRS} returns observed prevalence \eqn{x_q=qI/H}.
+
 \link{F_prevalence.SIRS} returns \eqn{x=I/H}. This module has no diagnostic
 sensitivity parameters or module-specific light microscopy, RDT, or PCR
 prevalence methods.
@@ -80,7 +83,7 @@ and has no treatment parameters \code{rho} or \code{sigma}.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

@@ -24,7 +24,7 @@ and support for progressive stratification."><!-- mathjax --><script src="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -157,7 +157,10 @@ infection: the parameter \(b\).</p>
 
 
 <p>The parameters returned by <a href="get_XH_pars.SIPd.html">get_XH_pars.SIPd</a> and modifiable by
-<a href="change_XH_pars.SIPd.html">change_XH_pars.SIPd</a> describe infection, treatment, and chemoprotection.</p><dl><dt><code>b</code></dt>
+<a href="change_XH_pars.SIPd.html">change_XH_pars.SIPd</a> describe infection, treatment, and chemoprotection.</p><dl><dt><code>q</code></dt>
+<dd><p>test positivity (default <code>0.8</code>)</p></dd>
+
+<dt><code>b</code></dt>
 <dd><p>transmission probability from mosquito to human</p></dd>
 
 <dt><code>c</code></dt>
@@ -199,6 +202,7 @@ The mortality function uses the same model for \(I\) and \(P\) as for \(H\).</p>
     <h2>Prevalence</h2>
 
 
+<p><a href="F_pr_obs.SIPd.html">F_pr_obs.SIPd</a> returns observed prevalence \(x_q=qI/H\).</p>
 <p>True prevalence is \(x = I/H\). The light microscopy, RDT, and PCR
 prevalence functions currently also return \(I/H\), without diagnostic
 sensitivity parameters.</p>
@@ -225,10 +229,7 @@ unlike <code>SIP</code>, it has no <code>sigma</code> parameter.</p>
 
 
 
-<p>Demographic changes (<strong>H</strong>) are given by the equation:</p>
-<p>$$
-dH/dt = \mathbf{B}(t,H) - \mathbf{D}(H)$$</p>
-<p>This model has no parameter
+<p>This model has no parameters
 or terms to describe disease-induced mortality.</p>
 <dl><dt><code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code> or \(\mathbf{B}\)</dt>
 <dd><p>the births function</p></dd>
@@ -237,8 +238,9 @@ or terms to describe disease-induced mortality.</p>
 <dd><p>the deaths function</p></dd>
 
 
-</dl><p><strong>Setup:</strong></p><ul><li><p>The defaults are no births and no deaths</p></li>
-<li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_births.html" class="external-link">setup_births</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code></p></li>
+</dl><p><strong>Setup:</strong></p>
+<p>The default is a constant population model: birth
+and death rates are set to zero</p><ul><li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_births.html" class="external-link">setup_births</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code></p></li>
 <li><p>Use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_deaths.html" class="external-link">setup_deaths</a> to configure <code><a href="https://dd-harp.github.io/ramp.xds/reference/Deaths.html" class="external-link">Deaths</a></code></p></li>
 </ul><p>Also, see <a href="https://dd-harp.github.io/ramp.xds/reference/xds_info_demographic_change.html" class="external-link">xds_info_demographic_change</a>.</p>
     </div>

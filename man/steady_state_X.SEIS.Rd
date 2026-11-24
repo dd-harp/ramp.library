@@ -2,9 +2,12 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{steady_state_X.SEIS}
 \alias{steady_state_X.SEIS}
-\title{Compute the steady states for the \code{SEIS} model as a function of the daily EIR}
+\alias{steady_state_X_SEIS}
+\title{Compute steady states for \code{SEIS} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SEIS}(foi, H, xds_obj, i = 1)
+
+steady_state_X_SEIS(foi, H, xds_obj, i = 1)
 }
 \arguments{
 \item{foi}{the daily FoI}
@@ -16,15 +19,13 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
+a named \link{numeric} vector containing \code{S}, \code{E}, and \code{I}; the \code{xde}
+method additionally returns \code{H}
 }
 \description{
-Compute the steady state of the \code{SEIS} model as a function of the daily eir.
+Compute steady states given daily FoI \code{foi} and fixed host density \code{H}.
 }
 \note{
-Assumes no demographic change or mass treatment. Includes \code{rho} and \code{sigma}.
-}
-\seealso{
-\link{SEIS}
+Delegate to \link{steady_state_X_SEIS}, which dispatches on \code{xds_obj$xds}.
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{dXHdt.SIP}
 \alias{dXHdt.SIP}
-\title{Compute derivatives for \code{SIP} (\strong{XH})}
+\title{Compute the derivatives for \code{SIP} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIP}(t, y, xds_obj, i)
 }
@@ -19,13 +19,22 @@
 a \link{numeric} vector
 }
 \description{
-Computes derivatives for the \code{SIP} module (\strong{XH}).
+The derivatives for the \code{SIP} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dI/dt &= (1-\rho)hS-(r+\xi_t+\sigma_t)I-\mathbf{D}(t,I) \\
+dP/dt &= \rho hS+\xi_t(S+I)+\sigma_t I-\eta P-\mathbf{D}(t,P)
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{S=H-I-P},
+\eqn{\xi_t=\xi+mda(t)}, and \eqn{\sigma_t=\sigma+msat(t)}.
+The term \eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{setup_L_obj.stages}
 \alias{setup_L_obj.stages}
-\title{Set up \code{stages} (\strong{L})}
+\title{Set up the module object for \code{stages} (\strong{L})}
 \usage{
 \method{setup_L_obj}{stages}(Lname, membership, xds_obj, options = list(), s = 1)
 }
@@ -21,15 +21,18 @@
 an \strong{\code{xds}} model object
 }
 \description{
-This sets up a \code{stages} model object for the \strong{L} module for the \eqn{s^{th}} vector species
+Set up a \code{stages} module object for the \strong{L} component and the \eqn{s^{th}} vector species.
 \itemize{
-\item the object is created by \link{make_L_obj_stages}
-\item the initial conditions are set by \link[ramp.xds:setup_L_inits]{setup_L_inits}
-\item \code{options} is passed to both to override the defaults
+\item Create the module object with \link{make_L_obj_stages}, passing \code{nHabitats} and \code{options}.
+\item Set the skill set using \link[ramp.xds:get_skillset_L]{ramp.xds::get_skillset_L}.
+\item Set initial values using \link[ramp.xds:setup_L_inits]{ramp.xds::setup_L_inits}, passing \code{options} to override defaults.
+\item Initialize habitat search weights using \link[ramp.xds:setup_habitat_search_weights.setup]{ramp.xds::setup_habitat_search_weights.setup}.
+\item Return the updated \strong{\code{xds}} model object.
 }
 }
 \note{
 The module object is stored at \code{xds_obj$L_obj[[s]]}
+Its classes are \code{stages} and \code{stages_} followed by \code{xds_obj$xds}.
 }
 \seealso{
 \link{stages}, \link{make_L_obj_stages}

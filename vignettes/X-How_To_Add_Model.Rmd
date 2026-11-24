@@ -17,7 +17,7 @@ If you need help, please contact [Professor David L Smith](mailto:smitdave@gmail
 
 *** 
 
-We have written this vignette to produce a new template file using `knitr::purl.` The template can be modified to build a new **XH** module. 
+We have written this vignette to produce a new template file using `knitr::purl`. The template can be modified to build a new **XH** module.
 
 Do this:
 
@@ -54,6 +54,41 @@ We recommend that new models conform to a set of style guidelines:
 
 + The functions should be easy to relate to the equations defining a model, following notation defined in an accompanying vignette.
 
+### Documentation policy
+
+Follow the shared [function order](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order)
+in module files and guide implementation sections. Move functions with their
+documentation, keep file-level review/TODO notes at the top, and preserve
+definitions and behavior when reordering.
+
+Follow the shared [documentation conventions](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions)
+for all component modules. These vignettes are the public style reference;
+keep template documentation aligned with the implemented functions.
+
+- Use the approved family titles, with the module name in backticks and
+  the **XH** component tag.
+- Describe the function's behavior, not just which generic it implements.
+  Show the actual derivative or updating equations, in returned-vector
+  order, including demographic, treatment, and accessory terms when used.
+- Put storage locations, class assignments, and dispatch mechanics in
+  `@note`. Explain generic dispatch on the generic, not on every method.
+- Describe setup with an ordered-by-implementation bulleted list covering
+  the constructor and dimension, initial values, and each
+  interface call. End every complete bullet with a period.
+- Each S3 method uses `@inheritParams` from its immediate generic, even
+  when that generic inherits its argument documentation. Document
+  method-specific arguments or restrictions locally with `@param`.
+- Qualify links to shared helpers with
+  `ramp.xds::`. Setup and check methods return "an **`xds`** model object".
+- Describe skill sets as capabilities and compatibilities. Include
+  `dts = FALSE` if there is no discrete-time update method; advertise
+  discrete-time support only when it is implemented and tested.
+- State explicitly when a check method performs no checks.
+
+The template includes both dynamics alternatives for illustration. Retain
+the methods appropriate to the new module, replace all placeholder
+equations, and make the skill set match the supported solver pathways.
+
 ## Dynamics 
 
 
@@ -66,8 +101,12 @@ The sections that need to be modified are marked `# Change this`
 + The method reads the stored FoI from `xds_obj$terms$FoI[[i]]`. Use the shared `Births(t, y, xds_obj, i)` and `Deaths` functions for demographic terms, as shown below. Return derivatives in the same order as the indexed state variables.
 
 ```{r}
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [dXHdt] for the newXHname model
+#' @title Compute the derivatives for `newXHname` (**XH**)
+#' @description For the `newXHname` differential equation system:
+#' \deqn{\frac{dH}{dt} = \mathrm{Births}(t,y) - \mathrm{Deaths}(t,H)}
+#' \deqn{\frac{dX_1}{dt} = F_1(\mathrm{foi},X_1,X_2) - \mathrm{Deaths}(t,X_1)}
+#' \deqn{\frac{dX_2}{dt} = F_2(\mathrm{foi},X_1,X_2) - \mathrm{Deaths}(t,X_2)}
+#' Replace the placeholder functions and these equations together.
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @export
@@ -100,11 +139,16 @@ dXHdt.newXHname <- function(t, y, xds_obj, i) {
 
 ### Update_XHt (discrete-time modules)
 
-This is the discrete-time alternative to `dXHdt`; the continuous-time `SIS` module does not define `Update_XHt.SIS`.
+This is the discrete-time alternative to `dXHdt`. The `SIS` module provides
+both `dXHdt.SIS` and `Update_XHt.SIS` as examples of the two solver pathways.
 
 ```{r}
-#' @title Compute the derivatives for parasite infection dynamics in human population strata 
-#' @description Implements [Update_XHt] for the newXHname model
+#' @title Update states for `newXHname` (**XH**)
+#' @description For the `newXHname` discrete-time system, the updating function is:
+#' \deqn{H_{t+1} = H_t}
+#' \deqn{X_{1,t+1} = X_{1,t} + F_1(\mathrm{ar},X_{1,t},X_{2,t})}
+#' \deqn{X_{2,t+1} = X_{2,t} + F_2(\mathrm{ar},X_{1,t},X_{2,t})}
+#' Replace the placeholder functions and these equations together.
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
 #' @export
@@ -134,124 +178,12 @@ Update_XHt.newXHname <- function(t, y, xds_obj, i) {
 ```
 
 
-## XH Model Object 
+## State-variable extraction
 
-### make_XH_obj
-
-+ In the following, replace `p1` with the first parameter, `p2` with the second, and so on.
-
-+ Shared demographic and mass-treatment features are initialized by `setup_XH_obj` using the `ramp.xds` setup functions; do not create a separate demographic matrix or replace these ports in `make_XH_obj`.
-+ If the module supports mass drug administration or mass screen and treat, include the corresponding treatment terms in its state updates and record that capability in `get_skillset_XH.newXHname`.
-
-```{r}
-#' @title Make a `newXHname` **XH** model object
-#' @param nStrata is the number of population strata
-#' @param options a [list] that could override defaults
-#' @param p1 the first parameter 
-#' @param p2 the second parameter 
-#' @param p3 the third parameter 
-#' @return a [list]
-#' @export
-make_XH_obj_newXHname = function(nStrata, options=list(),
-                         p1=1, p2=2, p3=3){
-  with(options,{
-    XH_obj = list()
-    class(XH_obj) <- c("newXHname")
-
-    # Change this
-    XH_obj$p1 = checkIt(p1, nStrata)
-    XH_obj$p2 = checkIt(p2, nStrata)
-    XH_obj$p3 = checkIt(p3, nStrata)
-
-    return(XH_obj)
-  })}
-```
-
-
-### setup_XH_obj  
-
-This method also initializes the shared XH interface features. Follow the setup sequence used by existing modules.
-
-```{r}
-#' @title Setup XH_obj.newXHname
-#' @description Implements [setup_XH_obj] for the newXHname model
-#' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** object
-#' @export
-setup_XH_obj.newXHname = function(XHname, residence, xds_obj, options=list(), i=1){
-  xds_obj$XHname = "newXHname"
-  xds_obj$XH_obj[[i]] = make_XH_obj_newXHname(xds_obj$nStrata[i], options)
-  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
-  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
-  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_mass_treatment(xds_obj, i=i)
-  xds_obj <- setup_demog_obj(xds_obj, i)
-  xds_obj <- setup_time_away("setup", xds_obj, i=i)
-  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
-  return(xds_obj)
-}
-```
-
-## Parameters 
-
-Implement methods to inspect and change the module's parameters. The `options` argument is a named list; parameters not supplied in `options` retain their existing values when changed.
-
-```{r}
-#' @title Get parameters for `newXHname` (**XH**)
-#' @inheritParams ramp.xds::get_XH_pars
-#' @return a [list]
-#' @export
-get_XH_pars.newXHname <- function(xds_obj, i=1) {
-  with(xds_obj$XH_obj[[i]], list(p1=p1, p2=p2, p3=p3))
-}
-
-#' @title Change parameters for `newXHname` (**XH**)
-#' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** object
-#' @export
-change_XH_pars.newXHname <- function(xds_obj, options=list(), i=1) {
-  with(xds_obj$XH_obj[[i]], with(options, {
-    if (!is.null(p1)) xds_obj$XH_obj[[i]]$p1 <- p1
-    if (!is.null(p2)) xds_obj$XH_obj[[i]]$p2 <- p2
-    if (!is.null(p3)) xds_obj$XH_obj[[i]]$p3 <- p3
-    xds_obj
-  }))
-}
-```
-
-## Variables 
-
-### setup_XH_ix  
-
-In the following, each variable in your model gets its own pair of lines. Replace `X1` in `X1_ix` with the first variable name, `X2` in `X2_ix` with the second, and add lines for each variable by copying and pasting and editing the pair of lines. Be sure the replacement gets applied to all four instances.  
-
-
-```{r}
-#' @title Add indices for human population variables
-#' @description Implements [setup_XH_ix] for the newXHname model.
-#' @inheritParams ramp.xds::setup_XH_ix
-#' @return none
-#' @importFrom utils tail
-#' @export
-setup_XH_ix.newXHname <- function(xds_obj, i) {with(xds_obj,{
-
-  H_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
-  max_ix <- tail(H_ix, 1)
-  
-  X1_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
-  max_ix <- tail(X1_ix, 1)
-
-  X2_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
-  max_ix <- tail(X2_ix, 1)
-  
-  xds_obj$max_ix = max_ix
-  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix, X1_ix=X1_ix, X2_ix=X2_ix)
-  return(xds_obj)
-})}
-```
-
-### get_XH_vars   
+This method primarily supports solver evaluations that need variables by
+name; users rarely call it directly. Follow the title and description below,
+document any derived quantities, and put index storage in `@note`.
+Return a named list; do not confuse extraction from `y` with output parsing.
 
 In the following, each variable in your model gets its own pair of lines. 
 
@@ -266,10 +198,13 @@ In the following, each variable in your model gets its own pair of lines.
 + The variable `X0` is the class that gets newborns. If you use it or if you want to have it available, compute it and add it to the returned list. 
 
 ```{r}
-#' @title Return the variables as a list
-#' @description This method dispatches on the type of `xds_obj$XH_obj`
+#' @title Get the state variables for `newXHname` (**XH**)
+#' @description Extract the state variables for the `newXHname` module
+#' from `y` and return them by name in a list for use during model solving.
+#' Also compute the remaining class `X0 = H - X1 - X2`.
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
 #' @inheritParams ramp.xds::get_XH_vars
-#' @return a [list]
+#' @return a named [list] of state variables and module-specific derived quantities
 #' @export
 get_XH_vars.newXHname <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
@@ -280,95 +215,6 @@ get_XH_vars.newXHname <- function(y, xds_obj, i) {
       return(list(H=H, X1=X1, X2=X2, X0=X0))})
 }
 ``` 
-
-### parse_XH_orbits  
-
-In the following, each variable in your model gets its own pair of lines. 
-
-+ Leave `H` as-is 
-
-+ Replace `X1` in `X1` and `X1_ix` with the first variable name. 
-
-+ Replace `X2` in `X2` and `X2_ix` with the second variable name. 
-
-+ Copy the form for every other variable 
-
-+ The variable `X0` is the class that gets newborns. If you use it or if you want to have it available, compute it and add it to the returned list.
-
-```{r}
-#' @title parse the output of deSolve and return variables for the newXHname model
-#' @description Implements [parse_XH_orbits] for the newXHname model
-#' @inheritParams ramp.xds::parse_XH_orbits
-#' @return a named list  
-#' @export
-parse_XH_orbits.newXHname <- function(outputs, xds_obj, i) {
-  with(xds_obj$XH_obj[[i]]$ix,{
-    H <- outputs[,H_ix]
-    X1 <- outputs[,X1_ix]
-    X2 <- outputs[,X2_ix]
-    X0 <- H-X1-X2
-    vars <- list(H=H, X1=X1, X2=X2, X0=X0)
-    return(vars)
-})}
-```
- 
-
-## Initial Values 
-
-### setup_XH_inits
-
-If you did the global search and replace, you won't need to change this function. 
-
-```{r}
-#' @title Setup initial values for *newXHname*
-#' 
-#' @inheritParams ramp.xds::setup_XH_inits
-#' 
-#' @return a **`ramp.xds`** object 
-#' 
-#' @export
-setup_XH_inits.newXHname = function(xds_obj, options=list(), i=1){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_newXHname(xds_obj$nStrata[i], options=options)
-  return(xds_obj)
-}
-```
-
-### make_XH_inits
-
-```{r}
-#' @title Make initial values for the XHname human model, with defaults
-#' @param nStrata the number of strata in the model
-#' @param options a [list] to override defaults
-#' @param X1 the initial value for X1 
-#' @param X2 the initial value for X2
-#' @return a [list]
-#' @export
-make_XH_inits_newXHname = function(nStrata, options = list(), H=1000, X1=1, X2=1){with(options,{
-  H = unname(as.vector(checkIt(H, nStrata)))
-  X1 = unname(as.vector(checkIt(X1, nStrata)))
-  X2 = unname(as.vector(checkIt(X2, nStrata)))
-  return(list(H=H, X1=X1, X2=X2))
-})}
-```
-
-### change_XH_inits 
-
-```{r}
-#' @title Change initial values for `newXHname` (**XH**)
-#' 
-#' @inheritParams ramp.xds::change_XH_inits 
-#' 
-#' @return an **`xds`** object
-#' @export
-change_XH_inits.newXHname <- function(xds_obj, options=list(), i=1) {
-  with(get_XH_inits(xds_obj, i), with(options,{
-    xds_obj$XH_obj[[i]]$inits$H = H
-    xds_obj$XH_obj[[i]]$inits$X1 = X1
-    xds_obj$XH_obj[[i]]$inits$X2 = X2
-    return(xds_obj)
-  }))}
-```
-
 
 ## Dynamical Terms   
 
@@ -433,9 +279,323 @@ F_infectivity.newXHname <- function(y, xds_obj, i) {
 ```
 
 
+## XH Model Object 
+
+### make_XH_obj
+
+Use the title "Make a module object for `module` (**XH**)". Describe the
+parameters initialized by the constructor and their relationship to the
+getter and changer. Each of these three functions links to the other two
+in `@seealso`; document any differences in supported parameters explicitly.
+
++ In the following, replace `p1` with the first parameter, `p2` with the second, and so on.
+
++ Shared demographic and mass-treatment features are initialized by `setup_XH_obj` using the `ramp.xds` setup functions; do not create a separate demographic matrix or replace these ports in `make_XH_obj`.
++ If the module supports mass drug administration or mass screen and treat, include the corresponding treatment terms in its state updates and record that capability in `get_skillset_XH.newXHname`.
+
+```{r}
+#' @title Make a module object for `newXHname` (**XH**)
+#' @description Create a `newXHname` module object and initialize its parameters.
+#' Inspect parameters with [get_XH_pars.newXHname] and change supported values
+#' with [change_XH_pars.newXHname]. Values in `options` override parameter arguments.
+#' @seealso [get_XH_pars.newXHname], [change_XH_pars.newXHname]
+#' @param nStrata is the number of population strata
+#' @param options a [list] that could override defaults
+#' @param p1 the first parameter 
+#' @param p2 the second parameter 
+#' @param p3 the third parameter 
+#' @param q test positivity
+#' @return a [list]
+#' @export
+make_XH_obj_newXHname = function(nStrata, options=list(),
+                         p1=1, p2=2, p3=3, q=0.8){
+  with(options,{
+    XH_obj = list()
+    class(XH_obj) <- c("newXHname")
+
+    # Change this
+    XH_obj$p1 = checkIt(p1, nStrata)
+    XH_obj$p2 = checkIt(p2, nStrata)
+    XH_obj$p3 = checkIt(p3, nStrata)
+    XH_obj$q = checkIt(q, nStrata)
+
+    return(XH_obj)
+  })}
+```
+
+
+### setup_XH_obj  
+
+This method also initializes the shared XH interface features. Follow the setup sequence used by existing modules.
+
+```{r}
+#' @title Set up the module object for `newXHname` (**XH**)
+#' @description Set up a `newXHname` module object for the **XH** component
+#' and the \eqn{i^{th}} host species.
+#' + Set the module name to `newXHname`.
+#' + Create the module object with [make_XH_obj_newXHname], passing `nStrata[i]` and `options`.
+#' + Set initial values using [ramp.xds::setup_XH_inits], passing `options` to override defaults.
+#' + Initialize blood search weights using [ramp.xds::setup_blood_search_weights.setup].
+#' + Initialize the time-spent matrix using [ramp.xds::setup_timespent.setup].
+#' + Initialize mass-treatment functions using [ramp.xds::setup_mass_treatment].
+#' + Initialize birth and death rates using [ramp.xds::setup_demog_obj].
+#' + Initialize time away using [ramp.xds::setup_time_away.setup].
+#' + Initialize travel EIR using [ramp.xds::setup_travel_eir.no_travel].
+#' + Return the updated **`xds`** model object.
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`.
+#' @inheritParams ramp.xds::setup_XH_obj
+#' @return an **`xds`** model object
+#' @export
+setup_XH_obj.newXHname = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "newXHname"
+  xds_obj$XH_obj[[i]] = make_XH_obj_newXHname(xds_obj$nStrata[i], options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
+  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_mass_treatment(xds_obj, i=i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
+  xds_obj <- setup_time_away("setup", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
+  return(xds_obj)
+}
+```
+
+## Parameters 
+
+Implement methods to inspect and change the module's parameters. The `options` argument is a named list; parameters not supplied in `options` retain their existing values when changed.
+
+```{r}
+#' @title Get parameters for `newXHname` (**XH**)
+#' @description Return the parameters for the `newXHname` module as a named list.
+#' @seealso [make_XH_obj_newXHname], [change_XH_pars.newXHname]
+#' @inheritParams ramp.xds::get_XH_pars
+#' @return a named [list] of parameter values
+#' @export
+get_XH_pars.newXHname <- function(xds_obj, i=1) {
+  with(xds_obj$XH_obj[[i]], list(p1=p1, p2=p2, p3=p3, q=q))
+}
+
+#' @title Change parameters for `newXHname` (**XH**)
+#' @description Change parameter values named in `options` for the `newXHname`
+#' module, leaving other values unchanged.
+#' @seealso [make_XH_obj_newXHname], [get_XH_pars.newXHname]
+#' @inheritParams ramp.xds::change_XH_pars
+#' @return an **`xds`** model object
+#' @export
+change_XH_pars.newXHname <- function(xds_obj, options=list(), i=1) {
+  with(xds_obj$XH_obj[[i]], with(options, {
+    if (!is.null(p1)) xds_obj$XH_obj[[i]]$p1 <- p1
+    if (!is.null(p2)) xds_obj$XH_obj[[i]]$p2 <- p2
+    if (!is.null(p3)) xds_obj$XH_obj[[i]]$p3 <- p3
+    xds_obj$XH_obj[[i]]$q <- q
+    xds_obj
+  }))
+}
+```
+
+## Initial Values 
+
+Use the shared `ramp.xds::get_XH_inits` function to return stored initial
+values for the selected host species; do not implement a module-specific
+getter. It returns the `inits` field directly as a named list, preserves an
+empty list, and returns `NULL` if the field is absent (as in `trivialXH`).
+Getter documentation uses "Get initial values (**XH**)", describes returning
+stored values, puts storage in `@note`, and links to setup/change functions.
+
+Initial-value constructors use the title "Make initial values for `module`
+(**XH**)" and return "a named [list] of initial values". Describe creation
+and `options` overrides as in the example below, preserving any
+model-specific explanation. The constructor, setup method, and change
+method each link to the other two in `@seealso`.
+
+Document numeric scalar expansion to `nStrata` and the required length
+for non-scalar initial values. State additional input restrictions and
+any internally constructed accessory values. For example, `garki` requires
+positive `H`; `SEISd` initializes `cases` to zero and `SIPd` initializes
+`cfoi` to zero rather than accepting independent overrides for those fields.
+
+### make_XH_inits
+
+```{r}
+#' @title Make initial values for `newXHname` (**XH**)
+#' @description Create a named list of initial values for the `newXHname` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nStrata`.
+#' Scalars are expanded to that length.
+#' @param nStrata the number of strata in the model
+#' @param options a [list] to override defaults
+#' @param X1 the initial value for X1 
+#' @param X2 the initial value for X2
+#' @return a named [list] of initial values
+#' @seealso [setup_XH_inits.newXHname], [change_XH_inits.newXHname]
+#' @export
+make_XH_inits_newXHname = function(nStrata, options = list(), H=1000, X1=1, X2=1){with(options,{
+  H = unname(as.vector(checkIt(H, nStrata)))
+  X1 = unname(as.vector(checkIt(X1, nStrata)))
+  X2 = unname(as.vector(checkIt(X2, nStrata)))
+  return(list(H=H, X1=X1, X2=X2))
+})}
+```
+
+### setup_XH_inits
+
+If you did the global search and replace, you won't need to change this function. 
+
+```{r}
+#' @title Set up initial values for `newXHname` (**XH**)
+#' @description Set up initial values for the `newXHname` module using
+#' [make_XH_inits_newXHname]. Values in `options` override the defaults.
+#' @note Initial values are stored at `xds_obj$XH_obj[[i]]$inits`.
+#' 
+#' @inheritParams ramp.xds::setup_XH_inits
+#' @seealso [make_XH_inits_newXHname], [change_XH_inits.newXHname]
+#' 
+#' @return an **`xds`** model object
+#' 
+#' @export
+setup_XH_inits.newXHname = function(xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_newXHname(xds_obj$nStrata[i], options=options)
+  return(xds_obj)
+}
+```
+
+### change_XH_inits 
+
+Use the changer title and description below. Document supported values
+and special behavior, put storage explanations in `@note`, and return
+"an **`xds`** model object". Keep reciprocal constructor/setup links.
+Check that unspecified values and other species are preserved; report
+implementation discrepancies separately during documentation alignment.
+
+Read fallback values from `inits` and update its stored states, not
+derived quantities such as `S` when the constructor stores `H`. Do not
+insert another species index inside `inits`. Preserve unsupported
+auxiliary fields, such as `cases` in SEISd and `cfoi` in SIPd.
+
+```{r}
+#' @title Change initial values for `newXHname` (**XH**)
+#' @description Change initial values named in `options` for the `newXHname`
+#' module, leaving other values unchanged.
+#' @note Stored initial values for this module are at
+#' `xds_obj$XH_obj[[i]]$inits`.
+#' 
+#' @inheritParams ramp.xds::change_XH_inits 
+#' @seealso [make_XH_inits_newXHname], [setup_XH_inits.newXHname]
+#' 
+#' @return an **`xds`** model object
+#' @export
+change_XH_inits.newXHname <- function(xds_obj, options=list(), i=1) {
+  with(get_XH_inits(xds_obj, i), with(options,{
+    xds_obj$XH_obj[[i]]$inits$H = H
+    xds_obj$XH_obj[[i]]$inits$X1 = X1
+    xds_obj$XH_obj[[i]]$inits$X2 = X2
+    return(xds_obj)
+  }))}
+```
+
+
+## Variable indices
+
+### setup_XH_ix  
+
+Retrieve stored indices with the shared `ramp.xds::get_XH_ix(xds_obj, i = 1)`;
+do not implement a module-specific getter. It returns the `ix` field directly:
+a named list of variable indices, an empty list if stored, or `NULL` if absent.
+Getter documentation uses "Get variable indices (**XH**)", describes returning
+stored indices for the selected host species, puts storage in `@note`, and
+links to `setup_XH_ix`.
+
+Use the title and description below, documenting allocation order and
+block lengths. Put index storage and the updated maximum in `@note`;
+the method returns the model object, not the index list. Record actual
+legacy storage exceptions separately rather than copying them into new models.
+
+In the following, each variable in your model gets its own pair of lines. Replace `X1` in `X1_ix` with the first variable name, `X2` in `X2_ix` with the second, and add lines for each variable by copying and pasting and editing the pair of lines. Be sure the replacement gets applied to all four instances.  
+
+
+```{r}
+#' @title Set up variable indices for `newXHname` (**XH**)
+#' @description Assign consecutive variable indices for the `newXHname` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `H_ix`, `X1_ix`, `X2_ix`.
+#' Each block has length `nStrata[i]`.
+#' @note Indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
+#' @inheritParams ramp.xds::setup_XH_ix
+#' @return an **`xds`** model object
+#' @importFrom utils tail
+#' @export
+setup_XH_ix.newXHname <- function(xds_obj, i) {with(xds_obj,{
+
+  H_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
+  max_ix <- tail(H_ix, 1)
+  
+  X1_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
+  max_ix <- tail(X1_ix, 1)
+
+  X2_ix <- seq(from = max_ix+1, length.out=xds_obj$nStrata[i])
+  max_ix <- tail(X2_ix, 1)
+  
+  xds_obj$max_ix = max_ix
+  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix, X1_ix=X1_ix, X2_ix=X2_ix)
+  return(xds_obj)
+})}
+```
+
 ## Other Outputs  
 
 To make `ramp.xds` easy to use, we provide some functions that parse the outputs and compute some standard metrics. 
+
+### parse_XH_orbits  
+
+After solving, retrieve the saved results with the shared
+`ramp.xds::get_XH_orbits(xds_obj, i = 1)`; do not implement a module-specific
+orbit getter. Its title is "Get orbits (**XH**)". It returns a list of
+module-specific orbits (trajectories) for **XH** for the selected species
+from `xds_obj$outputs$orbits$XH[[i]]`, with
+`time` added from `xds_obj$outputs$time`. It neither parses outputs nor
+modifies the model object. Link its documentation to `parse_XH_orbits`
+and `xds_solve`.
+
+This method processes trajectories after solving, not a single state vector
+during solving. Follow the shared output-parser conventions: describe
+extraction from `outputs`, document derived quantities and module-level index
+storage, and use "a [list]" for returns. The method returns results without
+modifying the model object; the output-processing pipeline stores them at
+`xds_obj$outputs$orbits$XH[[i]]`.
+
+In the following, each variable in your model gets its own pair of lines. 
+
++ Leave `H` as-is 
+
++ Replace `X1` in `X1` and `X1_ix` with the first variable name. 
+
++ Replace `X2` in `X2` and `X2_ix` with the second variable name. 
+
++ Copy the form for every other variable 
+
++ The variable `X0` is the class that gets newborns. If you use it or if you want to have it available, compute it and add it to the returned list.
+
+```{r}
+#' @title Parse outputs for `newXHname` (**XH**)
+#' @description Extract the model state outputs for the `newXHname` module
+#' from `outputs` and return them by name in a list.
+#' Also compute `X0 = H-X1-X2`.
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#' @inheritParams ramp.xds::parse_XH_orbits
+#' @return a [list]
+#' @export
+parse_XH_orbits.newXHname <- function(outputs, xds_obj, i) {
+  with(xds_obj$XH_obj[[i]]$ix,{
+    H <- outputs[,H_ix]
+    X1 <- outputs[,X1_ix]
+    X2 <- outputs[,X2_ix]
+    X0 <- H-X1-X2
+    vars <- list(H=H, X1=X1, X2=X2, X0=X0)
+    return(vars)
+})}
+```
+ 
 
 ### F_prevalence
 
@@ -480,59 +640,63 @@ get_HTC.newXHname <- function(xds_obj, i) {
 }
 ```
 
-## Internal Consistency
+### Observed prevalence
 
-Every model provides a skill-set method and a check method. The former returns supported capabilities as a list; setup stores that list on the module object. The latter can check or update the model before solving.
+All current XH modules except `hMoI` have a test-positivity parameter `q`,
+defaulting to `0.8`, and compute observed prevalence as `q` times their
+true prevalence. The trivial module returns an empty numeric vector.
+Retain any diagnostic-specific parameters and methods when adding this
+observation model.
+
+The `hMoI` module instead computes observed prevalence as
+`1 - exp(-m2)`, without `q`. Its three diagnostic methods are compatibility
+aliases for `F_pr_obs`, and its skill set reports `pr_obs = TRUE` with
+all three `pf_*` flags set to `FALSE`.
 
 ```{r}
-#' @title Get the skill set for `newXHname` (**XH**)
-#' @inheritParams ramp.xds::get_skillset_XH
-#' @return the **XH** module skill set, as a list
+#' @title Compute observed prevalence
+#' @description Return test positivity times true prevalence.
+#' @inheritParams ramp.xds::F_pr_obs
+#' @return a [numeric] vector of length `nStrata`
 #' @export
-get_skillset_XH.newXHname <- function(xds_obj, i) {
-  list(
-    delay=FALSE,
-    demography=TRUE,
-    prevalence=TRUE,
-    malaria=TRUE,
-    diagnostics="linear"
-  )
-}
-
-#' @title Check `newXHname` before solving
-#' @inheritParams ramp.xds::check_XH
-#' @return an **`xds`** object
-#' @export
-check_XH.newXHname <- function(xds_obj, i) {
-  xds_obj
+F_pr_obs.newXHname <- function(vars, XH_obj) {
+  XH_obj$q * ramp.xds::F_prevalence(vars, XH_obj)
 }
 ```
 
-## Optional Functions
-
 ### Diagnostic prevalence
 
-The `SIS` module implements these three methods. Other modules can implement the methods relevant to their diagnostic outputs; replace `X1/H` and the diagnostic parameter names below with the appropriate formulas and parameters for the model.
+The `SIS` module uses a single test-positivity parameter `q` (default `0.8`).
+Its `F_pr_obs.SIS` method computes `q * I / H`, and its three `F_pfpr_by_*`
+methods are compatibility aliases for that calculation, not distinct
+diagnostic models. Its skill set has `pr_obs = TRUE` and all three
+`pf_*` flags set to `FALSE`. Use `get_PR(xds_obj, method = "obs")` after
+solving to retrieve observed prevalence.
+
+Other modules can implement the methods relevant to their diagnostic
+outputs; replace `X1/H` and the diagnostic parameter names below with the
+appropriate formulas and parameters for the model. These diagnostic-specific
+examples do not describe the SIS parameterization.
 
 ```{r}
-#' @title Compute prevalence by light microscopy
-#' @inheritParams ramp.xds::F_prevalence
+#' @title Compute observed prevalence by light microscopy
+#' @inheritParams ramp.xds::F_pfpr_by_lm
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pfpr_by_lm.newXHname <- function(vars, XH_obj) {
   with(vars, with(XH_obj, q_lm*X1/H))
 }
 
-#' @title Compute prevalence by RDT
-#' @inheritParams ramp.xds::F_prevalence
+#' @title Compute observed prevalence by RDT
+#' @inheritParams ramp.xds::F_pfpr_by_rdt
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pfpr_by_rdt.newXHname <- function(vars, XH_obj) {
   with(vars, with(XH_obj, q_rdt*X1/H))
 }
 
-#' @title Compute prevalence by PCR
-#' @inheritParams ramp.xds::F_prevalence
+#' @title Compute observed prevalence by PCR
+#' @inheritParams ramp.xds::F_pfpr_by_pcr
 #' @return a [numeric] vector of length `nStrata`
 #' @export
 F_pfpr_by_pcr.newXHname <- function(vars, XH_obj) {
@@ -540,14 +704,72 @@ F_pfpr_by_pcr.newXHname <- function(vars, XH_obj) {
 }
 ```
 
+## Internal Consistency
+
+Every model provides a skill-set method and a check method. The former returns supported capabilities as a list. The latter can check or update the model before solving.
+
+```{r}
+#' @title Check `newXHname` (**XH**)
+#' @description Return the model unchanged; no checks are implemented in this template.
+#' @inheritParams ramp.xds::check_XH
+#' @return an **`xds`** model object
+#' @export
+check_XH.newXHname <- function(xds_obj, i) {
+  xds_obj
+}
+
+#' @title Get the skill set for `newXHname` (**XH**)
+#' @description Return the capabilities and compatibilities of the `newXHname` module as a list.
+#' @inheritParams ramp.xds::get_skillset_XH
+#' @return the **XH** module skill set, as a list
+#' @export
+get_skillset_XH.newXHname <- function(xds_obj, i) {
+  list(
+    dts=FALSE,
+    xde=TRUE,
+    delay=FALSE,
+    demography=TRUE,
+    malaria=TRUE,
+    pr_obs=TRUE,
+    pf_lm=TRUE,
+    pf_rdt=TRUE,
+    pf_pcr=TRUE,
+    mda=FALSE,
+    msat=FALSE
+  )
+}
+```
+
+Use these logical fields for XH skill sets, choosing values for
+the module's supported capabilities. Models with `malaria = FALSE`,
+including SIR, SIRS, SEIR, and SEIRV, omit all three `pf_*` fields.
+For a module supporting `F_pr_obs`, include `pr_obs = TRUE` after
+`malaria`. Compatibility aliases do not imply distinct
+diagnostic capabilities.
+
+## Optional Functions
+
 ### Steady states
 
 `steady_state_X` is optional and is implemented by `SIS`. If useful for the model, implement the method for the **X** component as a function of FoI and host density.
 
+Describe the supplied `foi` and `H`, supported equation system, and any
+model-specific assumptions. Document the actual return type and state names;
+existing methods return either lists or numeric vectors. The generic dispatches
+on `xds_obj$XH_obj[[i]]`. For a module supporting both equation systems,
+delegate to a module-specific generic such as `steady_state_X_SEIR`, which
+dispatches on `xds_obj$xds` to select `xde` or `dts`. Forward `foi`, `H`,
+`xds_obj`, and `i` through both stages; do not encode the equation system
+in the module class. Return values are not stored on the model object.
+
 ```{r}
 #' @title Compute steady states for `newXHname` (**XH**)
+#' @description Compute steady-state infection densities for the `newXHname`
+#' module given daily FoI `foi` and fixed host population density `H`.
+#' @note Document the equation system and assumptions supported by this method.
 #' @inheritParams ramp.xds::steady_state_X
-#' @return a named list of steady-state variables
+#' @return a named [list] of steady-state variables; replace this description
+#' with the actual return type and state names
 #' @export
 steady_state_X.newXHname <- function(foi, H, xds_obj, i=1) {
   stop("Replace this with the model's steady-state calculation")
@@ -555,38 +777,6 @@ steady_state_X.newXHname <- function(foi, H, xds_obj, i=1) {
 ```
 
 ### Plotting
-
-### Module-specific line plotting function
-
-#### add_lines_X_newXHname
-
-```{r}
-#' Add lines for the `newXHname` state variables
-#'
-#' @param time simulation time points
-#' @param XH a list with the outputs of parse_XH_orbits.newXHname
-#' @param nStrata the number of population strata
-#' @param clrs a vector of colors
-#' @param llty an integer (or integers) to set the `lty` for plotting
-#'
-#' @export
-add_lines_X_newXHname = function(time, XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
-  with(XH,{
-    if(nStrata==1) {
-      lines(time, X1, col=clrs[1], lty = llty[1])
-      lines(time, X2, col=clrs[2], lty = llty[1])
-    }
-    if(nStrata>1){
-      if (length(clrs)==2) clrs=matrix(clrs, 2, nStrata)
-      if (length(llty)==1) llty=rep(llty, nStrata)
-
-      for(i in 1:nStrata){
-        lines(time, X1[,i], col=clrs[1,i], lty = llty[i])
-        lines(time, X2[,i], col=clrs[2,i], lty = llty[i])
-      }
-    }
-  })}
-```
 
 ### xds_plot_X
 
@@ -626,6 +816,38 @@ xds_plot_X.newXHname = function(xds_obj, i=1, clrs=c("darkblue","darkred"), llty
 }
 ```
 
+
+### Module-specific line plotting function
+
+#### add_lines_X_newXHname
+
+```{r}
+#' Add lines for the `newXHname` state variables
+#'
+#' @param time simulation time points
+#' @param XH a list with the outputs of parse_XH_orbits.newXHname
+#' @param nStrata the number of population strata
+#' @param clrs a vector of colors
+#' @param llty an integer (or integers) to set the `lty` for plotting
+#'
+#' @export
+add_lines_X_newXHname = function(time, XH, nStrata, clrs=c("darkblue","darkred"), llty=1){
+  with(XH,{
+    if(nStrata==1) {
+      lines(time, X1, col=clrs[1], lty = llty[1])
+      lines(time, X2, col=clrs[2], lty = llty[1])
+    }
+    if(nStrata>1){
+      if (length(clrs)==2) clrs=matrix(clrs, 2, nStrata)
+      if (length(llty)==1) llty=rep(llty, nStrata)
+
+      for(i in 1:nStrata){
+        lines(time, X1[,i], col=clrs[1,i], lty = llty[i])
+        lines(time, X2[,i], col=clrs[2,i], lty = llty[i])
+      }
+    }
+  })}
+```
 
 ## Reusable Code 
 

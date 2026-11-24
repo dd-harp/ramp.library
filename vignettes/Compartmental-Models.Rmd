@@ -26,6 +26,11 @@ In this vignette, we describe four basic compartmental models for mosquito-borne
 
 ## Parameters
 
+All four models also have test positivity `q` (default `0.8`).
+`F_pr_obs` computes observed prevalence as `q * I / H`; after solving,
+use `get_PR(model, method = "obs")`. Their skill sets report
+`pr_obs = TRUE` while retaining `malaria = FALSE` and omitting `pf_*` flags.
+
 + $r$ is the rate infections clear
 
 + $b$ is the fraction of bites by infective mosquitoes that transmit parasites and cause an infection. 
@@ -183,5 +188,4 @@ xds_plot_X(test_SEIRV)
 1. Ross R. Report on the Prevention of Malaria in Mauritius. London: Waterlow; 1908.
 2. Ross R. The Prevention of Malaria. 2nd ed. London: John Murray; 1911.
 3. Smith DL, Battle KE, Hay SI, Barker CM, Scott TW, McKenzie FE. Ross, Macdonald, and a theory for the dynamics and control of mosquito-transmitted pathogens. PLoS Pathog. 2012;8: e1002588. doi:10.1371/journal.ppat.1002588
-
 

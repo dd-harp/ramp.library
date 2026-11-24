@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{get_q.SEI}
 \alias{get_q.SEI}
-\title{Get the feeding rate}
+\title{Get the human blood fraction for \code{SEI} (\strong{MY})}
 \usage{
 \method{get_q}{SEI}(xds_obj, s = 1)
 }
@@ -12,9 +12,32 @@
 \item{s}{the vector species index}
 }
 \value{
-y a \link{numeric} vector assigned the class "dynamic"
+a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Get the feeding rate
+Return the stored realized human blood fraction per patch.
+}
+\details{
+Read \code{q} without evaluating ports or applying effect sizes.
+}
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
+\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_mosy_emigration]{ramp.xds::setup_mosy_emigration}}
+\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
+\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
+\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
+}
+After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
+values. Bionomic parameters are configured as static baselines by default.
+}
+
+\seealso{
+\link{SEI}
 }
 \keyword{internal}

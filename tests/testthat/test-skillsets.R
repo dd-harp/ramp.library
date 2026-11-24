@@ -23,7 +23,7 @@ test_that("library skill-set methods return lists by name and model", {
   }
 })
 
-test_that("setup stores skill sets and selects the delay solver", {
+test_that("setup preserves skill-set lookup and selects the delay solver", {
   for (component in names(skillset_modules)) {
     # BRQS construction has an existing undefined `theta` parameter.
     for (module in setdiff(skillset_modules[[component]], "BRQS")) {
@@ -31,8 +31,9 @@ test_that("setup stores skill sets and selects the delay solver", {
       args[[paste0(component, "name")]] <- module
       model <- do.call(xds_setup, args)
       getter <- get(paste0("get_skillset_", component))
-      expect_identical(model[[paste0(component, "_obj")]][[1]]$skill_set,
-                       getter(module))
+      object <- model[[paste0(component, "_obj")]][[1]]
+      expect_false("skill_set" %in% names(object))
+      expect_identical(getter(model), getter(module))
       expect_identical(as.character(model$xde),
                        if (module %in% c("SEISd", "SIPd")) "dde" else "ode")
     }

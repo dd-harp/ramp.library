@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{dXHdt.SIPd}
 \alias{dXHdt.SIPd}
-\title{Compute derivatives for \code{SIPd} (\strong{XH})}
+\title{Compute the derivatives for \code{SIPd} (\strong{XH})}
 \usage{
 \method{dXHdt}{SIPd}(t, y, xds_obj, i)
 }
@@ -19,13 +19,26 @@
 a \link{numeric} vector
 }
 \description{
-Computes derivatives for the \code{SIPd} module (\strong{XH}).
+The derivatives for the \code{SIPd} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dI/dt &= (1-\rho)hS-(r+\xi)I-\mathbf{D}(t,I) \\
+dP/dt &= \rho hS+\xi(S+I)-T_\eta(t)-\mathbf{D}(t,P) \\
+d\,\mathrm{treated}/dt &= (\rho h+\xi)S+\xi I
+\end{array}}
+Here \eqn{h} is \code{foi} and \eqn{S} is the susceptible density
+returned by \link{get_XH_vars.SIPd}.
+The delayed treatment rate \eqn{T_\eta(t)} is zero for \eqn{t\leq\eta};
+otherwise it is the derivative of \code{treated} at \eqn{t-\eta},
+obtained with \link[deSolve:lagderiv]{deSolve::lagderiv}.
+The term \eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{
