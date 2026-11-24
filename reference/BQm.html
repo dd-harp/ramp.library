@@ -20,7 +20,7 @@ initialized and parsed state vector tracks blood-feeding (B) and gravid
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -169,7 +169,7 @@ initialized and parsed state vector tracks blood-feeding (<strong>B</strong>) an
 <dd><p>extrinsic incubation period</p></dd>
 
 <dt><code>nu</code> or \(\nu\)</dt>
-<dd><p>egg batch rate — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
+<dd><p>oviposition rate: the number of egg batches laid in each patch, per mosquito, per day — use <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_nu</a> or <a href="https://dd-harp.github.io/ramp.xds/reference/setup_nu.html" class="external-link">ramp.xds::setup_egg_batch_rates</a></p></dd>
 
 <dt><code>eggsPerBatch</code> or \(\Gamma\)</dt>
 <dd><p>number of eggs per batch</p></dd>
@@ -213,7 +213,7 @@ and resident-bite fraction to compute stratum-level <code>EIR</code>;
     <h2>Egg Laying</h2>
 
 
-<p>Gravid mosquitoes lay eggs at rate \(\nu\); the egg batch rate and
+<p>Gravid mosquitoes lay eggs at rate \(\nu\); the oviposition rate and
 number of eggs per batch determine patch-level egg production:
 $$G=\nu(Q_u+Q_y+Q_z)\Gamma.$$
 <a href="F_eggs.BQm.html">F_eggs.BQm</a> computes \(G\), which is passed to <a href="https://dd-harp.github.io/ramp.xds/reference/EggLaying.html" class="external-link">ramp.xds::EggLaying</a>

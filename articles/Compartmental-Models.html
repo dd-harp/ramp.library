@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Compartmental Models</h1>
             
-            <h4 data-toc-skip class="date">November 19, 2026</h4>
+            <h4 data-toc-skip class="date">November 24, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dd-harp/ramp.xds/blob/main/vignettes/Compartmental-Models.Rmd" class="external-link"><code>vignettes/Compartmental-Models.Rmd</code></a></small>
       <div class="hidden name"><code>Compartmental-Models.Rmd</code></div>
@@ -161,6 +161,12 @@ is the density of humans</p></li>
 <div class="section level2">
 <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
 </h2>
+<p>All four models also have test positivity <code>q</code> (default
+<code>0.8</code>). <code>F_pr_obs</code> computes observed prevalence as
+<code>q * I / H</code>; after solving, use
+<code>get_PR(model, method = "obs")</code>. Their skill sets report
+<code>pr_obs = TRUE</code> while retaining <code>malaria = FALSE</code>
+and omitting <code>pf_*</code> flags.</p>
 <ul>
 <li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
 is the rate infections clear</p></li>

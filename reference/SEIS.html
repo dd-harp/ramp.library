@@ -28,7 +28,7 @@ parameters to model detection by diagnostic methods.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -162,7 +162,10 @@ a constant fraction of infectious bites causes an infection: the parameter \(b\)
 
 
 <p>The parameters returned by <a href="get_XH_pars.SEIS.html">get_XH_pars.SEIS</a> and modifiable by
-<a href="change_XH_pars.SEIS.html">change_XH_pars.SEIS</a> describe the dynamics or detection by diagnostic methods.</p><dl><dt><code>b</code></dt>
+<a href="change_XH_pars.SEIS.html">change_XH_pars.SEIS</a> describe the dynamics or detection by diagnostic methods.</p><dl><dt><code>q</code></dt>
+<dd><p>test positivity (default <code>0.8</code>)</p></dd>
+
+<dt><code>b</code></dt>
 <dd><p>transmission probability from mosquito to human</p></dd>
 
 <dt><code>c</code></dt>
@@ -221,6 +224,9 @@ The mortality function uses the same model for \(E\) and \(I\) as for
 <dl><dt>\(x\)</dt>
 <dd><p>True prevalence is \(x = I/H\)</p></dd>
 
+<dt>\(x_q\)</dt>
+<dd><p>Observed prevalence from <a href="https://dd-harp.github.io/ramp.xds/reference/F_pr_obs.html" class="external-link">ramp.xds::F_pr_obs</a> is \(qx=qI/H\)</p></dd>
+
 <dt>\(x_{lm}\)</dt>
 <dd><p>Expected prevalence by light microscopy is \(q_{lm}\; x\)</p></dd>
 
@@ -247,7 +253,7 @@ infectiousness is \(cI/H\).</p>
 
 
 
-<p>This model has no parameter
+<p>This model has no parameters
 or terms to describe disease-induced mortality.</p>
 <dl><dt><code><a href="https://dd-harp.github.io/ramp.xds/reference/Births.html" class="external-link">Births</a></code> or \(\mathbf{B}\)</dt>
 <dd><p>the births function</p></dd>

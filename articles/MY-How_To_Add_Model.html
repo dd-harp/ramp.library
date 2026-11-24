@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -178,170 +178,76 @@ assumptions, and relevant references in roxygen.</li>
 <li>Add tests for setup, parameter and initial-value changes, dynamics,
 and any model-specific outputs.</li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="model-object-and-state-variables">Model object and state variables<a class="anchor" aria-label="anchor" href="#model-object-and-state-variables"></a>
-</h2>
-<p><code>make_MY_obj_newMYname</code> creates the module-specific list
-and assigns its class. <code>setup_MY_obj.newMYname</code> attaches it
-to the full <code>xds_obj</code>. Include the parameters and any
-model-specific objects needed by the equations. Parameters that use the
-shared bionomics or dispersal interfaces should be set up with the
-corresponding <code>ramp.xds</code> helpers.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make the model object for newMYname</span></span>
-<span><span class="co">#' @param nPatches number of patches</span></span>
-<span><span class="co">#' @param options named values that override defaults</span></span>
-<span><span class="co">#' @return a list</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">make_MY_obj_newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">p1</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
-<span>    <span class="va">MY_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">MY_obj</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nPatches</span><span class="op">)</span></span>
-<span>    <span class="va">MY_obj</span><span class="op">$</span><span class="va">nPatches</span> <span class="op">&lt;-</span> <span class="va">nPatches</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">MY_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"newMYname"</span></span>
-<span>    <span class="va">MY_obj</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Set up the newMYname MY module</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::setup_MY_obj] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_MY_obj</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_MY_obj.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">MYname</span>, <span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span>, <span class="va">options</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">skill_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_skillset_MY.html" class="external-link">get_skillset_MY</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_inits.html" class="external-link">setup_MY_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, options <span class="op">=</span> <span class="va">options</span>, s <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span></span>
-<span><span class="op">}</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="state-variable-indices">State-variable indices<a class="anchor" aria-label="anchor" href="#state-variable-indices"></a>
+<h3 id="documentation-policy">Documentation policy<a class="anchor" aria-label="anchor" href="#documentation-policy"></a>
 </h3>
-<p><code>setup_MY_ix.newMYname</code> assigns a contiguous index range
-to each state variable. The example follows the SI implementation; add
-or remove index ranges to match the model and store them in the named
-list at <code>xds_obj$MY_obj[[s]]$ix</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Set up indices for newMYname</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::setup_MY_ix] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_MY_ix</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
-<span><span class="co">#' @importFrom utils tail</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_MY_ix.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="op">{</span></span>
-<span>    <span class="va">M_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">nPatches</span><span class="op">)</span></span>
-<span>    <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">M_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">Y_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">nPatches</span><span class="op">)</span></span>
-<span>    <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">Y_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="va">max_ix</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M_ix <span class="op">=</span> <span class="va">M_ix</span>, Y_ix <span class="op">=</span> <span class="va">Y_ix</span><span class="op">)</span></span>
-<span>    <span class="va">xds_obj</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><code>get_MY_vars.newMYname</code> maps the dependent-variable vector
-<code>y</code> to the named state variables used in the equations.
-Include only variables that belong to the module’s state vector; do not
-add host variables unless they are actual MY states.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Get newMYname state variables</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::get_MY_vars] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::get_MY_vars</span></span>
-<span><span class="co">#' @return a named list</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">get_MY_vars.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      M <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">M_ix</span><span class="op">]</span>,</span>
-<span>      Y <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">Y_ix</span><span class="op">]</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><code>parse_MY_orbits.newMYname</code> extracts the same state
-variables from the solver output matrix. It can also return derived
-quantities, such as prevalence or parity, when those quantities are
-defined for the model.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Parse newMYname model output</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::parse_MY_orbits] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::parse_MY_orbits</span></span>
-<span><span class="co">#' @return a named list</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">parse_MY_orbits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">outputs</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
-<span>    <span class="va">M</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>, <span class="va">M_ix</span><span class="op">]</span></span>
-<span>    <span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>, <span class="va">Y_ix</span><span class="op">]</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M <span class="op">=</span> <span class="va">M</span>, Y <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order" class="external-link">function
+order</a> in module files and guide implementation sections. Move
+functions with their documentation, keep file-level review/TODO notes at
+the top, and preserve definitions and behavior when reordering.</p>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions" class="external-link">documentation
+conventions</a> and the <a href="https://dd-harp.github.io/ramp.xds/articles/MY-interface.html#setup-documentation" class="external-link">MY
+setup wording</a>. These vignettes are the public style reference for
+both packages.</p>
+<ul>
+<li>Use the approved family titles with the module name in backticks and
+the <strong>MY</strong> tag. Bionomics titles are “Mosquito bionomics
+for <code>module</code> (<strong>MY</strong>)”; effect-size titles are
+“Apply effect sizes for <code>module</code> (<strong>MY</strong>)”.</li>
+<li>Describe the actual equations, including accessory derivatives and
+delayed branches. Replace placeholder descriptions with formulas when
+implementing the model; keep returned states and equations in the same
+order.</li>
+<li>Keep storage, class assignments, and dispatch mechanics in
+<code>@note</code>. Describe generic dispatch on the generic rather than
+repeating it on methods.</li>
+<li>List setup actions in code order, including the constructor with
+<code>nPatches</code> and <code>options</code>, initial values, and any
+shared ports. End with “Return the updated
+<strong><code>xds</code></strong> model object.”</li>
+<li>Use method-specific helper links for circadian and dispersal
+initialization, qualified with <code>ramp.xds::</code>, and end complete
+bullets with periods. Only list interfaces the method actually sets
+up.</li>
+<li>Describe skill sets as capabilities and compatibilities returned on
+demand by <code>get_skillset_MY</code>; do not store them on the module
+object. Explicitly include <code>dts = FALSE</code> when no
+discrete-time update method is defined.</li>
+<li>Document any checks actually performed. A no-op check returns the
+model unchanged; it does not validate the setup.</li>
+</ul>
+<p>The minimal setup example below does not configure shared bionomics,
+circadian, or matrix ports. Add the helpers required by the implemented
+equations and document each call using the MY setup wording. Do not copy
+matrix-port configuration without checking the module’s needs.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="initial-values">Initial values<a class="anchor" aria-label="anchor" href="#initial-values"></a>
+<h2 id="module-overview">Module overview<a class="anchor" aria-label="anchor" href="#module-overview"></a>
 </h2>
-<p><code>make_MY_inits_newMYname</code> returns a named list containing
-an initial value for every state variable.
-<code>setup_MY_inits.newMYname</code> stores those values in the module
-object, and <code>change_MY_inits.newMYname</code> updates named values
-after setup.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make newMYname initial values</span></span>
-<span><span class="co">#' @param nPatches number of patches</span></span>
-<span><span class="co">#' @param options named values that override defaults</span></span>
-<span><span class="co">#' @param M initial adult mosquito density</span></span>
-<span><span class="co">#' @param Y initial infected mosquito density</span></span>
-<span><span class="co">#' @return a named list</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">make_MY_inits_newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">M</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">Y</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
-<span>    <span class="va">M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">M</span>, <span class="va">nPatches</span><span class="op">)</span></span>
-<span>    <span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">nPatches</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M <span class="op">=</span> <span class="va">M</span>, Y <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Set up newMYname initial values</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::setup_MY_inits] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_MY_inits</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_MY_inits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span> <span class="op">&lt;-</span></span>
-<span>    <span class="fu">make_MY_inits_newMYname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span>, <span class="va">options</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Change newMYname initial values</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::change_MY_inits] for newMYname.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::change_MY_inits</span></span>
-<span><span class="co">#' @return an **`xds`** model object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">change_MY_inits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">options</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">options</span></span>
-<span>  <span class="va">xds_obj</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="parameters-and-bionomics">Parameters and bionomics<a class="anchor" aria-label="anchor" href="#parameters-and-bionomics"></a>
-</h2>
-<p>Implement <code>get_MY_pars.newMYname</code> and
-<code>change_MY_pars.newMYname</code> for the parameters users should
-inspect and change. For bionomic parameters managed through shared
-ports, implement <code>MBionomics.newMYname</code> to evaluate their
-baseline values at time <code>t</code>, and
-<code>MEffectSizes.newMYname</code> to apply the intervention effects.
-These methods receive <code>t</code>, <code>y</code>,
-<code>xds_obj</code>, and <code>s</code>, and return the updated
-<code>xds_obj</code>.</p>
-<p>The SI module is an example of a module using the shared parameter
-helpers for feeding rate (<code>f</code>), human fraction
-(<code>q</code>), mortality (<code>g</code>), emigration
-(<code>sigma</code>), emigration loss (<code>mu</code>), egg-batch rate
-(<code>nu</code>), and EIP duration. Use only the parameters relevant to
-the model.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title The `newMYname` module for the **MY** component</span></span>
+<span><span class="co">#' @section State Variables:</span></span>
+<span><span class="co">#' Describe the module's actual states and any derived quantities used by</span></span>
+<span><span class="co">#' its initial-density accessors.</span></span>
+<span><span class="co">#' @section Parameters:</span></span>
+<span><span class="co">#' Describe the parameters used by the implemented model, including their</span></span>
+<span><span class="co">#' biological meanings and units. Include `f`, `q`, `g`, and `sigma` if the</span></span>
+<span><span class="co">#' corresponding dynamical parameter accessors are implemented.</span></span>
+<span><span class="co">#' @section Dynamical Terms:</span></span>
+<span><span class="co">#' Describe the shared terms used by the implemented equations.</span></span>
+<span><span class="co">#' @section ODE:</span></span>
+<span><span class="co">#' Describe the continuous-time equations if the module implements `dMYdt`.</span></span>
+<span><span class="co">#' @section DTS:</span></span>
+<span><span class="co">#' Describe the updating equations if the module implements `Update_MYt`.</span></span>
+<span><span class="co">#' @section Egg Laying:</span></span>
+<span><span class="co">#' Describe the daily number of eggs laid per patch as the module's egg-laying</span></span>
+<span><span class="co">#' population times oviposition rate and eggs per batch.</span></span>
+<span><span class="co">#' [F_eggs.newMYname] returns this quantity before distribution among aquatic</span></span>
+<span><span class="co">#' habitats by [ramp.xds::EggLaying].</span></span>
+<span><span class="co">#' @name newMYname</span></span>
+<span><span class="cn">NULL</span></span></code></pre></div>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="dynamics">Dynamics<a class="anchor" aria-label="anchor" href="#dynamics"></a>
@@ -353,11 +259,20 @@ methods receive <code>t</code>, the dependent-variable vector
 <code>y</code>, <code>xds_obj</code>, and the vector-species index
 <code>s</code>. Return values in the same order used for the state
 indices.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute newMYname derivatives</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::dMYdt] for newMYname.</span></span>
+<p>Begin derivative descriptions “Compute the derivatives for the
+<code>module</code> module:” and show the implemented equations
+immediately below, including accessory derivatives and delayed branches.
+Inherit the module NULL anchor’s relevant sections. Document returned
+block order in <code>@note</code>, including matrix flattening when
+applicable. Keep dispatch documentation on the shared generic.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Compute the derivatives for the `newMYname` module:</span></span>
+<span><span class="co">#' Replace this placeholder with the equations for `dM` and `dY`,</span></span>
+<span><span class="co">#' in returned-vector order, when replacing the placeholder code below.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::dMYdt</span></span>
-<span><span class="co">#' @return a numeric vector of derivatives</span></span>
+<span><span class="co">#' @note Derivatives are returned in blocks for `M`, then `Y`, each in patch order.</span></span>
+<span><span class="co">#' @return a [numeric] vector of derivatives in the module's state-variable order</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">dMYdt.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Retrieve the shared terms needed by this model.</span></span>
@@ -375,10 +290,27 @@ indices.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>For discrete-time models, implement the update equations directly and
 return the updated state vector; do not return derivatives or add them
-to the current state unless that is the model’s defined update rule.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Update newMYname states</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::Update_MYt] for newMYname.</span></span>
+to the current state unless that is the model’s defined update rule. Use
+“Update states for <code>module</code> (<strong>MY</strong>)” for the
+title and “Update the state variables for the <code>module</code>
+module:” for the description, followed by the updating equations in
+<code>\deqn{}</code>. Inherit the same NULL-anchor sections as the
+derivative method, with <code>DTS</code> in place of <code>ODE</code>
+(or the continuous-time <code>Dynamics</code> section). Document the
+actual return shape; the existing RMdts and SEI list-return
+discrepancies remain deferred.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Update states for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Update the state variables for the `newMYname` module:</span></span>
+<span><span class="co">#' \deqn{\begin{array}{rl}</span></span>
+<span><span class="co">#' M_t &amp;= \ldots \\\\</span></span>
+<span><span class="co">#' Y_t &amp;= \ldots</span></span>
+<span><span class="co">#' \end{array}}</span></span>
+<span><span class="co">#' Replace these placeholders with the implemented updating equations.</span></span>
+<span><span class="co">#' @inheritSection newMYname State Variables</span></span>
+<span><span class="co">#' @inheritSection newMYname Dynamical Terms</span></span>
+<span><span class="co">#' @inheritSection newMYname Parameters</span></span>
+<span><span class="co">#' @inheritSection newMYname DTS</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::Update_MYt</span></span>
 <span><span class="co">#' @return a numeric vector of updated states</span></span>
 <span><span class="co">#' @export</span></span>
@@ -391,6 +323,58 @@ to the current state unless that is the model’s defined update rule.</p>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="state-variable-extraction">State-variable extraction<a class="anchor" aria-label="anchor" href="#state-variable-extraction"></a>
+</h2>
+<p><code>get_MY_vars.newMYname</code> maps the dependent-variable vector
+<code>y</code> to the named state variables used in the equations.
+Include only variables that belong to the module’s state vector; do not
+add host variables unless they are actual MY states.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the state variables for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Extract the state variables for the `newMYname` module</span></span>
+<span><span class="co">#' from `y` and return them by name in a list for use during model solving.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_MY_vars</span></span>
+<span><span class="co">#' @return a named [list] of state variables and module-specific derived quantities</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_MY_vars.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      M <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">M_ix</span><span class="op">]</span>,</span>
+<span>      Y <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">Y_ix</span><span class="op">]</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="bionomics-and-effect-sizes">Bionomics and effect sizes<a class="anchor" aria-label="anchor" href="#bionomics-and-effect-sizes"></a>
+</h2>
+<p>For bionomic parameters managed through shared ports, implement
+<code>MBionomics.newMYname</code> to evaluate their baseline values at
+time <code>t</code>, and <code>MEffectSizes.newMYname</code> to apply
+the intervention effects. These methods receive <code>t</code>,
+<code>y</code>, <code>xds_obj</code>, and <code>s</code>, and return the
+updated <code>xds_obj</code>.</p>
+<p>For each parameter <code>x</code> configured as a port, bionomics
+stores <code>x_t</code> and resets <code>es_x</code> to 1; effect sizes
+set <code>x = x_t * es_x</code>. Parameters without ports are stored
+directly as <code>x</code> and are not modified by effect sizes. This
+also applies to EIP (<code>eip_t</code>, <code>es_eip</code>) and the
+standard dispersal matrix (<code>K_matrix_t</code>,
+<code>es_K_matrix</code>). Matrix effects use elementwise <code>*</code>
+and must preserve the dispersal-matrix constraints. Recompute
+demographic and survival matrices using the realized parameters, and
+have dynamical parameter accessors such as <code>get_f</code> read those
+values without applying effects again. Document separately whether
+<code>get_MY_pars</code> reports baselines or realized values.</p>
+<p>The SI module is an example of a module using the shared parameter
+helpers for feeding rate (<code>f</code>), human fraction
+(<code>q</code>), mortality (<code>g</code>), emigration
+(<code>sigma</code>), emigration loss (<code>mu</code>), oviposition
+rate (<code>nu</code>), and EIP duration. Use only the parameters
+relevant to the model.</p>
 </div>
 <div class="section level2">
 <h2 id="interface-outputs">Interface outputs<a class="anchor" aria-label="anchor" href="#interface-outputs"></a>
@@ -412,11 +396,30 @@ among habitats.</li>
 </ul>
 <p>Each method receives <code>t</code>, <code>y</code>,
 <code>xds_obj</code>, and <code>s</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute newMYname infective biting density</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::F_fqZ] for newMYname.</span></span>
+<p>For egg production, use “Compute egg production for
+<code>module</code> (<strong>MY</strong>)”. Use the description “Return
+the number of eggs laid by the adult mosquito population, per patch” and
+return “a [numeric] vector of length <code>nPatches</code>”. Inherit the
+module NULL anchor’s <code>Egg Laying</code> section using
+<code>@inheritSection newMYname Egg Laying</code>. In that section,
+explain which mosquitoes lay eggs: total adult density or, in
+behavioral-state models, gravid density. Multiply that density by the
+oviposition rate and eggs per batch. Link the method to its module and
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/EggLaying.html" class="external-link">ramp.xds::EggLaying</a></code>.</p>
+<p>For biting outputs, describe daily biting density on humans in each
+patch, not a per-host biting rate. Use the titles and numeric-vector
+return contract below, link the two methods reciprocally, and explain
+any model-specific formula or behavioral-state restriction. Generic
+dispatch selects <code>xds_obj$MY_obj[[s]]</code>. Preserve formulas and
+flag return-shape or parameter-lookup discrepancies separately during
+documentation review.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Compute infective mosquito biting density for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the daily infective mosquito biting density on humans,</span></span>
+<span><span class="co">#' `fqZ`, for each patch in the `newMYname` module.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_fqZ</span></span>
-<span><span class="co">#' @return a numeric vector with one value per patch</span></span>
+<span><span class="co">#' @seealso [F_fqM.newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_fqZ.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_vars.html" class="external-link">get_MY_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span>, <span class="op">{</span></span>
@@ -427,10 +430,12 @@ among habitats.</li>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Compute newMYname human biting density</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::F_fqM] for newMYname.</span></span>
+<span><span class="co">#' @title Compute mosquito biting density for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the daily mosquito biting density on humans,</span></span>
+<span><span class="co">#' `fqM`, for each patch in the `newMYname` module.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_fqM</span></span>
-<span><span class="co">#' @return a numeric vector with one value per patch</span></span>
+<span><span class="co">#' @seealso [F_fqZ.newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_fqM.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_vars.html" class="external-link">get_MY_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span>, <span class="op">{</span></span>
@@ -441,10 +446,12 @@ among habitats.</li>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Compute newMYname egg production</span></span>
-<span><span class="co">#' @description Implements [ramp.xds::F_eggs] for newMYname.</span></span>
+<span><span class="co">#' @title Compute egg production for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the number of eggs laid by the adult mosquito population, per patch</span></span>
+<span><span class="co">#' @inheritSection newMYname Egg Laying</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_eggs</span></span>
-<span><span class="co">#' @return a numeric vector with one value per patch</span></span>
+<span><span class="co">#' @seealso [newMYname], [ramp.xds::EggLaying]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_eggs.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_vars.html" class="external-link">get_MY_vars</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span>, <span class="op">{</span></span>
@@ -456,27 +463,407 @@ among habitats.</li>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="skill-set-and-checks">Skill set and checks<a class="anchor" aria-label="anchor" href="#skill-set-and-checks"></a>
+<h2 id="dynamical-parameter-accessors">Dynamical parameter accessors<a class="anchor" aria-label="anchor" href="#dynamical-parameter-accessors"></a>
 </h2>
-<p>Implement <code>get_skillset_MY.newMYname</code> to return the
-module’s capabilities and limitations as a list. Store this list on the
-module object during setup. Implement <code>check_MY.newMYname</code>
-for model-specific setup checks that should run before solving.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Get newMYname skill set</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::get_skillset_MY</span></span>
-<span><span class="co">#' @return the **MY** module skill set, as a list</span></span>
+<p>Implement <code>get_f</code>, <code>get_q</code>, <code>get_g</code>,
+and <code>get_sigma</code> methods when the module supplies those
+parameters. They return stored realized values, without evaluating ports
+or applying effect sizes. Refresh port-backed values through bionomics
+and effect-size application first. These accessors are distinct from the
+module’s documented parameter-reporting convention in
+<code>get_MY_pars</code>.</p>
+<p>Use the titles and short descriptions below, inherit the module NULL
+anchor’s <code>Parameters</code> section, and return “a [numeric] vector
+of length <code>nPatches</code>”. The shared generics document dispatch
+on <code>xds_obj$MY_obj[[s]]</code>. For BQ, BQm, and BRQS,
+<code>get_sigma</code> reads <code>sigma_b</code>, the blood-feeding
+emigration rate, not <code>sigma_q</code>. Their <code>get_g</code>
+methods read <code>g</code>; BRQS’s state-specific mortality mismatch
+remains deferred.</p>
+<p>Add these parameters and their biological definitions to the module
+constructor and NULL anchor when implementing these optional
+methods.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the feeding rate for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the stored realized feeding rate per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname Parameters</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_f</span></span>
+<span><span class="co">#' @seealso [newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">get_skillset_MY.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>delay<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">get_f.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">f</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Check newMYname setup</span></span>
+<span><span class="co">#' @title Get the human blood fraction for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the stored realized human blood fraction per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname Parameters</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_q</span></span>
+<span><span class="co">#' @seealso [newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_q.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">q</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the adult mosquito mortality rate for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the stored realized adult mosquito mortality rate per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname Parameters</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_g</span></span>
+<span><span class="co">#' @seealso [newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_g.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">g</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the patch emigration rate for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the stored realized patch emigration rate per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname Parameters</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_sigma</span></span>
+<span><span class="co">#' @seealso [newMYname]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_sigma.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sigma</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="mosquito-matrix-accessors">Mosquito-matrix accessors<a class="anchor" aria-label="anchor" href="#mosquito-matrix-accessors"></a>
+</h2>
+<p>Use the shared <code>ramp.xds::get_Omega(xds_obj, s = 1)</code> and
+<code>ramp.xds::get_Upsilon(xds_obj, s = 1)</code> to retrieve the
+stored mosquito demographic matrix,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Ω</mi><annotation encoding="application/x-tex">\Omega</annotation></semantics></math>,
+and EIP survival-and-dispersal matrix,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Υ</mi><annotation encoding="application/x-tex">\Upsilon</annotation></semantics></math>,
+respectively. Do not implement module-specific getter methods. They read
+<code>xds_obj$MY_obj[[s]]$Omega</code> and
+<code>xds_obj$MY_obj[[s]]$Upsilon</code> without recomputing matrices or
+modifying the model object. Each returns a matrix of dimensions
+<code>nPatches</code> by <code>nPatches</code>, or <code>NULL</code> if
+the corresponding matrix is not stored.</p>
+<p>Their titles are “Get the mosquito demographic matrix
+(<strong>MY</strong>)” and “Get the EIP survival-and-dispersal matrix
+(<strong>MY</strong>)”. Document storage and the absence of
+recomputation in <code>@note</code>, and link to the other getter, the
+corresponding <code><a href="https://dd-harp.github.io/ramp.xds/reference/change_Omega.html" class="external-link">ramp.xds::change_Omega</a></code> or
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/change_Upsilon.html" class="external-link">ramp.xds::change_Upsilon</a></code> function, and
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_info_mosquito_demography.html" class="external-link">ramp.xds::xds_info_mosquito_demography</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="model-object-and-state-variables">Model object and state variables<a class="anchor" aria-label="anchor" href="#model-object-and-state-variables"></a>
+</h2>
+<p>Use the constructor title “Make a module object for
+<code>module</code> (<strong>MY</strong>)”. Describe parameter
+initialization and <code>options</code> overrides. The constructor,
+parameter getter, and parameter changer each link to the other two in
+<code>@seealso</code>; describe any differences in their parameter
+coverage.</p>
+<p><code>make_MY_obj_newMYname</code> creates the module-specific list
+and assigns its class. <code>setup_MY_obj.newMYname</code> attaches it
+to the full <code>xds_obj</code>. Include the parameters and any
+model-specific objects needed by the equations. Parameters that use the
+shared bionomics or dispersal interfaces should be set up with the
+corresponding <code>ramp.xds</code> helpers.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make a module object for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Create a `newMYname` module object and initialize its parameters.</span></span>
+<span><span class="co">#' Inspect parameters with [get_MY_pars.newMYname] and change supported values</span></span>
+<span><span class="co">#' with [change_MY_pars.newMYname]. Values in `options` override parameter arguments.</span></span>
+<span><span class="co">#' @seealso [get_MY_pars.newMYname], [change_MY_pars.newMYname]</span></span>
+<span><span class="co">#' @param nPatches number of patches</span></span>
+<span><span class="co">#' @param options named values that override defaults</span></span>
+<span><span class="co">#' @return a list</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">make_MY_obj_newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">p1</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
+<span>    <span class="va">MY_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">MY_obj</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nPatches</span><span class="op">)</span></span>
+<span>    <span class="va">MY_obj</span><span class="op">$</span><span class="va">nPatches</span> <span class="op">&lt;-</span> <span class="va">nPatches</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">MY_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"newMYname"</span></span>
+<span>    <span class="va">MY_obj</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Set up the module object for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Set up a `newMYname` module object for the **MY** component</span></span>
+<span><span class="co">#' and the \eqn{s^{th}} vector species.</span></span>
+<span><span class="co">#' + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.</span></span>
+<span><span class="co">#' + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.</span></span>
+<span><span class="co">#' + Return the updated **`xds`** model object.</span></span>
+<span><span class="co">#' @note The module object is stored at `xds_obj$MY_obj[[s]]`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_MY_obj</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_MY_obj.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">MYname</span>, <span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span>, <span class="va">options</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_MY_inits.html" class="external-link">setup_MY_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, options <span class="op">=</span> <span class="va">options</span>, s <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get parameters for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the parameters for the `newMYname` module as a named list.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_MY_pars</span></span>
+<span><span class="co">#' @seealso [make_MY_obj_newMYname], [change_MY_pars.newMYname]</span></span>
+<span><span class="co">#' @return a named [list] of parameter values</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_MY_pars.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Change parameters for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Change parameter values named in `options` for the `newMYname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' This example supports changes to `p1`.</span></span>
+<span><span class="co">#' Call [ramp.xds::MBionomics] at time zero after changing parameters;</span></span>
+<span><span class="co">#' do not call [ramp.xds::MEffectSizes].</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::change_MY_pars</span></span>
+<span><span class="co">#' @seealso [make_MY_obj_newMYname], [get_MY_pars.newMYname]</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">change_MY_pars.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="st">"p1"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">options</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">options</span><span class="op">$</span><span class="va">p1</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_inits.html" class="external-link">get_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/MBionomics.html" class="external-link">MBionomics</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Implement <code>get_MY_pars.newMYname</code> and
+<code>change_MY_pars.newMYname</code> for the parameters users should
+inspect and change.</p>
+</div>
+<div class="section level2">
+<h2 id="initial-values">Initial values<a class="anchor" aria-label="anchor" href="#initial-values"></a>
+</h2>
+<p>Use the shared <code><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_inits.html" class="external-link">ramp.xds::get_MY_inits</a></code> function to return
+stored initial values for the selected vector species; do not implement
+a module-specific getter. It returns the <code>inits</code> field
+directly as a named list, preserves an empty list, and returns
+<code>NULL</code> if the field is absent (as in <code>trivialMY</code>).
+Getter documentation uses “Get initial values (<strong>MY</strong>)”,
+describes returning stored values, puts storage in <code>@note</code>,
+and links to setup/change functions.</p>
+<p><code>make_MY_inits_newMYname</code> returns a named list containing
+an initial value for every state variable.
+<code>setup_MY_inits.newMYname</code> stores those values in the module
+object, and <code>change_MY_inits.newMYname</code> updates named values
+after setup.</p>
+<p>Use the constructor title and description below, preserving any
+model-specific explanation. Its return description is “a named [list] of
+initial values”. The constructor, setup method, and change method each
+link to the other two in <code>@seealso</code>. Document numeric scalar
+expansion to <code>nPatches</code>, module-specific length exceptions,
+input restrictions, and internally constructed accessory values that
+cannot be set independently through <code>options</code>. For changers,
+document supported values and special behavior, put storage explanations
+in <code>@note</code>, and return “an <strong><code>xds</code></strong>
+model object”. Check preservation of unspecified values and other
+species; report implementation discrepancies separately during
+documentation alignment.</p>
+<p>Partial updates must read fallback values from the selected module’s
+<code>inits</code> list, not from its parent module object; preserve
+other species and any fields not supported by the changer.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make initial values for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Create a named list of initial values for the `newMYname` module.</span></span>
+<span><span class="co">#' Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @details Initial values must be numeric scalars or have length `nPatches`.</span></span>
+<span><span class="co">#' Scalars are expanded to that length.</span></span>
+<span><span class="co">#' @param nPatches number of patches</span></span>
+<span><span class="co">#' @param options named values that override defaults</span></span>
+<span><span class="co">#' @param M initial adult mosquito density</span></span>
+<span><span class="co">#' @param Y initial infected mosquito density</span></span>
+<span><span class="co">#' @return a named [list] of initial values</span></span>
+<span><span class="co">#' @seealso [setup_MY_inits.newMYname], [change_MY_inits.newMYname]</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">make_MY_inits_newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nPatches</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">M</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">Y</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
+<span>    <span class="va">M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">M</span>, <span class="va">nPatches</span><span class="op">)</span></span>
+<span>    <span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">nPatches</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M <span class="op">=</span> <span class="va">M</span>, Y <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Set up initial values for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Set up initial values for the `newMYname` module using</span></span>
+<span><span class="co">#' [make_MY_inits_newMYname]. Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @note Initial values are stored at `xds_obj$MY_obj[[s]]$inits`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_MY_inits</span></span>
+<span><span class="co">#' @seealso [make_MY_inits_newMYname], [change_MY_inits.newMYname]</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_MY_inits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu">make_MY_inits_newMYname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nPatches</span>, <span class="va">options</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Change initial values for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Change initial values named in `options` for the `newMYname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' @note Stored initial values for this module are at</span></span>
+<span><span class="co">#' `xds_obj$MY_obj[[s]]$inits`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::change_MY_inits</span></span>
+<span><span class="co">#' @seealso [make_MY_inits_newMYname], [setup_MY_inits.newMYname]</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">change_MY_inits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">options</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">options</span></span>
+<span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="initial-density-accessors">Initial-density accessors<a class="anchor" aria-label="anchor" href="#initial-density-accessors"></a>
+</h2>
+<p>Implement <code>get_M</code> and <code>get_Z</code> only when the
+module supports these initial density queries. They return initial adult
+and infective mosquito densities, not current solver states or output
+trajectories. Use the titles and short descriptions below, inherit the
+module NULL anchor’s <code>State Variables</code> section, and keep
+model-specific explanations there rather than repeating derivations in
+accessor descriptions. The shared generics document dispatch on
+<code>xds_obj$MY_obj[[s]]</code>.</p>
+<p>The examples assume the module stores initial <code>M</code> and
+<code>Z</code> values; adapt the implementation to the module’s actual
+initial-state representation.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the initial adult mosquito density for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the initial adult mosquito density per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname State Variables</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_M</span></span>
+<span><span class="co">#' @seealso [newMYname], [ramp.xds::get_MY_inits]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_M.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_inits.html" class="external-link">get_MY_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">M</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the initial infective mosquito density for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the initial infective mosquito density per patch.</span></span>
+<span><span class="co">#' @inheritSection newMYname State Variables</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_Z</span></span>
+<span><span class="co">#' @seealso [newMYname], [ramp.xds::get_MY_inits]</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nPatches`</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_Z.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_inits.html" class="external-link">get_MY_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">Z</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="state-indices">State indices<a class="anchor" aria-label="anchor" href="#state-indices"></a>
+</h2>
+<p>Retrieve stored indices with the shared
+<code>ramp.xds::get_MY_ix(xds_obj, s = 1)</code>; the species index
+defaults to 1. Do not implement a module-specific getter. It returns the
+<code>ix</code> field directly: a named list of variable indices, an
+empty list if stored, or <code>NULL</code> if absent. Getter
+documentation uses “Get variable indices (<strong>MY</strong>)”,
+describes returning stored indices for the selected vector species, puts
+storage in <code>@note</code>, and links to
+<code>setup_MY_ix</code>.</p>
+<p><code>setup_MY_ix.newMYname</code> assigns a contiguous index range
+to each state variable. The example follows the SI implementation; add
+or remove index ranges to match the model and store them in the named
+list at <code>xds_obj$MY_obj[[s]]$ix</code>.</p>
+<p>Use the title and description below, documenting actual allocation
+order and block lengths, including any auxiliary or matrix/cohort
+blocks. Put storage and the updated maximum in <code>@note</code>.
+Return the model object, not the index list; flag legacy storage or
+return errors separately.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Set up variable indices for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Assign consecutive variable indices for the `newMYname` module,</span></span>
+<span><span class="co">#' starting after `xds_obj$max_ix`, and update the maximum index.</span></span>
+<span><span class="co">#' Allocate blocks in the order `M_ix`, `Y_ix`.</span></span>
+<span><span class="co">#' Each block has length `nPatches`.</span></span>
+<span><span class="co">#' @note Indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span><span class="co">#' The maximum index is stored at `xds_obj$max_ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_MY_ix</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @importFrom utils tail</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_MY_ix.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="op">{</span></span>
+<span>    <span class="va">M_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">nPatches</span><span class="op">)</span></span>
+<span>    <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">M_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">Y_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span> <span class="op">+</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="va">nPatches</span><span class="op">)</span></span>
+<span>    <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">Y_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="va">max_ix</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M_ix <span class="op">=</span> <span class="va">M_ix</span>, Y_ix <span class="op">=</span> <span class="va">Y_ix</span><span class="op">)</span></span>
+<span>    <span class="va">xds_obj</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="parsing-outputs">Parsing outputs<a class="anchor" aria-label="anchor" href="#parsing-outputs"></a>
+</h2>
+<p>After solving, retrieve the saved results with the shared
+<code>ramp.xds::get_MY_orbits(xds_obj, s = 1)</code>; do not implement a
+module-specific orbit getter. Its title is “Get orbits
+(<strong>MY</strong>)”. It returns a list of module-specific orbits
+(trajectories) for <strong>MY</strong> for the selected species from
+<code>xds_obj$outputs$orbits$MY[[s]]</code>, with <code>time</code>
+added from <code>xds_obj$outputs$time</code>. It neither parses outputs
+nor modifies the model object. Link its documentation to
+<code>parse_MY_orbits</code> and <code>xds_solve</code>.</p>
+<p><code>parse_MY_orbits.newMYname</code> extracts the same state
+variables from the solver output matrix. It can also return derived
+quantities, such as prevalence or parity, when those quantities are
+defined for the model.</p>
+<p>This method processes trajectories after solving. Document derived
+quantities and index storage in its Roxygen block, and use “a [list]”
+for returns. It returns results without modifying the model object; the
+output-processing pipeline stores them at
+<code>xds_obj$outputs$orbits$MY[[s]]</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Parse outputs for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Extract the model state outputs for the `newMYname` module</span></span>
+<span><span class="co">#' from `outputs` and return them by name in a list.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::parse_MY_orbits</span></span>
+<span><span class="co">#' @return a [list]</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">parse_MY_orbits.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">outputs</span>, <span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">MY_obj</span><span class="op">[[</span><span class="va">s</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>, <span class="op">{</span></span>
+<span>    <span class="va">M</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>, <span class="va">M_ix</span><span class="op">]</span></span>
+<span>    <span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>, <span class="va">Y_ix</span><span class="op">]</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>M <span class="op">=</span> <span class="va">M</span>, Y <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="checks-and-skill-set">Checks and skill set<a class="anchor" aria-label="anchor" href="#checks-and-skill-set"></a>
+</h2>
+<p>Implement <code>get_skillset_MY.newMYname</code> to return the
+module’s capabilities and limitations as a list when queried. Do not
+store it on the module object during setup. Implement
+<code>check_MY.newMYname</code> for model-specific setup checks that
+should run before solving.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Check `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the model unchanged; no checks are implemented in this template.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::check_MY</span></span>
 <span><span class="co">#' @return an **`xds`** model object</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">check_MY.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the skill set for `newMYname` (**MY**)</span></span>
+<span><span class="co">#' @description Return the capabilities and compatibilities of the `newMYname` module as a list.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_skillset_MY</span></span>
+<span><span class="co">#' @return the **MY** module skill set, as a list</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_skillset_MY.newMYname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dts<span class="op">=</span><span class="cn">FALSE</span>, delay<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -488,12 +875,45 @@ for model-specific setup checks that should run before solving.</p>
 steady state is defined for the model. The MY interface does not define
 MY-specific plotting generics; model-specific plots can use the parsed
 output from <code>parse_MY_orbits.newMYname</code>.</p>
+<p>Use “Compute steady states for <code>module</code>
+(<strong>MY</strong>)” for method titles. Descriptions identify the
+inputs and supported equation system; return tags identify the actual
+type and state names. The M, Y, and MY generics dispatch on
+<code>xds_obj$MY_obj[[s]]</code>. If the module supports multiple
+equation systems, follow the basicM pattern: delegate to a
+module-specific generic that dispatches on <code>xds_obj$xds</code>. Do
+not imply this second stage exists for every module. Keep existing
+list/numeric-vector differences explicit, preserve formulas, and return
+values without storing them on the model object.</p>
 <p>Add the module to the appropriate source file in
 <code>ramp.library</code> and write tests that check the equations and
 integration with <code>ramp.xds</code>. For example, check that initial
 values have the expected names and dimensions, that derivatives or
 updates preserve state ordering, and that the biting and egg outputs
 have one value per patch.</p>
+</div>
+<div class="section level2">
+<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
+<p>Use the shared <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_M.html" class="external-link">ramp.xds::xds_plot_M</a></code>,
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Y.html" class="external-link">ramp.xds::xds_plot_Y</a></code>, and <code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Z.html" class="external-link">ramp.xds::xds_plot_Z</a></code>
+helpers when parsed outputs include adult, infected, and infective
+mosquito densities. The fraction helpers
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Y_fracs.html" class="external-link">ramp.xds::xds_plot_Y_fracs</a></code> and
+<code><a href="https://dd-harp.github.io/ramp.xds/reference/xds_plot_Z_fracs.html" class="external-link">ramp.xds::xds_plot_Z_fracs</a></code> require saved
+<code>y = Y/M</code> and <code>z = Z/M</code>; they do not compute
+fractions. These ordinary functions read the selected species’ saved
+orbits through <code><a href="https://dd-harp.github.io/ramp.xds/reference/get_MY_orbits.html" class="external-link">ramp.xds::get_MY_orbits</a></code> and draw one line
+per patch. Do not implement module-specific methods for them.</p>
+<p>Plot helpers create a new plot unless <code>add = TRUE</code>;
+corresponding <code>ramp.xds::xds_lines_*</code> helpers add lines to an
+existing plot. Pass one color or line type for all patches, or vectors
+with one value per patch. The helpers return
+<code>invisible(NULL)</code>. Use titles such as “Plot infected mosquito
+density (<strong>MY</strong>)” and “Add lines for the infective mosquito
+fraction (<strong>MY</strong>)”. Keep required fields and overlay
+behavior in <code>@note</code>, and link plot and line helpers
+reciprocally. Module-specific visualization remains optional.</p>
 </div>
 <div class="section level2">
 <h2 id="reusable-model-code">Reusable model code<a class="anchor" aria-label="anchor" href="#reusable-model-code"></a>

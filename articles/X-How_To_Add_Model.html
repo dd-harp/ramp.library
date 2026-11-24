@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ramp.library</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@ already part of the SimBA library.</p>
 <p>If you need help, please contact <a href="mailto:smitdave@gmail.com">Professor David L Smith</a></p>
 <hr>
 <p>We have written this vignette to produce a new template file using
-<code>knitr::purl.</code> The template can be modified to build a new
+<code><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knitr::purl</a></code>. The template can be modified to build a new
 <strong>XH</strong> module.</p>
 <p>Do this:</p>
 <ol style="list-style-type: decimal">
@@ -187,6 +187,48 @@ the relevant publications, and proposed tests of the code.</p></li>
 a model, following notation defined in an accompanying
 vignette.</p></li>
 </ul>
+<div class="section level3">
+<h3 id="documentation-policy">Documentation policy<a class="anchor" aria-label="anchor" href="#documentation-policy"></a>
+</h3>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order" class="external-link">function
+order</a> in module files and guide implementation sections. Move
+functions with their documentation, keep file-level review/TODO notes at
+the top, and preserve definitions and behavior when reordering.</p>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions" class="external-link">documentation
+conventions</a> for all component modules. These vignettes are the
+public style reference; keep template documentation aligned with the
+implemented functions.</p>
+<ul>
+<li>Use the approved family titles, with the module name in backticks
+and the <strong>XH</strong> component tag.</li>
+<li>Describe the function’s behavior, not just which generic it
+implements. Show the actual derivative or updating equations, in
+returned-vector order, including demographic, treatment, and accessory
+terms when used.</li>
+<li>Put storage locations, class assignments, and dispatch mechanics in
+<code>@note</code>. Explain generic dispatch on the generic, not on
+every method.</li>
+<li>Describe setup with an ordered-by-implementation bulleted list
+covering the constructor and dimension, initial values, and each
+interface call. End every complete bullet with a period.</li>
+<li>Each S3 method uses <code>@inheritParams</code> from its immediate
+generic, even when that generic inherits its argument documentation.
+Document method-specific arguments or restrictions locally with
+<code>@param</code>.</li>
+<li>Qualify links to shared helpers with <code>ramp.xds::</code>. Setup
+and check methods return “an <strong><code>xds</code></strong> model
+object”.</li>
+<li>Describe skill sets as capabilities and compatibilities. Include
+<code>dts = FALSE</code> if there is no discrete-time update method;
+advertise discrete-time support only when it is implemented and
+tested.</li>
+<li>State explicitly when a check method performs no checks.</li>
+</ul>
+<p>The template includes both dynamics alternatives for illustration.
+Retain the methods appropriate to the new module, replace all
+placeholder equations, and make the skill set match the supported solver
+pathways.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="dynamics">Dynamics<a class="anchor" aria-label="anchor" href="#dynamics"></a>
@@ -208,8 +250,12 @@ for demographic terms, as shown below. Return derivatives in the same
 order as the indexed state variables.</p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span><span class="co">#' @description Implements [dXHdt] for the newXHname model</span></span>
+<code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description For the `newXHname` differential equation system:</span></span>
+<span><span class="co">#' \deqn{\frac{dH}{dt} = \mathrm{Births}(t,y) - \mathrm{Deaths}(t,H)}</span></span>
+<span><span class="co">#' \deqn{\frac{dX_1}{dt} = F_1(\mathrm{foi},X_1,X_2) - \mathrm{Deaths}(t,X_1)}</span></span>
+<span><span class="co">#' \deqn{\frac{dX_2}{dt} = F_2(\mathrm{foi},X_1,X_2) - \mathrm{Deaths}(t,X_2)}</span></span>
+<span><span class="co">#' Replace the placeholder functions and these equations together.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::dXHdt</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
@@ -242,12 +288,16 @@ order as the indexed state variables.</p></li>
 <div class="section level3">
 <h3 id="update_xht-discrete-time-modules">Update_XHt (discrete-time modules)<a class="anchor" aria-label="anchor" href="#update_xht-discrete-time-modules"></a>
 </h3>
-<p>This is the discrete-time alternative to <code>dXHdt</code>; the
-continuous-time <code>SIS</code> module does not define
-<code>Update_XHt.SIS</code>.</p>
+<p>This is the discrete-time alternative to <code>dXHdt</code>. The
+<code>SIS</code> module provides both <code>dXHdt.SIS</code> and
+<code>Update_XHt.SIS</code> as examples of the two solver pathways.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute the derivatives for parasite infection dynamics in human population strata </span></span>
-<span><span class="co">#' @description Implements [Update_XHt] for the newXHname model</span></span>
+<code class="sourceCode R"><span><span class="co">#' @title Update states for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description For the `newXHname` discrete-time system, the updating function is:</span></span>
+<span><span class="co">#' \deqn{H_{t+1} = H_t}</span></span>
+<span><span class="co">#' \deqn{X_{1,t+1} = X_{1,t} + F_1(\mathrm{ar},X_{1,t},X_{2,t})}</span></span>
+<span><span class="co">#' \deqn{X_{2,t+1} = X_{2,t} + F_2(\mathrm{ar},X_{1,t},X_{2,t})}</span></span>
+<span><span class="co">#' Replace the placeholder functions and these equations together.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::Update_XHt</span></span>
 <span><span class="co">#' @return a [numeric] vector</span></span>
 <span><span class="co">#' @export</span></span>
@@ -277,138 +327,13 @@ continuous-time <code>SIS</code> module does not define
 </div>
 </div>
 <div class="section level2">
-<h2 id="xh-model-object">XH Model Object<a class="anchor" aria-label="anchor" href="#xh-model-object"></a>
+<h2 id="state-variable-extraction">State-variable extraction<a class="anchor" aria-label="anchor" href="#state-variable-extraction"></a>
 </h2>
-<div class="section level3">
-<h3 id="make_xh_obj">make_XH_obj<a class="anchor" aria-label="anchor" href="#make_xh_obj"></a>
-</h3>
-<ul>
-<li><p>In the following, replace <code>p1</code> with the first
-parameter, <code>p2</code> with the second, and so on.</p></li>
-<li><p>Shared demographic and mass-treatment features are initialized by
-<code>setup_XH_obj</code> using the <code>ramp.xds</code> setup
-functions; do not create a separate demographic matrix or replace these
-ports in <code>make_XH_obj</code>.</p></li>
-<li><p>If the module supports mass drug administration or mass screen
-and treat, include the corresponding treatment terms in its state
-updates and record that capability in
-<code>get_skillset_XH.newXHname</code>.</p></li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make a `newXHname` **XH** model object</span></span>
-<span><span class="co">#' @param nStrata is the number of population strata</span></span>
-<span><span class="co">#' @param options a [list] that could override defaults</span></span>
-<span><span class="co">#' @param p1 the first parameter </span></span>
-<span><span class="co">#' @param p2 the second parameter </span></span>
-<span><span class="co">#' @param p3 the third parameter </span></span>
-<span><span class="co">#' @return a [list]</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">make_XH_obj_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                         <span class="va">p1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">p2</span><span class="op">=</span><span class="fl">2</span>, <span class="va">p3</span><span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
-<span>    <span class="va">XH_obj</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">XH_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"newXHname"</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="co"># Change this</span></span>
-<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p3</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p3</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">XH_obj</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="setup_xh_obj">setup_XH_obj<a class="anchor" aria-label="anchor" href="#setup_xh_obj"></a>
-</h3>
-<p>This method also initializes the shared XH interface features. Follow
-the setup sequence used by existing modules.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Setup XH_obj.newXHname</span></span>
-<span><span class="co">#' @description Implements [setup_XH_obj] for the newXHname model</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_XH_obj</span></span>
-<span><span class="co">#' @return an **`xds`** object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_XH_obj.newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XHname</span>, <span class="va">residence</span>, <span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XHname</span> <span class="op">=</span> <span class="st">"newXHname"</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_XH_obj_newXHname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">options</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_inits.html" class="external-link">setup_XH_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, options<span class="op">=</span><span class="va">options</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">skill_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_skillset_XH.html" class="external-link">get_skillset_XH</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_blood_search_weights.html" class="external-link">setup_blood_search_weights</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_TimeSpent.html" class="external-link">setup_timespent</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>residence<span class="op">=</span><span class="va">residence</span><span class="op">)</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_mass_treatment.html" class="external-link">setup_mass_treatment</a></span><span class="op">(</span><span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_demog_obj.html" class="external-link">setup_demog_obj</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_time_away.html" class="external-link">setup_time_away</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_travel_eir.html" class="external-link">setup_travel_eir</a></span><span class="op">(</span><span class="st">"no_travel"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
-</h2>
-<p>Implement methods to inspect and change the module’s parameters. The
-<code>options</code> argument is a named list; parameters not supplied
-in <code>options</code> retain their existing values when changed.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Get parameters for `newXHname` (**XH**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::get_XH_pars</span></span>
-<span><span class="co">#' @return a [list]</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">get_XH_pars.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p1<span class="op">=</span><span class="va">p1</span>, p2<span class="op">=</span><span class="va">p2</span>, p3<span class="op">=</span><span class="va">p3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Change parameters for `newXHname` (**XH**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::change_XH_pars</span></span>
-<span><span class="co">#' @return an **`xds`** object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">change_XH_pars.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p1</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p2</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">p3</span></span>
-<span>    <span class="va">xds_obj</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="variables">Variables<a class="anchor" aria-label="anchor" href="#variables"></a>
-</h2>
-<div class="section level3">
-<h3 id="setup_xh_ix">setup_XH_ix<a class="anchor" aria-label="anchor" href="#setup_xh_ix"></a>
-</h3>
-<p>In the following, each variable in your model gets its own pair of
-lines. Replace <code>X1</code> in <code>X1_ix</code> with the first
-variable name, <code>X2</code> in <code>X2_ix</code> with the second,
-and add lines for each variable by copying and pasting and editing the
-pair of lines. Be sure the replacement gets applied to all four
-instances.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Add indices for human population variables</span></span>
-<span><span class="co">#' @description Implements [setup_XH_ix] for the newXHname model.</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_XH_ix</span></span>
-<span><span class="co">#' @return none</span></span>
-<span><span class="co">#' @importFrom utils tail</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_XH_ix.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span>,<span class="op">{</span></span>
-<span></span>
-<span>  <span class="va">H_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">H_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">X1_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X1_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="va">X2_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X2_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">=</span> <span class="va">max_ix</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H_ix<span class="op">=</span><span class="va">H_ix</span>, X1_ix<span class="op">=</span><span class="va">X1_ix</span>, X2_ix<span class="op">=</span><span class="va">X2_ix</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="get_xh_vars">get_XH_vars<a class="anchor" aria-label="anchor" href="#get_xh_vars"></a>
-</h3>
+<p>This method primarily supports solver evaluations that need variables
+by name; users rarely call it directly. Follow the title and description
+below, document any derived quantities, and put index storage in
+<code>@note</code>. Return a named list; do not confuse extraction from
+<code>y</code> with output parsing.</p>
 <p>In the following, each variable in your model gets its own pair of
 lines.</p>
 <ul>
@@ -422,11 +347,14 @@ with the second variable name.</p></li>
 you use it or if you want to have it available, compute it and add it to
 the returned list.</p></li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Return the variables as a list</span></span>
-<span><span class="co">#' @description This method dispatches on the type of `xds_obj$XH_obj`</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get the state variables for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Extract the state variables for the `newXHname` module</span></span>
+<span><span class="co">#' from `y` and return them by name in a list for use during model solving.</span></span>
+<span><span class="co">#' Also compute the remaining class `X0 = H - X1 - X2`.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::get_XH_vars</span></span>
-<span><span class="co">#' @return a [list]</span></span>
+<span><span class="co">#' @return a named [list] of state variables and module-specific derived quantities</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">get_XH_vars.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>,<span class="op">{</span></span>
@@ -437,97 +365,6 @@ the returned list.</p></li>
 <span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H<span class="op">=</span><span class="va">H</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, X0<span class="op">=</span><span class="va">X0</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="parse_xh_orbits">parse_XH_orbits<a class="anchor" aria-label="anchor" href="#parse_xh_orbits"></a>
-</h3>
-<p>In the following, each variable in your model gets its own pair of
-lines.</p>
-<ul>
-<li><p>Leave <code>H</code> as-is</p></li>
-<li><p>Replace <code>X1</code> in <code>X1</code> and <code>X1_ix</code>
-with the first variable name.</p></li>
-<li><p>Replace <code>X2</code> in <code>X2</code> and <code>X2_ix</code>
-with the second variable name.</p></li>
-<li><p>Copy the form for every other variable</p></li>
-<li><p>The variable <code>X0</code> is the class that gets newborns. If
-you use it or if you want to have it available, compute it and add it to
-the returned list.</p></li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title parse the output of deSolve and return variables for the newXHname model</span></span>
-<span><span class="co">#' @description Implements [parse_XH_orbits] for the newXHname model</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::parse_XH_orbits</span></span>
-<span><span class="co">#' @return a named list  </span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">parse_XH_orbits.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">outputs</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>,<span class="op">{</span></span>
-<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">H_ix</span><span class="op">]</span></span>
-<span>    <span class="va">X1</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">X1_ix</span><span class="op">]</span></span>
-<span>    <span class="va">X2</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">X2_ix</span><span class="op">]</span></span>
-<span>    <span class="va">X0</span> <span class="op">&lt;-</span> <span class="va">H</span><span class="op">-</span><span class="va">X1</span><span class="op">-</span><span class="va">X2</span></span>
-<span>    <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H<span class="op">=</span><span class="va">H</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, X0<span class="op">=</span><span class="va">X0</span><span class="op">)</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="initial-values">Initial Values<a class="anchor" aria-label="anchor" href="#initial-values"></a>
-</h2>
-<div class="section level3">
-<h3 id="setup_xh_inits">setup_XH_inits<a class="anchor" aria-label="anchor" href="#setup_xh_inits"></a>
-</h3>
-<p>If you did the global search and replace, you won’t need to change
-this function.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Setup initial values for *newXHname*</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @inheritParams ramp.xds::setup_XH_inits</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @return a **`ramp.xds`** object </span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">setup_XH_inits.newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span> <span class="op">=</span> <span class="fu">make_XH_inits_newXHname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, options<span class="op">=</span><span class="va">options</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="make_xh_inits">make_XH_inits<a class="anchor" aria-label="anchor" href="#make_xh_inits"></a>
-</h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Make initial values for the XHname human model, with defaults</span></span>
-<span><span class="co">#' @param nStrata the number of strata in the model</span></span>
-<span><span class="co">#' @param options a [list] to override defaults</span></span>
-<span><span class="co">#' @param X1 the initial value for X1 </span></span>
-<span><span class="co">#' @param X2 the initial value for X2</span></span>
-<span><span class="co">#' @return a [list]</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">make_XH_inits_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">H</span><span class="op">=</span><span class="fl">1000</span>, <span class="va">X1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">X2</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
-<span>  <span class="va">H</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">H</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">X1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">X2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X2</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H<span class="op">=</span><span class="va">H</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="change_xh_inits">change_XH_inits<a class="anchor" aria-label="anchor" href="#change_xh_inits"></a>
-</h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Change initial values for `newXHname` (**XH**)</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @inheritParams ramp.xds::change_XH_inits </span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' @return an **`xds`** object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">change_XH_inits.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_inits.html" class="external-link">get_XH_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">H</span> <span class="op">=</span> <span class="va">H</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">X1</span> <span class="op">=</span> <span class="va">X1</span></span>
-<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">X2</span> <span class="op">=</span> <span class="va">X2</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
-</div>
 <div class="section level2">
 <h2 id="dynamical-terms">Dynamical Terms<a class="anchor" aria-label="anchor" href="#dynamical-terms"></a>
 </h2>
@@ -537,7 +374,7 @@ this function.</p>
 <p>Replace <code>p1*X1</code> with the model’s formula for effective
 infectious host density: state density weighted by the probability of
 transmitting.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of effective infectious human population</span></span>
 <span><span class="co">#' @description Implements [F_I] for the newXHname model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_I</span></span>
@@ -557,7 +394,7 @@ transmitting.</p>
 </h3>
 <p>If you did the global search and replace, and have not changed the
 name of <code>H</code>, this method may not need to be changed.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Size of human population</span></span>
 <span><span class="co">#' @description Implements [F_H] for the newXHname model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_H</span></span>
@@ -572,7 +409,7 @@ name of <code>H</code>, this method may not need to be changed.</p>
 </h3>
 <p>If you use <code>p1</code> for the probability of getting infected
 per infectious bite, don’t change anything.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Infection blocking pre-erythrocytic immunity</span></span>
 <span><span class="co">#' @description Implements [F_infectivity] for the newXHname model.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::F_infectivity</span></span>
@@ -593,10 +430,343 @@ per infectious bite, don’t change anything.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="xh-model-object">XH Model Object<a class="anchor" aria-label="anchor" href="#xh-model-object"></a>
+</h2>
+<div class="section level3">
+<h3 id="make_xh_obj">make_XH_obj<a class="anchor" aria-label="anchor" href="#make_xh_obj"></a>
+</h3>
+<p>Use the title “Make a module object for <code>module</code>
+(<strong>XH</strong>)”. Describe the parameters initialized by the
+constructor and their relationship to the getter and changer. Each of
+these three functions links to the other two in <code>@seealso</code>;
+document any differences in supported parameters explicitly.</p>
+<ul>
+<li><p>In the following, replace <code>p1</code> with the first
+parameter, <code>p2</code> with the second, and so on.</p></li>
+<li><p>Shared demographic and mass-treatment features are initialized by
+<code>setup_XH_obj</code> using the <code>ramp.xds</code> setup
+functions; do not create a separate demographic matrix or replace these
+ports in <code>make_XH_obj</code>.</p></li>
+<li><p>If the module supports mass drug administration or mass screen
+and treat, include the corresponding treatment terms in its state
+updates and record that capability in
+<code>get_skillset_XH.newXHname</code>.</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make a module object for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Create a `newXHname` module object and initialize its parameters.</span></span>
+<span><span class="co">#' Inspect parameters with [get_XH_pars.newXHname] and change supported values</span></span>
+<span><span class="co">#' with [change_XH_pars.newXHname]. Values in `options` override parameter arguments.</span></span>
+<span><span class="co">#' @seealso [get_XH_pars.newXHname], [change_XH_pars.newXHname]</span></span>
+<span><span class="co">#' @param nStrata is the number of population strata</span></span>
+<span><span class="co">#' @param options a [list] that could override defaults</span></span>
+<span><span class="co">#' @param p1 the first parameter </span></span>
+<span><span class="co">#' @param p2 the second parameter </span></span>
+<span><span class="co">#' @param p3 the third parameter </span></span>
+<span><span class="co">#' @param q test positivity</span></span>
+<span><span class="co">#' @return a [list]</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">make_XH_obj_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                         <span class="va">p1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">p2</span><span class="op">=</span><span class="fl">2</span>, <span class="va">p3</span><span class="op">=</span><span class="fl">3</span>, <span class="va">q</span><span class="op">=</span><span class="fl">0.8</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
+<span>    <span class="va">XH_obj</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">XH_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"newXHname"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># Change this</span></span>
+<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">p3</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">p3</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>    <span class="va">XH_obj</span><span class="op">$</span><span class="va">q</span> <span class="op">=</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">q</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">XH_obj</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="setup_xh_obj">setup_XH_obj<a class="anchor" aria-label="anchor" href="#setup_xh_obj"></a>
+</h3>
+<p>This method also initializes the shared XH interface features. Follow
+the setup sequence used by existing modules.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Set up the module object for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Set up a `newXHname` module object for the **XH** component</span></span>
+<span><span class="co">#' and the \eqn{i^{th}} host species.</span></span>
+<span><span class="co">#' + Set the module name to `newXHname`.</span></span>
+<span><span class="co">#' + Create the module object with [make_XH_obj_newXHname], passing `nStrata[i]` and `options`.</span></span>
+<span><span class="co">#' + Set initial values using [ramp.xds::setup_XH_inits], passing `options` to override defaults.</span></span>
+<span><span class="co">#' + Initialize blood search weights using [ramp.xds::setup_blood_search_weights.setup].</span></span>
+<span><span class="co">#' + Initialize the time-spent matrix using [ramp.xds::setup_timespent.setup].</span></span>
+<span><span class="co">#' + Initialize mass-treatment functions using [ramp.xds::setup_mass_treatment].</span></span>
+<span><span class="co">#' + Initialize birth and death rates using [ramp.xds::setup_demog_obj].</span></span>
+<span><span class="co">#' + Initialize time away using [ramp.xds::setup_time_away.setup].</span></span>
+<span><span class="co">#' + Initialize travel EIR using [ramp.xds::setup_travel_eir.no_travel].</span></span>
+<span><span class="co">#' + Return the updated **`xds`** model object.</span></span>
+<span><span class="co">#' @note The module object is stored at `xds_obj$XH_obj[[i]]`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_XH_obj</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_XH_obj.newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">XHname</span>, <span class="va">residence</span>, <span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XHname</span> <span class="op">=</span> <span class="st">"newXHname"</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu">make_XH_obj_newXHname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">options</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_XH_inits.html" class="external-link">setup_XH_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, options<span class="op">=</span><span class="va">options</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_blood_search_weights.html" class="external-link">setup_blood_search_weights</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_TimeSpent.html" class="external-link">setup_timespent</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>residence<span class="op">=</span><span class="va">residence</span><span class="op">)</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_mass_treatment.html" class="external-link">setup_mass_treatment</a></span><span class="op">(</span><span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_demog_obj.html" class="external-link">setup_demog_obj</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_time_away.html" class="external-link">setup_time_away</a></span><span class="op">(</span><span class="st">"setup"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">xds_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/setup_travel_eir.html" class="external-link">setup_travel_eir</a></span><span class="op">(</span><span class="st">"no_travel"</span>, <span class="va">xds_obj</span>, i<span class="op">=</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
+</h2>
+<p>Implement methods to inspect and change the module’s parameters. The
+<code>options</code> argument is a named list; parameters not supplied
+in <code>options</code> retain their existing values when changed.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Get parameters for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Return the parameters for the `newXHname` module as a named list.</span></span>
+<span><span class="co">#' @seealso [make_XH_obj_newXHname], [change_XH_pars.newXHname]</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_XH_pars</span></span>
+<span><span class="co">#' @return a named [list] of parameter values</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_XH_pars.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p1<span class="op">=</span><span class="va">p1</span>, p2<span class="op">=</span><span class="va">p2</span>, p3<span class="op">=</span><span class="va">p3</span>, q<span class="op">=</span><span class="va">q</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Change parameters for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Change parameter values named in `options` for the `newXHname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' @seealso [make_XH_obj_newXHname], [get_XH_pars.newXHname]</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::change_XH_pars</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">change_XH_pars.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>, <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p1</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">p2</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span><span class="op">)</span> <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">p3</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">q</span> <span class="op">&lt;-</span> <span class="va">q</span></span>
+<span>    <span class="va">xds_obj</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="initial-values">Initial Values<a class="anchor" aria-label="anchor" href="#initial-values"></a>
+</h2>
+<p>Use the shared <code><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_inits.html" class="external-link">ramp.xds::get_XH_inits</a></code> function to return
+stored initial values for the selected host species; do not implement a
+module-specific getter. It returns the <code>inits</code> field directly
+as a named list, preserves an empty list, and returns <code>NULL</code>
+if the field is absent (as in <code>trivialXH</code>). Getter
+documentation uses “Get initial values (<strong>XH</strong>)”, describes
+returning stored values, puts storage in <code>@note</code>, and links
+to setup/change functions.</p>
+<p>Initial-value constructors use the title “Make initial values for
+<code>module</code> (<strong>XH</strong>)” and return “a named [list] of
+initial values”. Describe creation and <code>options</code> overrides as
+in the example below, preserving any model-specific explanation. The
+constructor, setup method, and change method each link to the other two
+in <code>@seealso</code>.</p>
+<p>Document numeric scalar expansion to <code>nStrata</code> and the
+required length for non-scalar initial values. State additional input
+restrictions and any internally constructed accessory values. For
+example, <code>garki</code> requires positive <code>H</code>;
+<code>SEISd</code> initializes <code>cases</code> to zero and
+<code>SIPd</code> initializes <code>cfoi</code> to zero rather than
+accepting independent overrides for those fields.</p>
+<div class="section level3">
+<h3 id="make_xh_inits">make_XH_inits<a class="anchor" aria-label="anchor" href="#make_xh_inits"></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Make initial values for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Create a named list of initial values for the `newXHname` module.</span></span>
+<span><span class="co">#' Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @details Initial values must be numeric scalars or have length `nStrata`.</span></span>
+<span><span class="co">#' Scalars are expanded to that length.</span></span>
+<span><span class="co">#' @param nStrata the number of strata in the model</span></span>
+<span><span class="co">#' @param options a [list] to override defaults</span></span>
+<span><span class="co">#' @param X1 the initial value for X1 </span></span>
+<span><span class="co">#' @param X2 the initial value for X2</span></span>
+<span><span class="co">#' @return a named [list] of initial values</span></span>
+<span><span class="co">#' @seealso [setup_XH_inits.newXHname], [change_XH_inits.newXHname]</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">make_XH_inits_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">nStrata</span>, <span class="va">options</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">H</span><span class="op">=</span><span class="fl">1000</span>, <span class="va">X1</span><span class="op">=</span><span class="fl">1</span>, <span class="va">X2</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
+<span>  <span class="va">H</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">H</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">X1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">X2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/checkIt.html" class="external-link">checkIt</a></span><span class="op">(</span><span class="va">X2</span>, <span class="va">nStrata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H<span class="op">=</span><span class="va">H</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="setup_xh_inits">setup_XH_inits<a class="anchor" aria-label="anchor" href="#setup_xh_inits"></a>
+</h3>
+<p>If you did the global search and replace, you won’t need to change
+this function.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Set up initial values for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Set up initial values for the `newXHname` module using</span></span>
+<span><span class="co">#' [make_XH_inits_newXHname]. Values in `options` override the defaults.</span></span>
+<span><span class="co">#' @note Initial values are stored at `xds_obj$XH_obj[[i]]$inits`.</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_XH_inits</span></span>
+<span><span class="co">#' @seealso [make_XH_inits_newXHname], [change_XH_inits.newXHname]</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_XH_inits.newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span> <span class="op">=</span> <span class="fu">make_XH_inits_newXHname</span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, options<span class="op">=</span><span class="va">options</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="change_xh_inits">change_XH_inits<a class="anchor" aria-label="anchor" href="#change_xh_inits"></a>
+</h3>
+<p>Use the changer title and description below. Document supported
+values and special behavior, put storage explanations in
+<code>@note</code>, and return “an <strong><code>xds</code></strong>
+model object”. Keep reciprocal constructor/setup links. Check that
+unspecified values and other species are preserved; report
+implementation discrepancies separately during documentation
+alignment.</p>
+<p>Read fallback values from <code>inits</code> and update its stored
+states, not derived quantities such as <code>S</code> when the
+constructor stores <code>H</code>. Do not insert another species index
+inside <code>inits</code>. Preserve unsupported auxiliary fields, such
+as <code>cases</code> in SEISd and <code>cfoi</code> in SIPd.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Change initial values for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Change initial values named in `options` for the `newXHname`</span></span>
+<span><span class="co">#' module, leaving other values unchanged.</span></span>
+<span><span class="co">#' @note Stored initial values for this module are at</span></span>
+<span><span class="co">#' `xds_obj$XH_obj[[i]]$inits`.</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @inheritParams ramp.xds::change_XH_inits </span></span>
+<span><span class="co">#' @seealso [make_XH_inits_newXHname], [setup_XH_inits.newXHname]</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">change_XH_inits.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">options</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/get_XH_inits.html" class="external-link">get_XH_inits</a></span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">options</span>,<span class="op">{</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">H</span> <span class="op">=</span> <span class="va">H</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">X1</span> <span class="op">=</span> <span class="va">X1</span></span>
+<span>    <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">inits</span><span class="op">$</span><span class="va">X2</span> <span class="op">=</span> <span class="va">X2</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="variable-indices">Variable indices<a class="anchor" aria-label="anchor" href="#variable-indices"></a>
+</h2>
+<div class="section level3">
+<h3 id="setup_xh_ix">setup_XH_ix<a class="anchor" aria-label="anchor" href="#setup_xh_ix"></a>
+</h3>
+<p>Retrieve stored indices with the shared
+<code>ramp.xds::get_XH_ix(xds_obj, i = 1)</code>; do not implement a
+module-specific getter. It returns the <code>ix</code> field directly: a
+named list of variable indices, an empty list if stored, or
+<code>NULL</code> if absent. Getter documentation uses “Get variable
+indices (<strong>XH</strong>)”, describes returning stored indices for
+the selected host species, puts storage in <code>@note</code>, and links
+to <code>setup_XH_ix</code>.</p>
+<p>Use the title and description below, documenting allocation order and
+block lengths. Put index storage and the updated maximum in
+<code>@note</code>; the method returns the model object, not the index
+list. Record actual legacy storage exceptions separately rather than
+copying them into new models.</p>
+<p>In the following, each variable in your model gets its own pair of
+lines. Replace <code>X1</code> in <code>X1_ix</code> with the first
+variable name, <code>X2</code> in <code>X2_ix</code> with the second,
+and add lines for each variable by copying and pasting and editing the
+pair of lines. Be sure the replacement gets applied to all four
+instances.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Set up variable indices for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Assign consecutive variable indices for the `newXHname` module,</span></span>
+<span><span class="co">#' starting after `xds_obj$max_ix`, and update the maximum index.</span></span>
+<span><span class="co">#' Allocate blocks in the order `H_ix`, `X1_ix`, `X2_ix`.</span></span>
+<span><span class="co">#' Each block has length `nStrata[i]`.</span></span>
+<span><span class="co">#' @note Indices are stored at `xds_obj$XH_obj[[i]]$ix`.</span></span>
+<span><span class="co">#' The maximum index is stored at `xds_obj$max_ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::setup_XH_ix</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @importFrom utils tail</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">setup_XH_ix.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span>,<span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">H_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">H_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">X1_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X1_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">X2_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">max_ix</span><span class="op">+</span><span class="fl">1</span>, length.out<span class="op">=</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">max_ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">X2_ix</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">max_ix</span> <span class="op">=</span> <span class="va">max_ix</span></span>
+<span>  <span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H_ix<span class="op">=</span><span class="va">H_ix</span>, X1_ix<span class="op">=</span><span class="va">X1_ix</span>, X2_ix<span class="op">=</span><span class="va">X2_ix</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
 <h2 id="other-outputs">Other Outputs<a class="anchor" aria-label="anchor" href="#other-outputs"></a>
 </h2>
 <p>To make <code>ramp.xds</code> easy to use, we provide some functions
 that parse the outputs and compute some standard metrics.</p>
+<div class="section level3">
+<h3 id="parse_xh_orbits">parse_XH_orbits<a class="anchor" aria-label="anchor" href="#parse_xh_orbits"></a>
+</h3>
+<p>After solving, retrieve the saved results with the shared
+<code>ramp.xds::get_XH_orbits(xds_obj, i = 1)</code>; do not implement a
+module-specific orbit getter. Its title is “Get orbits
+(<strong>XH</strong>)”. It returns a list of module-specific orbits
+(trajectories) for <strong>XH</strong> for the selected species from
+<code>xds_obj$outputs$orbits$XH[[i]]</code>, with <code>time</code>
+added from <code>xds_obj$outputs$time</code>. It neither parses outputs
+nor modifies the model object. Link its documentation to
+<code>parse_XH_orbits</code> and <code>xds_solve</code>.</p>
+<p>This method processes trajectories after solving, not a single state
+vector during solving. Follow the shared output-parser conventions:
+describe extraction from <code>outputs</code>, document derived
+quantities and module-level index storage, and use “a [list]” for
+returns. The method returns results without modifying the model object;
+the output-processing pipeline stores them at
+<code>xds_obj$outputs$orbits$XH[[i]]</code>.</p>
+<p>In the following, each variable in your model gets its own pair of
+lines.</p>
+<ul>
+<li><p>Leave <code>H</code> as-is</p></li>
+<li><p>Replace <code>X1</code> in <code>X1</code> and <code>X1_ix</code>
+with the first variable name.</p></li>
+<li><p>Replace <code>X2</code> in <code>X2</code> and <code>X2_ix</code>
+with the second variable name.</p></li>
+<li><p>Copy the form for every other variable</p></li>
+<li><p>The variable <code>X0</code> is the class that gets newborns. If
+you use it or if you want to have it available, compute it and add it to
+the returned list.</p></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Parse outputs for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Extract the model state outputs for the `newXHname` module</span></span>
+<span><span class="co">#' from `outputs` and return them by name in a list.</span></span>
+<span><span class="co">#' Also compute `X0 = H-X1-X2`.</span></span>
+<span><span class="co">#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::parse_XH_orbits</span></span>
+<span><span class="co">#' @return a [list]</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">parse_XH_orbits.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">outputs</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">xds_obj</span><span class="op">$</span><span class="va">XH_obj</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">ix</span>,<span class="op">{</span></span>
+<span>    <span class="va">H</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">H_ix</span><span class="op">]</span></span>
+<span>    <span class="va">X1</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">X1_ix</span><span class="op">]</span></span>
+<span>    <span class="va">X2</span> <span class="op">&lt;-</span> <span class="va">outputs</span><span class="op">[</span>,<span class="va">X2_ix</span><span class="op">]</span></span>
+<span>    <span class="va">X0</span> <span class="op">&lt;-</span> <span class="va">H</span><span class="op">-</span><span class="va">X1</span><span class="op">-</span><span class="va">X2</span></span>
+<span>    <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H<span class="op">=</span><span class="va">H</span>, X1<span class="op">=</span><span class="va">X1</span>, X2<span class="op">=</span><span class="va">X2</span>, X0<span class="op">=</span><span class="va">X0</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="f_prevalence">F_prevalence<a class="anchor" aria-label="anchor" href="#f_prevalence"></a>
 </h3>
@@ -639,82 +809,144 @@ infectiousness.</p>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Replace this with the model's human transmitting capacity formula"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="internal-consistency">Internal Consistency<a class="anchor" aria-label="anchor" href="#internal-consistency"></a>
-</h2>
-<p>Every model provides a skill-set method and a check method. The
-former returns supported capabilities as a list; setup stores that list
-on the module object. The latter can check or update the model before
-solving.</p>
+<div class="section level3">
+<h3 id="observed-prevalence">Observed prevalence<a class="anchor" aria-label="anchor" href="#observed-prevalence"></a>
+</h3>
+<p>All current XH modules except <code>hMoI</code> have a
+test-positivity parameter <code>q</code>, defaulting to
+<code>0.8</code>, and compute observed prevalence as <code>q</code>
+times their true prevalence. The trivial module returns an empty numeric
+vector. Retain any diagnostic-specific parameters and methods when
+adding this observation model.</p>
+<p>The <code>hMoI</code> module instead computes observed prevalence as
+<code>1 - exp(-m2)</code>, without <code>q</code>. Its three diagnostic
+methods are compatibility aliases for <code>F_pr_obs</code>, and its
+skill set reports <code>pr_obs = TRUE</code> with all three
+<code>pf_*</code> flags set to <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Get the skill set for `newXHname` (**XH**)</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::get_skillset_XH</span></span>
-<span><span class="co">#' @return the **XH** module skill set, as a list</span></span>
+<code class="sourceCode R"><span><span class="co">#' @title Compute observed prevalence</span></span>
+<span><span class="co">#' @description Return test positivity times true prevalence.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_pr_obs</span></span>
+<span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">get_skillset_XH.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    delay<span class="op">=</span><span class="cn">FALSE</span>,</span>
-<span>    demography<span class="op">=</span><span class="cn">TRUE</span>,</span>
-<span>    prevalence<span class="op">=</span><span class="cn">TRUE</span>,</span>
-<span>    malaria<span class="op">=</span><span class="cn">TRUE</span>,</span>
-<span>    diagnostics<span class="op">=</span><span class="st">"linear"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#' @title Check `newXHname` before solving</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::check_XH</span></span>
-<span><span class="co">#' @return an **`xds`** object</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">check_XH.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">xds_obj</span></span>
+<span><span class="va">F_pr_obs.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">XH_obj</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">XH_obj</span><span class="op">$</span><span class="va">q</span> <span class="op">*</span> <span class="fu">ramp.xds</span><span class="fu">::</span><span class="fu"><a href="https://dd-harp.github.io/ramp.xds/reference/F_prevalence.html" class="external-link">F_prevalence</a></span><span class="op">(</span><span class="va">vars</span>, <span class="va">XH_obj</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="optional-functions">Optional Functions<a class="anchor" aria-label="anchor" href="#optional-functions"></a>
-</h2>
 <div class="section level3">
 <h3 id="diagnostic-prevalence">Diagnostic prevalence<a class="anchor" aria-label="anchor" href="#diagnostic-prevalence"></a>
 </h3>
-<p>The <code>SIS</code> module implements these three methods. Other
-modules can implement the methods relevant to their diagnostic outputs;
-replace <code>X1/H</code> and the diagnostic parameter names below with
-the appropriate formulas and parameters for the model.</p>
+<p>The <code>SIS</code> module uses a single test-positivity parameter
+<code>q</code> (default <code>0.8</code>). Its <code>F_pr_obs.SIS</code>
+method computes <code>q * I / H</code>, and its three
+<code>F_pfpr_by_*</code> methods are compatibility aliases for that
+calculation, not distinct diagnostic models. Its skill set has
+<code>pr_obs = TRUE</code> and all three <code>pf_*</code> flags set to
+<code>FALSE</code>. Use <code>get_PR(xds_obj, method = "obs")</code>
+after solving to retrieve observed prevalence.</p>
+<p>Other modules can implement the methods relevant to their diagnostic
+outputs; replace <code>X1/H</code> and the diagnostic parameter names
+below with the appropriate formulas and parameters for the model. These
+diagnostic-specific examples do not describe the SIS
+parameterization.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' @title Compute prevalence by light microscopy</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::F_prevalence</span></span>
+<code class="sourceCode R"><span><span class="co">#' @title Compute observed prevalence by light microscopy</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_pfpr_by_lm</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_pfpr_by_lm.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">XH_obj</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH_obj</span>, <span class="va">q_lm</span><span class="op">*</span><span class="va">X1</span><span class="op">/</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Compute prevalence by RDT</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::F_prevalence</span></span>
+<span><span class="co">#' @title Compute observed prevalence by RDT</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_pfpr_by_rdt</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_pfpr_by_rdt.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">XH_obj</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH_obj</span>, <span class="va">q_rdt</span><span class="op">*</span><span class="va">X1</span><span class="op">/</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#' @title Compute prevalence by PCR</span></span>
-<span><span class="co">#' @inheritParams ramp.xds::F_prevalence</span></span>
+<span><span class="co">#' @title Compute observed prevalence by PCR</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::F_pfpr_by_pcr</span></span>
 <span><span class="co">#' @return a [numeric] vector of length `nStrata`</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">F_pfpr_by_pcr.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vars</span>, <span class="va">XH_obj</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">vars</span>, <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH_obj</span>, <span class="va">q_pcr</span><span class="op">*</span><span class="va">X1</span><span class="op">/</span><span class="va">H</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="internal-consistency">Internal Consistency<a class="anchor" aria-label="anchor" href="#internal-consistency"></a>
+</h2>
+<p>Every model provides a skill-set method and a check method. The
+former returns supported capabilities as a list. The latter can check or
+update the model before solving.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' @title Check `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Return the model unchanged; no checks are implemented in this template.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::check_XH</span></span>
+<span><span class="co">#' @return an **`xds`** model object</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">check_XH.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xds_obj</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @title Get the skill set for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Return the capabilities and compatibilities of the `newXHname` module as a list.</span></span>
+<span><span class="co">#' @inheritParams ramp.xds::get_skillset_XH</span></span>
+<span><span class="co">#' @return the **XH** module skill set, as a list</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">get_skillset_XH.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">xds_obj</span>, <span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    dts<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>    xde<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    delay<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>    demography<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    malaria<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    pr_obs<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    pf_lm<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    pf_rdt<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    pf_pcr<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>    mda<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>    msat<span class="op">=</span><span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Use these logical fields for XH skill sets, choosing values for the
+module’s supported capabilities. Models with
+<code>malaria = FALSE</code>, including SIR, SIRS, SEIR, and SEIRV, omit
+all three <code>pf_*</code> fields. For a module supporting
+<code>F_pr_obs</code>, include <code>pr_obs = TRUE</code> after
+<code>malaria</code>. Compatibility aliases do not imply distinct
+diagnostic capabilities.</p>
+</div>
+<div class="section level2">
+<h2 id="optional-functions">Optional Functions<a class="anchor" aria-label="anchor" href="#optional-functions"></a>
+</h2>
 <div class="section level3">
 <h3 id="steady-states">Steady states<a class="anchor" aria-label="anchor" href="#steady-states"></a>
 </h3>
 <p><code>steady_state_X</code> is optional and is implemented by
 <code>SIS</code>. If useful for the model, implement the method for the
 <strong>X</strong> component as a function of FoI and host density.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<p>Describe the supplied <code>foi</code> and <code>H</code>, supported
+equation system, and any model-specific assumptions. Document the actual
+return type and state names; existing methods return either lists or
+numeric vectors. The generic dispatches on
+<code>xds_obj$XH_obj[[i]]</code>. For a module supporting both equation
+systems, delegate to a module-specific generic such as
+<code>steady_state_X_SEIR</code>, which dispatches on
+<code>xds_obj$xds</code> to select <code>xde</code> or <code>dts</code>.
+Forward <code>foi</code>, <code>H</code>, <code>xds_obj</code>, and
+<code>i</code> through both stages; do not encode the equation system in
+the module class. Return values are not stored on the model object.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @title Compute steady states for `newXHname` (**XH**)</span></span>
+<span><span class="co">#' @description Compute steady-state infection densities for the `newXHname`</span></span>
+<span><span class="co">#' module given daily FoI `foi` and fixed host population density `H`.</span></span>
+<span><span class="co">#' @note Document the equation system and assumptions supported by this method.</span></span>
 <span><span class="co">#' @inheritParams ramp.xds::steady_state_X</span></span>
-<span><span class="co">#' @return a named list of steady-state variables</span></span>
+<span><span class="co">#' @return a named [list] of steady-state variables; replace this description</span></span>
+<span><span class="co">#' with the actual return type and state names</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="va">steady_state_X.newXHname</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">foi</span>, <span class="va">H</span>, <span class="va">xds_obj</span>, <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Replace this with the model's steady-state calculation"</span><span class="op">)</span></span>
@@ -723,40 +955,6 @@ the appropriate formulas and parameters for the model.</p>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h3>
-</div>
-<div class="section level3">
-<h3 id="module-specific-line-plotting-function">Module-specific line plotting function<a class="anchor" aria-label="anchor" href="#module-specific-line-plotting-function"></a>
-</h3>
-<div class="section level4">
-<h4 id="add_lines_x_newxhname">add_lines_X_newXHname<a class="anchor" aria-label="anchor" href="#add_lines_x_newxhname"></a>
-</h4>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Add lines for the `newXHname` state variables</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @param time simulation time points</span></span>
-<span><span class="co">#' @param XH a list with the outputs of parse_XH_orbits.newXHname</span></span>
-<span><span class="co">#' @param nStrata the number of population strata</span></span>
-<span><span class="co">#' @param clrs a vector of colors</span></span>
-<span><span class="co">#' @param llty an integer (or integers) to set the `lty` for plotting</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' @export</span></span>
-<span><span class="va">add_lines_X_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span>, <span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH</span>,<span class="op">{</span></span>
-<span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X1</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X2</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">&gt;</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
-<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">clrs</span><span class="op">)</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span> <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">clrs</span>, <span class="fl">2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">llty</span><span class="op">)</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="va">llty</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">llty</span>, <span class="va">nStrata</span><span class="op">)</span></span>
-<span></span>
-<span>      <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nStrata</span><span class="op">)</span><span class="op">{</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X1</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X2</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="op">}</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level3">
 <h3 id="xds_plot_x">xds_plot_X<a class="anchor" aria-label="anchor" href="#xds_plot_x"></a>
@@ -796,6 +994,40 @@ the appropriate formulas and parameters for the model.</p>
 <span>         ylab<span class="op">=</span><span class="st">"State density"</span>, xlab<span class="op">=</span><span class="st">"Time"</span><span class="op">)</span></span>
 <span>  <span class="fu">add_lines_X_newXHname</span><span class="op">(</span><span class="va">time</span>, <span class="va">XH</span>, <span class="va">xds_obj</span><span class="op">$</span><span class="va">nStrata</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">clrs</span>, <span class="va">llty</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="module-specific-line-plotting-function">Module-specific line plotting function<a class="anchor" aria-label="anchor" href="#module-specific-line-plotting-function"></a>
+</h3>
+<div class="section level4">
+<h4 id="add_lines_x_newxhname">add_lines_X_newXHname<a class="anchor" aria-label="anchor" href="#add_lines_x_newxhname"></a>
+</h4>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Add lines for the `newXHname` state variables</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param time simulation time points</span></span>
+<span><span class="co">#' @param XH a list with the outputs of parse_XH_orbits.newXHname</span></span>
+<span><span class="co">#' @param nStrata the number of population strata</span></span>
+<span><span class="co">#' @param clrs a vector of colors</span></span>
+<span><span class="co">#' @param llty an integer (or integers) to set the `lty` for plotting</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">add_lines_X_newXHname</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span>, <span class="va">XH</span>, <span class="va">nStrata</span>, <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"darkred"</span><span class="op">)</span>, <span class="va">llty</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">XH</span>,<span class="op">{</span></span>
+<span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X1</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X2</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="kw">if</span><span class="op">(</span><span class="va">nStrata</span><span class="op">&gt;</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">clrs</span><span class="op">)</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span> <span class="va">clrs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">clrs</span>, <span class="fl">2</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">llty</span><span class="op">)</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="va">llty</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">llty</span>, <span class="va">nStrata</span><span class="op">)</span></span>
+<span></span>
+<span>      <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nStrata</span><span class="op">)</span><span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X1</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">1</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">X2</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, col<span class="op">=</span><span class="va">clrs</span><span class="op">[</span><span class="fl">2</span>,<span class="va">i</span><span class="op">]</span>, lty <span class="op">=</span> <span class="va">llty</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 </div>
