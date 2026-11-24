@@ -25,7 +25,7 @@ Implements \link[ramp.xds:F_H]{F_H} for the \code{SIRS} model.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

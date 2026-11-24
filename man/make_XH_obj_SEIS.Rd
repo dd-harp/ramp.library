@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{make_XH_obj_SEIS}
 \alias{make_XH_obj_SEIS}
-\title{Make a \code{SEIS} \strong{XH} model object}
+\title{Make a module object for \code{SEIS} (\strong{XH})}
 \usage{
 make_XH_obj_SEIS(
   nStrata,
@@ -15,7 +15,8 @@ make_XH_obj_SEIS(
   q_rdt = 0.8,
   q_pcr = 0.9,
   rho = 0,
-  sigma = 0
+  sigma = 0,
+  q = 0.8
 )
 }
 \arguments{
@@ -40,18 +41,23 @@ make_XH_obj_SEIS(
 \item{rho}{the fraction of incident infections that are treated and cured}
 
 \item{sigma}{the rate prevalent infections are treated and cured}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 an \strong{XH} model object
 }
 \description{
-Make a \code{SEIS} \strong{XH} model object
+Create an \code{SEIS} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.SEIS} and change supported values
+with \link{change_XH_pars.SEIS}. Values in \code{options} override parameter arguments.
 }
 \section{Parameters}{
 
 The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 \link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{rate of progression from exposed to infectious}
@@ -65,6 +71,8 @@ The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 }
 
 \seealso{
+\link{get_XH_pars.SEIS}, \link{change_XH_pars.SEIS}
+
 \link{SEIS}
 }
 \keyword{internal}

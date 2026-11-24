@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{make_XH_inits_garki}
 \alias{make_XH_inits_garki}
-\title{Make inits for garki human model.}
+\title{Make initial values for \code{garki} (\strong{XH})}
 \usage{
 make_XH_inits_garki(
   nStrata,
@@ -36,12 +36,20 @@ make_XH_inits_garki(
 \item{x4}{a \link{numeric} initial value for the variable x4}
 }
 \value{
-none
+a named \link{list} of initial values
 }
 \description{
-Make inits for garki human model.
+Create a named list of initial values for the \code{garki} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length. Require positive \code{H} in every stratum.
 }
 \note{
 We use H instead of x, but other variables are passed in the same order as they are presented in the original paper.
+}
+\seealso{
+\link{setup_XH_inits.garki}, \link{change_XH_inits.garki}
 }
 \keyword{internal}

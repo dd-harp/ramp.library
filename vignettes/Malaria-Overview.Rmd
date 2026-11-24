@@ -19,6 +19,13 @@ library(ramp.library)
 
 In **`ramp.xds`** and **`ramp.library`** there are several modules that would be considered suitable for modeling some aspects of malaria epidemiology.
 
+Except for `hMoI`, all XH modules support observed prevalence through
+`F_pr_obs`, using test positivity `q` (default `0.8`) times true prevalence.
+Set `q` through `XHoptions` at setup or `change_XH_pars` afterward;
+retrieve the output with `get_PR(model, method = "obs")` after solving.
+The existing diagnostic-specific parameters and methods in library modules
+are unchanged.
+
 + **`ramp.xds`**
 
   +  `hMoI`

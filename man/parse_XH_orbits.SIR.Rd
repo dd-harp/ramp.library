@@ -7,17 +7,22 @@
 \method{parse_XH_orbits}{SIR}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }
 \value{
-a named list of module variables
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SIR} model
+Extract the model state outputs for the \code{SIR} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{S = H-I-R}, \code{ni = c*I/H}, and \code{true_pr = I/H}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \section{State Variables}{
 

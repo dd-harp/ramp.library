@@ -14,7 +14,7 @@ test_that("SEIS modules configure, return, and change SIS-style diagnostic param
     model$nStrata <- 2
     model <- setup_XH_obj(module, c(1, 1), model, options)
     pars <- get_XH_pars(model)
-    expect_named(pars, c("b", "c", "r", "nu", "q_lm", "q_rdt", "q_pcr", "rho", "sigma"))
+    expect_named(pars, c("q", "b", "c", "r", "nu", "q_lm", "q_rdt", "q_pcr", "rho", "sigma"))
     expect_equal(pars[names(options)], options)
 
     changed <- change_XH_pars(model, list(q_rdt=c(0.1, 0.3)))

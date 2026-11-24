@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{make_L_obj_stages}
 \alias{make_L_obj_stages}
-\title{Make \code{L_obj} for \code{stages} (\strong{L} component)}
+\title{Make a module object for \code{stages} (\strong{L})}
 \usage{
 make_L_obj_stages(
   nHabitats,
@@ -87,6 +87,10 @@ make_L_obj_stages(
 \strong{\code{L_obj}} an \strong{L} component object
 }
 \description{
+Create a \code{stages} module object and initialize its parameters.
+Inspect parameters with \link{get_L_pars.stages} and change supported values
+with \link{change_L_pars.stages}. Values in \code{options} override parameter arguments.
+
 The following parameters will be set to the values in
 \code{options}. If they are not found, default values will be used.
 \itemize{
@@ -103,5 +107,7 @@ The following parameters will be set to the values in
 }
 \seealso{
 Called by: \link{setup_L_obj.stages}. Related: \link{dLdt.stages}
+
+\link{get_L_pars.stages}, \link{change_L_pars.stages}
 }
 \keyword{internal}

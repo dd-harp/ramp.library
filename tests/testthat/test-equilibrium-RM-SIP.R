@@ -58,7 +58,7 @@ test_that("test equilibrium with macdonald adults (DDE), SIP_xde humans, trivial
   TaR <- matrix(c(dg[1], 1-dg, dg[2]), 2, 2)
 
   W <- F_W_available(searchWtsH, H, TaR)
-  beta <- F_beta(H, W, searchWtsH, TaR)
+  beta <- F_beta(W, searchWtsH, TaR)
   fqZ <- rep(2, nPatches)
   eir <- as.vector(beta %*% fqZ)
   foi <- b*eir

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{get_MY_pars.SEI}
 \alias{get_MY_pars.SEI}
-\title{Return the parameters as a list}
+\title{Get parameters for \code{SEI} (\strong{MY})}
 \usage{
 \method{get_MY_pars}{SEI}(xds_obj, s = 1)
 }
@@ -12,10 +12,10 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list}
+a named \link{list} of parameter values
 }
 \description{
-This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
+Return the parameters for the \code{SEI} module as a named list.
 }
 \section{Parameters}{
 
@@ -27,11 +27,14 @@ This method dispatches on the type of \code{xds_obj$MY_obj[[s]]}.
 \item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
 \item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
 values. Bionomic parameters are configured as static baselines by default.
 }
 
+\seealso{
+\link{make_MY_obj_SEI}, \link{change_MY_pars.SEI}
+}
 \keyword{internal}

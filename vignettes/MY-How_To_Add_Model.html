@@ -385,161 +385,72 @@ assumptions, and relevant references in roxygen.</li>
 <li>Add tests for setup, parameter and initial-value changes, dynamics,
 and any model-specific outputs.</li>
 </ul>
-</div>
-<div id="model-object-and-state-variables" class="section level2">
-<h2>Model object and state variables</h2>
-<p><code>make_MY_obj_newMYname</code> creates the module-specific list
-and assigns its class. <code>setup_MY_obj.newMYname</code> attaches it
-to the full <code>xds_obj</code>. Include the parameters and any
-model-specific objects needed by the equations. Parameters that use the
-shared bionomics or dispersal interfaces should be set up with the
-corresponding <code>ramp.xds</code> helpers.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#&#39; @title Make the model object for newMYname</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches number of patches</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&#39; @param options named values that override defaults</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&#39; @return a list</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>make_MY_obj_newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(nPatches, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">p1 =</span> <span class="dv">1</span>) {</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    MY_obj <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    MY_obj<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(p1, nPatches)</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    MY_obj<span class="sc">$</span>nPatches <span class="ot">&lt;-</span> nPatches</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="fu">class</span>(MY_obj) <span class="ot">&lt;-</span> <span class="st">&quot;newMYname&quot;</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    MY_obj</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  })</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>}</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&#39; @title Set up the newMYname MY module</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::setup_MY_obj] for newMYname.</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_obj</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>setup_MY_obj.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(MYname, xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]] <span class="ot">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">get_skillset_MY</span>(xds_obj, s)</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  xds_obj</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>}</span></code></pre></div>
-<div id="state-variable-indices" class="section level3">
-<h3>State-variable indices</h3>
-<p><code>setup_MY_ix.newMYname</code> assigns a contiguous index range
-to each state variable. The example follows the SI implementation; add
-or remove index ranges to match the model and store them in the named
-list at <code>xds_obj$MY_obj[[s]]$ix</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&#39; @title Set up indices for newMYname</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::setup_MY_ix] for newMYname.</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_ix</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>setup_MY_ix.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj, {</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    M_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix <span class="sc">+</span> <span class="dv">1</span>, <span class="at">length.out =</span> nPatches)</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(M_ix, <span class="dv">1</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    Y_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix <span class="sc">+</span> <span class="dv">1</span>, <span class="at">length.out =</span> nPatches)</span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(Y_ix, <span class="dv">1</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    xds_obj<span class="sc">$</span>max_ix <span class="ot">&lt;-</span> max_ix</span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">M_ix =</span> M_ix, <span class="at">Y_ix =</span> Y_ix)</span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    xds_obj</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  })</span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>}</span></code></pre></div>
-<p><code>get_MY_vars.newMYname</code> maps the dependent-variable vector
-<code>y</code> to the named state variables used in the equations.
-Include only variables that belong to the module’s state vector; do not
-add host variables unless they are actual MY states.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Get newMYname state variables</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::get_MY_vars] for newMYname.</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_MY_vars</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; @return a named list</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>get_MY_vars.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, s) {</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix, {</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="fu">list</span>(</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>      <span class="at">M =</span> y[M_ix],</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>      <span class="at">Y =</span> y[Y_ix]</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    )</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  })</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>}</span></code></pre></div>
-<p><code>parse_MY_orbits.newMYname</code> extracts the same state
-variables from the solver output matrix. It can also return derived
-quantities, such as prevalence or parity, when those quantities are
-defined for the model.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Parse newMYname model output</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::parse_MY_orbits] for newMYname.</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::parse_MY_orbits</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; @return a named list</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>parse_MY_orbits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, s) {</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix, {</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    M <span class="ot">&lt;-</span> outputs[, M_ix]</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    Y <span class="ot">&lt;-</span> outputs[, Y_ix]</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">Y =</span> Y)</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  })</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>}</span></code></pre></div>
+<div id="documentation-policy" class="section level3">
+<h3>Documentation policy</h3>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order">function
+order</a> in module files and guide implementation sections. Move
+functions with their documentation, keep file-level review/TODO notes at
+the top, and preserve definitions and behavior when reordering.</p>
+<p>Follow the shared <a href="https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions">documentation
+conventions</a> and the <a href="https://dd-harp.github.io/ramp.xds/articles/MY-interface.html#setup-documentation">MY
+setup wording</a>. These vignettes are the public style reference for
+both packages.</p>
+<ul>
+<li>Use the approved family titles with the module name in backticks and
+the <strong>MY</strong> tag. Bionomics titles are “Mosquito bionomics
+for <code>module</code> (<strong>MY</strong>)”; effect-size titles are
+“Apply effect sizes for <code>module</code> (<strong>MY</strong>)”.</li>
+<li>Describe the actual equations, including accessory derivatives and
+delayed branches. Replace placeholder descriptions with formulas when
+implementing the model; keep returned states and equations in the same
+order.</li>
+<li>Keep storage, class assignments, and dispatch mechanics in
+<code>@note</code>. Describe generic dispatch on the generic rather than
+repeating it on methods.</li>
+<li>List setup actions in code order, including the constructor with
+<code>nPatches</code> and <code>options</code>, skill set, initial
+values, and any shared ports. End with “Return the updated
+<strong><code>xds</code></strong> model object.”</li>
+<li>Use method-specific helper links for circadian and dispersal
+initialization, qualified with <code>ramp.xds::</code>, and end complete
+bullets with periods. Only list interfaces the method actually sets
+up.</li>
+<li>Describe skill sets as capabilities and compatibilities, and
+explicitly include <code>dts = FALSE</code> when no discrete-time update
+method is defined.</li>
+<li>Document any checks actually performed. A no-op check returns the
+model unchanged; it does not validate the setup.</li>
+</ul>
+<p>The minimal setup example below does not configure shared bionomics,
+circadian, or matrix ports. Add the helpers required by the implemented
+equations and document each call using the MY setup wording. Do not copy
+matrix-port configuration without checking the module’s needs.</p>
 </div>
 </div>
-<div id="initial-values" class="section level2">
-<h2>Initial values</h2>
-<p><code>make_MY_inits_newMYname</code> returns a named list containing
-an initial value for every state variable.
-<code>setup_MY_inits.newMYname</code> stores those values in the module
-object, and <code>change_MY_inits.newMYname</code> updates named values
-after setup.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Make newMYname initial values</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @param nPatches number of patches</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; @param options named values that override defaults</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @param M initial adult mosquito density</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @param Y initial infected mosquito density</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @return a named list</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>make_MY_inits_newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(nPatches, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">M =</span> <span class="dv">10</span>, <span class="at">Y =</span> <span class="dv">1</span>) {</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    M <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(M, nPatches)</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    Y <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(Y, nPatches)</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">Y =</span> Y)</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  })</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>}</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&#39; @title Set up newMYname initial values</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::setup_MY_inits] for newMYname.</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_inits</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>setup_MY_inits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>inits <span class="ot">&lt;-</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>    <span class="fu">make_MY_inits_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  xds_obj</span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>}</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&#39; @title Change newMYname initial values</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::change_MY_inits] for newMYname.</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_MY_inits</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>change_MY_inits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>inits[<span class="fu">names</span>(options)] <span class="ot">&lt;-</span> options</span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>  xds_obj</span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<div id="parameters-and-bionomics" class="section level2">
-<h2>Parameters and bionomics</h2>
-<p>Implement <code>get_MY_pars.newMYname</code> and
-<code>change_MY_pars.newMYname</code> for the parameters users should
-inspect and change. For bionomic parameters managed through shared
-ports, implement <code>MBionomics.newMYname</code> to evaluate their
-baseline values at time <code>t</code>, and
-<code>MEffectSizes.newMYname</code> to apply the intervention effects.
-These methods receive <code>t</code>, <code>y</code>,
-<code>xds_obj</code>, and <code>s</code>, and return the updated
-<code>xds_obj</code>.</p>
-<p>The SI module is an example of a module using the shared parameter
-helpers for feeding rate (<code>f</code>), human fraction
-(<code>q</code>), mortality (<code>g</code>), emigration
-(<code>sigma</code>), emigration loss (<code>mu</code>), egg-batch rate
-(<code>nu</code>), and EIP duration. Use only the parameters relevant to
-the model.</p>
+<div id="module-overview" class="section level2">
+<h2>Module overview</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">#&#39; @title The `newMYname` module for the **MY** component</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&#39; @section State Variables:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&#39; Describe the module&#39;s actual states and any derived quantities used by</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&#39; its initial-density accessors.</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&#39; @section Parameters:</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&#39; Describe the parameters used by the implemented model, including their</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&#39; biological meanings and units. Include `f`, `q`, `g`, and `sigma` if the</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&#39; corresponding dynamical parameter accessors are implemented.</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&#39; @section Dynamical Terms:</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&#39; Describe the shared terms used by the implemented equations.</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&#39; @section ODE:</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&#39; Describe the continuous-time equations if the module implements `dMYdt`.</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&#39; @section DTS:</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&#39; Describe the updating equations if the module implements `Update_MYt`.</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&#39; @section Egg Laying:</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&#39; Describe the daily number of eggs laid per patch as the module&#39;s egg-laying</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&#39; population times oviposition rate and eggs per batch.</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&#39; [F_eggs.newMYname] returns this quantity before distribution among aquatic</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&#39; habitats by [ramp.xds::EggLaying].</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&#39; @name newMYname</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<pre><code>## NULL</code></pre>
 </div>
 <div id="dynamics" class="section level2">
 <h2>Dynamics</h2>
@@ -550,42 +461,117 @@ methods receive <code>t</code>, the dependent-variable vector
 <code>y</code>, <code>xds_obj</code>, and the vector-species index
 <code>s</code>. Return values in the same order used for the state
 indices.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title Compute newMYname derivatives</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::dMYdt] for newMYname.</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::dMYdt</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of derivatives</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>dMYdt.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="co"># Retrieve the shared terms needed by this model.</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  Lambda <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>Lambda[[s]]</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  kappa <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>kappa[[s]]</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>      <span class="co"># Replace these placeholders with the model&#39;s equations.</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>      dM <span class="ot">&lt;-</span> ...</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>      dY <span class="ot">&lt;-</span> ...</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>      <span class="fu">c</span>(dM, dY)</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>    })</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  })</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>}</span></code></pre></div>
+<p>Begin derivative descriptions “Compute the derivatives for the
+<code>module</code> module:” and show the implemented equations
+immediately below, including accessory derivatives and delayed branches.
+Inherit the module NULL anchor’s relevant sections. Document returned
+block order in <code>@note</code>, including matrix flattening when
+applicable. Keep dispatch documentation on the shared generic.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&#39; @title Compute the derivatives for `newMYname` (**MY**)</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&#39; @description Compute the derivatives for the `newMYname` module:</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&#39; Replace this placeholder with the equations for `dM` and `dY`,</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&#39; in returned-vector order, when replacing the placeholder code below.</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::dMYdt</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&#39; @note Derivatives are returned in blocks for `M`, then `Y`, each in patch order.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of derivatives in the module&#39;s state-variable order</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>dMYdt.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="co"># Retrieve the shared terms needed by this model.</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  Lambda <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>Lambda[[s]]</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  kappa <span class="ot">&lt;-</span> xds_obj<span class="sc">$</span>terms<span class="sc">$</span>kappa[[s]]</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>      <span class="co"># Replace these placeholders with the model&#39;s equations.</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>      dM <span class="ot">&lt;-</span> ...</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>      dY <span class="ot">&lt;-</span> ...</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>      <span class="fu">c</span>(dM, dY)</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>    })</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  })</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>}</span></code></pre></div>
 <p>For discrete-time models, implement the update equations directly and
 return the updated state vector; do not return derivatives or add them
-to the current state unless that is the model’s defined update rule.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title Update newMYname states</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::Update_MYt] for newMYname.</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::Update_MYt</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of updated states</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>Update_MYt.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>      M_next <span class="ot">&lt;-</span> ...</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>      Y_next <span class="ot">&lt;-</span> ...</span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>      <span class="fu">c</span>(M_next, Y_next)</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    })</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  })</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>}</span></code></pre></div>
+to the current state unless that is the model’s defined update rule. Use
+“Update states for <code>module</code> (<strong>MY</strong>)” for the
+title and “Update the state variables for the <code>module</code>
+module:” for the description, followed by the updating equations in
+<code>\deqn{}</code>. Inherit the same NULL-anchor sections as the
+derivative method, with <code>DTS</code> in place of <code>ODE</code>
+(or the continuous-time <code>Dynamics</code> section). Document the
+actual return shape; the existing RMdts and SEI list-return
+discrepancies remain deferred.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#&#39; @title Update states for `newMYname` (**MY**)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&#39; @description Update the state variables for the `newMYname` module:</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&#39; \deqn{\begin{array}{rl}</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&#39; M_t &amp;= \ldots \\\\</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&#39; Y_t &amp;= \ldots</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&#39; \end{array}}</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&#39; Replace these placeholders with the implemented updating equations.</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname State Variables</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Dynamical Terms</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Parameters</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname DTS</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::Update_MYt</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector of updated states</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>Update_MYt.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>      M_next <span class="ot">&lt;-</span> ...</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>      Y_next <span class="ot">&lt;-</span> ...</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>      <span class="fu">c</span>(M_next, Y_next)</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>    })</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  })</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="state-variable-extraction" class="section level2">
+<h2>State-variable extraction</h2>
+<p><code>get_MY_vars.newMYname</code> maps the dependent-variable vector
+<code>y</code> to the named state variables used in the equations.
+Include only variables that belong to the module’s state vector; do not
+add host variables unless they are actual MY states.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&#39; @title Get the state variables for `newMYname` (**MY**)</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&#39; @description Extract the state variables for the `newMYname` module</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&#39; from `y` and return them by name in a list for use during model solving.</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&#39; @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_MY_vars</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&#39; @return a named [list] of state variables and module-specific derived quantities</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>get_MY_vars.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(y, xds_obj, s) {</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix, {</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>      <span class="at">M =</span> y[M_ix],</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>      <span class="at">Y =</span> y[Y_ix]</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    )</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  })</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="bionomics-and-effect-sizes" class="section level2">
+<h2>Bionomics and effect sizes</h2>
+<p>For bionomic parameters managed through shared ports, implement
+<code>MBionomics.newMYname</code> to evaluate their baseline values at
+time <code>t</code>, and <code>MEffectSizes.newMYname</code> to apply
+the intervention effects. These methods receive <code>t</code>,
+<code>y</code>, <code>xds_obj</code>, and <code>s</code>, and return the
+updated <code>xds_obj</code>.</p>
+<p>For each parameter <code>x</code> configured as a port, bionomics
+stores <code>x_t</code> and resets <code>es_x</code> to 1; effect sizes
+set <code>x = x_t * es_x</code>. Parameters without ports are stored
+directly as <code>x</code> and are not modified by effect sizes. This
+also applies to EIP (<code>eip_t</code>, <code>es_eip</code>) and the
+standard dispersal matrix (<code>K_matrix_t</code>,
+<code>es_K_matrix</code>). Matrix effects use elementwise <code>*</code>
+and must preserve the dispersal-matrix constraints. Recompute
+demographic and survival matrices using the realized parameters, and
+have dynamical parameter accessors such as <code>get_f</code> read those
+values without applying effects again. Document separately whether
+<code>get_MY_pars</code> reports baselines or realized values.</p>
+<p>The SI module is an example of a module using the shared parameter
+helpers for feeding rate (<code>f</code>), human fraction
+(<code>q</code>), mortality (<code>g</code>), emigration
+(<code>sigma</code>), emigration loss (<code>mu</code>), oviposition
+rate (<code>nu</code>), and EIP duration. Use only the parameters
+relevant to the model.</p>
 </div>
 <div id="interface-outputs" class="section level2">
 <h2>Interface outputs</h2>
@@ -603,69 +589,456 @@ among habitats.</li>
 </ul>
 <p>Each method receives <code>t</code>, <code>y</code>,
 <code>xds_obj</code>, and <code>s</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Compute newMYname infective biting density</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::F_fqZ] for newMYname.</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_fqZ</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector with one value per patch</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>F_fqZ.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>      fqZ <span class="ot">&lt;-</span> ...</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>      fqZ</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    })</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  })</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>}</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&#39; @title Compute newMYname human biting density</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::F_fqM] for newMYname.</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_fqM</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector with one value per patch</span></span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>F_fqM.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>      fqM <span class="ot">&lt;-</span> ...</span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>      fqM</span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>    })</span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  })</span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>}</span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a></span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&#39; @title Compute newMYname egg production</span></span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&#39; @description Implements [ramp.xds::F_eggs] for newMYname.</span></span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_eggs</span></span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&#39; @return a numeric vector with one value per patch</span></span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>F_eggs.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
-<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
-<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
-<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>      eggs <span class="ot">&lt;-</span> ...</span>
-<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>      eggs</span>
-<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>    })</span>
-<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>  })</span>
-<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a>}</span></code></pre></div>
+<p>For egg production, use “Compute egg production for
+<code>module</code> (<strong>MY</strong>)”. Use the description “Return
+the number of eggs laid by the adult mosquito population, per patch” and
+return “a [numeric] vector of length <code>nPatches</code>”. Inherit the
+module NULL anchor’s <code>Egg Laying</code> section using
+<code>@inheritSection newMYname Egg Laying</code>. In that section,
+explain which mosquitoes lay eggs: total adult density or, in
+behavioral-state models, gravid density. Multiply that density by the
+oviposition rate and eggs per batch. Link the method to its module and
+<code>ramp.xds::EggLaying</code>.</p>
+<p>For biting outputs, describe daily biting density on humans in each
+patch, not a per-host biting rate. Use the titles and numeric-vector
+return contract below, link the two methods reciprocally, and explain
+any model-specific formula or behavioral-state restriction. Generic
+dispatch selects <code>xds_obj$MY_obj[[s]]</code>. Preserve formulas and
+flag return-shape or parameter-lookup discrepancies separately during
+documentation review.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&#39; @title Compute infective mosquito biting density for `newMYname` (**MY**)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&#39; @description Return the daily infective mosquito biting density on humans,</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&#39; `fqZ`, for each patch in the `newMYname` module.</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_fqZ</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&#39; @seealso [F_fqM.newMYname]</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>F_fqZ.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>      fqZ <span class="ot">&lt;-</span> ...</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>      fqZ</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    })</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  })</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>}</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&#39; @title Compute mosquito biting density for `newMYname` (**MY**)</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&#39; @description Return the daily mosquito biting density on humans,</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&#39; `fqM`, for each patch in the `newMYname` module.</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_fqM</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&#39; @seealso [F_fqZ.newMYname]</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>F_fqM.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>      fqM <span class="ot">&lt;-</span> ...</span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>      fqM</span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>    })</span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>  })</span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>}</span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&#39; @title Compute egg production for `newMYname` (**MY**)</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&#39; @description Return the number of eggs laid by the adult mosquito population, per patch</span></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Egg Laying</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::F_eggs</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname], [ramp.xds::EggLaying]</span></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a>F_eggs.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(t, y, xds_obj, s) {</span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">get_MY_vars</span>(y, xds_obj, s), {</span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a>    <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], {</span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>      eggs <span class="ot">&lt;-</span> ...</span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>      eggs</span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>    })</span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>  })</span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="skill-set-and-checks" class="section level2">
-<h2>Skill set and checks</h2>
+<div id="dynamical-parameter-accessors" class="section level2">
+<h2>Dynamical parameter accessors</h2>
+<p>Implement <code>get_f</code>, <code>get_q</code>, <code>get_g</code>,
+and <code>get_sigma</code> methods when the module supplies those
+parameters. They return stored realized values, without evaluating ports
+or applying effect sizes. Refresh port-backed values through bionomics
+and effect-size application first. These accessors are distinct from the
+module’s documented parameter-reporting convention in
+<code>get_MY_pars</code>.</p>
+<p>Use the titles and short descriptions below, inherit the module NULL
+anchor’s <code>Parameters</code> section, and return “a [numeric] vector
+of length <code>nPatches</code>”. The shared generics document dispatch
+on <code>xds_obj$MY_obj[[s]]</code>. For BQ, BQm, and BRQS,
+<code>get_sigma</code> reads <code>sigma_b</code>, the blood-feeding
+emigration rate, not <code>sigma_q</code>. Their <code>get_g</code>
+methods read <code>g</code>; BRQS’s state-specific mortality mismatch
+remains deferred.</p>
+<p>Add these parameters and their biological definitions to the module
+constructor and NULL anchor when implementing these optional
+methods.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&#39; @title Get the feeding rate for `newMYname` (**MY**)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&#39; @description Return the stored realized feeding rate per patch.</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Parameters</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_f</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname]</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>get_f.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>f</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>}</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&#39; @title Get the human blood fraction for `newMYname` (**MY**)</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&#39; @description Return the stored realized human blood fraction per patch.</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Parameters</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_q</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname]</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>get_q.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>q</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>}</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&#39; @title Get the adult mosquito mortality rate for `newMYname` (**MY**)</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&#39; @description Return the stored realized adult mosquito mortality rate per patch.</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Parameters</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_g</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname]</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>get_g.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>g</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>}</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&#39; @title Get the patch emigration rate for `newMYname` (**MY**)</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&#39; @description Return the stored realized patch emigration rate per patch.</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname Parameters</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_sigma</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname]</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>get_sigma.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>sigma</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="mosquito-matrix-accessors" class="section level2">
+<h2>Mosquito-matrix accessors</h2>
+<p>Use the shared <code>ramp.xds::get_Omega(xds_obj, s = 1)</code> and
+<code>ramp.xds::get_Upsilon(xds_obj, s = 1)</code> to retrieve the
+stored mosquito demographic matrix, <span class="math inline">\(\Omega\)</span>, and EIP survival-and-dispersal
+matrix, <span class="math inline">\(\Upsilon\)</span>, respectively. Do
+not implement module-specific getter methods. They read
+<code>xds_obj$MY_obj[[s]]$Omega</code> and
+<code>xds_obj$MY_obj[[s]]$Upsilon</code> without recomputing matrices or
+modifying the model object. Each returns a matrix of dimensions
+<code>nPatches</code> by <code>nPatches</code>, or <code>NULL</code> if
+the corresponding matrix is not stored.</p>
+<p>Their titles are “Get the mosquito demographic matrix
+(<strong>MY</strong>)” and “Get the EIP survival-and-dispersal matrix
+(<strong>MY</strong>)”. Document storage and the absence of
+recomputation in <code>@note</code>, and link to the other getter, the
+corresponding <code>ramp.xds::change_Omega</code> or
+<code>ramp.xds::change_Upsilon</code> function, and
+<code>ramp.xds::xds_info_mosquito_demography</code>.</p>
+</div>
+<div id="model-object-and-state-variables" class="section level2">
+<h2>Model object and state variables</h2>
+<p>Use the constructor title “Make a module object for
+<code>module</code> (<strong>MY</strong>)”. Describe parameter
+initialization and <code>options</code> overrides. The constructor,
+parameter getter, and parameter changer each link to the other two in
+<code>@seealso</code>; describe any differences in their parameter
+coverage.</p>
+<p><code>make_MY_obj_newMYname</code> creates the module-specific list
+and assigns its class. <code>setup_MY_obj.newMYname</code> attaches it
+to the full <code>xds_obj</code>. Include the parameters and any
+model-specific objects needed by the equations. Parameters that use the
+shared bionomics or dispersal interfaces should be set up with the
+corresponding <code>ramp.xds</code> helpers.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#&#39; @title Make a module object for `newMYname` (**MY**)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&#39; @description Create a `newMYname` module object and initialize its parameters.</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&#39; Inspect parameters with [get_MY_pars.newMYname] and change supported values</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&#39; with [change_MY_pars.newMYname]. Values in `options` override parameter arguments.</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&#39; @seealso [get_MY_pars.newMYname], [change_MY_pars.newMYname]</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&#39; @param nPatches number of patches</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&#39; @param options named values that override defaults</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&#39; @return a list</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>make_MY_obj_newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(nPatches, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">p1 =</span> <span class="dv">1</span>) {</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    MY_obj <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    MY_obj<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(p1, nPatches)</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    MY_obj<span class="sc">$</span>nPatches <span class="ot">&lt;-</span> nPatches</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    <span class="fu">class</span>(MY_obj) <span class="ot">&lt;-</span> <span class="st">&quot;newMYname&quot;</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>    MY_obj</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  })</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>}</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&#39; @title Set up the module object for `newMYname` (**MY**)</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&#39; @description Set up a `newMYname` module object for the **MY** component</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&#39; and the \eqn{s^{th}} vector species.</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&#39; + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&#39; + Set the skill set using [ramp.xds::get_skillset_MY].</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&#39; + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&#39; + Return the updated **`xds`** model object.</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&#39; @note The module object is stored at `xds_obj$MY_obj[[s]]`.</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_obj</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>setup_MY_obj.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(MYname, xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]] <span class="ot">&lt;-</span> <span class="fu">make_MY_obj_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>skill_set <span class="ot">&lt;-</span> <span class="fu">get_skillset_MY</span>(xds_obj, s)</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> <span class="fu">setup_MY_inits</span>(xds_obj, <span class="at">options =</span> options, <span class="at">s =</span> s)</span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>  xds_obj</span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="parameters" class="section level2">
+<h2>Parameters</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Get parameters for `newMYname` (**MY**)</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @description Return the parameters for the `newMYname` module as a named list.</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_MY_pars</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @seealso [make_MY_obj_newMYname], [change_MY_pars.newMYname]</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&#39; @return a named [list] of parameter values</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>get_MY_pars.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]], <span class="fu">list</span>(<span class="at">p1 =</span> p1))</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&#39; @title Change parameters for `newMYname` (**MY**)</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&#39; @description Change parameter values named in `options` for the `newMYname`</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&#39; module, leaving other values unchanged.</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&#39; This example supports changes to `p1`.</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&#39; Call [ramp.xds::MBionomics] at time zero after changing parameters;</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&#39; do not call [ramp.xds::MEffectSizes].</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_MY_pars</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&#39; @seealso [make_MY_obj_newMYname], [get_MY_pars.newMYname]</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>change_MY_pars.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&quot;p1&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(options)) {</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>    xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(options<span class="sc">$</span>p1, xds_obj<span class="sc">$</span>nPatches)</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>  }</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>  y <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">get_inits</span>(xds_obj, <span class="at">flatten =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>  xds_obj <span class="ot">&lt;-</span> ramp.xds<span class="sc">::</span><span class="fu">MBionomics</span>(<span class="dv">0</span>, y, xds_obj, s)</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>  xds_obj</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a>}</span></code></pre></div>
+<p>Implement <code>get_MY_pars.newMYname</code> and
+<code>change_MY_pars.newMYname</code> for the parameters users should
+inspect and change.</p>
+</div>
+<div id="initial-values" class="section level2">
+<h2>Initial values</h2>
+<p>Use the shared <code>ramp.xds::get_MY_inits</code> function to return
+stored initial values for the selected vector species; do not implement
+a module-specific getter. It returns the <code>inits</code> field
+directly as a named list, preserves an empty list, and returns
+<code>NULL</code> if the field is absent (as in <code>trivialMY</code>).
+Getter documentation uses “Get initial values (<strong>MY</strong>)”,
+describes returning stored values, puts storage in <code>@note</code>,
+and links to setup/change functions.</p>
+<p><code>make_MY_inits_newMYname</code> returns a named list containing
+an initial value for every state variable.
+<code>setup_MY_inits.newMYname</code> stores those values in the module
+object, and <code>change_MY_inits.newMYname</code> updates named values
+after setup.</p>
+<p>Use the constructor title and description below, preserving any
+model-specific explanation. Its return description is “a named [list] of
+initial values”. The constructor, setup method, and change method each
+link to the other two in <code>@seealso</code>. Document numeric scalar
+expansion to <code>nPatches</code>, module-specific length exceptions,
+input restrictions, and internally constructed accessory values that
+cannot be set independently through <code>options</code>. For changers,
+document supported values and special behavior, put storage explanations
+in <code>@note</code>, and return “an <strong><code>xds</code></strong>
+model object”. Check preservation of unspecified values and other
+species; report implementation discrepancies separately during
+documentation alignment.</p>
+<p>Partial updates must read fallback values from the selected module’s
+<code>inits</code> list, not from its parent module object; preserve
+other species and any fields not supported by the changer.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co">#&#39; @title Make initial values for `newMYname` (**MY**)</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&#39; @description Create a named list of initial values for the `newMYname` module.</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&#39; Values in `options` override the defaults.</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&#39; @details Initial values must be numeric scalars or have length `nPatches`.</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&#39; Scalars are expanded to that length.</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&#39; @param nPatches number of patches</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&#39; @param options named values that override defaults</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&#39; @param M initial adult mosquito density</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&#39; @param Y initial infected mosquito density</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&#39; @return a named [list] of initial values</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&#39; @seealso [setup_MY_inits.newMYname], [change_MY_inits.newMYname]</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>make_MY_inits_newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(nPatches, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">M =</span> <span class="dv">10</span>, <span class="at">Y =</span> <span class="dv">1</span>) {</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  <span class="fu">with</span>(options, {</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    M <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(M, nPatches)</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>    Y <span class="ot">&lt;-</span> <span class="fu">checkIt</span>(Y, nPatches)</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">Y =</span> Y)</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>  })</span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>}</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&#39; @title Set up initial values for `newMYname` (**MY**)</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&#39; @description Set up initial values for the `newMYname` module using</span></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&#39; [make_MY_inits_newMYname]. Values in `options` override the defaults.</span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&#39; @note Initial values are stored at `xds_obj$MY_obj[[s]]$inits`.</span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_inits</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&#39; @seealso [make_MY_inits_newMYname], [change_MY_inits.newMYname]</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>setup_MY_inits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>inits <span class="ot">&lt;-</span></span>
+<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>    <span class="fu">make_MY_inits_newMYname</span>(xds_obj<span class="sc">$</span>nPatches, options)</span>
+<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a>  xds_obj</span>
+<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a>}</span>
+<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a><span class="co">#&#39; @title Change initial values for `newMYname` (**MY**)</span></span>
+<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a><span class="co">#&#39; @description Change initial values named in `options` for the `newMYname`</span></span>
+<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a><span class="co">#&#39; module, leaving other values unchanged.</span></span>
+<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a><span class="co">#&#39; @note Stored initial values for this module are at</span></span>
+<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a><span class="co">#&#39; `xds_obj$MY_obj[[s]]$inits`.</span></span>
+<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::change_MY_inits</span></span>
+<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a><span class="co">#&#39; @seealso [make_MY_inits_newMYname], [setup_MY_inits.newMYname]</span></span>
+<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a>change_MY_inits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">options =</span> <span class="fu">list</span>(), <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a>  xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>inits[<span class="fu">names</span>(options)] <span class="ot">&lt;-</span> options</span>
+<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a>  xds_obj</span>
+<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="initial-density-accessors" class="section level2">
+<h2>Initial-density accessors</h2>
+<p>Implement <code>get_M</code> and <code>get_Z</code> only when the
+module supports these initial density queries. They return initial adult
+and infective mosquito densities, not current solver states or output
+trajectories. Use the titles and short descriptions below, inherit the
+module NULL anchor’s <code>State Variables</code> section, and keep
+model-specific explanations there rather than repeating derivations in
+accessor descriptions. The shared generics document dispatch on
+<code>xds_obj$MY_obj[[s]]</code>.</p>
+<p>The examples assume the module stores initial <code>M</code> and
+<code>Z</code> values; adapt the implementation to the module’s actual
+initial-state representation.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&#39; @title Get the initial adult mosquito density for `newMYname` (**MY**)</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&#39; @description Return the initial adult mosquito density per patch.</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname State Variables</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_M</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname], [ramp.xds::get_MY_inits]</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>get_M.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  ramp.xds<span class="sc">::</span><span class="fu">get_MY_inits</span>(xds_obj, s)<span class="sc">$</span>M</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>}</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&#39; @title Get the initial infective mosquito density for `newMYname` (**MY**)</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&#39; @description Return the initial infective mosquito density per patch.</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&#39; @inheritSection newMYname State Variables</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_Z</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&#39; @seealso [newMYname], [ramp.xds::get_MY_inits]</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&#39; @return a [numeric] vector of length `nPatches`</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>get_Z.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, <span class="at">s =</span> <span class="dv">1</span>) {</span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>  ramp.xds<span class="sc">::</span><span class="fu">get_MY_inits</span>(xds_obj, s)<span class="sc">$</span>Z</span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="state-indices" class="section level2">
+<h2>State indices</h2>
+<p>Retrieve stored indices with the shared
+<code>ramp.xds::get_MY_ix(xds_obj, s = 1)</code>; the species index
+defaults to 1. Do not implement a module-specific getter. It returns the
+<code>ix</code> field directly: a named list of variable indices, an
+empty list if stored, or <code>NULL</code> if absent. Getter
+documentation uses “Get variable indices (<strong>MY</strong>)”,
+describes returning stored indices for the selected vector species, puts
+storage in <code>@note</code>, and links to
+<code>setup_MY_ix</code>.</p>
+<p><code>setup_MY_ix.newMYname</code> assigns a contiguous index range
+to each state variable. The example follows the SI implementation; add
+or remove index ranges to match the model and store them in the named
+list at <code>xds_obj$MY_obj[[s]]$ix</code>.</p>
+<p>Use the title and description below, documenting actual allocation
+order and block lengths, including any auxiliary or matrix/cohort
+blocks. Put storage and the updated maximum in <code>@note</code>.
+Return the model object, not the index list; flag legacy storage or
+return errors separately.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co">#&#39; @title Set up variable indices for `newMYname` (**MY**)</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&#39; @description Assign consecutive variable indices for the `newMYname` module,</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&#39; starting after `xds_obj$max_ix`, and update the maximum index.</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&#39; Allocate blocks in the order `M_ix`, `Y_ix`.</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&#39; Each block has length `nPatches`.</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&#39; @note Indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&#39; The maximum index is stored at `xds_obj$max_ix`.</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::setup_MY_ix</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&#39; @importFrom utils tail</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>setup_MY_ix.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj, {</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>    M_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix <span class="sc">+</span> <span class="dv">1</span>, <span class="at">length.out =</span> nPatches)</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>    max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(M_ix, <span class="dv">1</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>    Y_ix <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> max_ix <span class="sc">+</span> <span class="dv">1</span>, <span class="at">length.out =</span> nPatches)</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>    max_ix <span class="ot">&lt;-</span> <span class="fu">tail</span>(Y_ix, <span class="dv">1</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>    xds_obj<span class="sc">$</span>max_ix <span class="ot">&lt;-</span> max_ix</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>    xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">M_ix =</span> M_ix, <span class="at">Y_ix =</span> Y_ix)</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>    xds_obj</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>  })</span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="parsing-outputs" class="section level2">
+<h2>Parsing outputs</h2>
+<p>After solving, retrieve the saved results with the shared
+<code>ramp.xds::get_MY_orbits(xds_obj, s = 1)</code>; do not implement a
+module-specific orbit getter. Its title is “Get orbits
+(<strong>MY</strong>)”. It returns a list of module-specific orbits
+(trajectories) for <strong>MY</strong> for the selected species from
+<code>xds_obj$outputs$orbits$MY[[s]]</code>, with <code>time</code>
+added from <code>xds_obj$outputs$time</code>. It neither parses outputs
+nor modifies the model object. Link its documentation to
+<code>parse_MY_orbits</code> and <code>xds_solve</code>.</p>
+<p><code>parse_MY_orbits.newMYname</code> extracts the same state
+variables from the solver output matrix. It can also return derived
+quantities, such as prevalence or parity, when those quantities are
+defined for the model.</p>
+<p>This method processes trajectories after solving. Document derived
+quantities and index storage in its Roxygen block, and use “a [list]”
+for returns. It returns results without modifying the model object; the
+output-processing pipeline stores them at
+<code>xds_obj$outputs$orbits$MY[[s]]</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&#39; @title Parse outputs for `newMYname` (**MY**)</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&#39; @description Extract the model state outputs for the `newMYname` module</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&#39; from `outputs` and return them by name in a list.</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&#39; @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::parse_MY_orbits</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&#39; @return a [list]</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>parse_MY_orbits.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(outputs, xds_obj, s) {</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">with</span>(xds_obj<span class="sc">$</span>MY_obj[[s]]<span class="sc">$</span>ix, {</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>    M <span class="ot">&lt;-</span> outputs[, M_ix]</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>    Y <span class="ot">&lt;-</span> outputs[, Y_ix]</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">Y =</span> Y)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  })</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="checks-and-skill-set" class="section level2">
+<h2>Checks and skill set</h2>
 <p>Implement <code>get_skillset_MY.newMYname</code> to return the
 module’s capabilities and limitations as a list. Store this list on the
 module object during setup. Implement <code>check_MY.newMYname</code>
 for model-specific setup checks that should run before solving.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&#39; @title Get newMYname skill set</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_skillset_MY</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&#39; @return the **MY** module skill set, as a list</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>get_skillset_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">delay=</span><span class="cn">FALSE</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&#39; @title Check newMYname setup</span></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_MY</span></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>check_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  xds_obj</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#&#39; @title Check `newMYname` (**MY**)</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&#39; @description Return the model unchanged; no checks are implemented in this template.</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::check_MY</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&#39; @return an **`xds`** model object</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>check_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  xds_obj</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&#39; @title Get the skill set for `newMYname` (**MY**)</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&#39; @description Return the capabilities and compatibilities of the `newMYname` module as a list.</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&#39; @inheritParams ramp.xds::get_skillset_MY</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&#39; @return the **MY** module skill set, as a list</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>get_skillset_MY.newMYname <span class="ot">&lt;-</span> <span class="cf">function</span>(xds_obj, s) {</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dts=</span><span class="cn">FALSE</span>, <span class="at">delay=</span><span class="cn">FALSE</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="optional-methods-and-tests" class="section level2">
 <h2>Optional methods and tests</h2>
@@ -675,12 +1048,44 @@ for model-specific setup checks that should run before solving.</p>
 steady state is defined for the model. The MY interface does not define
 MY-specific plotting generics; model-specific plots can use the parsed
 output from <code>parse_MY_orbits.newMYname</code>.</p>
+<p>Use “Compute steady states for <code>module</code>
+(<strong>MY</strong>)” for method titles. Descriptions identify the
+inputs and supported equation system; return tags identify the actual
+type and state names. The M, Y, and MY generics dispatch on
+<code>xds_obj$MY_obj[[s]]</code>. If the module supports multiple
+equation systems, follow the basicM pattern: delegate to a
+module-specific generic that dispatches on <code>xds_obj$xds</code>. Do
+not imply this second stage exists for every module. Keep existing
+list/numeric-vector differences explicit, preserve formulas, and return
+values without storing them on the model object.</p>
 <p>Add the module to the appropriate source file in
 <code>ramp.library</code> and write tests that check the equations and
 integration with <code>ramp.xds</code>. For example, check that initial
 values have the expected names and dimensions, that derivatives or
 updates preserve state ordering, and that the biting and egg outputs
 have one value per patch.</p>
+</div>
+<div id="plotting" class="section level2">
+<h2>Plotting</h2>
+<p>Use the shared <code>ramp.xds::xds_plot_M</code>,
+<code>ramp.xds::xds_plot_Y</code>, and <code>ramp.xds::xds_plot_Z</code>
+helpers when parsed outputs include adult, infected, and infective
+mosquito densities. The fraction helpers
+<code>ramp.xds::xds_plot_Y_fracs</code> and
+<code>ramp.xds::xds_plot_Z_fracs</code> require saved
+<code>y = Y/M</code> and <code>z = Z/M</code>; they do not compute
+fractions. These ordinary functions read the selected species’ saved
+orbits through <code>ramp.xds::get_MY_orbits</code> and draw one line
+per patch. Do not implement module-specific methods for them.</p>
+<p>Plot helpers create a new plot unless <code>add = TRUE</code>;
+corresponding <code>ramp.xds::xds_lines_*</code> helpers add lines to an
+existing plot. Pass one color or line type for all patches, or vectors
+with one value per patch. The helpers return
+<code>invisible(NULL)</code>. Use titles such as “Plot infected mosquito
+density (<strong>MY</strong>)” and “Add lines for the infective mosquito
+fraction (<strong>MY</strong>)”. Keep required fields and overlay
+behavior in <code>@note</code>, and link plot and line helpers
+reciprocally. Module-specific visualization remains optional.</p>
 </div>
 <div id="reusable-model-code" class="section level2">
 <h2>Reusable model code</h2>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{setup_XH_inits.SEIS}
 \alias{setup_XH_inits.SEIS}
-\title{Setup initial values for \code{SEIS} (\strong{XH})}
+\title{Set up initial values for \code{SEIS} (\strong{XH})}
 \usage{
 \method{setup_XH_inits}{SEIS}(xds_obj, options = list(), i = 1)
 }
@@ -17,14 +17,11 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Set initial values for all the variables in the \code{SEIS} module
-(\strong{XH}) for the \eqn{i^{th}} host species.
-\itemize{
-\item \link{make_XH_inits_SEIS} supplies default values
-\item The values in \code{options} override the defaults
-\item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
-see the inline module documentation.
+Set up initial values for the \code{SEIS} module using
+\link{make_XH_inits_SEIS}. Values in \code{options} override the defaults.
 }
+\note{
+Initial values are stored at \code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -38,5 +35,9 @@ see the inline module documentation.
 
 \seealso{
 \link{SEIS}
+
+\link{change_XH_inits.SEIS}
+
+\link[ramp.xds:get_XH_inits]{ramp.xds::get_XH_inits}
 }
 \keyword{internal}

@@ -2,9 +2,12 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{steady_state_X.SIRS}
 \alias{steady_state_X.SIRS}
-\title{Compute the steady states for the \code{SIRS} model as a function of the daily EIR}
+\alias{steady_state_X_SIRS}
+\title{Compute steady states for \code{SIRS} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SIRS}(foi, H, xds_obj, i = 1)
+
+steady_state_X_SIRS(foi, H, xds_obj, i = 1)
 }
 \arguments{
 \item{foi}{the daily FoI}
@@ -16,12 +19,11 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
+a named \link{numeric} vector containing \code{S}, \code{I}, and \code{R}
 }
 \description{
-Compute the steady state of the \code{SIRS} model as a function of the daily eir.
+Compute steady states given daily FoI \code{foi} and fixed host density \code{H}.
 }
-\seealso{
-\link{SIRS}
+\note{
+Delegate to \link{steady_state_X_SIRS}, which dispatches on \code{xds_obj$xds}.
 }
-\keyword{internal}

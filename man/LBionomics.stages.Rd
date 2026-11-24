@@ -19,10 +19,25 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Resets all effect sizes
-(\code{es_psi_E}, \code{es_phi_E}, \code{es_psi1}–\code{es_psi4}, \code{es_xi1}–\code{es_xi4},
-\code{es_phi1}–\code{es_phi4}, \code{es_theta1}–\code{es_theta4}, \code{es_phi_P}, \code{es_psi_P})
-to 1. The time-varying baseline values (\verb{_t} fields) are set by
-\link{change_L_pars.stages} and persist until explicitly updated.
+Leave directly stored parameters unchanged. This module
+does not configure bionomic parameter ports.
+}
+\section{Parameters}{
+
+\describe{
+\item{\code{psi_E}}{egg maturation (hatching) rate (\eqn{\psi_E})}
+\item{\code{phi_E}}{egg mortality rate (\eqn{\phi_E})}
+\item{\code{psi1}, \code{psi2}, \code{psi3}, \code{psi4}}{larval instar maturation rates (\eqn{\psi_i})}
+\item{\code{xi1}, \code{xi2}, \code{xi3}, \code{xi4}}{delayed maturation responses to mean crowding (\eqn{\xi_i})}
+\item{\code{phi1}, \code{phi2}, \code{phi3}, \code{phi4}}{density-independent larval mortality rates (\eqn{\phi_i})}
+\item{\code{theta1}, \code{theta2}, \code{theta3}, \code{theta4}}{density-dependent larval mortality slopes (\eqn{\theta_i})}
+\item{\code{phi_P}}{pupal mortality rate (\eqn{\phi_P})}
+\item{\code{psi_P}}{pupal maturation (emergence) rate (\eqn{\psi_P})}
+\item{\code{w1}, \code{w2}, \code{w3}}{contributions of \eqn{L_1}, \eqn{L_2}, and \eqn{L_3} to mean crowding (\eqn{w_i})}
+}
+}
+
+\seealso{
+\link{stages}, \link{LEffectSizes.stages}
 }
 \keyword{internal}

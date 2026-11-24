@@ -18,10 +18,15 @@ make_XH_inits_SIP(nStrata, options = list(), H = 1000, I = 1, P = 0)
 \item{P}{the initial number of humans under chemoprotection}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{SIP} (\strong{XH})
+Create a named list of initial values for the \code{SIP} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -35,5 +40,7 @@ Make initial values for \code{SIP} (\strong{XH})
 
 \seealso{
 \link{SIP}
+
+\link{setup_XH_inits.SIP}, \link{change_XH_inits.SIP}
 }
 \keyword{internal}

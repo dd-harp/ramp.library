@@ -7,18 +7,21 @@
 \method{parse_L_orbits}{stages}(outputs, xds_obj, s)
 }
 \arguments{
-\item{outputs}{a \link{matrix} with the solutions to a dynamical system}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{s}{the species index}
 }
 \value{
-a named \link{list}
+a \link{list}
 }
 \description{
-Returns the columns representing \eqn{E, L_1, L_2, L_3,
-L_4, P} from a matrix where each column is a state variable. The
-variables are returned as a named list.
+Extract the model state outputs for the \code{stages} module
+from \code{outputs} and return them by name in a list.
+Return \code{E}, \code{L1}, \code{L2}, \code{L3}, \code{L4}, and \code{P}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$L_obj[[s]]$ix}.
 }
 \keyword{internal}

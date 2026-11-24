@@ -2,9 +2,12 @@
 % Please edit documentation in R/host-xde-SEIR.R
 \name{steady_state_X.SEIR}
 \alias{steady_state_X.SEIR}
-\title{Compute the steady states for the \code{SEIR} model as a function of the daily EIR}
+\alias{steady_state_X_SEIR}
+\title{Compute steady states for \code{SEIR} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SEIR}(foi, H, xds_obj, i = 1)
+
+steady_state_X_SEIR(foi, H, xds_obj, i = 1)
 }
 \arguments{
 \item{foi}{the daily FoI}
@@ -16,12 +19,11 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
+a named \link{numeric} vector containing \code{S}, \code{E}, \code{I}, and \code{R}
 }
 \description{
-Compute the steady state of the \code{SEIR} model as a function of the daily eir.
+Compute steady states given daily FoI \code{foi} and fixed host density \code{H}.
 }
-\seealso{
-\link{SEIR}
+\note{
+Delegate to \link{steady_state_X_SEIR}, which dispatches on \code{xds_obj$xds}.
 }
-\keyword{internal}

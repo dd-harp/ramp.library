@@ -19,8 +19,25 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:LEffectSizes]{LEffectSizes} for the \code{stages} model.
-Computes effective parameter values as the product of each time-varying
-baseline (\verb{_t}) and its corresponding effect size (\code{es_}).
+Leave directly stored parameters unchanged. This module
+does not configure bionomic parameter ports or apply effect sizes.
+}
+\section{Parameters}{
+
+\describe{
+\item{\code{psi_E}}{egg maturation (hatching) rate (\eqn{\psi_E})}
+\item{\code{phi_E}}{egg mortality rate (\eqn{\phi_E})}
+\item{\code{psi1}, \code{psi2}, \code{psi3}, \code{psi4}}{larval instar maturation rates (\eqn{\psi_i})}
+\item{\code{xi1}, \code{xi2}, \code{xi3}, \code{xi4}}{delayed maturation responses to mean crowding (\eqn{\xi_i})}
+\item{\code{phi1}, \code{phi2}, \code{phi3}, \code{phi4}}{density-independent larval mortality rates (\eqn{\phi_i})}
+\item{\code{theta1}, \code{theta2}, \code{theta3}, \code{theta4}}{density-dependent larval mortality slopes (\eqn{\theta_i})}
+\item{\code{phi_P}}{pupal mortality rate (\eqn{\phi_P})}
+\item{\code{psi_P}}{pupal maturation (emergence) rate (\eqn{\psi_P})}
+\item{\code{w1}, \code{w2}, \code{w3}}{contributions of \eqn{L_1}, \eqn{L_2}, and \eqn{L_3} to mean crowding (\eqn{w_i})}
+}
+}
+
+\seealso{
+\link{stages}, \link{LBionomics.stages}
 }
 \keyword{internal}

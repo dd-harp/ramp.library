@@ -18,10 +18,15 @@ make_XH_inits_SIRS(nStrata, options = list(), H = 1000, I = 1, R = 0)
 \item{R}{the initial values for R}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{SIRS} (\strong{XH})
+Create a named list of initial values for the \code{SIRS} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -35,5 +40,7 @@ Make initial values for \code{SIRS} (\strong{XH})
 
 \seealso{
 \link{SIRS}
+
+\link{setup_XH_inits.SIRS}, \link{change_XH_inits.SIRS}
 }
 \keyword{internal}

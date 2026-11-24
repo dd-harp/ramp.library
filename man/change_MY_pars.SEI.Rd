@@ -5,8 +5,6 @@
 \title{Change parameters for \code{SEI} (\strong{MY})}
 \usage{
 \method{change_MY_pars}{SEI}(xds_obj, options = list(), s = 1)
-
-\method{change_MY_pars}{SEI}(xds_obj, options = list(), s = 1)
 }
 \arguments{
 \item{xds_obj}{an \strong{\code{xds}} model object}
@@ -17,15 +15,12 @@
 }
 \value{
 an \strong{\code{xds}} model object
-
-an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SEI} module (\strong{MY}) for the \eqn{s^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
-
-For the \code{SEI} module (\strong{MY}) for the \eqn{s^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{SEI}
+module, leaving other values unchanged.
+Refresh baseline bionomics at time zero using \link[ramp.xds:MBionomics]{ramp.xds::MBionomics},
+without calling \link[ramp.xds:MEffectSizes]{ramp.xds::MEffectSizes}.
 }
 \section{Parameters}{
 
@@ -37,26 +32,14 @@ change parameter values named in \code{options} leaving other values unchanged.
 \item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
 \item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
-\item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
-}
-After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
-values. Bionomic parameters are configured as static baselines by default.
-
-
-\describe{
-\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
-\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
-\item{\code{g}}{mosquito mortality rate --- use \link[ramp.xds:setup_g]{ramp.xds::setup_g} or \link[ramp.xds:setup_mosquito_mortality]{ramp.xds::setup_mosquito_mortality}}
-\item{\code{sigma} or \eqn{\sigma}}{emigration rate --- use \link[ramp.xds:setup_sigma]{ramp.xds::setup_sigma} or \link[ramp.xds:setup_emigration_rates]{ramp.xds::setup_emigration_rates}}
-\item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
-\item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
-\item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
 values. Bionomic parameters are configured as static baselines by default.
 }
 
+\seealso{
+\link{make_MY_obj_SEI}, \link{get_MY_pars.SEI}
+}
 \keyword{internal}

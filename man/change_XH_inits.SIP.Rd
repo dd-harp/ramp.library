@@ -17,11 +17,14 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SIP} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{SIP}
+module, leaving other values unchanged.
 }
 \note{
 This method changes \code{I} and \code{P}; it leaves \code{H} unchanged.
+
+Stored initial values for this module are at
+\code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -35,5 +38,7 @@ This method changes \code{I} and \code{P}; it leaves \code{H} unchanged.
 
 \seealso{
 \link{SIP}
+
+\link{make_XH_inits_SIP}, \link{setup_XH_inits.SIP}
 }
 \keyword{internal}

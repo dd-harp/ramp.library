@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{setup_L_inits.stages}
 \alias{setup_L_inits.stages}
-\title{Setup initial values for \code{stages} (\strong{L})}
+\title{Set up initial values for \code{stages} (\strong{L})}
 \usage{
 \method{setup_L_inits}{stages}(xds_obj, options = list(), s = 1)
 }
@@ -17,19 +17,20 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Set initial values for all the variables in the \code{stages} module
-(\strong{L}) for the \eqn{s^{th}} species.
-\itemize{
-\item \link{make_L_inits_stages} supplies default values
-\item The values in \code{options} override the defaults
-\item To inspect variable names, use \link[ramp.xds:get_L_inits]{get_L_inits} or
-see the inline module documentation.
-}
+Set up initial values for the \code{stages} module using
+\link{make_L_inits_stages}. Values in \code{options} override the defaults.
 
 Initial values of \eqn{E, L_1, L_2, L_3, L_4, P} can be passed in \code{options}
 by name.
 }
+\note{
+Initial values are stored at \code{xds_obj$L_obj[[s]]$inits}.
+}
 \seealso{
 \link{make_L_inits_stages}
+
+\link{change_L_inits.stages}
+
+\link[ramp.xds:get_L_inits]{ramp.xds::get_L_inits}
 }
 \keyword{internal}

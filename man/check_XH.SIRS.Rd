@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{check_XH.SIRS}
 \alias{check_XH.SIRS}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SIRS} (\strong{XH})}
 \usage{
 \method{check_XH}{SIRS}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SIRS} (\strong{XH})
 }
 \seealso{
 \link{SIRS}

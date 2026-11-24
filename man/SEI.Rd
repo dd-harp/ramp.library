@@ -36,7 +36,7 @@ separately across patches.
 \item{\code{mu} or \eqn{\mu}}{fraction of emigrating mosquitoes lost --- use \link[ramp.xds:setup_mu]{ramp.xds::setup_mu} or \link[ramp.xds:setup_emigration_loss]{ramp.xds::setup_emigration_loss}}
 \item{\code{K} or \code{K_matrix}}{mosquito dispersal matrix --- use \link[ramp.xds:setup_K_matrix]{ramp.xds::setup_K_matrix}}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period --- use \link[ramp.xds:setup_eip]{ramp.xds::setup_eip}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.SEI} can be used to change parameter
@@ -80,6 +80,13 @@ dZ/dt &= (Y-Z)/\tau-\Omega\cdot Z
 }
 }
 
+\section{DTS}{
+
+\link{Update_MYt.SEI} updates \code{M} and \code{Z} using the stored \code{Omega} directly.
+The updating equations use \code{D = xds_obj$MYday} and the module field \code{ccc}.
+The method returns these two updated states as a list; it does not update \code{Y}.
+}
+
 \section{Infective Biting}{
 
 The patch-level human biting density, \code{fqM}, is \eqn{f q M}; the
@@ -93,7 +100,7 @@ stratum-level \code{EIR}; \link[ramp.xds:F_hbr]{ramp.xds::F_hbr} uses \code{fqM}
 
 \section{Egg Laying}{
 
-The egg batch rate \eqn{\nu} and the number of eggs per batch
+The oviposition rate \eqn{\nu} and the number of eggs per batch
 \eqn{\Gamma} determine the egg production rate per patch:
 \deqn{G=\nu\Gamma M.}
 \link{F_eggs.SEI} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}

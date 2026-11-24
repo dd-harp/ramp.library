@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIRS.R
 \name{make_XH_obj_SIRS}
 \alias{make_XH_obj_SIRS}
-\title{Make a \code{SIRS} \strong{XH} model object}
+\title{Make a module object for \code{SIRS} (\strong{XH})}
 \usage{
 make_XH_obj_SIRS(
   nStrata,
@@ -10,7 +10,8 @@ make_XH_obj_SIRS(
   b = 0.55,
   r = 1/180,
   c = 0.15,
-  gamma = 0.5
+  gamma = 0.5,
+  q = 0.8
 )
 }
 \arguments{
@@ -25,18 +26,23 @@ make_XH_obj_SIRS(
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
 
 \item{gamma}{the rate of loss of immunity}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 an \strong{XH} model object
 }
 \description{
-Make a \code{SIRS} \strong{XH} model object
+Create an \code{SIRS} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.SIRS} and change supported values
+with \link{change_XH_pars.SIRS}. Values in \code{options} override parameter arguments.
 }
 \section{Parameters}{
 
 \link{make_XH_obj_SIRS} supplies defaults for the parameters, which can be changed
 using \link{change_XH_pars.SIRS}.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -45,6 +51,8 @@ using \link{change_XH_pars.SIRS}.
 }
 
 \seealso{
+\link{get_XH_pars.SIRS}, \link{change_XH_pars.SIRS}
+
 \link{SIRS}
 }
 \keyword{internal}

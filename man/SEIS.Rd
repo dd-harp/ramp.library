@@ -46,6 +46,7 @@ a constant fraction of infectious bites causes an infection: the parameter \eqn{
 The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 \link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{rate of progression from exposed to infectious}
@@ -84,6 +85,7 @@ The mortality function uses the same model for \eqn{E} and \eqn{I} as for
 
 \describe{
 \item{\eqn{x}}{True prevalence is \eqn{x = I/H}}
+\item{\eqn{x_q}}{Observed prevalence from \link[ramp.xds:F_pr_obs]{ramp.xds::F_pr_obs} is \eqn{qx=qI/H}}
 \item{\eqn{x_{lm}}}{Expected prevalence by light microscopy is \eqn{q_{lm}\; x}}
 \item{\eqn{x_{rdt}}}{Expected prevalence by RDT is \eqn{q_{rdt}\; x}}
 \item{\eqn{x_{pcr}}}{Expected prevalence by PCR is \eqn{q_{pcr}\; x}}
@@ -102,7 +104,7 @@ infectiousness is \eqn{cI/H}.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{setup_MY_inits.BQ}
 \alias{setup_MY_inits.BQ}
-\title{Setup initial values for \code{BQ} (\strong{MY})}
+\title{Set up initial values for \code{BQ} (\strong{MY})}
 \usage{
 \method{setup_MY_inits}{BQ}(xds_obj, options = list(), s = 1)
 }
@@ -14,17 +14,14 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list}
+an \strong{\code{xds}} model object
 }
 \description{
-Set initial values for all the variables in the \code{BQ} module
-(\strong{MY}) for the \eqn{s^{th}} species.
-\itemize{
-\item \link{make_MY_inits_BQ} supplies default values
-\item The values in \code{options} override the defaults
-\item To inspect variable names, use \link[ramp.xds:get_MY_inits]{get_MY_inits} or
-see the inline module documentation.
+Set up initial values for the \code{BQ} module using
+\link{make_MY_inits_BQ}. Values in \code{options} override the defaults.
 }
+\note{
+Initial values are stored at \code{xds_obj$MY_obj[[s]]$inits}.
 }
 \section{State Variables}{
 
@@ -41,4 +38,9 @@ see the inline module documentation.
 }
 }
 
+\seealso{
+\link{change_MY_inits.BQ}
+
+\link[ramp.xds:get_MY_inits]{ramp.xds::get_MY_inits}
+}
 \keyword{internal}

@@ -50,170 +50,67 @@ model's equations and state variables before using the file.
 - Add tests for setup, parameter and initial-value changes, dynamics, and any
   model-specific outputs.
 
-## Model object and state variables
+### Documentation policy
 
-`make_MY_obj_newMYname` creates the module-specific list and assigns its class.
-`setup_MY_obj.newMYname` attaches it to the full `xds_obj`. Include the
-parameters and any model-specific objects needed by the equations. Parameters
-that use the shared bionomics or dispersal interfaces should be set up with
-the corresponding `ramp.xds` helpers.
+Follow the shared [function order](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#function-order)
+in module files and guide implementation sections. Move functions with their
+documentation, keep file-level review/TODO notes at the top, and preserve
+definitions and behavior when reordering.
 
-```{r, eval=TRUE, purl=TRUE}
-#' @title Make the model object for newMYname
-#' @param nPatches number of patches
-#' @param options named values that override defaults
-#' @return a list
-#' @export
-make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
-  with(options, {
-    MY_obj <- list()
-    MY_obj$p1 <- checkIt(p1, nPatches)
-    MY_obj$nPatches <- nPatches
-    class(MY_obj) <- "newMYname"
-    MY_obj
-  })
-}
+Follow the shared [documentation conventions](https://dd-harp.github.io/ramp.xds/articles/XH-interface.html#documentation-conventions)
+and the [MY setup wording](https://dd-harp.github.io/ramp.xds/articles/MY-interface.html#setup-documentation).
+These vignettes are the public style reference for both packages.
 
-#' @title Set up the newMYname MY module
-#' @description Implements [ramp.xds::setup_MY_obj] for newMYname.
-#' @inheritParams ramp.xds::setup_MY_obj
-#' @return an **`xds`** model object
-#' @export
-setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
-  xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
-  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
-  xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
-  xds_obj
-}
-```
+- Use the approved family titles with the module name in backticks and the
+  **MY** tag. Bionomics titles are "Mosquito bionomics for `module`
+  (**MY**)"; effect-size titles are "Apply effect sizes for `module`
+  (**MY**)".
+- Describe the actual equations, including accessory derivatives and
+  delayed branches. Replace placeholder descriptions with formulas when
+  implementing the model; keep returned states and equations in the same order.
+- Keep storage, class assignments, and dispatch mechanics in `@note`.
+  Describe generic dispatch on the generic rather than repeating it on methods.
+- List setup actions in code order, including the constructor with
+  `nPatches` and `options`, skill set, initial values, and any shared ports.
+  End with "Return the updated **`xds`** model object."
+- Use method-specific helper links for circadian and dispersal
+  initialization, qualified with `ramp.xds::`, and end complete bullets
+  with periods. Only list interfaces the method actually sets up.
+- Describe skill sets as capabilities and compatibilities, and explicitly
+  include `dts = FALSE` when no discrete-time update method is defined.
+- Document any checks actually performed. A no-op check returns the model
+  unchanged; it does not validate the setup.
 
-### State-variable indices
+The minimal setup example below does not configure shared bionomics,
+circadian, or matrix ports. Add the helpers required by the implemented
+equations and document each call using the MY setup wording. Do not copy
+matrix-port configuration without checking the module's needs.
 
-`setup_MY_ix.newMYname` assigns a contiguous index range to each state
-variable. The example follows the SI implementation; add or remove index
-ranges to match the model and store them in the named list at
-`xds_obj$MY_obj[[s]]$ix`.
+## Module overview
 
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Set up indices for newMYname
-#' @description Implements [ramp.xds::setup_MY_ix] for newMYname.
-#' @inheritParams ramp.xds::setup_MY_ix
-#' @return an **`xds`** model object
-#' @importFrom utils tail
-#' @export
-setup_MY_ix.newMYname <- function(xds_obj, s) {
-  with(xds_obj, {
-    M_ix <- seq(from = max_ix + 1, length.out = nPatches)
-    max_ix <- tail(M_ix, 1)
-
-    Y_ix <- seq(from = max_ix + 1, length.out = nPatches)
-    max_ix <- tail(Y_ix, 1)
-
-    xds_obj$max_ix <- max_ix
-    xds_obj$MY_obj[[s]]$ix <- list(M_ix = M_ix, Y_ix = Y_ix)
-    xds_obj
-  })
-}
+#' @title The `newMYname` module for the **MY** component
+#' @section State Variables:
+#' Describe the module's actual states and any derived quantities used by
+#' its initial-density accessors.
+#' @section Parameters:
+#' Describe the parameters used by the implemented model, including their
+#' biological meanings and units. Include `f`, `q`, `g`, and `sigma` if the
+#' corresponding dynamical parameter accessors are implemented.
+#' @section Dynamical Terms:
+#' Describe the shared terms used by the implemented equations.
+#' @section ODE:
+#' Describe the continuous-time equations if the module implements `dMYdt`.
+#' @section DTS:
+#' Describe the updating equations if the module implements `Update_MYt`.
+#' @section Egg Laying:
+#' Describe the daily number of eggs laid per patch as the module's egg-laying
+#' population times oviposition rate and eggs per batch.
+#' [F_eggs.newMYname] returns this quantity before distribution among aquatic
+#' habitats by [ramp.xds::EggLaying].
+#' @name newMYname
+NULL
 ```
-
-`get_MY_vars.newMYname` maps the dependent-variable vector `y` to the named
-state variables used in the equations. Include only variables that belong to
-the module's state vector; do not add host variables unless they are actual MY
-states.
-
-```{r, eval=TRUE, purl=TRUE}
-#' @title Get newMYname state variables
-#' @description Implements [ramp.xds::get_MY_vars] for newMYname.
-#' @inheritParams ramp.xds::get_MY_vars
-#' @return a named list
-#' @export
-get_MY_vars.newMYname <- function(y, xds_obj, s) {
-  with(xds_obj$MY_obj[[s]]$ix, {
-    list(
-      M = y[M_ix],
-      Y = y[Y_ix]
-    )
-  })
-}
-```
-
-`parse_MY_orbits.newMYname` extracts the same state variables from the solver
-output matrix. It can also return derived quantities, such as prevalence or
-parity, when those quantities are defined for the model.
-
-```{r, eval=TRUE, purl=TRUE}
-#' @title Parse newMYname model output
-#' @description Implements [ramp.xds::parse_MY_orbits] for newMYname.
-#' @inheritParams ramp.xds::parse_MY_orbits
-#' @return a named list
-#' @export
-parse_MY_orbits.newMYname <- function(outputs, xds_obj, s) {
-  with(xds_obj$MY_obj[[s]]$ix, {
-    M <- outputs[, M_ix]
-    Y <- outputs[, Y_ix]
-    list(M = M, Y = Y)
-  })
-}
-```
-
-## Initial values
-
-`make_MY_inits_newMYname` returns a named list containing an initial value for
-every state variable. `setup_MY_inits.newMYname` stores those values in the
-module object, and `change_MY_inits.newMYname` updates named values after
-setup.
-
-```{r, eval=TRUE, purl=TRUE}
-#' @title Make newMYname initial values
-#' @param nPatches number of patches
-#' @param options named values that override defaults
-#' @param M initial adult mosquito density
-#' @param Y initial infected mosquito density
-#' @return a named list
-#' @export
-make_MY_inits_newMYname <- function(nPatches, options = list(), M = 10, Y = 1) {
-  with(options, {
-    M <- checkIt(M, nPatches)
-    Y <- checkIt(Y, nPatches)
-    list(M = M, Y = Y)
-  })
-}
-
-#' @title Set up newMYname initial values
-#' @description Implements [ramp.xds::setup_MY_inits] for newMYname.
-#' @inheritParams ramp.xds::setup_MY_inits
-#' @return an **`xds`** model object
-#' @export
-setup_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
-  xds_obj$MY_obj[[s]]$inits <-
-    make_MY_inits_newMYname(xds_obj$nPatches, options)
-  xds_obj
-}
-
-#' @title Change newMYname initial values
-#' @description Implements [ramp.xds::change_MY_inits] for newMYname.
-#' @inheritParams ramp.xds::change_MY_inits
-#' @return an **`xds`** model object
-#' @export
-change_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
-  xds_obj$MY_obj[[s]]$inits[names(options)] <- options
-  xds_obj
-}
-```
-
-## Parameters and bionomics
-
-Implement `get_MY_pars.newMYname` and `change_MY_pars.newMYname` for the
-parameters users should inspect and change. For bionomic parameters managed
-through shared ports, implement `MBionomics.newMYname` to evaluate their
-baseline values at time `t`, and `MEffectSizes.newMYname` to apply the
-intervention effects. These methods receive `t`, `y`, `xds_obj`, and `s`, and
-return the updated `xds_obj`.
-
-The SI module is an example of a module using the shared parameter helpers
-for feeding rate (`f`), human fraction (`q`), mortality (`g`), emigration
-(`sigma`), emigration loss (`mu`), egg-batch rate (`nu`), and EIP duration.
-Use only the parameters relevant to the model.
 
 ## Dynamics
 
@@ -223,11 +120,20 @@ Both methods receive `t`, the dependent-variable vector `y`, `xds_obj`, and
 the vector-species index `s`. Return values in the same order used for the
 state indices.
 
+Begin derivative descriptions "Compute the derivatives for the `module` module:"
+and show the implemented equations immediately below, including accessory
+derivatives and delayed branches. Inherit the module NULL anchor's relevant
+sections. Document returned block order in `@note`, including matrix flattening
+when applicable. Keep dispatch documentation on the shared generic.
+
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Compute newMYname derivatives
-#' @description Implements [ramp.xds::dMYdt] for newMYname.
+#' @title Compute the derivatives for `newMYname` (**MY**)
+#' @description Compute the derivatives for the `newMYname` module:
+#' Replace this placeholder with the equations for `dM` and `dY`,
+#' in returned-vector order, when replacing the placeholder code below.
 #' @inheritParams ramp.xds::dMYdt
-#' @return a numeric vector of derivatives
+#' @note Derivatives are returned in blocks for `M`, then `Y`, each in patch order.
+#' @return a [numeric] vector of derivatives in the module's state-variable order
 #' @export
 dMYdt.newMYname <- function(t, y, xds_obj, s) {
   # Retrieve the shared terms needed by this model.
@@ -248,10 +154,25 @@ dMYdt.newMYname <- function(t, y, xds_obj, s) {
 For discrete-time models, implement the update equations directly and return
 the updated state vector; do not return derivatives or add them to the
 current state unless that is the model's defined update rule.
+Use "Update states for `module` (**MY**)" for the title and
+"Update the state variables for the `module` module:" for the description,
+followed by the updating equations in `\deqn{}`. Inherit the same NULL-anchor
+sections as the derivative method, with `DTS` in place of `ODE` (or the
+continuous-time `Dynamics` section). Document the actual return shape;
+the existing RMdts and SEI list-return discrepancies remain deferred.
 
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Update newMYname states
-#' @description Implements [ramp.xds::Update_MYt] for newMYname.
+#' @title Update states for `newMYname` (**MY**)
+#' @description Update the state variables for the `newMYname` module:
+#' \deqn{\begin{array}{rl}
+#' M_t &= \ldots \\\\
+#' Y_t &= \ldots
+#' \end{array}}
+#' Replace these placeholders with the implemented updating equations.
+#' @inheritSection newMYname State Variables
+#' @inheritSection newMYname Dynamical Terms
+#' @inheritSection newMYname Parameters
+#' @inheritSection newMYname DTS
 #' @inheritParams ramp.xds::Update_MYt
 #' @return a numeric vector of updated states
 #' @export
@@ -265,6 +186,55 @@ Update_MYt.newMYname <- function(t, y, xds_obj, s) {
   })
 }
 ```
+
+## State-variable extraction
+
+`get_MY_vars.newMYname` maps the dependent-variable vector `y` to the named
+state variables used in the equations. Include only variables that belong to
+the module's state vector; do not add host variables unless they are actual MY
+states.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get the state variables for `newMYname` (**MY**)
+#' @description Extract the state variables for the `newMYname` module
+#' from `y` and return them by name in a list for use during model solving.
+#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.
+#' @inheritParams ramp.xds::get_MY_vars
+#' @return a named [list] of state variables and module-specific derived quantities
+#' @export
+get_MY_vars.newMYname <- function(y, xds_obj, s) {
+  with(xds_obj$MY_obj[[s]]$ix, {
+    list(
+      M = y[M_ix],
+      Y = y[Y_ix]
+    )
+  })
+}
+```
+
+## Bionomics and effect sizes
+
+For bionomic parameters managed
+through shared ports, implement `MBionomics.newMYname` to evaluate their
+baseline values at time `t`, and `MEffectSizes.newMYname` to apply the
+intervention effects. These methods receive `t`, `y`, `xds_obj`, and `s`, and
+return the updated `xds_obj`.
+
+For each parameter `x` configured as a port, bionomics stores `x_t` and
+resets `es_x` to 1; effect sizes set `x = x_t * es_x`. Parameters without
+ports are stored directly as `x` and are not modified by effect sizes.
+This also applies to EIP (`eip_t`, `es_eip`) and the standard dispersal
+matrix (`K_matrix_t`, `es_K_matrix`). Matrix effects use elementwise `*`
+and must preserve the dispersal-matrix constraints. Recompute demographic
+and survival matrices using the realized parameters, and have dynamical
+parameter accessors such as `get_f` read those values without applying
+effects again. Document separately whether `get_MY_pars` reports baselines
+or realized values.
+
+The SI module is an example of a module using the shared parameter helpers
+for feeding rate (`f`), human fraction (`q`), mortality (`g`), emigration
+(`sigma`), emigration loss (`mu`), oviposition rate (`nu`), and EIP duration.
+Use only the parameters relevant to the model.
 
 ## Interface outputs
 
@@ -281,11 +251,29 @@ Implement the following methods with one value per patch:
 
 Each method receives `t`, `y`, `xds_obj`, and `s`.
 
+For egg production, use "Compute egg production for `module` (**MY**)".
+Use the description "Return the number of eggs laid by the adult mosquito
+population, per patch" and return "a [numeric] vector of length `nPatches`".
+Inherit the module NULL anchor's `Egg Laying` section using
+`@inheritSection newMYname Egg Laying`. In that section, explain which
+mosquitoes lay eggs: total adult density or, in behavioral-state
+models, gravid density. Multiply that density by the oviposition rate and
+eggs per batch. Link the method to its module and `ramp.xds::EggLaying`.
+
+For biting outputs, describe daily biting density on humans in each patch,
+not a per-host biting rate. Use the titles and numeric-vector return contract
+below, link the two methods reciprocally, and explain any model-specific
+formula or behavioral-state restriction. Generic dispatch selects
+`xds_obj$MY_obj[[s]]`. Preserve formulas and flag return-shape or
+parameter-lookup discrepancies separately during documentation review.
+
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Compute newMYname infective biting density
-#' @description Implements [ramp.xds::F_fqZ] for newMYname.
+#' @title Compute infective mosquito biting density for `newMYname` (**MY**)
+#' @description Return the daily infective mosquito biting density on humans,
+#' `fqZ`, for each patch in the `newMYname` module.
 #' @inheritParams ramp.xds::F_fqZ
-#' @return a numeric vector with one value per patch
+#' @seealso [F_fqM.newMYname]
+#' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqZ.newMYname <- function(t, y, xds_obj, s) {
   with(get_MY_vars(y, xds_obj, s), {
@@ -296,10 +284,12 @@ F_fqZ.newMYname <- function(t, y, xds_obj, s) {
   })
 }
 
-#' @title Compute newMYname human biting density
-#' @description Implements [ramp.xds::F_fqM] for newMYname.
+#' @title Compute mosquito biting density for `newMYname` (**MY**)
+#' @description Return the daily mosquito biting density on humans,
+#' `fqM`, for each patch in the `newMYname` module.
 #' @inheritParams ramp.xds::F_fqM
-#' @return a numeric vector with one value per patch
+#' @seealso [F_fqZ.newMYname]
+#' @return a [numeric] vector of length `nPatches`
 #' @export
 F_fqM.newMYname <- function(t, y, xds_obj, s) {
   with(get_MY_vars(y, xds_obj, s), {
@@ -310,10 +300,12 @@ F_fqM.newMYname <- function(t, y, xds_obj, s) {
   })
 }
 
-#' @title Compute newMYname egg production
-#' @description Implements [ramp.xds::F_eggs] for newMYname.
+#' @title Compute egg production for `newMYname` (**MY**)
+#' @description Return the number of eggs laid by the adult mosquito population, per patch
+#' @inheritSection newMYname Egg Laying
 #' @inheritParams ramp.xds::F_eggs
-#' @return a numeric vector with one value per patch
+#' @seealso [newMYname], [ramp.xds::EggLaying]
+#' @return a [numeric] vector of length `nPatches`
 #' @export
 F_eggs.newMYname <- function(t, y, xds_obj, s) {
   with(get_MY_vars(y, xds_obj, s), {
@@ -325,7 +317,377 @@ F_eggs.newMYname <- function(t, y, xds_obj, s) {
 }
 ```
 
-## Skill set and checks
+## Dynamical parameter accessors
+
+Implement `get_f`, `get_q`, `get_g`, and `get_sigma` methods when the module
+supplies those parameters. They return stored realized values, without
+evaluating ports or applying effect sizes. Refresh port-backed values through
+bionomics and effect-size application first. These accessors are distinct
+from the module's documented parameter-reporting convention in `get_MY_pars`.
+
+Use the titles and short descriptions below, inherit the module NULL anchor's
+`Parameters` section, and return "a [numeric] vector of length `nPatches`".
+The shared generics document dispatch on `xds_obj$MY_obj[[s]]`.
+For BQ, BQm, and BRQS, `get_sigma` reads `sigma_b`, the blood-feeding
+emigration rate, not `sigma_q`. Their `get_g` methods read `g`; BRQS's
+state-specific mortality mismatch remains deferred.
+
+Add these parameters and their biological definitions to the module constructor
+and NULL anchor when implementing these optional methods.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get the feeding rate for `newMYname` (**MY**)
+#' @description Return the stored realized feeding rate per patch.
+#' @inheritSection newMYname Parameters
+#' @inheritParams ramp.xds::get_f
+#' @seealso [newMYname]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_f.newMYname <- function(xds_obj, s = 1) {
+  xds_obj$MY_obj[[s]]$f
+}
+
+#' @title Get the human blood fraction for `newMYname` (**MY**)
+#' @description Return the stored realized human blood fraction per patch.
+#' @inheritSection newMYname Parameters
+#' @inheritParams ramp.xds::get_q
+#' @seealso [newMYname]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_q.newMYname <- function(xds_obj, s = 1) {
+  xds_obj$MY_obj[[s]]$q
+}
+
+#' @title Get the adult mosquito mortality rate for `newMYname` (**MY**)
+#' @description Return the stored realized adult mosquito mortality rate per patch.
+#' @inheritSection newMYname Parameters
+#' @inheritParams ramp.xds::get_g
+#' @seealso [newMYname]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_g.newMYname <- function(xds_obj, s = 1) {
+  xds_obj$MY_obj[[s]]$g
+}
+
+#' @title Get the patch emigration rate for `newMYname` (**MY**)
+#' @description Return the stored realized patch emigration rate per patch.
+#' @inheritSection newMYname Parameters
+#' @inheritParams ramp.xds::get_sigma
+#' @seealso [newMYname]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_sigma.newMYname <- function(xds_obj, s = 1) {
+  xds_obj$MY_obj[[s]]$sigma
+}
+```
+
+## Mosquito-matrix accessors
+
+Use the shared `ramp.xds::get_Omega(xds_obj, s = 1)` and
+`ramp.xds::get_Upsilon(xds_obj, s = 1)` to retrieve the stored mosquito
+demographic matrix, $\Omega$, and EIP survival-and-dispersal matrix,
+$\Upsilon$, respectively. Do not implement module-specific getter methods.
+They read `xds_obj$MY_obj[[s]]$Omega` and `xds_obj$MY_obj[[s]]$Upsilon`
+without recomputing matrices or modifying the model object. Each returns
+a matrix of dimensions `nPatches` by `nPatches`, or `NULL` if the
+corresponding matrix is not stored.
+
+Their titles are "Get the mosquito demographic matrix (**MY**)" and
+"Get the EIP survival-and-dispersal matrix (**MY**)". Document storage
+and the absence of recomputation in `@note`, and link to the other getter,
+the corresponding `ramp.xds::change_Omega` or `ramp.xds::change_Upsilon`
+function, and `ramp.xds::xds_info_mosquito_demography`.
+
+## Model object and state variables
+
+Use the constructor title "Make a module object for `module` (**MY**)".
+Describe parameter initialization and `options` overrides. The constructor,
+parameter getter, and parameter changer each link to the other two in
+`@seealso`; describe any differences in their parameter coverage.
+
+`make_MY_obj_newMYname` creates the module-specific list and assigns its class.
+`setup_MY_obj.newMYname` attaches it to the full `xds_obj`. Include the
+parameters and any model-specific objects needed by the equations. Parameters
+that use the shared bionomics or dispersal interfaces should be set up with
+the corresponding `ramp.xds` helpers.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Make a module object for `newMYname` (**MY**)
+#' @description Create a `newMYname` module object and initialize its parameters.
+#' Inspect parameters with [get_MY_pars.newMYname] and change supported values
+#' with [change_MY_pars.newMYname]. Values in `options` override parameter arguments.
+#' @seealso [get_MY_pars.newMYname], [change_MY_pars.newMYname]
+#' @param nPatches number of patches
+#' @param options named values that override defaults
+#' @return a list
+#' @export
+make_MY_obj_newMYname <- function(nPatches, options = list(), p1 = 1) {
+  with(options, {
+    MY_obj <- list()
+    MY_obj$p1 <- checkIt(p1, nPatches)
+    MY_obj$nPatches <- nPatches
+    class(MY_obj) <- "newMYname"
+    MY_obj
+  })
+}
+
+#' @title Set up the module object for `newMYname` (**MY**)
+#' @description Set up a `newMYname` module object for the **MY** component
+#' and the \eqn{s^{th}} vector species.
+#' + Create the module object with [make_MY_obj_newMYname], passing `nPatches` and `options`.
+#' + Set the skill set using [ramp.xds::get_skillset_MY].
+#' + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.
+#' + Return the updated **`xds`** model object.
+#' @note The module object is stored at `xds_obj$MY_obj[[s]]`.
+#' @inheritParams ramp.xds::setup_MY_obj
+#' @return an **`xds`** model object
+#' @export
+setup_MY_obj.newMYname <- function(MYname, xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]] <- make_MY_obj_newMYname(xds_obj$nPatches, options)
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
+  xds_obj <- setup_MY_inits(xds_obj, options = options, s = s)
+  xds_obj
+}
+```
+
+## Parameters
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get parameters for `newMYname` (**MY**)
+#' @description Return the parameters for the `newMYname` module as a named list.
+#' @inheritParams ramp.xds::get_MY_pars
+#' @seealso [make_MY_obj_newMYname], [change_MY_pars.newMYname]
+#' @return a named [list] of parameter values
+#' @export
+get_MY_pars.newMYname <- function(xds_obj, s = 1) {
+  with(xds_obj$MY_obj[[s]], list(p1 = p1))
+}
+
+#' @title Change parameters for `newMYname` (**MY**)
+#' @description Change parameter values named in `options` for the `newMYname`
+#' module, leaving other values unchanged.
+#' This example supports changes to `p1`.
+#' Call [ramp.xds::MBionomics] at time zero after changing parameters;
+#' do not call [ramp.xds::MEffectSizes].
+#' @inheritParams ramp.xds::change_MY_pars
+#' @seealso [make_MY_obj_newMYname], [get_MY_pars.newMYname]
+#' @return an **`xds`** model object
+#' @export
+change_MY_pars.newMYname <- function(xds_obj, options = list(), s = 1) {
+  if ("p1" %in% names(options)) {
+    xds_obj$MY_obj[[s]]$p1 <- checkIt(options$p1, xds_obj$nPatches)
+  }
+  y <- ramp.xds::get_inits(xds_obj, flatten = TRUE)
+  xds_obj <- ramp.xds::MBionomics(0, y, xds_obj, s)
+  xds_obj
+}
+```
+
+Implement `get_MY_pars.newMYname` and `change_MY_pars.newMYname` for the
+parameters users should inspect and change.
+
+## Initial values
+
+Use the shared `ramp.xds::get_MY_inits` function to return stored initial
+values for the selected vector species; do not implement a module-specific
+getter. It returns the `inits` field directly as a named list, preserves an
+empty list, and returns `NULL` if the field is absent (as in `trivialMY`).
+Getter documentation uses "Get initial values (**MY**)", describes returning
+stored values, puts storage in `@note`, and links to setup/change functions.
+
+`make_MY_inits_newMYname` returns a named list containing an initial value for
+every state variable. `setup_MY_inits.newMYname` stores those values in the
+module object, and `change_MY_inits.newMYname` updates named values after
+setup.
+
+Use the constructor title and description below, preserving any
+model-specific explanation. Its return description is "a named [list] of
+initial values". The constructor, setup method, and change method each
+link to the other two in `@seealso`.
+Document numeric scalar expansion to `nPatches`, module-specific length
+exceptions, input restrictions, and internally constructed accessory values
+that cannot be set independently through `options`.
+For changers, document supported values and special behavior, put storage
+explanations in `@note`, and return "an **`xds`** model object". Check
+preservation of unspecified values and other species; report implementation
+discrepancies separately during documentation alignment.
+
+Partial updates must read fallback values from the selected module's
+`inits` list, not from its parent module object; preserve other species
+and any fields not supported by the changer.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Make initial values for `newMYname` (**MY**)
+#' @description Create a named list of initial values for the `newMYname` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nPatches`.
+#' Scalars are expanded to that length.
+#' @param nPatches number of patches
+#' @param options named values that override defaults
+#' @param M initial adult mosquito density
+#' @param Y initial infected mosquito density
+#' @return a named [list] of initial values
+#' @seealso [setup_MY_inits.newMYname], [change_MY_inits.newMYname]
+#' @export
+make_MY_inits_newMYname <- function(nPatches, options = list(), M = 10, Y = 1) {
+  with(options, {
+    M <- checkIt(M, nPatches)
+    Y <- checkIt(Y, nPatches)
+    list(M = M, Y = Y)
+  })
+}
+
+#' @title Set up initial values for `newMYname` (**MY**)
+#' @description Set up initial values for the `newMYname` module using
+#' [make_MY_inits_newMYname]. Values in `options` override the defaults.
+#' @note Initial values are stored at `xds_obj$MY_obj[[s]]$inits`.
+#' @inheritParams ramp.xds::setup_MY_inits
+#' @seealso [make_MY_inits_newMYname], [change_MY_inits.newMYname]
+#' @return an **`xds`** model object
+#' @export
+setup_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]]$inits <-
+    make_MY_inits_newMYname(xds_obj$nPatches, options)
+  xds_obj
+}
+
+#' @title Change initial values for `newMYname` (**MY**)
+#' @description Change initial values named in `options` for the `newMYname`
+#' module, leaving other values unchanged.
+#' @note Stored initial values for this module are at
+#' `xds_obj$MY_obj[[s]]$inits`.
+#' @inheritParams ramp.xds::change_MY_inits
+#' @seealso [make_MY_inits_newMYname], [setup_MY_inits.newMYname]
+#' @return an **`xds`** model object
+#' @export
+change_MY_inits.newMYname <- function(xds_obj, options = list(), s = 1) {
+  xds_obj$MY_obj[[s]]$inits[names(options)] <- options
+  xds_obj
+}
+```
+
+## Initial-density accessors
+
+Implement `get_M` and `get_Z` only when the module supports these initial
+density queries. They return initial adult and infective mosquito densities,
+not current solver states or output trajectories. Use the titles and short
+descriptions below, inherit the module NULL anchor's `State Variables`
+section, and keep model-specific explanations there rather than repeating
+derivations in accessor descriptions. The shared generics document dispatch
+on `xds_obj$MY_obj[[s]]`.
+
+The examples assume the module stores initial `M` and `Z` values; adapt the
+implementation to the module's actual initial-state representation.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Get the initial adult mosquito density for `newMYname` (**MY**)
+#' @description Return the initial adult mosquito density per patch.
+#' @inheritSection newMYname State Variables
+#' @inheritParams ramp.xds::get_M
+#' @seealso [newMYname], [ramp.xds::get_MY_inits]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_M.newMYname <- function(xds_obj, s = 1) {
+  ramp.xds::get_MY_inits(xds_obj, s)$M
+}
+
+#' @title Get the initial infective mosquito density for `newMYname` (**MY**)
+#' @description Return the initial infective mosquito density per patch.
+#' @inheritSection newMYname State Variables
+#' @inheritParams ramp.xds::get_Z
+#' @seealso [newMYname], [ramp.xds::get_MY_inits]
+#' @return a [numeric] vector of length `nPatches`
+#' @export
+get_Z.newMYname <- function(xds_obj, s = 1) {
+  ramp.xds::get_MY_inits(xds_obj, s)$Z
+}
+```
+
+## State indices
+
+
+Retrieve stored indices with the shared `ramp.xds::get_MY_ix(xds_obj, s = 1)`;
+the species index defaults to 1. Do not implement a module-specific getter.
+It returns the `ix` field directly: a named list of variable indices, an
+empty list if stored, or `NULL` if absent. Getter documentation uses
+"Get variable indices (**MY**)", describes returning stored indices for
+the selected vector species, puts storage in `@note`, and links to `setup_MY_ix`.
+
+`setup_MY_ix.newMYname` assigns a contiguous index range to each state
+variable. The example follows the SI implementation; add or remove index
+ranges to match the model and store them in the named list at
+`xds_obj$MY_obj[[s]]$ix`.
+
+Use the title and description below, documenting actual allocation order
+and block lengths, including any auxiliary or matrix/cohort blocks.
+Put storage and the updated maximum in `@note`. Return the model object,
+not the index list; flag legacy storage or return errors separately.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Set up variable indices for `newMYname` (**MY**)
+#' @description Assign consecutive variable indices for the `newMYname` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `M_ix`, `Y_ix`.
+#' Each block has length `nPatches`.
+#' @note Indices are stored at `xds_obj$MY_obj[[s]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
+#' @inheritParams ramp.xds::setup_MY_ix
+#' @return an **`xds`** model object
+#' @importFrom utils tail
+#' @export
+setup_MY_ix.newMYname <- function(xds_obj, s) {
+  with(xds_obj, {
+    M_ix <- seq(from = max_ix + 1, length.out = nPatches)
+    max_ix <- tail(M_ix, 1)
+
+    Y_ix <- seq(from = max_ix + 1, length.out = nPatches)
+    max_ix <- tail(Y_ix, 1)
+
+    xds_obj$max_ix <- max_ix
+    xds_obj$MY_obj[[s]]$ix <- list(M_ix = M_ix, Y_ix = Y_ix)
+    xds_obj
+  })
+}
+```
+
+## Parsing outputs
+
+After solving, retrieve the saved results with the shared
+`ramp.xds::get_MY_orbits(xds_obj, s = 1)`; do not implement a module-specific
+orbit getter. Its title is "Get orbits (**MY**)". It returns a list of
+module-specific orbits (trajectories) for **MY** for the selected species
+from `xds_obj$outputs$orbits$MY[[s]]`, with
+`time` added from `xds_obj$outputs$time`. It neither parses outputs nor
+modifies the model object. Link its documentation to `parse_MY_orbits`
+and `xds_solve`.
+
+`parse_MY_orbits.newMYname` extracts the same state variables from the solver
+output matrix. It can also return derived quantities, such as prevalence or
+parity, when those quantities are defined for the model.
+
+This method processes trajectories after solving. Document derived quantities
+and index storage in its Roxygen block, and use "a [list]" for returns.
+It returns results without modifying the model object; the output-processing
+pipeline stores them at `xds_obj$outputs$orbits$MY[[s]]`.
+
+```{r, eval=TRUE, purl=TRUE}
+#' @title Parse outputs for `newMYname` (**MY**)
+#' @description Extract the model state outputs for the `newMYname` module
+#' from `outputs` and return them by name in a list.
+#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.
+#' @inheritParams ramp.xds::parse_MY_orbits
+#' @return a [list]
+#' @export
+parse_MY_orbits.newMYname <- function(outputs, xds_obj, s) {
+  with(xds_obj$MY_obj[[s]]$ix, {
+    M <- outputs[, M_ix]
+    Y <- outputs[, Y_ix]
+    list(M = M, Y = Y)
+  })
+}
+```
+
+## Checks and skill set
 
 Implement `get_skillset_MY.newMYname` to return the module's capabilities
 and limitations as a list. Store this list on the module object during setup.
@@ -333,20 +695,22 @@ Implement `check_MY.newMYname` for model-specific setup
 checks that should run before solving.
 
 ```{r, eval=TRUE, purl=TRUE}
-#' @title Get newMYname skill set
-#' @inheritParams ramp.xds::get_skillset_MY
-#' @return the **MY** module skill set, as a list
-#' @export
-get_skillset_MY.newMYname <- function(xds_obj, s) {
-  list(delay=FALSE)
-}
-
-#' @title Check newMYname setup
+#' @title Check `newMYname` (**MY**)
+#' @description Return the model unchanged; no checks are implemented in this template.
 #' @inheritParams ramp.xds::check_MY
 #' @return an **`xds`** model object
 #' @export
 check_MY.newMYname <- function(xds_obj, s) {
   xds_obj
+}
+
+#' @title Get the skill set for `newMYname` (**MY**)
+#' @description Return the capabilities and compatibilities of the `newMYname` module as a list.
+#' @inheritParams ramp.xds::get_skillset_MY
+#' @return the **MY** module skill set, as a list
+#' @export
+get_skillset_MY.newMYname <- function(xds_obj, s) {
+  list(dts=FALSE, delay=FALSE)
 }
 ```
 
@@ -358,11 +722,40 @@ defined for the model. The MY interface does not define MY-specific plotting
 generics; model-specific plots can use the parsed output from
 `parse_MY_orbits.newMYname`.
 
+Use "Compute steady states for `module` (**MY**)" for method titles.
+Descriptions identify the inputs and supported equation system; return tags
+identify the actual type and state names. The M, Y, and MY generics dispatch
+on `xds_obj$MY_obj[[s]]`. If the module supports multiple equation systems,
+follow the basicM pattern: delegate to a module-specific generic that dispatches
+on `xds_obj$xds`. Do not imply this second stage exists for every module.
+Keep existing list/numeric-vector differences explicit, preserve formulas,
+and return values without storing them on the model object.
+
 Add the module to the appropriate source file in `ramp.library` and write
 tests that check the equations and integration with `ramp.xds`. For example,
 check that initial values have the expected names and dimensions, that
 derivatives or updates preserve state ordering, and that the biting and egg
 outputs have one value per patch.
+
+## Plotting
+
+Use the shared `ramp.xds::xds_plot_M`, `ramp.xds::xds_plot_Y`, and
+`ramp.xds::xds_plot_Z` helpers when parsed outputs include adult, infected,
+and infective mosquito densities. The fraction helpers
+`ramp.xds::xds_plot_Y_fracs` and `ramp.xds::xds_plot_Z_fracs` require saved
+`y = Y/M` and `z = Z/M`; they do not compute fractions.
+These ordinary functions read the selected species' saved orbits through
+`ramp.xds::get_MY_orbits` and draw one line per patch. Do not implement
+module-specific methods for them.
+
+Plot helpers create a new plot unless `add = TRUE`; corresponding
+`ramp.xds::xds_lines_*` helpers add lines to an existing plot.
+Pass one color or line type for all patches, or vectors with one value per
+patch. The helpers return `invisible(NULL)`.
+Use titles such as "Plot infected mosquito density (**MY**)" and
+"Add lines for the infective mosquito fraction (**MY**)". Keep required
+fields and overlay behavior in `@note`, and link plot and line helpers
+reciprocally. Module-specific visualization remains optional.
 
 ## Reusable model code
 

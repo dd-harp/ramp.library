@@ -1,5 +1,19 @@
 # specialized methods for the adult mosquito BRQS model
 
+# TODO: Reconcile constructor inputs with the state-specific parameter fields;
+# several referenced parameters are not defined by its arguments or defaults.
+# Confirm the intended sigma_s and mu_s inputs: the constructor currently
+# initializes them from sigma_q and mu_q.
+# TODO: Align get_MY_pars.BRQS and constructor demographic matrices with the
+# state-specific parameter fields; both still reference legacy generic inputs.
+# TODO: Review F_fqZ.BRQS and F_fqM.BRQS: both obtain q using get_f, not get_q.
+# TODO: Review dMYdt.BRQS: all three blood-feeding equations use total R in
+# xi*R rather than the corresponding Ru, Ry, or Rz. Confirm the intended flows.
+# TODO: Reconcile dMYdt.BRQS's generic g in resting-state losses with the
+# state-specific mortality parameters, including g_r.
+# TODO: Align dMYdt.BRQS's top-level Lambda and kappa reads with the shared
+# dynamical terms at xds_obj$terms$Lambda and xds_obj$terms$kappa.
+
 #' @title The `BRQS` module for the **MY** component
 #' @description
 #' Implements the **MY** component using a BRQS (Blood-feeding / Resting /
@@ -78,7 +92,7 @@
 #'
 #' @section Egg Laying:
 #' Gravid mosquitoes lay eggs at rate \eqn{\nu}; egg production is the number
-#' of gravid mosquitoes multiplied by the egg batch rate and eggs per batch:
+#' of gravid mosquitoes multiplied by the oviposition rate and eggs per batch:
 #' \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
 #' [F_eggs.BRQS] computes \eqn{G}, which is passed to [ramp.xds::EggLaying]
 #' for distribution among aquatic habitats.
@@ -94,31 +108,31 @@
 #' @rdname BRQS
 NULL
 
-#' @title The skill set
-#'
-#' @inheritParams ramp.xds::get_skillset_MY
-#'
-#' @return the **MY** module skill set, as a list
-#'
-#' @keywords internal
-#' @export
-get_skillset_MY.BRQS = function(xds_obj, s){
-  skills = list(
-    delay = FALSE,
-    not_implemented = TRUE
-  )
-  return(skills)
-}
-
-#' @title Compute derivatives for `BRQS` (**MY**)
-#' @description Implements [dMYdt] for the BRQS ODE model.
+#' @title Compute the derivatives for `BRQS` (**MY**)
+#' @description Compute the derivatives for the `BRQS` module:
+#' \deqn{\begin{array}{rl}
+#' dS_u/dt &= \omega\Lambda+\zeta B_u+(\nu+\theta)(1-\delta)Q_u-\rho S_u-\Omega_s\cdot S_u \\
+#' dB_u/dt &= (1-\omega)\Lambda+\rho S_u+(\nu+\theta)\delta Q_u+\xi R-(f+\zeta)B_u-\Omega_b\cdot B_u \\
+#' dR_u/dt &= f(1-q\kappa)B_u-(\xi+\eta+g)R_u \\
+#' dQ_u/dt &= \eta R_u-(\nu+\theta)Q_u-\Omega_q\cdot Q_u \\
+#' dS_y/dt &= \zeta B_y+(\nu+\theta)(1-\delta)Q_y-\rho S_y-\Omega_s\cdot S_y-\tau S_y \\
+#' dB_y/dt &= \rho S_y+(\nu+\theta)\delta Q_y+\xi R-(f+\zeta)B_y-\Omega_b\cdot B_y-\tau B_y \\
+#' dR_y/dt &= fq\kappa B_u+fB_y-(\xi+\eta+g)R_y-\tau R_y \\
+#' dQ_y/dt &= \eta R_y-(\nu+\theta)Q_y-\Omega_q\cdot Q_y-\tau Q_y \\
+#' dS_z/dt &= \zeta B_z+(\nu+\theta)(1-\delta)Q_z-\rho S_z-\Omega_s\cdot S_z+\tau S_y \\
+#' dB_z/dt &= \rho S_z+(\nu+\theta)\delta Q_z+\xi R-(f+\zeta)B_z-\Omega_b\cdot B_z+\tau B_y \\
+#' dR_z/dt &= fB_z-(\xi+\eta+g)R_z+\tau R_y \\
+#' dQ_z/dt &= \eta R_z-(\nu+\theta)Q_z-\Omega_q\cdot Q_z+\tau Q_y
+#' \end{array}}
 #' @inheritSection BRQS State Variables
 #' @inheritSection BRQS Dynamical Terms
 #' @inheritSection BRQS Parameters
 #' @inheritSection BRQS Dynamics
 #' @inheritParams ramp.xds::dMYdt
 #' @seealso [BRQS], [F_fqZ.BRQS], [F_eggs.BRQS]
-#' @return a [numeric] vector
+#' @note Derivatives are returned in blocks for `Su`, `Bu`, `Ru`, `Qu`,
+#' `Sy`, `By`, `Ry`, `Qy`, `Sz`, `Bz`, `Rz`, and `Qz`, each in patch order.
+#' @return a [numeric] vector of derivatives in the module's state-variable order
 #' @keywords internal
 #' @export
 dMYdt.BRQS <- function(t, y, xds_obj, s){
@@ -151,37 +165,47 @@ dMYdt.BRQS <- function(t, y, xds_obj, s){
   })
 }
 
-#' @title Return the variables as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`
+#' @title Get the state variables for `BRQS` (**MY**)
+#' @description Extract the state variables for the `BRQS` module
+#' from `y` and return them by name in a list for use during model solving.
+#' Also compute totals `B`, `R`, `Q`, `S`, and `M` across behavioral states.
 #' @inheritSection BRQS State Variables
 #' @inheritParams ramp.xds::get_MY_vars
-#' @return a [list]
+#' @return a named [list] of state variables and module-specific derived quantities
 #' @seealso [BRQS], [setup_MY_obj.BRQS]
 #' @keywords internal
 #' @export
+#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.
 get_MY_vars.BRQS<- function(y, xds_obj, s){
-  with(xds_obj$MY_obj[[s]]$ix, return(list(
-    Su <- y[Su_ix],
-    Bu <- y[Bu_ix],
-    Ru <- y[Ru_ix],
-    Qu <- y[Qu_ix],
-    Sy <- y[Sy_ix],
-    By <- y[By_ix],
-    Ry <- y[Ry_ix],
-    Qy <- y[Qy_ix],
-    Sz <- y[Sz_ix],
-    Bz <- y[Bz_ix],
-    Rz <- y[Rz_ix],
-    Qz <- y[Qz_ix],
-    B = Bu+By+Bz,
-    R = Ru+Ry+Rz,
-    Q = Qu+Qy+Qz,
-    S = Su+Sy+Sz,
-    M = B+R+Q+S
-)))}
+  with(xds_obj$MY_obj[[s]]$ix, {
+    Su <- y[Su_ix]
+    Bu <- y[Bu_ix]
+    Ru <- y[Ru_ix]
+    Qu <- y[Qu_ix]
+    Sy <- y[Sy_ix]
+    By <- y[By_ix]
+    Ry <- y[Ry_ix]
+    Qy <- y[Qy_ix]
+    Sz <- y[Sz_ix]
+    Bz <- y[Bz_ix]
+    Rz <- y[Rz_ix]
+    Qz <- y[Qz_ix]
+    B <- Bu+By+Bz
+    R <- Ru+Ry+Rz
+    Q <- Qu+Qy+Qz
+    S <- Su+Sy+Sz
+    return(list(
+      Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
+      Sy=Sy, By=By, Ry=Ry, Qy=Qy,
+      Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz,
+      B=B, R=R, Q=Q, S=S, M=B+R+Q+S
+    ))
+  })
+}
 
 #' @title Mosquito bionomics for `BRQS` (**MY**)
-#' @description Implements [MBionomics] for the BRQS model
+#' @description Leave directly stored parameters unchanged. This module
+#' does not configure bionomic parameter ports.
 #' @inheritSection BRQS Parameters
 #' @inheritSection BRQS Survival and Dispersal
 #' @inheritSection BRQS Blood Feeding
@@ -190,27 +214,14 @@ get_MY_vars.BRQS<- function(y, xds_obj, s){
 #' @return an **`xds`** model object
 #' @keywords internal
 #' @export
-MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
-  xds_obj$MY_obj[[s]]$es_f       <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_q       <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_nu      <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_g_s     <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_g_b     <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_g_r     <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_g_q     <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_sigma_b <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_sigma_q <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_sigma_s <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_mu_b    <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_mu_q    <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_mu_s    <- rep(1, nPatches)
-  xds_obj$MY_obj[[s]]$es_theta   <- rep(1, nPatches)
-  return(pars)
-})}
+MBionomics.BRQS <- function(t, y, xds_obj, s) {
+  return(xds_obj)
+}
 
 
 #' @title Apply effect sizes for `BRQS` (**MY**)
-#' @description Implements [MEffectSizes] for the BRQS model
+#' @description Leave directly stored parameters unchanged. This module
+#' does not configure bionomic parameter ports or apply effect sizes.
 #' @inheritSection BRQS Parameters
 #' @inheritSection BRQS Survival and Dispersal
 #' @inheritParams ramp.xds::MEffectSizes
@@ -218,54 +229,51 @@ MBionomics.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
 #' @return an **`xds`** model object
 #' @keywords internal
 #' @export
-MEffectSizes.BRQS <- function(t, y, xds_obj, s) {with(xds_obj$MY_obj[[s]],{
-  xds_obj$MY_obj[[s]]$f <- es_f*f_t
-  xds_obj$MY_obj[[s]]$q <- es_q*q_t
-  g <- es_g*g_t
-  sigma_b <- es_sigma_b*sigma_b_t
-  sigma_q <- es_sigma_q*sigma_q_t
-  xds_obj$MY_obj[[s]]$g <- g
-  xds_obj$MY_obj[[s]]$sigma_b <- sigma_b
-  xds_obj$MY_obj[[s]]$sigma_q <- sigma_q
-  xds_obj$MY_obj[[s]]$Omega_b = compute_Omega_xde(g, sigma_b, mu, calKb)
-  xds_obj$MY_obj[[s]]$Omega_q = compute_Omega_xde(g, sigma_q, mu, calKq)
-  return(pars)
-})}
+MEffectSizes.BRQS <- function(t, y, xds_obj, s) {
+  return(xds_obj)
+}
 
-#' @title Infective mosquito biting rate for `BRQS`
-#' @description Implements [F_fqZ] for the BRQS model.
+#' @title Compute infective mosquito biting density for `BRQS` (**MY**)
+#' @description Return the daily infective mosquito biting density on humans,
+#' `fqZ`, for each patch in the `BRQS` module.
+#' Use only the blood-feeding behavioral states: `fqZ = f*q*Bz`.
 #' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::F_fqZ
 #' @seealso [BRQS], [F_fqM.BRQS]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
+#' @note The current implementation obtains `q` using `get_f`
+#' rather than `get_q`; this discrepancy requires repair.
 F_fqZ.BRQS <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
   q = get_f(xds_obj, s)
-  fqZ = f*q*y[xds_obj$ix$MY[[s]]$Z_b_ix]
+  fqZ = f*q*y[xds_obj$MY_obj[[s]]$ix$Bz_ix]
   return(fqZ)
 }
 
-#' @title Mosquito biting rate for `BRQS`
-#' @description Returns `fqM`, the daily mosquito biting density on humans
-#' for each patch in the BRQS model.
+#' @title Compute mosquito biting density for `BRQS` (**MY**)
+#' @description Return the daily mosquito biting density on humans,
+#' `fqM`, for each patch in the `BRQS` module.
+#' Use only the blood-feeding behavioral states: `fqM = f*q*(Bu+By+Bz)`.
 #' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::F_fqM
-#' @seealso [BRQS], [ramp.xds::F_hbr]
+#' @seealso [BRQS], [ramp.xds::F_hbr], [F_fqZ.BRQS]
 #' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
+#' @note The current implementation obtains `q` using `get_f`
+#' rather than `get_q`; this discrepancy requires repair.
 F_fqM.BRQS <- function(t, y, xds_obj, s) {
   f = get_f(xds_obj, s)
   q = get_f(xds_obj, s)
-  M = with(xds_obj$ix$MY[[s]], y[Bu_ix] + y[By_ix] + y[Bz_ix])
+  M = with(xds_obj$MY_obj[[s]]$ix, y[Bu_ix] + y[By_ix] + y[Bz_ix])
   fqM = f*q*M
   return(fqM)
 }
 
-#' @title Egg production rate for `BRQS`
-#' @description Implements [F_eggs] for the BRQS model.
+#' @title Compute egg production for `BRQS` (**MY**)
+#' @description Return the number of eggs laid by the adult mosquito population, per patch
 #' @inheritSection BRQS Egg Laying
 #' @inheritParams ramp.xds::F_eggs
 #' @seealso [BRQS], [ramp.xds::EggLaying]
@@ -274,7 +282,7 @@ F_fqM.BRQS <- function(t, y, xds_obj, s) {
 #' @export
 F_eggs.BRQS <- function(t, y, xds_obj, s) {
 
-  G <- with(xds_obj$ix$MY[[s]], y[Qu_ix] + y[Qy_ix] + y[Qz_ix])
+  G <- with(xds_obj$MY_obj[[s]]$ix, y[Qu_ix] + y[Qy_ix] + y[Qz_ix])
   eggs = with(xds_obj$MY_obj[[s]], {
     return(G*nu*eggsPerBatch)
   })
@@ -282,38 +290,65 @@ F_eggs.BRQS <- function(t, y, xds_obj, s) {
 }
 
 
-#' @title Set up `BRQS` (**MY**)
-#' @description
-#'
-#' This sets up a `BRQS` model object for the **MY** module for the \eqn{s^{th}} vector species
-#' + the object is created by [make_MY_obj_BRQS]
-#' + the initial conditions are set by [setup_MY_inits]
-#' + `options` is passed to both to override the defaults
-#'
-#' @inheritSection BRQS State Variables
+#' @title Get the feeding rate for `BRQS` (**MY**)
+#' @description Return the stored realized feeding rate per patch.
 #' @inheritSection BRQS Parameters
-#' @inheritSection BRQS Dynamics
-#' @seealso [BRQS], [make_MY_obj_BRQS], [setup_MY_inits.BRQS]
-#'
-#' @note The module object is stored at `xds_obj$MY_obj[[s]]`
-#'
-#' @inheritParams ramp.xds::setup_MY_obj
-#' @return a [list] vector
+#' @inheritParams ramp.xds::get_f
+#' @seealso [BRQS]
+#' @details Read `f` without evaluating ports or applying effect sizes.
+#' @return a [numeric] vector of length `nPatches`
 #' @keywords internal
 #' @export
-setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
-  xds_obj$MYname <- "BRQS"
-  xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
-  xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
-  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
-  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
-  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
-  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Ks"), s=s)
-  xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
-  return(xds_obj)
+get_f.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], f)
 }
 
-#' @title Make parameters for `BRQS` (**MY**)
+#' @title Get the human blood fraction for `BRQS` (**MY**)
+#' @description Return the stored realized human blood fraction per patch.
+#' @inheritSection BRQS Parameters
+#' @inheritParams ramp.xds::get_q
+#' @seealso [BRQS]
+#' @details Read `q` without evaluating ports or applying effect sizes.
+#' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
+#' @export
+get_q.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], q)
+}
+
+#' @title Get the adult mosquito mortality rate for `BRQS` (**MY**)
+#' @description Return the stored realized adult mosquito mortality rate per patch.
+#' @inheritSection BRQS Parameters
+#' @inheritParams ramp.xds::get_g
+#' @seealso [BRQS]
+#' @details Read `g` without evaluating ports or applying effect sizes.
+#' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
+#' @export
+get_g.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], g)
+}
+
+#' @title Get the patch emigration rate for `BRQS` (**MY**)
+#' @description Return the stored realized patch emigration rate per patch.
+#' @inheritSection BRQS Parameters
+#' @inheritParams ramp.xds::get_sigma
+#' @seealso [BRQS]
+#' @details Read `sigma_b` without evaluating ports or applying effect sizes.
+#' This is the blood-feeding emigration rate, not the egg-laying emigration rate.
+#' @return a [numeric] vector of length `nPatches`
+#' @keywords internal
+#' @export
+get_sigma.BRQS = function(xds_obj, s=1){
+  with(xds_obj$MY_obj[[s]], sigma_b)
+}
+
+
+#' @title Make a module object for `BRQS` (**MY**)
+#' @description Create a `BRQS` module object and initialize its parameters.
+#' Inspect parameters with [get_MY_pars.BRQS] and change supported values
+#' with [change_MY_pars.BRQS]. Values in `options` override parameter arguments.
+#' @seealso [get_MY_pars.BRQS], [change_MY_pars.BRQS]
 #' @param nPatches is the number of patches, an integer
 #' @param options a [list] of values that overrides the defaults
 #' @param eip extrinsic incubation period
@@ -323,7 +358,8 @@ setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
 #' @param mu emigration loss
 #' @param f feeding rate
 #' @param q human blood fraction
-#' @param nu oviposition rate, per mosquito
+#' @param nu the oviposition rate: the number of egg batches laid in each patch,
+#' per mosquito, per day
 #' @param eggsPerBatch eggs laid per oviposition
 #' @return a [list]
 #' @keywords internal
@@ -343,53 +379,37 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
     MY_obj$eip_par <- eip_par
     MY_obj$eip     <- eip
 
-    MY_obj$f_t          <- checkIt(f, nPatches)
-    MY_obj$es_f         <- rep(1, nPatches)
+    MY_obj$f          <- checkIt(f, nPatches)
 
-    MY_obj$nu_t         <- checkIt(nu, nPatches)
-    MY_obj$es_nu        <- rep(1, nPatches)
+    MY_obj$nu         <- checkIt(nu, nPatches)
 
-    MY_obj$theta_t        <- checkIt(theta, nPatches)
-    MY_obj$es_theta        <- rep(1, nPatches)
+    MY_obj$theta        <- checkIt(theta, nPatches)
 
-    MY_obj$g_b_t         <- checkIt(g_b, nPatches)
-    MY_obj$es_g_b        <- rep(1, nPatches)
+    MY_obj$g_b         <- checkIt(g_b, nPatches)
 
-    MY_obj$g_q_t          <- checkIt(g_q, nPatches)
-    MY_obj$es_g_q         <- rep(1, nPatches)
+    MY_obj$g_q          <- checkIt(g_q, nPatches)
 
-    MY_obj$g_s_t          <- checkIt(g_s, nPatches)
-    MY_obj$es_g_s         <- rep(1, nPatches)
+    MY_obj$g_s          <- checkIt(g_s, nPatches)
 
-    MY_obj$g_r_t          <- checkIt(g_r, nPatches)
-    MY_obj$es_g_r         <- rep(1, nPatches)
+    MY_obj$g_r          <- checkIt(g_r, nPatches)
 
-    MY_obj$sigma_b_t    <- checkIt(sigma_b, nPatches)
-    MY_obj$es_sigma_b   <- rep(1, nPatches)
+    MY_obj$sigma_b    <- checkIt(sigma_b, nPatches)
 
-    MY_obj$sigma_q_t    <- checkIt(sigma_q, nPatches)
-    MY_obj$es_sigma_q   <- rep(1, nPatches)
+    MY_obj$sigma_q    <- checkIt(sigma_q, nPatches)
 
-    MY_obj$sigma_s_t    <- checkIt(sigma_q, nPatches)
-    MY_obj$es_sigma_s   <- rep(1, nPatches)
+    MY_obj$sigma_s    <- checkIt(sigma_q, nPatches)
 
-    MY_obj$mu_b_t    <- checkIt(mu_b, nPatches)
-    MY_obj$es_mu_b   <- rep(1, nPatches)
+    MY_obj$mu_b    <- checkIt(mu_b, nPatches)
 
-    MY_obj$mu_q_t    <- checkIt(mu_q, nPatches)
-    MY_obj$es_mu_q   <- rep(1, nPatches)
+    MY_obj$mu_q    <- checkIt(mu_q, nPatches)
 
-    MY_obj$mu_s_t    <- checkIt(mu_q, nPatches)
-    MY_obj$es_mu_s   <- rep(1, nPatches)
+    MY_obj$mu_s    <- checkIt(mu_q, nPatches)
 
-    MY_obj$xi_t           <- checkIt(xi, nPatches)
-    MY_obj$es_xi         <- rep(1, nPatches)
+    MY_obj$xi           <- checkIt(xi, nPatches)
 
-    MY_obj$eta_t           <- checkIt(eta, nPatches)
-    MY_obj$es_eta         <- rep(1, nPatches)
+    MY_obj$eta           <- checkIt(eta, nPatches)
 
-    MY_obj$q_t          <- checkIt(q, nPatches)
-    MY_obj$es_q         <- rep(1, nPatches)
+    MY_obj$q          <- checkIt(q, nPatches)
 
     MY_obj$eggsPerBatch <- eggsPerBatch
 
@@ -409,85 +429,96 @@ make_MY_obj_BRQS = function(nPatches, options=list(), eip=12,
     return(MY_obj)
 })}
 
-#' @title Return the parameters as a list
-#' @description This method dispatches on the type of `xds_obj$MY_obj[[s]]`.
+
+#' @title Set up the module object for `BRQS` (**MY**)
+#' @description
+#'
+#' Set up a `BRQS` module object for the **MY** component and the \eqn{s^{th}} vector species.
+#'
+#' + Set the module name to `BRQS`.
+#' + Create the module object with [make_MY_obj_BRQS], passing `nPatches` and `options`.
+#' + Initialize the circadian function using [ramp.xds::setup_F_circadian.setup].
+#' + Set the skill set using [ramp.xds::get_skillset_MY].
+#' + Initialize the mosquito dispersal matrices using [ramp.xds::setup_K_matrix.zero],
+#'   with `which_K = "Kb"`, `which_K = "Kq"`, and `which_K = "Ks"`.
+#' + Set initial values using [ramp.xds::setup_MY_inits], passing `options` to override defaults.
+#' + Return the updated **`xds`** model object.
+#'
+#' @inheritSection BRQS State Variables
 #' @inheritSection BRQS Parameters
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return a [list]
+#' @inheritSection BRQS Dynamics
+#' @seealso [BRQS], [make_MY_obj_BRQS], [setup_MY_inits.BRQS]
+#'
+#' @note The module object is stored at `xds_obj$MY_obj[[s]]`
+#'
+#' @inheritParams ramp.xds::setup_MY_obj
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+setup_MY_obj.BRQS = function(MYname, xds_obj, options=list(), s=1){
+  xds_obj$MYname <- "BRQS"
+  xds_obj$MY_obj[[s]] = make_MY_obj_BRQS(xds_obj$nPatches, options)
+  xds_obj <- setup_F_circadian("setup", xds_obj, s=s)
+  xds_obj$MY_obj[[s]]$skill_set <- get_skillset_MY(xds_obj, s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kb"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Kq"), s=s)
+  xds_obj <- setup_K_matrix("zero", xds_obj, options=list(which_K = "Ks"), s=s)
+  xds_obj <- setup_MY_inits(xds_obj, options=options, s=s)
+  return(xds_obj)
+}
+
+#' @title Get parameters for `BRQS` (**MY**)
+#' @description Return the parameters for the `BRQS` module as a named list.
+#' @inheritSection BRQS Parameters
+#' @inheritParams ramp.xds::get_MY_pars
+#' @return a named [list] of parameter values
 #' @seealso [BRQS], [change_MY_pars.BRQS]
+#' @seealso [make_MY_obj_BRQS]
 #' @keywords internal
 #' @export
 get_MY_pars.BRQS <- function(xds_obj, s=1) {
   with(xds_obj$MY_obj[[s]], list(
-    f=f_t, q=q_t, g=g_t, sigma_b=sigma_b_t, sigma_q = sigma_q_t, eip=eip, mu=mu_t,
-    nu=nu_t, eggsPerBatch=eggsPerBatch, calK=calK
+    f=f, q=q, g=g, sigma_b=sigma_b, sigma_q = sigma_q, eip=eip, mu=mu,
+    nu=nu, eggsPerBatch=eggsPerBatch, calK=calK
   ))
 }
 
 #' @title Change parameters for `BRQS` (**MY**)
-#' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
-#' change parameter values named in `options` leaving other values unchanged.
+#' @seealso [make_MY_obj_BRQS], [get_MY_pars.BRQS]
+#' @description Change parameter values named in `options` for the `BRQS`
+#' module, leaving other values unchanged.
+#' Update the direct parameter fields for `f`, `q`, `nu`, `g_s`, `g_b`, `g_r`, `g_q`,
+#' `mu_s`, `mu_b`, `mu_q`, `sigma_b`, `sigma_q`, `sigma_s`, `theta`, `xi`, and `eta`
+#' when supplied, as well as `eip` and `eggsPerBatch`.
+#' Call [ramp.xds::MBionomics] at time zero after the updates,
+#' without calling [ramp.xds::MEffectSizes].
 #' @inheritSection BRQS Parameters
 #' @inheritParams ramp.xds::change_MY_pars
 #' @return an **`xds`** model object
 #' @keywords internal
 #' @export
 change_MY_pars.BRQS <- function(xds_obj, options=list(), s=1) {
-  nHabitats <- xds_obj$nHabitats
-  with(xds_obj$MY_obj[[s]], with(options,{
-
-    xds_obj$MY_obj[[s]]$f_obj$f = f
-    xds_obj$MY_obj[[s]]$q_obj$q = q
-    xds_obj$MY_obj[[s]]$g_obj$g = g
-    xds_obj$MY_obj[[s]]$sigma_b_obj$sigma_b = sigma_b
-    xds_obj$MY_obj[[s]]$sigma_q_obj$sigma_q = sigma_q
-    xds_obj$MY_obj[[s]]$eip_obj$eip = eip
-    xds_obj$MY_obj[[s]]$mu_obj$mu = mu
-    xds_obj$MY_obj[[s]]$nu_obj$nu = nu
-    xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
-
-    y <- get_inits(xds_obj, flatten=TRUE)
-    xds_obj <- MBionomics(0, y, xds_obj, s)
-    xds_obj <- MEffectSizes(0, y, xds_obj, s)
-
-
-    xds_obj$MY_obj[[s]]$f_t = f
-    xds_obj$MY_obj[[s]]$q_t = q
-    xds_obj$MY_obj[[s]]$nu_t = nu
-    xds_obj$MY_obj[[s]]$g_s_t = g_s
-    xds_obj$MY_obj[[s]]$g_b_t = g_b
-    xds_obj$MY_obj[[s]]$g_r_t = g_r
-    xds_obj$MY_obj[[s]]$g_q_t = g_q
-    xds_obj$MY_obj[[s]]$mu_s_t = mu_s
-    xds_obj$MY_obj[[s]]$mu_b_t = mu_b
-    xds_obj$MY_obj[[s]]$mu_q_t = mu_q
-    xds_obj$MY_obj[[s]]$sigma_b_t = sigma_b
-    xds_obj$MY_obj[[s]]$sigma_q_t = sigma_q
-    xds_obj$MY_obj[[s]]$sigma_s_t = sigma_s
-    xds_obj$MY_obj[[s]]$eip = eip
-    xds_obj$MY_obj[[s]]$eggsPerBatch = eggsPerBatch
-    return(pars)
-  }))}
-
-#' @title Setup initial values for `BRQS` (**MY**)
-#' @description Set initial values for all the variables in the `BRQS` module
-#' (**MY**) for the \eqn{s^{th}} species.
-#' + [make_MY_inits_BRQS] supplies default values
-#' + The values in `options` override the defaults
-#' + To inspect variable names, use [get_MY_inits] or
-#' see the inline module documentation.
-#' @inheritSection BRQS State Variables
-#' @inheritParams ramp.xds::setup_MY_inits
-#' @return a [list]
-#' @keywords internal
-#' @export
-setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
-  xds_obj$MYinits[[s]] = with(xds_obj$MY_obj[[s]], make_MY_inits_BRQS(nPatches, options))
+  parameters <- c(
+    "f", "q", "nu", "g_s", "g_b", "g_r", "g_q",
+    "mu_s", "mu_b", "mu_q", "sigma_b", "sigma_q", "sigma_s",
+    "theta", "xi", "eta"
+  )
+  for (par in intersect(parameters, names(options))) {
+    xds_obj$MY_obj[[s]][[par]] <- checkIt(options[[par]], xds_obj$nPatches)
+  }
+  for (par in intersect(c("eip", "eggsPerBatch"), names(options))) {
+    xds_obj$MY_obj[[s]][[par]] <- options[[par]]
+  }
+  y <- get_inits(xds_obj, flatten=TRUE)
+  xds_obj <- MBionomics(0, y, xds_obj, s)
   return(xds_obj)
 }
 
 #' @title Make initial values for `BRQS` (**MY**)
+#' @description Create a named list of initial values for the `BRQS` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nPatches`.
+#' Scalars are expanded to that length.
 #' @inheritSection BRQS State Variables
 #' @seealso [BRQS], [setup_MY_inits.BRQS]
 #' @param nPatches the number of patches
@@ -504,42 +535,86 @@ setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
 #' @param Bz infectious, blood feeding mosquitoes
 #' @param Rz infectious, resting mosquitoes
 #' @param Qz infectious, gravid mosqutioes
-#' @return a [list]
+#' @return a named [list] of initial values
 #' @keywords internal
 #' @export
+#' @seealso [change_MY_inits.BRQS]
 make_MY_inits_BRQS = function(nPatches, options = list(),
                               Su=100, Bu=100, Ru=1, Qu=10,
                               Sy=0, By=0, Ry=0, Qy=0,
                               Sz=0, Bz=0, Rz=0, Qz=0){
 
   with(options,{
-    Su = checkit(Su, nPatches)
-    Bu = checkit(Bu, nPatches)
-    Ru = checkit(Ru, nPatches)
-    Qu = checkit(Qu, nPatches)
-    Sy = checkit(Sy, nPatches)
-    By = checkit(By, nPatches)
-    Ry = checkit(Ry, nPatches)
-    Qy = checkit(Qy, nPatches)
-    Sz = checkit(Sz, nPatches)
-    Bz = checkit(Bz, nPatches)
-    Rz = checkit(Rz, nPatches)
-    Qz = checkit(Qz, nPatches)
+    Su = checkIt(Su, nPatches)
+    Bu = checkIt(Bu, nPatches)
+    Ru = checkIt(Ru, nPatches)
+    Qu = checkIt(Qu, nPatches)
+    Sy = checkIt(Sy, nPatches)
+    By = checkIt(By, nPatches)
+    Ry = checkIt(Ry, nPatches)
+    Qy = checkIt(Qy, nPatches)
+    Sz = checkIt(Sz, nPatches)
+    Bz = checkIt(Bz, nPatches)
+    Rz = checkIt(Rz, nPatches)
+    Qz = checkIt(Qz, nPatches)
 
     return(list(Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
                 Sy=Sy, By=By, Ry=Ry, Qy=Qy,
                 Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz))
   })}
 
+#' @title Set up initial values for `BRQS` (**MY**)
+#' @description Set up initial values for the `BRQS` module using
+#' [make_MY_inits_BRQS]. Values in `options` override the defaults.
+#' @inheritSection BRQS State Variables
+#' @inheritParams ramp.xds::setup_MY_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+#' @seealso [change_MY_inits.BRQS]
+#' @note Initial values are stored at `xds_obj$MY_obj[[s]]$inits`.
+#' @seealso [ramp.xds::get_MY_inits]
+setup_MY_inits.BRQS = function(xds_obj, options=list(), s=1){
+  xds_obj$MY_obj[[s]]$inits = make_MY_inits_BRQS(xds_obj$nPatches, options)
+  return(xds_obj)
+}
 
-#' @title Add indices for adult mosquitoes to parameter list
-#' @description Implements [setup_MY_ix] for the BRQS model.
+#' @title Change initial values for `BRQS` (**MY**)
+#' @description Change initial values named in `options` for the `BRQS`
+#' module, leaving other values unchanged.
+#' @inheritSection BRQS State Variables
+#' @seealso [BRQS], [setup_MY_inits.BRQS]
+#' @inheritParams ramp.xds::change_MY_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @export
+#' @seealso [make_MY_inits_BRQS]
+#' @note Stored initial values for this module are at
+#' `xds_obj$MY_obj[[s]]$inits`.
+change_MY_inits.BRQS <- function(xds_obj, options = list(), s=1) {
+  inits = with(get_MY_inits(xds_obj, s), with(options,
+    list(Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
+         Sy=Sy, By=By, Ry=Ry, Qy=Qy,
+         Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz)))
+
+  xds_obj$MY_obj[[s]]$inits=inits
+  return(xds_obj)
+}
+
+
+#' @title Set up variable indices for `BRQS` (**MY**)
+#' @description Assign consecutive variable indices for the `BRQS` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `Su_ix`, `Bu_ix`, `Ru_ix`, `Qu_ix`, `Sy_ix`, `By_ix`, `Ry_ix`, `Qy_ix`, `Sz_ix`, `Bz_ix`, `Rz_ix`, `Qz_ix`.
+#' Each block has length `nPatches`.
 #' @inheritSection BRQS State Variables
 #' @inheritParams ramp.xds::setup_MY_ix
-#' @return none
+#' @return an **`xds`** model object
 #' @importFrom utils tail
 #' @keywords internal
 #' @export
+#' @note Indices are stored at `xds_obj$MY_obj[[s]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
 setup_MY_ix.BRQS <- function(xds_obj, s) {with(xds_obj,{
 
   Su_ix <- seq(from = max_ix+1, length.out=nPatches)
@@ -579,26 +654,31 @@ setup_MY_ix.BRQS <- function(xds_obj, s) {with(xds_obj,{
   max_ix <- tail(Qz_ix, 1)
 
   xds_obj$max_ix = max_ix
-  xds_obj$MY[[s]]$ix = list(
+  xds_obj$MY_obj[[s]]$ix = list(
     Su_ix = Su_ix, Bu_ix = Bu_ix, Ru_ix=Ru_ix, Qu_ix = Qu_ix,
     Sy_ix = Sy_ix, By_ix = By_ix, Ry_ix=Ry_ix, Qy_ix = Qy_ix,
     Sz_ix = Sz_ix, Bz_ix = Bz_ix, Rz_ix=Rz_ix, Qz_ix = Qz_ix)
 
 
-  return(pars)
+  return(xds_obj)
 })}
 
 
 #' @title Parse outputs for `BRQS` (**MY**)
-#' @description Implements [parse_MY_orbits] for the BRQS model
+#' @description Extract the model state outputs for the `BRQS` module
+#' from `outputs` and return them by name in a list.
+#' Sum behavioral states to compute total density `M`, infected density `Y`
+#' (exposed and infectious), and infectious density `Z`.
+#' Also compute `y = Y/M` and `z = Z/M`.
+#' @note Variable indices are stored at `xds_obj$MY_obj[[s]]$ix`.
 #' @inheritSection BRQS State Variables
 #' @inheritSection BRQS Infective Biting
 #' @inheritParams ramp.xds::parse_MY_orbits
 #' @seealso [BRQS], [get_MY_vars.BRQS]
-#' @return none
+#' @return a [list]
 #' @keywords internal
 #' @export
-parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$ix$MY[[s]],{
+parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$MY_obj[[s]]$ix,{
   Su = outputs[,Su_ix]
   Bu = outputs[,Bu_ix]
   Ru = outputs[,Ru_ix]
@@ -622,62 +702,30 @@ parse_MY_orbits.BRQS <- function(outputs, xds_obj, s) {with(xds_obj$ix$MY[[s]],{
     Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz, M=M, Y=Y, Z=Z, y=y, z=z))
 })}
 
-#' @title Change initial values for `BRQS` (**MY**)
-#' @description For the `BRQS` module (**MY**) for the \eqn{s^{th}} species,
-#' change initial values named in `options` leaving other values unchanged.
-#' @inheritSection BRQS State Variables
-#' @seealso [BRQS], [setup_MY_inits.BRQS]
-#' @inheritParams ramp.xds::change_MY_inits
-#' @return none
+#' @title Get the skill set for `BRQS` (**MY**)
+#'
+#' @description Return the capabilities and compatibilities of the `BRQS` module as a list.
+#'
+#' @inheritParams ramp.xds::get_skillset_MY
+#'
+#' @return the **MY** module skill set, as a list
+#'
 #' @keywords internal
 #' @export
-change_MY_inits.BRQS <- function(xds_obj, options = list(), s=1) {
-  inits = with(get_MY_inits(xds_obj, s), with(options,
-    list(Su=Su, Bu=Bu, Ru=Ru, Qu=Qu,
-         Sy=Sy, By=By, Ry=Ry, Qy=Qy,
-         Sz=Sz, Bz=Bz, Rz=Rz, Qz=Qz)))
-
-  xds_obj$MY_obj[[s]]$inits=inits
-  return(xds_obj)
-}
-
-
-#' @title Get the feeding rate
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return a [numeric] vector
-#' @keywords internal
-#' @export
-get_f.BRQS = function(xds_obj, s=1){
-  with(xds_obj$MY_obj[[s]], f_t*es_f)
-}
-
-#' @title Get the feeding rate
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return y a [numeric] vector assigned the class "dynamic"
-#' @keywords internal
-#' @export
-get_q.BRQS = function(xds_obj, s=1){
-  with(xds_obj$MY_obj[[s]], q_t*es_q)
-}
-
-#' @title Get the feeding rate
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return y a [numeric] vector assigned the class "dynamic"
-#' @keywords internal
-#' @export
-get_g.BRQS = function(xds_obj, s=1){
-  with(xds_obj$MY_obj[[s]], g_t*es_g)
-}
-
-#' @title Get the feeding rate
-#' @param xds_obj an **`xds`** model object
-#' @param s the vector species index
-#' @return y a [numeric] vector assigned the class "dynamic"
-#' @keywords internal
-#' @export
-get_sigma.BRQS = function(xds_obj, s=1){
-  with(xds_obj$MY_obj[[s]], sigma_b_t*es_sigma_b)
+get_skillset_MY.BRQS = function(xds_obj, s){
+  skills = list(
+    f_is_port = FALSE,
+    q_is_port = FALSE,
+    g_is_port = FALSE,
+    sigma_is_port = FALSE,
+    sigma_b_is_port = FALSE,
+    sigma_q_is_port = FALSE,
+    mu_is_port = FALSE,
+    nu_is_port = FALSE,
+    eip_is_port = FALSE,
+    K_matrix_is_port = FALSE,
+    dts = FALSE,
+    delay = FALSE
+  )
+  return(skills)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{setup_L_ix.stages}
 \alias{setup_L_ix.stages}
-\title{Setup variable indices for \code{stages} (\strong{L} component)}
+\title{Set up variable indices for \code{stages} (\strong{L})}
 \usage{
 \method{setup_L_ix}{stages}(xds_obj, s)
 }
@@ -15,8 +15,13 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Set the values of the indices for the \strong{L} component
-variables for the \code{stages} module. Indices are allocated in the order
-\eqn{E, L_1, L_2, L_3, L_4, P}, each block of length \code{nHabitats}.
+Assign consecutive variable indices for the \code{stages} module,
+starting after \code{xds_obj$max_ix}, and update the maximum index.
+Allocate blocks in the order \code{E_ix}, \code{L1_ix}, \code{L2_ix}, \code{L3_ix}, \code{L4_ix}, \code{P_ix}.
+Each block has length \code{nHabitats}.
+}
+\note{
+Indices are stored at \code{xds_obj$L_obj[[s]]$ix}.
+The maximum index is stored at \code{xds_obj$max_ix}.
 }
 \keyword{internal}

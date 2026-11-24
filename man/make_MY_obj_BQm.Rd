@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{make_MY_obj_BQm}
 \alias{make_MY_obj_BQm}
-\title{Make parameters for \code{BQm} (\strong{MY})}
+\title{Make a module object for \code{BQm} (\strong{MY})}
 \usage{
 make_MY_obj_BQm(
   nPatches,
@@ -37,7 +37,8 @@ make_MY_obj_BQm(
 
 \item{q}{human blood fraction}
 
-\item{nu}{oviposition rate, per mosquito}
+\item{nu}{the oviposition rate: the number of egg batches laid in each patch,
+per mosquito, per day}
 
 \item{eggsPerBatch}{eggs laid per oviposition}
 }
@@ -45,9 +46,13 @@ make_MY_obj_BQm(
 a \link{list}
 }
 \description{
-Make parameters for \code{BQm} (\strong{MY})
+Create a \code{BQm} module object and initialize its parameters.
+Inspect parameters with \link{get_MY_pars.BQm} and change supported values
+with \link{change_MY_pars.BQm}. Values in \code{options} override parameter arguments.
 }
 \seealso{
+\link{get_MY_pars.BQm}, \link{change_MY_pars.BQm}
+
 \link{BQm}, \link{setup_MY_obj.BQm}
 }
 \keyword{internal}

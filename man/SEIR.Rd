@@ -39,6 +39,7 @@ A constant fraction of infectious bites causes an infection: the parameter \eqn{
 \link{make_XH_obj_SEIR} supplies defaults for the parameters, which can be changed
 using \link{change_XH_pars.SEIR}.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{tau}}{rate of progression from exposed to infectious}
@@ -64,6 +65,8 @@ Susceptible density is redundant and is computed after solving.
 
 \section{Prevalence}{
 
+\link{F_pr_obs.SEIR} returns observed prevalence \eqn{x_q=qI/H}.
+
 \link{F_prevalence.SEIR} returns \eqn{x=I/H}. In contrast,
 \link{parse_XH_orbits.SEIR} stores \code{true_pr} as \eqn{(E+I)/H}.
 This module has no diagnostic sensitivity parameters or module-specific
@@ -87,7 +90,7 @@ and has no treatment parameters \code{rho} or \code{sigma}.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

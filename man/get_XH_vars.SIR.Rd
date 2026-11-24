@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{get_XH_vars.SIR}
 \alias{get_XH_vars.SIR}
-\title{List variables for \code{SIR} (\strong{XH})}
+\title{Get the state variables for \code{SIR} (\strong{XH})}
 \usage{
 \method{get_XH_vars}{SIR}(y, xds_obj, i)
 }
@@ -14,10 +14,15 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list}
+a named \link{list} of state variables and module-specific derived quantities
 }
 \description{
-This method dispatches on the type of \code{xds_obj$XH_obj}
+Extract the state variables for the \code{SIR} module
+from \code{y} and return them by name in a list for use during model solving.
+Also compute susceptible density \code{S = H - I - R}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \section{State Variables}{
 

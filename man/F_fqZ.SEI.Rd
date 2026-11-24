@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{F_fqZ.SEI}
 \alias{F_fqZ.SEI}
-\title{Infective mosquito biting rate for \code{SEI}}
+\title{Compute infective mosquito biting density for \code{SEI} (\strong{MY})}
 \usage{
 \method{F_fqZ}{SEI}(t, y, xds_obj, s)
 }
@@ -19,7 +19,9 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_fqZ]{F_fqZ} for the SEI model.
+Return the daily infective mosquito biting density on humans,
+\code{fqZ}, for each patch in the \code{SEI} module.
+Compute \code{fqZ = f*q*Z}.
 }
 \section{Infective Biting}{
 

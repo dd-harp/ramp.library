@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{get_f.BRQS}
 \alias{get_f.BRQS}
-\title{Get the feeding rate}
+\title{Get the feeding rate for \code{BRQS} (\strong{MY})}
 \usage{
 \method{get_f}{BRQS}(xds_obj, s = 1)
 }
@@ -12,9 +12,43 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{numeric} vector
+a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Get the feeding rate
+Return the stored realized feeding rate per patch.
+}
+\details{
+Read \code{f} without evaluating ports or applying effect sizes.
+}
+\section{Parameters}{
+
+\describe{
+\item{\code{f}}{blood feeding rate --- use \link[ramp.xds:setup_f]{ramp.xds::setup_f} or \link[ramp.xds:setup_blood_feeding_rates]{ramp.xds::setup_blood_feeding_rates}}
+\item{\code{q}}{human fraction --- use \link[ramp.xds:setup_q]{ramp.xds::setup_q} or \link[ramp.xds:setup_human_fractions]{ramp.xds::setup_human_fractions}}
+\item{\code{g_b}, \code{g_q}, \code{g_s}, \code{g_r}}{mortality rates in the blood-feeding, gravid, sugar-feeding, and resting states}
+\item{\code{rho}}{rate of leaving the sugar-feeding state to blood-feed}
+\item{\code{zeta}}{rate at which blood-feeding mosquitoes take a sugar meal}
+\item{\code{xi}}{rate of leaving the resting state}
+\item{\code{eta}}{rate of transition from resting to gravid}
+\item{\code{nu}, \code{theta}}{parameters governing the egg-laying / gravid state}
+\item{\code{delta}}{fraction of gravid mosquitoes returning to blood feeding}
+\item{\code{omega}}{fraction of emerging mosquitoes entering the sugar-feeding state}
+\item{\code{tau}}{rate of progression from exposed to infectious}
+\item{\code{eip}}{extrinsic incubation period; \eqn{\tau} is its reciprocal}
+\item{\code{sigma_b}, \code{sigma_q}, \code{sigma_s}}{emigration rates in the blood-feeding, gravid, and sugar-feeding states}
+\item{\code{mu_b}, \code{mu_q}, \code{mu_s}}{fraction of emigrants lost in each dispersal state}
+\item{\code{K_b}, \code{K_q}, \code{K_s}}{dispersal matrices for the blood-feeding, gravid, and sugar-feeding states}
+\item{\code{eggsPerBatch}}{number of eggs per batch}
+}
+
+After basic setup, \link{change_MY_pars.BRQS} can be used to change parameter
+values. The model routes emergence between the blood-feeding and
+sugar-feeding states using \eqn{\omega}; behavioral transition rates
+\eqn{\rho}, \eqn{\zeta}, \eqn{\xi}, \eqn{\eta}, \eqn{\nu}, and \eqn{\theta}
+govern movement among the four behavioral states.
+}
+
+\seealso{
+\link{BRQS}
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{make_MY_obj_SEI}
 \alias{make_MY_obj_SEI}
-\title{Make parameters for \code{SEI} (\strong{MY})}
+\title{Make a module object for \code{SEI} (\strong{MY})}
 \usage{
 make_MY_obj_SEI(
   nPatches,
@@ -34,7 +34,8 @@ make_MY_obj_SEI(
 
 \item{q}{human blood fraction}
 
-\item{nu}{oviposition rate, per mosquito}
+\item{nu}{the oviposition rate: the number of egg batches laid in each patch,
+per mosquito, per day}
 
 \item{eggsPerBatch}{eggs laid per oviposition}
 }
@@ -42,9 +43,13 @@ make_MY_obj_SEI(
 a \link{list}
 }
 \description{
-Make parameters for \code{SEI} (\strong{MY})
+Create an \code{SEI} module object and initialize its parameters.
+Inspect parameters with \link{get_MY_pars.SEI} and change supported values
+with \link{change_MY_pars.SEI}. Values in \code{options} override parameter arguments.
 }
 \seealso{
+\link{get_MY_pars.SEI}, \link{change_MY_pars.SEI}
+
 \link{SEI}, \link{setup_MY_obj.SEI}
 }
 \keyword{internal}

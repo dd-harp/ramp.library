@@ -30,10 +30,15 @@ make_XH_inits_SEIRV(
 \item{V}{the initial values for V}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{SEIRV} (\strong{XH})
+Create a named list of initial values for the \code{SEIRV} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -49,5 +54,7 @@ Make initial values for \code{SEIRV} (\strong{XH})
 
 \seealso{
 \link{SEIRV}
+
+\link{setup_XH_inits.SEIRV}, \link{change_XH_inits.SEIRV}
 }
 \keyword{internal}

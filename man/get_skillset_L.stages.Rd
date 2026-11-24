@@ -2,7 +2,7 @@
 % Please edit documentation in R/aquatic-L-stages.R
 \name{get_skillset_L.stages}
 \alias{get_skillset_L.stages}
-\title{The \strong{L} module skill set}
+\title{Get the skill set for \code{stages} (\strong{L})}
 \usage{
 \method{get_skillset_L}{stages}(xds_obj, s)
 }
@@ -15,7 +15,6 @@
 the \strong{L} module skill set, as a list
 }
 \description{
-The \strong{L} skill set is a list of
-a module's capabilities
+Return the capabilities and compatibilities of the \code{stages} module as a list.
 }
 \keyword{internal}

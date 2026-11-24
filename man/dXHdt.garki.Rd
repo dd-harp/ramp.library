@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{dXHdt.garki}
 \alias{dXHdt.garki}
-\title{Derivatives for human population}
+\title{Compute the derivatives for \code{garki} (\strong{XH})}
 \usage{
 \method{dXHdt}{garki}(t, y, xds_obj, i)
 }
@@ -19,7 +19,21 @@
 a \link{numeric} vector
 }
 \description{
-Implements a continuous time version of the Garki model
+Implements a continuous time version of the Garki model.
+The derivatives for the \code{garki} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dx_2/dt &= hx_1-\nu x_2-\mathbf{D}(t,x_2) \\
+dy_1/dt &= \nu x_2-\alpha_1y_1-\mathbf{D}(t,y_1) \\
+dy_2/dt &= \alpha_1y_1-R_1y_2-\alpha_2y_2-\mathbf{D}(t,y_2) \\
+dy_3/dt &= \alpha_2y_2+\nu x_4-R_2y_3-\mathbf{D}(t,y_3) \\
+dx_3/dt &= R_2y_3-hx_3-\mathbf{D}(t,x_3) \\
+dx_4/dt &= hx_3-\nu x_4-\mathbf{D}(t,x_4)
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{R_1=h/(\exp(h/r_1)-1)}, and
+\eqn{R_2=h/(\exp(h/r_2)-1)}.
+The term \eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \references{
 {This implements a version of the model

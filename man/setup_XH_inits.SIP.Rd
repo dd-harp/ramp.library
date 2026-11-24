@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{setup_XH_inits.SIP}
 \alias{setup_XH_inits.SIP}
-\title{Setup initial values for \code{SIP} (\strong{XH})}
+\title{Set up initial values for \code{SIP} (\strong{XH})}
 \usage{
 \method{setup_XH_inits}{SIP}(xds_obj, options = list(), i = 1)
 }
@@ -17,14 +17,11 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Set initial values for all the variables in the \code{SIP} module
-(\strong{XH}) for the \eqn{i^{th}} host species.
-\itemize{
-\item \link{make_XH_inits_SIP} supplies default values
-\item The values in \code{options} override the defaults
-\item To inspect variable names, use \link[ramp.xds:get_XH_inits]{get_XH_inits} or
-see the inline module documentation.
+Set up initial values for the \code{SIP} module using
+\link{make_XH_inits_SIP}. Values in \code{options} override the defaults.
 }
+\note{
+Initial values are stored at \code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -38,5 +35,9 @@ see the inline module documentation.
 
 \seealso{
 \link{SIP}
+
+\link{change_XH_inits.SIP}
+
+\link[ramp.xds:get_XH_inits]{ramp.xds::get_XH_inits}
 }
 \keyword{internal}

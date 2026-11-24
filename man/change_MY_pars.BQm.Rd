@@ -17,8 +17,10 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{BQm} module (\strong{MY}) for the \eqn{s^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{BQm}
+module, leaving other values unchanged.
+Refresh baseline bionomics at time zero using \link[ramp.xds:MBionomics]{ramp.xds::MBionomics},
+without calling \link[ramp.xds:MEffectSizes]{ramp.xds::MEffectSizes}.
 }
 \section{Parameters}{
 
@@ -30,11 +32,14 @@ change parameter values named in \code{options} leaving other values unchanged.
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 After basic setup, \link{change_MY_pars.BQm} can be used to change parameter
 values. Bionomic parameters are configured as static baselines by default.
 }
 
+\seealso{
+\link{make_MY_obj_BQm}, \link{get_MY_pars.BQm}
+}
 \keyword{internal}

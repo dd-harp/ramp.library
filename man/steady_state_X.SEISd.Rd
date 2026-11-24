@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{steady_state_X.SEISd}
 \alias{steady_state_X.SEISd}
-\title{Compute the steady states for the \code{SEISd} model as a function of the daily EIR}
+\title{Compute steady states for \code{SEISd} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SEISd}(foi, H, xds_obj, i = 1)
 }
@@ -16,10 +16,12 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
+a named \link{numeric} vector containing \code{S}, \code{E}, \code{I}, and \code{H}
 }
 \description{
-Compute the steady state of the \code{SEISd} model as a function of the daily eir.
+Compute steady-state infection densities for the \code{SEISd} module
+given daily FoI \code{foi} and fixed host population density \code{H} for the
+delay differential-equation system.
 }
 \note{
 Assumes no demographic change or mass treatment and constant exposure

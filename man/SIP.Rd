@@ -48,6 +48,7 @@ infection: the parameter \eqn{b}.
 The parameters returned by \link{get_XH_pars.SIP} and modifiable by
 \link{change_XH_pars.SIP} describe infection, treatment, and chemoprotection.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -76,6 +77,8 @@ The mortality function uses the same model for \eqn{I} and \eqn{P} as for
 
 \section{Prevalence}{
 
+\link{F_pr_obs.SIP} returns observed prevalence \eqn{x_q=qI/H}.
+
 True prevalence is \eqn{x = I/H}. The light microscopy, RDT, and PCR
 prevalence functions currently also return \eqn{I/H}, without diagnostic
 sensitivity parameters.
@@ -92,7 +95,7 @@ infectiousness is \eqn{cI/H}.
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

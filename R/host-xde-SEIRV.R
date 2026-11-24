@@ -1,5 +1,14 @@
 # specialized methods for the human SEIRV model
 
+
+# TODO: Review Update_XHt.SEIRV: the E output repeats It instead of returning Et.
+# Reconcile the update equations, state order, and description before documenting them.
+# TODO: Review change_XH_inits.SEIRV repair: update stored H instead of S.
+# Confirm consistency with the constructor, partial updates, and species isolation.
+# TODO: Reconcile parameter coverage: make_XH_obj_SEIRV initializes alpha and
+# varepsilon, and get_XH_pars.SEIRV returns them, but change_XH_pars.SEIRV
+# does not update them. Decide whether to support changes or document the restriction.
+
 #' @title The `SEIRV` module for the **XH** component
 #' @description
 #' Implements the **XH** component using a Susceptible-Exposed-Infectious-Recovered-Vaccinated
@@ -28,9 +37,10 @@
 #'
 #' @section Parameters:
 #' [make_XH_obj_SEIRV] supplies defaults for all parameters.
-#' [change_XH_pars.SEIRV] currently changes `b`, `c`, `r`, `tau`, and `gamma`;
+#' [change_XH_pars.SEIRV] currently changes `b`, `c`, `r`, `tau`, `gamma`, and `q`;
 #' it leaves `alpha` and `varepsilon` unchanged.
 #' \describe{
+#'   \item{`q`}{test positivity (default `0.8`)}
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
 #'   \item{`tau`}{rate of progression from exposed to infectious}
@@ -59,6 +69,8 @@
 #' computed after solving.
 #'
 #' @section Prevalence:
+#' [F_pr_obs.SEIRV] returns observed prevalence \eqn{x_q=qI/H}.
+#'
 #' [F_prevalence.SEIRV] returns \eqn{x=I/H}. In contrast,
 #' [parse_XH_orbits.SEIRV] stores `true_pr` as \eqn{(E+I)/H}.
 #' This module has no diagnostic sensitivity parameters or module-specific
@@ -84,48 +96,20 @@
 #' @rdname SEIRV
 NULL
 
-#' @title The **XH** module skill set
-#'
-#' @description The **XH** skill set is a list of
-#' a module's capabilities.
-#'
-#' @note This method dispatches on `class(xds_obj$XH_obj)`
-#'
-#' @inheritParams ramp.xds::get_skillset_XH
-#'
-#' @return the **XH** module skill set, as a list
-#' @keywords internal
-#'
-#' @seealso [SEIRV]
-#' @export
-get_skillset_XH.SEIRV = function(xds_obj,i){
-  skills =   list(
-    delay       = FALSE,
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = "linear",
-    mda         = FALSE,
-    msat        = FALSE
-  )
-  return(skills)
-}
 
-#' Run checks before solving (**XH**)
-#'
-#' @inheritParams ramp.xds::check_XH
-#'
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @seealso [SEIRV]
-#' @export
-check_XH.SEIRV = function(xds_obj, i){
-  return(xds_obj)
-}
-
-
-#' @title Compute derivatives for `SEIRV` (**XH**)
-#' @description Implements [dXHdt] for the `SEIRV` model
+#' @title Compute the derivatives for `SEIRV` (**XH**)
+#' @description The derivatives for the `SEIRV` module are:
+#' \deqn{\begin{array}{rl}
+#' dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+#' dE/dt &= hS-\tau E-\mathbf{D}(t,E) \\
+#' dI/dt &= \tau E-rI-\mathbf{D}(t,I) \\
+#' dR/dt &= (1-\varepsilon)rI-\gamma R-\mathbf{D}(t,R) \\
+#' dV/dt &= \alpha\mathbf{B}(t,y)+\varepsilon rI-\mathbf{D}(t,V)
+#' \end{array}}
+#' Here \eqn{h} is `foi`, \eqn{S=H-E-I-R-V},
+#' \eqn{\varepsilon} is `varepsilon`,
+#' \eqn{\mathbf{B}(t,y)} is returned by [ramp.xds::Births], and
+#' \eqn{\mathbf{D}(t,X)} is returned by [ramp.xds::Deaths] for population \eqn{X}.
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @keywords internal
@@ -153,7 +137,7 @@ dXHdt.SEIRV<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title DTS updating for `SEIRV` (**XH**)
+#' @title Update states for `SEIRV` (**XH**)
 #' @description Implements [Update_XHt] for the `SEIRV` model
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
@@ -177,159 +161,21 @@ Update_XHt.SEIRV<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Change parameters for `SEIRV` (**XH**)
-#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
-#' change parameter values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SEIRV Parameters
-#' @seealso [SEIRV]
-#' @export
-change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
-  nHabitats <- xds_obj$nHabitats
-  with(xds_obj$XH_obj[[i]], with(options,{
-    xds_obj$XH_obj[[i]]$b <- b
-    xds_obj$XH_obj[[i]]$c <- c
-    xds_obj$XH_obj[[i]]$r <- r
-    xds_obj$XH_obj[[i]]$tau <- tau
-    xds_obj$XH_obj[[i]]$gamma <- gamma
-    return(xds_obj)
-  }))}
-
-
-#' @title Change initial values for `SEIRV` (**XH**)
-#' @description For the `SEIRV` module (**XH**) for the \eqn{i^{th}} host species,
-#' change initial values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_inits
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SEIRV State Variables
-#' @seealso [SEIRV]
-#' @export
-change_XH_inits.SEIRV <- function(xds_obj, options=list(), i=1) {
-  with(xds_obj$XH_obj[[i]]$inits,
-    with(options,{
-      xds_obj$XH_obj[[i]]$inits$S = S
-      xds_obj$XH_obj[[i]]$inits$E = E
-      xds_obj$XH_obj[[i]]$inits$I = I
-      xds_obj$XH_obj[[i]]$inits$R = R
-      xds_obj$XH_obj[[i]]$inits$V = V
-      return(xds_obj)
-  }))}
-
-#' @title Compute the steady states for the dts `SEIRV` model as a function of the daily EIR
-#' @description Compute the steady state of the  dts `SEIRV` model as a function of the daily eir.
-#' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named vector
-#' @keywords internal
-#' @seealso [SEIRV]
-#' @export
-steady_state_X.SEIRV_dts = function(foi, H, xds_obj, i=1){
-  ar = exp(-foi)
-  with(xds_obj$XH_obj[[i]],{
-    Steq = 0
-    Eteq = 0
-    Iteq = 0
-    Rteq = 0
-    Vteq = H -Steq - Eteq-Iteq-Rteq
-
-    return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq, V= Vteq))
-})}
-
-
-
-#' @title Make initial values for `SEIRV` (**XH**)
-#' @param nStrata the number of strata in the model
-#' @param options a [list] to override defaults
-#' @param H the initial value for H
-#' @param E the initial value for E
-#' @param I the initial value for I
-#' @param R the initial values for R
-#' @param V the initial values for V
-#' @return a [list]
-#' @keywords internal
-#' @inheritSection SEIRV State Variables
-#' @seealso [SEIRV]
-#' @export
-make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0, V=1){with(options,{
-  H = checkIt(H, nStrata)
-  E = checkIt(E, nStrata)
-  I = checkIt(I, nStrata)
-  R = checkIt(R, nStrata)
-  V = checkIt(V, nStrata)
-  return(list(H=H, E=E, I=I, R=R, V=V))
-})}
 
 
 
 
-
-
-#' @title Setup initial values for `SEIRV` (**XH**)
-#' @description Set initial values for all the variables in the `SEIRV` module
-#' (**XH**) for the \eqn{i^{th}} host species.
-#' + [make_XH_inits_SEIRV] supplies default values
-#' + The values in `options` override the defaults
-#' + To inspect variable names, use [get_XH_inits] or
-#' see the inline module documentation.
-#' @inheritParams ramp.xds::setup_XH_inits
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SEIRV State Variables
-#' @seealso [SEIRV]
-#' @export
-setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIRV(xds_obj$nStrata[i], options)
-  return(xds_obj)
-}
-
-
-
-
-
-#' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the `SEIRV` model.
-#' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** model object
-#' @importFrom utils tail
-#' @keywords internal
-#' @seealso [SEIRV]
-#' @export
-setup_XH_ix.SEIRV <- function(xds_obj, i) {with(xds_obj,{
-
-  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(H_ix, 1)
-
-  E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(E_ix, 1)
-
-  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(I_ix, 1)
-
-  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(R_ix, 1)
-
-  V_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(V_ix, 1)
-
-  xds_obj$max_ix = max_ix
-  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
-  return(xds_obj)
-})}
-
-
-
-
-
-#' @title List variables for `SEIRV` (**XH**)
-#' @description This method dispatches on the type of `xds_obj$XH_obj`
+#' @title Get the state variables for `SEIRV` (**XH**)
+#' @description Extract the state variables for the `SEIRV` module
+#' from `y` and return them by name in a list for use during model solving.
+#' Also compute susceptible density `S = H - E - I - R - V`.
 #' @inheritParams ramp.xds::get_XH_vars
-#' @return a [list]
+#' @return a named [list] of state variables and module-specific derived quantities
 #' @keywords internal
 #' @inheritSection SEIRV State Variables
 #' @seealso [SEIRV]
 #' @export
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
 get_XH_vars.SEIRV <- function(y, xds_obj, i) {
     with(xds_obj$XH_obj[[i]]$ix,{
       H = y[H_ix]
@@ -339,96 +185,6 @@ get_XH_vars.SEIRV <- function(y, xds_obj, i) {
       V = y[V_ix]
       S = H-E-I-R-V
       return(list(S=S,E=E,I=I,R=R,V=V,H=H))})
-}
-
-
-
-
-#' @title Make a `SEIRV` **XH** model object
-#' @param nStrata is the number of population strata
-#' @param options a [list] that could override defaults
-#' @param tau  incubation rate
-#' @param b the proportion of infective bites that cause an infection
-#' @param r the rate infections clear
-#' @param c the proportion of bites on infected humans that infect a mosquito
-#' @param alpha  proportion of vaccinated humans
-#' @param gamma   loss of immunity rate
-#' @param varepsilon proportion of recovered humans that are protected from the pathogen
-#' @return an **XH** model object
-#' @keywords internal
-#' @inheritSection SEIRV Parameters
-#' @seealso [SEIRV]
-#' @export
-make_XH_obj_SEIRV = function(nStrata, options=list(),
-                          alpha =0.1, b=0.55, r=1/180,
-                          c=0.15, tau= 0.5,
-                          varepsilon=0.5, gamma=0.5){
-  with(options,{
-    XH_obj = list()
-    class(XH_obj) <- c("SEIRV")
-
-    XH_obj$alpha = checkIt(alpha, nStrata)
-    XH_obj$b = checkIt(b, nStrata)
-    XH_obj$c = checkIt(c, nStrata)
-    XH_obj$r = checkIt(r, nStrata)
-    XH_obj$tau = checkIt(tau, nStrata)
-    XH_obj$gamma = checkIt(gamma, nStrata)
-    XH_obj$varepsilon = checkIt(varepsilon, nStrata)
-
-
-    return(XH_obj)
-  })}
-
-#' @title Compute the steady states for the `SEIRV` model as a function of the daily EIR
-#' @description Compute the steady state of the `SEIRV` model as a function of the daily eir.
-#' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named vector
-#' @keywords internal
-#' @seealso [SEIRV]
-#' @export
-steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
-  with(xds_obj$XH_obj[[i]],{
-    Ieq = 0
-    Seq = 0
-    Eeq = 0
-    Req = 0
-    Veq = H
-    return(c(S=as.vector(Seq), E =as.vector(Eeq),I=as.vector(Ieq), R =as.vector(Req), V=as.vector(Veq)))
-})}
-
-
-
-
-
-#' @title Set up `SEIRV` (**XH**)
-#' @description
-#'
-#' This sets up an `SEIRV` model object for the **XH** module for the \eqn{i^{th}} host species
-#' + the object is created by [make_XH_obj_SEIRV]
-#' + the initial conditions are set by [setup_XH_inits]
-#' + `options` is passed to both to override the defaults
-#'
-#' @seealso [SEIRV], [make_XH_obj_SEIRV]
-#'
-#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
-#'
-#' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SEIRV State Variables
-#' @inheritSection SEIRV Parameters
-#' @export
-setup_XH_obj.SEIRV = function(XHname, residence, xds_obj, options=list(), i=1){
-  xds_obj$XHname = "SEIRV"
-  xds_obj$XH_obj[[i]] = make_XH_obj_SEIRV(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
-  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_demog_obj(xds_obj, i)
-  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
-  xds_obj <- setup_time_away("setup", xds_obj, i=i)
-  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
-  return(xds_obj)
 }
 
 
@@ -484,10 +240,249 @@ F_infectivity.SEIRV <- function(y, xds_obj, i) {
 }
 
 
+
+
+#' @title Make a module object for `SEIRV` (**XH**)
+#' @description Create an `SEIRV` module object and initialize its parameters.
+#' Inspect parameters with [get_XH_pars.SEIRV] and change supported values
+#' with [change_XH_pars.SEIRV]. Values in `options` override parameter arguments.
+#' @seealso [get_XH_pars.SEIRV], [change_XH_pars.SEIRV]
+#' @param nStrata is the number of population strata
+#' @param options a [list] that could override defaults
+#' @param tau  incubation rate
+#' @param b the proportion of infective bites that cause an infection
+#' @param r the rate infections clear
+#' @param c the proportion of bites on infected humans that infect a mosquito
+#' @param alpha  proportion of vaccinated humans
+#' @param gamma   loss of immunity rate
+#' @param varepsilon proportion of recovered humans that are protected from the pathogen
+#' @param q test positivity; a numeric scalar or input of length `nStrata`
+#' @return an **XH** model object
+#' @keywords internal
+#' @inheritSection SEIRV Parameters
+#' @seealso [SEIRV]
+#' @export
+make_XH_obj_SEIRV = function(nStrata, options=list(),
+                          alpha =0.1, b=0.55, r=1/180,
+                          c=0.15, tau= 0.5,
+                          varepsilon=0.5, gamma=0.5, q=0.8){
+  with(options,{
+    XH_obj = list()
+    class(XH_obj) <- c("SEIRV")
+
+    XH_obj$alpha = checkIt(alpha, nStrata)
+    XH_obj$b = checkIt(b, nStrata)
+    XH_obj$c = checkIt(c, nStrata)
+    XH_obj$r = checkIt(r, nStrata)
+    XH_obj$tau = checkIt(tau, nStrata)
+    XH_obj$gamma = checkIt(gamma, nStrata)
+    XH_obj$varepsilon = checkIt(varepsilon, nStrata)
+
+
+    XH_obj$q = checkIt(q, nStrata)
+
+    return(XH_obj)
+  })}
+
+#' @title Set up the module object for `SEIRV` (**XH**)
+#' @description
+#'
+#' Set up an `SEIRV` module object for the **XH** component and the \eqn{i^{th}} host species.
+#'
+#' + Set the module name to `SEIRV`.
+#' + Create the module object with [make_XH_obj_SEIRV], passing `nStrata[i]` and `options`.
+#' + Set initial values using [ramp.xds::setup_XH_inits], passing `options` to override defaults.
+#' + Initialize the time-spent matrix using [ramp.xds::setup_timespent.setup].
+#' + Initialize birth and death rates using [ramp.xds::setup_demog_obj].
+#' + Initialize blood search weights using [ramp.xds::setup_blood_search_weights.setup].
+#' + Initialize time away using [ramp.xds::setup_time_away.setup].
+#' + Initialize travel EIR using [ramp.xds::setup_travel_eir.no_travel].
+#' + Return the updated **`xds`** model object.
+#'
+#' @seealso [SEIRV], [make_XH_obj_SEIRV]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
+#' @inheritParams ramp.xds::setup_XH_obj
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @inheritSection SEIRV Parameters
+#' @export
+setup_XH_obj.SEIRV = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SEIRV"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SEIRV(xds_obj$nStrata[i], options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
+  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
+  xds_obj <- setup_time_away("setup", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
+  return(xds_obj)
+}
+
+
+
+
+
+#' @title Get parameters for `SEIRV` (**XH**)
+#' @description Return the parameters for the `SEIRV` module as a named list.
+#' @inheritParams ramp.xds::get_XH_pars
+#' @inheritSection SEIRV Parameters
+#' @seealso [make_XH_obj_SEIRV], [change_XH_pars.SEIRV]
+#' @return a named [list] of parameter values
+#' @keywords internal
+#' @export
+get_XH_pars.SEIRV <- function(xds_obj, i=1) {
+  with(xds_obj$XH_obj[[i]], list(q=q,
+    alpha=alpha, b=b, c=c, r=r, tau=tau, gamma=gamma, varepsilon=varepsilon
+  ))
+}
+
+#' @title Change parameters for `SEIRV` (**XH**)
+#' @seealso [make_XH_obj_SEIRV], [get_XH_pars.SEIRV]
+#' @description Change parameter values named in `options` for the `SEIRV`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_pars
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SEIRV Parameters
+#' @seealso [SEIRV]
+#' @export
+change_XH_pars.SEIRV <- function(xds_obj, options=list(), i=1) {
+  nHabitats <- xds_obj$nHabitats
+  with(xds_obj$XH_obj[[i]], with(options,{
+    xds_obj$XH_obj[[i]]$b <- b
+    xds_obj$XH_obj[[i]]$c <- c
+    xds_obj$XH_obj[[i]]$r <- r
+    xds_obj$XH_obj[[i]]$tau <- tau
+    xds_obj$XH_obj[[i]]$gamma <- gamma
+    xds_obj$XH_obj[[i]]$q <- q
+    return(xds_obj)
+  }))}
+
+
+
+#' @title Make initial values for `SEIRV` (**XH**)
+#' @description Create a named list of initial values for the `SEIRV` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nStrata`.
+#' Scalars are expanded to that length.
+#' @param nStrata the number of strata in the model
+#' @param options a [list] to override defaults
+#' @param H the initial value for H
+#' @param E the initial value for E
+#' @param I the initial value for I
+#' @param R the initial values for R
+#' @param V the initial values for V
+#' @return a named [list] of initial values
+#' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
+#' @export
+#' @seealso [setup_XH_inits.SEIRV], [change_XH_inits.SEIRV]
+make_XH_inits_SEIRV = function(nStrata, options = list(), H=1000, I=1, E=0, R=0, V=1){with(options,{
+  H = checkIt(H, nStrata)
+  E = checkIt(E, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
+  V = checkIt(V, nStrata)
+  return(list(H=H, E=E, I=I, R=R, V=V))
+})}
+
+
+
+
+
+
+#' @title Set up initial values for `SEIRV` (**XH**)
+#' @description Set up initial values for the `SEIRV` module using
+#' [make_XH_inits_SEIRV]. Values in `options` override the defaults.
+#' @inheritParams ramp.xds::setup_XH_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
+#' @export
+#' @seealso [change_XH_inits.SEIRV]
+#' @note Initial values are stored at `xds_obj$XH_obj[[i]]$inits`.
+#' @seealso [ramp.xds::get_XH_inits]
+setup_XH_inits.SEIRV = function(xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SEIRV(xds_obj$nStrata[i], options)
+  return(xds_obj)
+}
+
+
+#' @title Change initial values for `SEIRV` (**XH**)
+#' @description Change initial values named in `options` for the `SEIRV`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SEIRV State Variables
+#' @seealso [SEIRV]
+#' @export
+#' @seealso [make_XH_inits_SEIRV], [setup_XH_inits.SEIRV]
+#' @note Stored initial values for this module are at
+#' `xds_obj$XH_obj[[i]]$inits`.
+change_XH_inits.SEIRV <- function(xds_obj, options=list(), i=1) {
+  with(xds_obj$XH_obj[[i]]$inits,
+    with(options,{
+      xds_obj$XH_obj[[i]]$inits$H = H
+      xds_obj$XH_obj[[i]]$inits$E = E
+      xds_obj$XH_obj[[i]]$inits$I = I
+      xds_obj$XH_obj[[i]]$inits$R = R
+      xds_obj$XH_obj[[i]]$inits$V = V
+      return(xds_obj)
+  }))}
+
+
+
+
+
+#' @title Set up variable indices for `SEIRV` (**XH**)
+#' @description Assign consecutive variable indices for the `SEIRV` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `H_ix`, `E_ix`, `I_ix`, `R_ix`, `V_ix`.
+#' Each block has length `nStrata[i]`.
+#' @inheritParams ramp.xds::setup_XH_ix
+#' @return an **`xds`** model object
+#' @importFrom utils tail
+#' @keywords internal
+#' @seealso [SEIRV]
+#' @export
+#' @note Indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
+setup_XH_ix.SEIRV <- function(xds_obj, i) {with(xds_obj,{
+
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
+
+  E_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(E_ix, 1)
+
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(I_ix, 1)
+
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(R_ix, 1)
+
+  V_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(V_ix, 1)
+
+  xds_obj$max_ix = max_ix
+  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix,  E_ix=E_ix, I_ix=I_ix, R_ix=R_ix, V_ix=V_ix)
+  return(xds_obj)
+})}
+
+
 #' @title Parse outputs for `SEIRV` (**XH**)
-#' @description Implements [parse_XH_orbits] for the `SEIRV` model
+#' @description Extract the model state outputs for the `SEIRV` module
+#' from `outputs` and return them by name in a list.
+#' Also compute `S = H-E-I-R-V`, `ni = c*I/H`, and `true_pr = (E+I)/H`.
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
 #' @inheritParams ramp.xds::parse_XH_orbits
-#' @return a named list of module variables
+#' @return a [list]
 #' @keywords internal
 #' @inheritSection SEIRV State Variables
 #' @seealso [SEIRV]
@@ -519,6 +514,18 @@ F_prevalence.SEIRV <- function(vars, XH_obj) {
   return(pr)
 }
 
+#' @title Compute observed prevalence
+#' @description Return observed prevalence for the `SEIRV` module as
+#' `q` times the true prevalence returned by [ramp.xds::F_prevalence].
+#' @inheritParams ramp.xds::F_pr_obs
+#' @return a [numeric] vector of length `nStrata`
+#' @seealso [SEIRV]
+#' @keywords internal
+#' @export
+F_pr_obs.SEIRV <- function(vars, XH_obj) {
+  XH_obj$q * ramp.xds::F_prevalence(vars, XH_obj)
+}
+
 #' @title Compute the net infectiousness
 #' @description Implements [F_ni] for the `SEIRV` model.
 #' @inheritParams ramp.xds::F_ni
@@ -544,6 +551,117 @@ get_HTC.SEIRV <- function(xds_obj, i) {
        HTC <- c/r,
        return(HTC)
   )
+}
+
+#' @title Check `SEIRV` (**XH**)
+#'
+#' @inheritParams ramp.xds::check_XH
+#'
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @seealso [SEIRV]
+#' @export
+check_XH.SEIRV = function(xds_obj, i){
+  return(xds_obj)
+}
+
+#' @title Get the skill set for `SEIRV` (**XH**)
+#'
+#' @description Return the capabilities and compatibilities of the `SEIRV` module as a list.
+#'
+#' @inheritParams ramp.xds::get_skillset_XH
+#'
+#' @return the **XH** module skill set, as a list
+#' @keywords internal
+#'
+#' @seealso [SEIRV]
+#' @export
+get_skillset_XH.SEIRV = function(xds_obj,i){
+  skills =   list(
+    dts         = FALSE,
+    xde         = TRUE,
+    delay       = FALSE,
+    demography  = TRUE,
+    malaria     = FALSE,
+    pr_obs      = TRUE,
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  return(skills)
+}
+#' @title Compute steady states for `SEIRV` (**XH**)
+#' @description Compute steady states given daily FoI `foi` and fixed host density `H`.
+#' @note Delegate to [steady_state_X_SEIRV], which dispatches on `xds_obj$xds`.
+#' @inheritParams ramp.xds::steady_state_X
+#' @return a named [numeric] vector containing `S`, `E`, `I`, `R`, and `V`
+#' @export
+steady_state_X.SEIRV = function(foi, H, xds_obj, i=1){
+  steady_state_X_SEIRV(foi, H, xds_obj, i)
+}
+
+#' @rdname steady_state_X.SEIRV
+#' @export
+steady_state_X_SEIRV = function(foi, H, xds_obj, i=1){
+  UseMethod("steady_state_X_SEIRV", xds_obj$xds)
+}
+
+#' @title Compute steady states for `SEIRV` (**XH**)
+#' @description Compute steady-state infection densities for the `SEIRV` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' differential-equation system.
+#' The current calculation sets `S`, `E`, `I`, and `R` to zero and `V` to `H`.
+#' @inheritParams steady_state_X_SEIRV
+#' @return a named [numeric] vector containing `S`, `E`, `I`, `R`, and `V`
+#' @keywords internal
+#' @seealso [SEIRV]
+#' @export
+steady_state_X_SEIRV.xde = function(foi, H, xds_obj, i=1){
+  with(xds_obj$XH_obj[[i]],{
+    Ieq = 0
+    Seq = 0
+    Eeq = 0
+    Req = 0
+    Veq = H
+    return(c(S=as.vector(Seq), E =as.vector(Eeq),I=as.vector(Ieq), R =as.vector(Req), V=as.vector(Veq)))
+})}
+
+#' @title Compute steady states for `SEIRV` (**XH**)
+#' @description Compute steady-state infection densities for the `SEIRV` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' discrete-time system.
+#' The current calculation sets `S`, `E`, `I`, and `R` to zero and `V` to `H`.
+#' @inheritParams steady_state_X_SEIRV
+#' @return a named [numeric] vector containing `S`, `E`, `I`, `R`, and `V`
+#' @keywords internal
+#' @seealso [SEIRV]
+#' @export
+steady_state_X_SEIRV.dts = function(foi, H, xds_obj, i=1){
+  ar = exp(-foi)
+  with(xds_obj$XH_obj[[i]],{
+    Steq = 0
+    Eteq = 0
+    Iteq = 0
+    Rteq = 0
+    Vteq = H -Steq - Eteq-Iteq-Rteq
+
+    return(c(S=Steq,  E= Eteq, I=Iteq, R=Rteq, V= Vteq))
+})}
+
+
+#' Plot the density of infected individuals for the `SEIRV` model
+#'
+#' @inheritParams ramp.xds::xds_plot_X
+#' @keywords internal
+#' @seealso [SEIRV]
+#' @export
+xds_plot_X.SEIRV = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, add=FALSE){
+  XH = xds_obj$outputs$orbits$XH[[i]]
+  time = xds_obj$outputs$time
+
+  if(add==FALSE)
+    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "No of. Infected", xlab = "Time")
+  xds_lines_X_SEIRV(time, XH, xds_obj$nStrata[i], clrs, llty)
 }
 
 
@@ -576,20 +694,3 @@ xds_lines_X_SEIRV = function(time, XH, nStrata, clrs=c("black","darkblue","darkr
         lines(time, V[,i], col=clrs[5,i], lty = llty[i])
       }
 })}
-
-
-#' Plot the density of infected individuals for the `SEIRV` model
-#'
-#' @inheritParams ramp.xds::xds_plot_X
-#' @keywords internal
-#' @seealso [SEIRV]
-#' @export
-xds_plot_X.SEIRV = function(xds_obj, i=1, clrs=c("black","darkblue","darkred","darkgreen","purple"), llty=1, add=FALSE){
-  XH = xds_obj$outputs$orbits$XH[[i]]
-  time = xds_obj$outputs$time
-
-  if(add==FALSE)
-    plot(time, 0*time, type = "n", ylim = c(0, max(XH$H)),
-         ylab = "No of. Infected", xlab = "Time")
-  xds_lines_X_SEIRV(time, XH, xds_obj$nStrata[i], clrs, llty)
-}

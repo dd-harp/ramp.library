@@ -2,9 +2,16 @@
 % Please edit documentation in R/host-xde-SIR.R
 \name{make_XH_obj_SIR}
 \alias{make_XH_obj_SIR}
-\title{Make a \code{SIR} \strong{XH} model object}
+\title{Make a module object for \code{SIR} (\strong{XH})}
 \usage{
-make_XH_obj_SIR(nStrata, options = list(), b = 0.55, r = 1/180, c = 0.15)
+make_XH_obj_SIR(
+  nStrata,
+  options = list(),
+  b = 0.55,
+  r = 1/180,
+  c = 0.15,
+  q = 0.8
+)
 }
 \arguments{
 \item{nStrata}{is the number of population strata}
@@ -16,18 +23,23 @@ make_XH_obj_SIR(nStrata, options = list(), b = 0.55, r = 1/180, c = 0.15)
 \item{r}{the clearance rate for infections}
 
 \item{c}{the proportion of bites on infected humans that infect a mosquito}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 an \strong{XH} model object
 }
 \description{
-Make a \code{SIR} \strong{XH} model object
+Create an \code{SIR} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.SIR} and change supported values
+with \link{change_XH_pars.SIR}. Values in \code{options} override parameter arguments.
 }
 \section{Parameters}{
 
 \link{make_XH_obj_SIR} supplies defaults for the parameters, which can be changed
 using \link{change_XH_pars.SIR}.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -35,6 +47,8 @@ using \link{change_XH_pars.SIR}.
 }
 
 \seealso{
+\link{get_XH_pars.SIR}, \link{change_XH_pars.SIR}
+
 \link{SIR}
 }
 \keyword{internal}

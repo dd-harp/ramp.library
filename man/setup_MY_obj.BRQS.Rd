@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{setup_MY_obj.BRQS}
 \alias{setup_MY_obj.BRQS}
-\title{Set up \code{BRQS} (\strong{MY})}
+\title{Set up the module object for \code{BRQS} (\strong{MY})}
 \usage{
 \method{setup_MY_obj}{BRQS}(MYname, xds_obj, options = list(), s = 1)
 }
@@ -16,14 +16,19 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list} vector
+an \strong{\code{xds}} model object
 }
 \description{
-This sets up a \code{BRQS} model object for the \strong{MY} module for the \eqn{s^{th}} vector species
+Set up a \code{BRQS} module object for the \strong{MY} component and the \eqn{s^{th}} vector species.
 \itemize{
-\item the object is created by \link{make_MY_obj_BRQS}
-\item the initial conditions are set by \link[ramp.xds:setup_MY_inits]{setup_MY_inits}
-\item \code{options} is passed to both to override the defaults
+\item Set the module name to \code{BRQS}.
+\item Create the module object with \link{make_MY_obj_BRQS}, passing \code{nPatches} and \code{options}.
+\item Initialize the circadian function using \link[ramp.xds:setup_F_circadian.setup]{ramp.xds::setup_F_circadian.setup}.
+\item Set the skill set using \link[ramp.xds:get_skillset_MY]{ramp.xds::get_skillset_MY}.
+\item Initialize the mosquito dispersal matrices using \link[ramp.xds:setup_K_matrix.zero]{ramp.xds::setup_K_matrix.zero},
+with \code{which_K = "Kb"}, \code{which_K = "Kq"}, and \code{which_K = "Ks"}.
+\item Set initial values using \link[ramp.xds:setup_MY_inits]{ramp.xds::setup_MY_inits}, passing \code{options} to override defaults.
+\item Return the updated \strong{\code{xds}} model object.
 }
 }
 \note{

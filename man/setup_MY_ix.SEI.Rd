@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-SEI.R
 \name{setup_MY_ix.SEI}
 \alias{setup_MY_ix.SEI}
-\title{Add indices for adult mosquitoes to parameter list}
+\title{Set up variable indices for \code{SEI} (\strong{MY})}
 \usage{
 \method{setup_MY_ix}{SEI}(xds_obj, s)
 }
@@ -12,10 +12,17 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{list}
+an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:setup_MY_ix]{setup_MY_ix} for the SEI model.
+Assign consecutive variable indices for the \code{SEI} module,
+starting after \code{xds_obj$max_ix}, and update the maximum index.
+Allocate blocks in the order \code{M_ix}, \code{Y_ix}, \code{Z_ix}.
+Each block has length \code{nPatches}.
+}
+\note{
+Indices are stored at \code{xds_obj$MY_obj[[s]]$ix}.
+The maximum index is stored at \code{xds_obj$max_ix}.
 }
 \section{State Variables}{
 

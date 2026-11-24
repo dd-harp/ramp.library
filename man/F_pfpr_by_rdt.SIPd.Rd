@@ -2,14 +2,14 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{F_pfpr_by_rdt.SIPd}
 \alias{F_pfpr_by_rdt.SIPd}
-\title{Compute the prevalence of infection by RDT}
+\title{Compute observed prevalence by RDT}
 \usage{
 \method{F_pfpr_by_rdt}{SIPd}(vars, XH_obj)
 }
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{XH_obj}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for humans}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}

@@ -9,7 +9,7 @@
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{XH_obj}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for humans}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}
@@ -18,6 +18,8 @@ a \link{numeric} vector of length \code{nStrata}
 Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SEIR} model.
 }
 \section{Prevalence}{
+
+\link{F_pr_obs.SEIR} returns observed prevalence \eqn{x_q=qI/H}.
 
 \link{F_prevalence.SEIR} returns \eqn{x=I/H}. In contrast,
 \link{parse_XH_orbits.SEIR} stores \code{true_pr} as \eqn{(E+I)/H}.

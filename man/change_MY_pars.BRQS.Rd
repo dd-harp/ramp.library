@@ -17,8 +17,13 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{BRQS} module (\strong{MY}) for the \eqn{s^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{BRQS}
+module, leaving other values unchanged.
+Update the direct parameter fields for \code{f}, \code{q}, \code{nu}, \code{g_s}, \code{g_b}, \code{g_r}, \code{g_q},
+\code{mu_s}, \code{mu_b}, \code{mu_q}, \code{sigma_b}, \code{sigma_q}, \code{sigma_s}, \code{theta}, \code{xi}, and \code{eta}
+when supplied, as well as \code{eip} and \code{eggsPerBatch}.
+Call \link[ramp.xds:MBionomics]{ramp.xds::MBionomics} at time zero after the updates,
+without calling \link[ramp.xds:MEffectSizes]{ramp.xds::MEffectSizes}.
 }
 \section{Parameters}{
 
@@ -48,4 +53,7 @@ sugar-feeding states using \eqn{\omega}; behavioral transition rates
 govern movement among the four behavioral states.
 }
 
+\seealso{
+\link{make_MY_obj_BRQS}, \link{get_MY_pars.BRQS}
+}
 \keyword{internal}

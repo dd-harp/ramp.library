@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{check_MY.BQ}
 \alias{check_MY.BQ}
-\title{Run a check before solving}
+\title{Check \code{BQ} (\strong{MY})}
 \usage{
 \method{check_MY}{BQ}(xds_obj, s)
 }
@@ -15,6 +15,6 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run a check before solving
+Check \code{BQ} (\strong{MY})
 }
 \keyword{internal}

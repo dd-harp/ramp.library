@@ -17,7 +17,10 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{garki} module (\strong{XH}) for the \eqn{i^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{garki}
+module, leaving other values unchanged.
+}
+\seealso{
+\link{make_XH_obj_garki}, \link{get_XH_pars.garki}
 }
 \keyword{internal}

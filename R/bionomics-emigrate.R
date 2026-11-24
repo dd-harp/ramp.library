@@ -77,7 +77,7 @@ F_sigma_q = function(t, xds_obj, s){
 #'
 #' @description Implements [F_sigma_b] for a static model
 #'
-#' @inheritParams ramp.xds::F_sigma
+#' @inheritParams F_sigma_b
 #'
 #' @return \eqn{sigma}, the patch emigration rate
 #' @keywords internal
@@ -90,7 +90,7 @@ F_sigma_b.static = function(t, xds_obj, s){
 #'
 #' @description Implements [F_sigma_q] for a static model
 #'
-#' @inheritParams ramp.xds::F_sigma
+#' @inheritParams F_sigma_q
 #'
 #' @return \eqn{sigma}, the patch emigration rate
 #' @keywords internal

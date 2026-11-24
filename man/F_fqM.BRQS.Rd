@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BRQS.R
 \name{F_fqM.BRQS}
 \alias{F_fqM.BRQS}
-\title{Mosquito biting rate for \code{BRQS}}
+\title{Compute mosquito biting density for \code{BRQS} (\strong{MY})}
 \usage{
 \method{F_fqM}{BRQS}(t, y, xds_obj, s)
 }
@@ -19,8 +19,13 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Returns \code{fqM}, the daily mosquito biting density on humans
-for each patch in the BRQS model.
+Return the daily mosquito biting density on humans,
+\code{fqM}, for each patch in the \code{BRQS} module.
+Use only the blood-feeding behavioral states: \code{fqM = f*q*(Bu+By+Bz)}.
+}
+\note{
+The current implementation obtains \code{q} using \code{get_f}
+rather than \code{get_q}; this discrepancy requires repair.
 }
 \section{Infective Biting}{
 
@@ -33,6 +38,6 @@ distribution matrix and resident-bite fraction to compute stratum-level
 }
 
 \seealso{
-\link{BRQS}, \link[ramp.xds:F_hbr]{ramp.xds::F_hbr}
+\link{BRQS}, \link[ramp.xds:F_hbr]{ramp.xds::F_hbr}, \link{F_fqZ.BRQS}
 }
 \keyword{internal}

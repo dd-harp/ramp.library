@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQ.R
 \name{dMYdt.BQ}
 \alias{dMYdt.BQ}
-\title{Compute derivatives for \code{BQ} (\strong{MY})}
+\title{Compute the derivatives for \code{BQ} (\strong{MY})}
 \usage{
 \method{dMYdt}{BQ}(t, y, xds_obj, s)
 }
@@ -16,10 +16,22 @@
 \item{s}{the vector species index}
 }
 \value{
-a \link{numeric} vector
+a \link{numeric} vector of derivatives in the module's state-variable order
 }
 \description{
-Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQ ODE model.
+Compute the derivatives for the \code{BQ} module:
+\deqn{\begin{array}{rl}
+dB_u/dt &= \Lambda+\nu Q_u-fB_u-\Omega_b\cdot B_u \\
+dQ_u/dt &= f(1-q\kappa)B_u-\nu Q_u-\Omega_q\cdot Q_u \\
+dB_y/dt &= \nu Q_y-(f+\phi)B_y-\Omega_b\cdot B_y \\
+dQ_y/dt &= fq\kappa B_u+fB_y-(\nu+\phi)Q_y-\Omega_q\cdot Q_y \\
+dB_z/dt &= \phi B_y+\nu Q_z-fB_z-\Omega_b\cdot B_z \\
+dQ_z/dt &= \phi Q_y+fB_z-\nu Q_z-\Omega_q\cdot Q_z
+\end{array}}
+}
+\note{
+Derivatives are returned in blocks for \code{Bu}, \code{Qu}, \code{By}, \code{Qy},
+\code{Bz}, and \code{Qz}, each in patch order.
 }
 \section{State Variables}{
 
@@ -54,7 +66,7 @@ Implements \link[ramp.xds:dMYdt]{dMYdt} for the BQ ODE model.
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 

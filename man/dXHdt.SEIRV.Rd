@@ -2,7 +2,7 @@
 % Please edit documentation in R/host-xde-SEIRV.R
 \name{dXHdt.SEIRV}
 \alias{dXHdt.SEIRV}
-\title{Compute derivatives for \code{SEIRV} (\strong{XH})}
+\title{Compute the derivatives for \code{SEIRV} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEIRV}(t, y, xds_obj, i)
 }
@@ -19,13 +19,24 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEIRV} model
+The derivatives for the \code{SEIRV} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dE/dt &= hS-\tau E-\mathbf{D}(t,E) \\
+dI/dt &= \tau E-rI-\mathbf{D}(t,I) \\
+dR/dt &= (1-\varepsilon)rI-\gamma R-\mathbf{D}(t,R) \\
+dV/dt &= \alpha\mathbf{B}(t,y)+\varepsilon rI-\mathbf{D}(t,V)
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{S=H-E-I-R-V},
+\eqn{\varepsilon} is \code{varepsilon},
+\eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

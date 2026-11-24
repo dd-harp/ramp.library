@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{change_MY_inits.BQm}
 \alias{change_MY_inits.BQm}
-\title{Set new MY parameter values}
+\title{Change initial values for \code{BQm} (\strong{MY})}
 \usage{
 \method{change_MY_inits}{BQm}(xds_obj, options = list(), s = 1)
 }
@@ -17,7 +17,14 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{BQm} module (\strong{MY}) for the \eqn{s^{th}} species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{BQm}
+module, leaving other values unchanged.
+}
+\note{
+Stored initial values for this module are at
+\code{xds_obj$MY_obj[[s]]$inits}.
+}
+\seealso{
+\link{make_MY_inits_BQm}, \link{setup_MY_inits.BQm}
 }
 \keyword{internal}

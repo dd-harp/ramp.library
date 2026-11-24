@@ -17,17 +17,35 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{stages} module (\strong{L}) for the \eqn{s^{th}} species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{stages}
+module, leaving other values unchanged.
 
 Named values passed in \code{options} update the corresponding
-time-varying baseline (\verb{_t}) fields, which take effect at the
-next call to \link{LEffectSizes.stages}.
+parameter fields directly; this module has no bionomic parameter ports.
+Call \link[ramp.xds:LBionomics]{ramp.xds::LBionomics} at time zero after updating the parameter fields,
+without calling \link[ramp.xds:LEffectSizes]{ramp.xds::LEffectSizes}.
 
 Recognised names: \code{psi_E}, \code{phi_E}, \code{psi1}–\code{psi4}, \code{xi1}–\code{xi4},
 \code{phi1}–\code{phi4}, \code{theta1}–\code{theta4}, \code{phi_P}, \code{psi_P}.
 }
+\section{Parameters}{
+
+\describe{
+\item{\code{psi_E}}{egg maturation (hatching) rate (\eqn{\psi_E})}
+\item{\code{phi_E}}{egg mortality rate (\eqn{\phi_E})}
+\item{\code{psi1}, \code{psi2}, \code{psi3}, \code{psi4}}{larval instar maturation rates (\eqn{\psi_i})}
+\item{\code{xi1}, \code{xi2}, \code{xi3}, \code{xi4}}{delayed maturation responses to mean crowding (\eqn{\xi_i})}
+\item{\code{phi1}, \code{phi2}, \code{phi3}, \code{phi4}}{density-independent larval mortality rates (\eqn{\phi_i})}
+\item{\code{theta1}, \code{theta2}, \code{theta3}, \code{theta4}}{density-dependent larval mortality slopes (\eqn{\theta_i})}
+\item{\code{phi_P}}{pupal mortality rate (\eqn{\phi_P})}
+\item{\code{psi_P}}{pupal maturation (emergence) rate (\eqn{\psi_P})}
+\item{\code{w1}, \code{w2}, \code{w3}}{contributions of \eqn{L_1}, \eqn{L_2}, and \eqn{L_3} to mean crowding (\eqn{w_i})}
+}
+}
+
 \seealso{
+\link{make_L_obj_stages}, \link{get_L_pars.stages}
+
 \link{dLdt.stages} or \link{make_L_obj_stages}
 }
 \keyword{internal}

@@ -17,14 +17,15 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SEIS} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change parameter values named in \code{options} leaving other values unchanged.
+Change parameter values named in \code{options} for the \code{SEIS}
+module, leaving other values unchanged.
 }
 \section{Parameters}{
 
 The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 \link{change_XH_pars.SEIS} describe the dynamics or detection by diagnostic methods.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{nu}}{rate of progression from exposed to infectious}
@@ -38,6 +39,8 @@ The parameters returned by \link{get_XH_pars.SEIS} and modifiable by
 }
 
 \seealso{
+\link{make_XH_obj_SEIS}, \link{get_XH_pars.SEIS}
+
 \link{SEIS}
 }
 \keyword{internal}

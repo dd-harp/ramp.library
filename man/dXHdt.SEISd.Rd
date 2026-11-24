@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEISd.R
 \name{dXHdt.SEISd}
 \alias{dXHdt.SEISd}
-\title{Compute derivatives for \code{SEISd} (\strong{XH})}
+\title{Compute the derivatives for \code{SEISd} (\strong{XH})}
 \usage{
 \method{dXHdt}{SEISd}(t, y, xds_obj, i)
 }
@@ -19,13 +19,26 @@
 a \link{numeric} vector
 }
 \description{
-Implements \link[ramp.xds:dXHdt]{dXHdt} for the \code{SEISd} model
+The derivatives for the \code{SEISd} module are:
+\deqn{\begin{array}{rl}
+dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+dE/dt &= hS-C_\nu(t)-\mathbf{D}(t,E) \\
+dI/dt &= (1-\rho)C_\nu(t)-(r+\sigma+\Xi(t))I-\mathbf{D}(t,I) \\
+d\,\mathrm{cases}/dt &= hS
+\end{array}}
+Here \eqn{h} is \code{foi}, \eqn{S=H-E-I}, and
+\eqn{\Xi(t)=mda(t)+msat(t)}.
+The delayed progression rate \eqn{C_\nu(t)} is zero for \eqn{t\leq\nu};
+otherwise it is the derivative of \code{cases} at \eqn{t-\nu},
+obtained with \link[deSolve:lagderiv]{deSolve::lagderiv}.
+The term \eqn{\mathbf{B}(t,y)} is returned by \link[ramp.xds:Births]{ramp.xds::Births}, and
+\eqn{\mathbf{D}(t,X)} is returned by \link[ramp.xds:Deaths]{ramp.xds::Deaths} for population \eqn{X}.
 }
 \section{Demography}{
 
 
 
-This model has no parameter
+This model has no parameters
 or terms to describe disease-induced mortality.
 
 \describe{

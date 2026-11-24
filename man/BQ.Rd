@@ -43,7 +43,7 @@ Infection is tracked as uninfected (\strong{u}), exposed (\strong{y}), or infect
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 
@@ -102,7 +102,7 @@ compute stratum-level \code{HBR}.
 
 \section{Egg Laying}{
 
-Gravid mosquitoes lay eggs at rate \eqn{\nu}; the egg batch rate and
+Gravid mosquitoes lay eggs at rate \eqn{\nu}; the oviposition rate and
 number of eggs per batch determine patch-level egg production:
 \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
 \link{F_eggs.BQ} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying} for

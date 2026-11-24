@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2026-11-18" />
+<meta name="date" content="2026-11-23" />
 
 <title>Compartmental Models</title>
 
@@ -339,7 +339,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Compartmental Models</h1>
-<h4 class="date">November 18, 2026</h4>
+<h4 class="date">November 23, 2026</h4>
 
 
 
@@ -370,6 +370,12 @@ humans</p></li>
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
+<p>All four models also have test positivity <code>q</code> (default
+<code>0.8</code>). <code>F_pr_obs</code> computes observed prevalence as
+<code>q * I / H</code>; after solving, use
+<code>get_PR(model, method = &quot;obs&quot;)</code>. Their skill sets report
+<code>pr_obs = TRUE</code> while retaining <code>malaria = FALSE</code>
+and omitting <code>pf_*</code> flags.</p>
 <ul>
 <li><p><span class="math inline">\(r\)</span> is the rate infections
 clear</p></li>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adult-MY-BQm.R
 \name{F_eggs.BQm}
 \alias{F_eggs.BQm}
-\title{Egg production rate for \code{BQm}}
+\title{Compute egg production for \code{BQm} (\strong{MY})}
 \usage{
 \method{F_eggs}{BQm}(t, y, xds_obj, s)
 }
@@ -19,11 +19,11 @@
 a \link{numeric} vector of length \code{nPatches}
 }
 \description{
-Implements \link[ramp.xds:F_eggs]{F_eggs} for the BQm model.
+Return the number of eggs laid by the adult mosquito population, per patch
 }
 \section{Egg Laying}{
 
-Gravid mosquitoes lay eggs at rate \eqn{\nu}; the egg batch rate and
+Gravid mosquitoes lay eggs at rate \eqn{\nu}; the oviposition rate and
 number of eggs per batch determine patch-level egg production:
 \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
 \link{F_eggs.BQm} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}

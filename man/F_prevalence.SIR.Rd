@@ -9,7 +9,7 @@
 \arguments{
 \item{vars}{a list with the variables attached by name}
 
-\item{XH_obj}{a list defining a model for human}
+\item{XH_obj}{a list defining a model for humans}
 }
 \value{
 a \link{numeric} vector of length \code{nStrata}
@@ -18,6 +18,8 @@ a \link{numeric} vector of length \code{nStrata}
 Implements \link[ramp.xds:F_prevalence]{F_prevalence} for the \code{SIR} model.
 }
 \section{Prevalence}{
+
+\link{F_pr_obs.SIR} returns observed prevalence \eqn{x_q=qI/H}.
 
 \link{F_prevalence.SIR} returns \eqn{x=I/H}. The parsed \code{true_pr} output
 also uses \eqn{I/H}. This module has no diagnostic sensitivity parameters

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-garki.R
 \name{make_XH_obj_garki}
 \alias{make_XH_obj_garki}
-\title{Make parameters for garki human model}
+\title{Make a module object for \code{garki} (\strong{XH})}
 \usage{
 make_XH_obj_garki(
   nStrata,
@@ -16,7 +16,8 @@ make_XH_obj_garki(
   q1 = 0.7,
   q2 = 0.5,
   q3 = 0.3,
-  mu = 1/65/365
+  mu = 1/65/365,
+  q = 0.8
 )
 }
 \arguments{
@@ -43,11 +44,18 @@ make_XH_obj_garki(
 \item{q3}{a \link{numeric} detection of y3}
 
 \item{mu}{a \link{numeric} the death rate}
+
+\item{q}{test positivity; a numeric scalar or input of length \code{nStrata}}
 }
 \value{
 a \link{list}
 }
 \description{
-Make parameters for garki human model
+Create a \code{garki} module object and initialize its parameters.
+Inspect parameters with \link{get_XH_pars.garki} and change supported values
+with \link{change_XH_pars.garki}. Values in \code{options} override parameter arguments.
+}
+\seealso{
+\link{get_XH_pars.garki}, \link{change_XH_pars.garki}
 }
 \keyword{internal}

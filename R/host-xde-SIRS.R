@@ -1,5 +1,11 @@
 # specialized methods for the human SIRS model
 
+
+# TODO: Review Update_XHt.SIRS: it computes Ht but returns undefined St.
+# Reconcile the update equations, state order, and description before documenting them.
+# TODO: Review change_XH_inits.SIRS repairs: read fallback values from inits
+# and update H instead of S. Confirm partial updates and species isolation.
+
 #' @title The `SIRS` module for the **XH** component
 #' @description
 #' Implements the **XH** component using a Susceptible-Infectious-Recovered-Susceptible
@@ -28,6 +34,7 @@
 #' [make_XH_obj_SIRS] supplies defaults for the parameters, which can be changed
 #' using [change_XH_pars.SIRS].
 #' \describe{
+#'   \item{`q`}{test positivity (default `0.8`)}
 #'   \item{`b`}{transmission probability from mosquito to human}
 #'   \item{`c`}{transmission probability from human to mosquito}
 #'   \item{`r`}{clearance rate for infections}
@@ -49,6 +56,8 @@
 #' \eqn{H}. Susceptible density is redundant and is computed after solving.
 #'
 #' @section Prevalence:
+#' [F_pr_obs.SIRS] returns observed prevalence \eqn{x_q=qI/H}.
+#'
 #' [F_prevalence.SIRS] returns \eqn{x=I/H}. This module has no diagnostic
 #' sensitivity parameters or module-specific light microscopy, RDT, or PCR
 #' prevalence methods.
@@ -73,48 +82,17 @@
 #' @rdname SIRS
 NULL
 
-#' @title The **XH** module skill set
-#'
-#' @description The **XH** skill set is a list of
-#' a module's capabilities.
-#'
-#' @note This method dispatches on `class(xds_obj$XH_obj)`
-#'
-#' @inheritParams ramp.xds::get_skillset_XH
-#'
-#' @return the **XH** module skill set, as a list
-#' @keywords internal
-#'
-#' @seealso [SIRS]
-#' @export
-get_skillset_XH.SIRS = function(xds_obj,i){
-  skills =   list(
-    delay       = FALSE,
-    demography  = TRUE,
-    prevalence  = TRUE,
-    malaria     = TRUE,
-    diagnostics = "linear",
-    mda         = FALSE,
-    msat        = FALSE
-  )
-  return(skills)
-}
 
-#' Run checks before solving (**XH**)
-#'
-#' @inheritParams ramp.xds::check_XH
-#'
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @seealso [SIRS]
-#' @export
-check_XH.SIRS = function(xds_obj, i){
-  return(xds_obj)
-}
-
-
-#' @title Compute derivatives for `SIRS` (**XH**)
-#' @description Implements [dXHdt] for the `SIRS` model
+#' @title Compute the derivatives for `SIRS` (**XH**)
+#' @description The derivatives for the `SIRS` module are:
+#' \deqn{\begin{array}{rl}
+#' dH/dt &= \mathbf{B}(t,y)-\mathbf{D}(t,H) \\
+#' dI/dt &= hS-rI-\mathbf{D}(t,I) \\
+#' dR/dt &= rI-\gamma R-\mathbf{D}(t,R)
+#' \end{array}}
+#' Here \eqn{h} is `foi`, \eqn{S=H-I-R},
+#' \eqn{\mathbf{B}(t,y)} is returned by [ramp.xds::Births], and
+#' \eqn{\mathbf{D}(t,X)} is returned by [ramp.xds::Deaths] for population \eqn{X}.
 #' @inheritParams ramp.xds::dXHdt
 #' @return a [numeric] vector
 #' @keywords internal
@@ -138,7 +116,7 @@ dXHdt.SIRS <- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title DTS updating for `SIRS` (**XH**)
+#' @title Update states for `SIRS` (**XH**)
 #' @description Implements [Update_XHt] for the `SIRS` model
 #' @inheritParams ramp.xds::Update_XHt
 #' @return a [numeric] vector
@@ -161,148 +139,18 @@ Update_XHt.SIRS<- function(t, y, xds_obj, i) {
   })
 }
 
-#' @title Compute the steady states for the dts `SIRS` model as a function of the daily EIR
-#' @description Compute the steady state of the  dts `SIRS` model as a function of the daily eir.
-#' @inheritParams ramp.xds::steady_state_X
-#' @return the steady states as a named vector
-#' @keywords internal
-#' @seealso [SIRS]
-#' @export
-steady_state_X.SIRS_dts = function(foi, H,  xds_obj, i=1){
-  ar = exp(-foi)
-  with(xds_obj$XH_obj[[i]],{
-    Iteq = (ar*H*gamma)/(r*gamma + ar*(r+gamma))
-    Rteq = (ar*H*r)/(r*gamma + ar*(r+gamma))
-    Steq = H -Iteq-Rteq
-  return(c(S=Steq, I=Iteq, R=Rteq))
-})}
 
-
-#' @title Change parameters for `SIRS` (**XH**)
-#' @description For the `SIRS` module (**XH**) for the \eqn{i^{th}} host species,
-#' change parameter values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_pars
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SIRS Parameters
-#' @seealso [SIRS]
-#' @export
-change_XH_pars.SIRS <- function(xds_obj, options=list(), i=1) {
-  nHabitats <- xds_obj$nHabitats
-  with(xds_obj$XH_obj[[i]], with(options,{
-    xds_obj$XH_obj[[i]]$b <- b
-    xds_obj$XH_obj[[i]]$c <- c
-    xds_obj$XH_obj[[i]]$r <- r
-    xds_obj$XH_obj[[i]]$gamma <- gamma
-    return(xds_obj)
-  }))}
-
-
-#' @title Change initial values for `SIRS` (**XH**)
-#' @description For the `SIRS` module (**XH**) for the \eqn{i^{th}} host species,
-#' change initial values named in `options` leaving other values unchanged.
-#' @inheritParams ramp.xds::change_XH_inits
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SIRS State Variables
-#' @seealso [SIRS]
-#' @export
-change_XH_inits.SIRS <- function(xds_obj, options=list(), i=1) {
-  with(xds_obj$XH_obj[[i]], with(options,{
-    xds_obj$XH_obj[[i]]$inits$S = S
-    xds_obj$XH_obj[[i]]$inits$I = I
-    xds_obj$XH_obj[[i]]$inits$R = R
-    return(xds_obj)
-  }))}
-
-
-#' @title Compute the steady states for the `SIRS` model as a function of the daily EIR
-#' @description Compute the steady state of the `SIRS` model as a function of the daily eir.
-#' @inheritParams  ramp.xds::steady_state_X
-#' @return the steady states as a named vector
-#' @keywords internal
-#' @seealso [SIRS]
-#' @export
-steady_state_X.SIRS = function(foi, H, xds_obj, i=1){
-  with(xds_obj$XH_obj[[i]],{
-    Ieq = foi*H*gamma/((r*gamma) + foi*(gamma+r))
-    Req = foi*r*H/((r*gamma) +foi*(gamma+r))
-    Seq = H-Ieq-Req
-    return(c(S=as.vector(Seq), I=as.vector(Ieq), R = as.vector(Req)))
-})}
-
-#' @title Make initial values for `SIRS` (**XH**)
-#' @param nStrata the number of strata in the model
-#' @param options a [list] to override defaults
-#' @param H the initial value for H
-#' @param I the initial value for I
-#' @param R the initial values for R
-#' @return a [list]
-#' @keywords internal
-#' @inheritSection SIRS State Variables
-#' @seealso [SIRS]
-#' @export
-make_XH_inits_SIRS = function(nStrata,  options = list(), H=1000, I=1, R=0){with(options,{
-  H = checkIt(H, nStrata)
-  I = checkIt(I, nStrata)
-  R = checkIt(R, nStrata)
-  return(list(H=H, I=I, R=R))
-})}
-
-
-
-#' @title Setup initial values for `SIRS` (**XH**)
-#' @description Set initial values for all the variables in the `SIRS` module
-#' (**XH**) for the \eqn{i^{th}} host species.
-#' + [make_XH_inits_SIRS] supplies default values
-#' + The values in `options` override the defaults
-#' + To inspect variable names, use [get_XH_inits] or
-#' see the inline module documentation.
-#' @inheritParams ramp.xds::setup_XH_inits
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SIRS State Variables
-#' @seealso [SIRS]
-#' @export
-setup_XH_inits.SIRS = function(xds_obj, options=list(), i=1){
-  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIRS(xds_obj$nStrata[i], options)
-  return(xds_obj)
-}
-
-
-#' @title Add indices for human population to parameter list
-#' @description Implements [setup_XH_ix] for the `SIRS` model.
-#' @inheritParams ramp.xds::setup_XH_ix
-#' @return an **`xds`** model object
-#' @importFrom utils tail
-#' @keywords internal
-#' @seealso [SIRS]
-#' @export
-setup_XH_ix.SIRS <- function(xds_obj, i) {with(xds_obj,{
-
-  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(H_ix, 1)
-
-  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(I_ix, 1)
-
-  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
-  max_ix <- tail(R_ix, 1)
-
-  xds_obj$max_ix = max_ix
-  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix, I_ix=I_ix, R_ix=R_ix)
-  return(xds_obj)
-})}
-
-
-#' @title List variables for `SIRS` (**XH**)
-#' @description This method dispatches on the type of `xds_obj$XH_obj`
+#' @title Get the state variables for `SIRS` (**XH**)
+#' @description Extract the state variables for the `SIRS` module
+#' from `y` and return them by name in a list for use during model solving.
+#' Also compute susceptible density `S = H - I - R`.
 #' @inheritParams ramp.xds::get_XH_vars
-#' @return a [list]
+#' @return a named [list] of state variables and module-specific derived quantities
 #' @keywords internal
 #' @inheritSection SIRS State Variables
 #' @seealso [SIRS]
 #' @export
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
 get_XH_vars.SIRS <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]]$ix,{
     H = y[H_ix]
@@ -310,66 +158,6 @@ get_XH_vars.SIRS <- function(y, xds_obj, i) {
     R = y[R_ix]
     S = H-I-R
     return(list(S=S, I=I, R=R, H=H))})
-}
-
-#' @title Make a `SIRS` **XH** model object
-#' @param nStrata is the number of population strata
-#' @param options a [list] that could override defaults
-#' @param b the proportion of infective bites that cause an infection
-#' @param r the clearance rate for infections
-#' @param c the proportion of bites on infected humans that infect a mosquito
-#' @param gamma the rate of loss of immunity
-#' @return an **XH** model object
-#' @keywords internal
-#' @inheritSection SIRS Parameters
-#' @seealso [SIRS]
-#' @export
-make_XH_obj_SIRS = function(nStrata, options=list(),
-                          b=0.55, r=1/180, c=0.15,gamma=0.5){
-  with(options,{
-    XH_obj = list()
-    class(XH_obj) <- c("SIRS")
-
-    XH_obj$b = checkIt(b, nStrata)
-    XH_obj$c = checkIt(c, nStrata)
-    XH_obj$r = checkIt(r, nStrata)
-    XH_obj$gamma = checkIt(gamma, nStrata)
-
-
-    return(XH_obj)
-})}
-
-
-
-#' @title Set up `SIRS` (**XH**)
-#' @description
-#'
-#' This sets up an `SIRS` model object for the **XH** module for the \eqn{i^{th}} host species
-#' + the object is created by [make_XH_obj_SIRS]
-#' + the initial conditions are set by [setup_XH_inits]
-#' + `options` is passed to both to override the defaults
-#'
-#' @seealso [SIRS], [make_XH_obj_SIRS]
-#'
-#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
-#'
-#' @inheritParams ramp.xds::setup_XH_obj
-#' @return an **`xds`** model object
-#' @keywords internal
-#' @inheritSection SIRS State Variables
-#' @inheritSection SIRS Parameters
-#' @export
-setup_XH_obj.SIRS = function(XHname, residence, xds_obj, options=list(), i=1){
-  xds_obj$XHname = "SIRS"
-  xds_obj$XH_obj[[i]] = make_XH_obj_SIRS(xds_obj$nStrata[1], options)
-  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
-  xds_obj$XH_obj[[i]]$skill_set <- get_skillset_XH(xds_obj, i)
-  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
-  xds_obj <- setup_demog_obj(xds_obj, i)
-  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
-  xds_obj <- setup_time_away("setup", xds_obj, i=i)
-  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
-  return(xds_obj)
 }
 
 
@@ -422,22 +210,213 @@ F_infectivity.SIRS <- function(y, xds_obj, i) {
   with(xds_obj$XH_obj[[i]],return(b))
 }
 
-#' @title Compute the net infectiousness
-#' @description Implements [F_ni] for the `SIRS` model.
-#' @inheritParams ramp.xds::F_ni
-#' @return a [numeric] vector of length `nStrata`
+#' @title Make a module object for `SIRS` (**XH**)
+#' @description Create an `SIRS` module object and initialize its parameters.
+#' Inspect parameters with [get_XH_pars.SIRS] and change supported values
+#' with [change_XH_pars.SIRS]. Values in `options` override parameter arguments.
+#' @seealso [get_XH_pars.SIRS], [change_XH_pars.SIRS]
+#' @param nStrata is the number of population strata
+#' @param options a [list] that could override defaults
+#' @param b the proportion of infective bites that cause an infection
+#' @param r the clearance rate for infections
+#' @param c the proportion of bites on infected humans that infect a mosquito
+#' @param gamma the rate of loss of immunity
+#' @return an **XH** model object
 #' @keywords internal
-#' @inheritSection SIRS Infectiousness
+#' @inheritSection SIRS Parameters
 #' @seealso [SIRS]
+#' @param q test positivity; a numeric scalar or input of length `nStrata`
 #' @export
-F_ni.SIRS <- function(vars, XH_obj) {
-  with(vars, with(XH_obj, c*I/H))
+make_XH_obj_SIRS = function(nStrata, options=list(),
+                          b=0.55, r=1/180, c=0.15,gamma=0.5, q=0.8){
+  with(options,{
+    XH_obj = list()
+    class(XH_obj) <- c("SIRS")
+
+    XH_obj$b = checkIt(b, nStrata)
+    XH_obj$c = checkIt(c, nStrata)
+    XH_obj$r = checkIt(r, nStrata)
+    XH_obj$gamma = checkIt(gamma, nStrata)
+
+
+    XH_obj$q = checkIt(q, nStrata)
+
+    return(XH_obj)
+})}
+
+#' @title Set up the module object for `SIRS` (**XH**)
+#' @description
+#'
+#' Set up an `SIRS` module object for the **XH** component and the \eqn{i^{th}} host species.
+#'
+#' + Set the module name to `SIRS`.
+#' + Create the module object with [make_XH_obj_SIRS], passing `nStrata[i]` and `options`.
+#' + Set initial values using [ramp.xds::setup_XH_inits], passing `options` to override defaults.
+#' + Initialize the time-spent matrix using [ramp.xds::setup_timespent.setup].
+#' + Initialize birth and death rates using [ramp.xds::setup_demog_obj].
+#' + Initialize blood search weights using [ramp.xds::setup_blood_search_weights.setup].
+#' + Initialize time away using [ramp.xds::setup_time_away.setup].
+#' + Initialize travel EIR using [ramp.xds::setup_travel_eir.no_travel].
+#' + Return the updated **`xds`** model object.
+#'
+#' @seealso [SIRS], [make_XH_obj_SIRS]
+#'
+#' @note The module object is stored at `xds_obj$XH_obj[[i]]`
+#'
+#' @inheritParams ramp.xds::setup_XH_obj
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SIRS State Variables
+#' @inheritSection SIRS Parameters
+#' @export
+setup_XH_obj.SIRS = function(XHname, residence, xds_obj, options=list(), i=1){
+  xds_obj$XHname = "SIRS"
+  xds_obj$XH_obj[[i]] = make_XH_obj_SIRS(xds_obj$nStrata[i], options)
+  xds_obj <- setup_XH_inits(xds_obj, options=options, i=i)
+  xds_obj <- setup_timespent("setup", xds_obj, list(residence=residence), i)
+  xds_obj <- setup_demog_obj(xds_obj, i)
+  xds_obj <- setup_blood_search_weights("setup", xds_obj, i=i)
+  xds_obj <- setup_time_away("setup", xds_obj, i=i)
+  xds_obj <- setup_travel_eir("no_travel", xds_obj, i=i)
+  return(xds_obj)
 }
 
+
+
+#' @title Get parameters for `SIRS` (**XH**)
+#' @description Return the parameters for the `SIRS` module as a named list.
+#' @inheritParams ramp.xds::get_XH_pars
+#' @inheritSection SIRS Parameters
+#' @seealso [make_XH_obj_SIRS], [change_XH_pars.SIRS]
+#' @return a named [list] of parameter values
+#' @keywords internal
+#' @export
+get_XH_pars.SIRS <- function(xds_obj, i=1) {
+  with(xds_obj$XH_obj[[i]], list(q=q, b=b, c=c, r=r, gamma=gamma))
+}
+
+
+#' @title Change parameters for `SIRS` (**XH**)
+#' @seealso [make_XH_obj_SIRS], [get_XH_pars.SIRS]
+#' @description Change parameter values named in `options` for the `SIRS`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_pars
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SIRS Parameters
+#' @seealso [SIRS]
+#' @export
+change_XH_pars.SIRS <- function(xds_obj, options=list(), i=1) {
+  nHabitats <- xds_obj$nHabitats
+  with(xds_obj$XH_obj[[i]], with(options,{
+    xds_obj$XH_obj[[i]]$b <- b
+    xds_obj$XH_obj[[i]]$c <- c
+    xds_obj$XH_obj[[i]]$r <- r
+    xds_obj$XH_obj[[i]]$gamma <- gamma
+    xds_obj$XH_obj[[i]]$q <- q
+    return(xds_obj)
+  }))}
+
+#' @title Make initial values for `SIRS` (**XH**)
+#' @description Create a named list of initial values for the `SIRS` module.
+#' Values in `options` override the defaults.
+#' @details Initial values must be numeric scalars or have length `nStrata`.
+#' Scalars are expanded to that length.
+#' @param nStrata the number of strata in the model
+#' @param options a [list] to override defaults
+#' @param H the initial value for H
+#' @param I the initial value for I
+#' @param R the initial values for R
+#' @return a named [list] of initial values
+#' @keywords internal
+#' @inheritSection SIRS State Variables
+#' @seealso [SIRS]
+#' @export
+#' @seealso [setup_XH_inits.SIRS], [change_XH_inits.SIRS]
+make_XH_inits_SIRS = function(nStrata,  options = list(), H=1000, I=1, R=0){with(options,{
+  H = checkIt(H, nStrata)
+  I = checkIt(I, nStrata)
+  R = checkIt(R, nStrata)
+  return(list(H=H, I=I, R=R))
+})}
+
+
+
+#' @title Set up initial values for `SIRS` (**XH**)
+#' @description Set up initial values for the `SIRS` module using
+#' [make_XH_inits_SIRS]. Values in `options` override the defaults.
+#' @inheritParams ramp.xds::setup_XH_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SIRS State Variables
+#' @seealso [SIRS]
+#' @export
+#' @seealso [change_XH_inits.SIRS]
+#' @note Initial values are stored at `xds_obj$XH_obj[[i]]$inits`.
+#' @seealso [ramp.xds::get_XH_inits]
+setup_XH_inits.SIRS = function(xds_obj, options=list(), i=1){
+  xds_obj$XH_obj[[i]]$inits = make_XH_inits_SIRS(xds_obj$nStrata[i], options)
+  return(xds_obj)
+}
+
+
+#' @title Change initial values for `SIRS` (**XH**)
+#' @description Change initial values named in `options` for the `SIRS`
+#' module, leaving other values unchanged.
+#' @inheritParams ramp.xds::change_XH_inits
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @inheritSection SIRS State Variables
+#' @seealso [SIRS]
+#' @export
+#' @seealso [make_XH_inits_SIRS], [setup_XH_inits.SIRS]
+#' @note Stored initial values for this module are at
+#' `xds_obj$XH_obj[[i]]$inits`.
+change_XH_inits.SIRS <- function(xds_obj, options=list(), i=1) {
+  with(xds_obj$XH_obj[[i]]$inits, with(options,{
+    xds_obj$XH_obj[[i]]$inits$H = H
+    xds_obj$XH_obj[[i]]$inits$I = I
+    xds_obj$XH_obj[[i]]$inits$R = R
+    return(xds_obj)
+  }))}
+
+
+#' @title Set up variable indices for `SIRS` (**XH**)
+#' @description Assign consecutive variable indices for the `SIRS` module,
+#' starting after `xds_obj$max_ix`, and update the maximum index.
+#' Allocate blocks in the order `H_ix`, `I_ix`, `R_ix`.
+#' Each block has length `nStrata[i]`.
+#' @inheritParams ramp.xds::setup_XH_ix
+#' @return an **`xds`** model object
+#' @importFrom utils tail
+#' @keywords internal
+#' @seealso [SIRS]
+#' @export
+#' @note Indices are stored at `xds_obj$XH_obj[[i]]$ix`.
+#' The maximum index is stored at `xds_obj$max_ix`.
+setup_XH_ix.SIRS <- function(xds_obj, i) {with(xds_obj,{
+
+  H_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(H_ix, 1)
+
+  I_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(I_ix, 1)
+
+  R_ix <- seq(from = max_ix+1, length.out=nStrata[i])
+  max_ix <- tail(R_ix, 1)
+
+  xds_obj$max_ix = max_ix
+  xds_obj$XH_obj[[i]]$ix = list(H_ix=H_ix, I_ix=I_ix, R_ix=R_ix)
+  return(xds_obj)
+})}
+
 #' @title Parse outputs for `SIRS` (**XH**)
-#' @description Implements [parse_XH_orbits] for the `SIRS` model
+#' @description Extract the model state outputs for the `SIRS` module
+#' from `outputs` and return them by name in a list.
+#' Also compute `S = H-I-R`.
+#' @note Variable indices are stored at `xds_obj$XH_obj[[i]]$ix`.
 #' @inheritParams ramp.xds::parse_XH_orbits
-#' @return a named list of module variables
+#' @return a [list]
 #' @keywords internal
 #' @inheritSection SIRS State Variables
 #' @seealso [SIRS]
@@ -465,6 +444,30 @@ F_prevalence.SIRS <- function(vars, XH_obj) {
   return(pr)
 }
 
+#' @title Compute observed prevalence
+#' @description Return observed prevalence for the `SIRS` module as
+#' `q` times the true prevalence returned by [ramp.xds::F_prevalence].
+#' @inheritParams ramp.xds::F_pr_obs
+#' @return a [numeric] vector of length `nStrata`
+#' @seealso [SIRS]
+#' @keywords internal
+#' @export
+F_pr_obs.SIRS <- function(vars, XH_obj) {
+  XH_obj$q * ramp.xds::F_prevalence(vars, XH_obj)
+}
+
+#' @title Compute the net infectiousness
+#' @description Implements [F_ni] for the `SIRS` model.
+#' @inheritParams ramp.xds::F_ni
+#' @return a [numeric] vector of length `nStrata`
+#' @keywords internal
+#' @inheritSection SIRS Infectiousness
+#' @seealso [SIRS]
+#' @export
+F_ni.SIRS <- function(vars, XH_obj) {
+  with(vars, with(XH_obj, c*I/H))
+}
+
 
 
 
@@ -481,6 +484,114 @@ get_HTC.SIRS <- function(xds_obj, i) {
        HTC <- c/r,
        return(HTC)
   )
+}
+
+#' @title Check `SIRS` (**XH**)
+#'
+#' @inheritParams ramp.xds::check_XH
+#'
+#' @return an **`xds`** model object
+#' @keywords internal
+#' @seealso [SIRS]
+#' @export
+check_XH.SIRS = function(xds_obj, i){
+  return(xds_obj)
+}
+
+#' @title Get the skill set for `SIRS` (**XH**)
+#'
+#' @description Return the capabilities and compatibilities of the `SIRS` module as a list.
+#'
+#' @inheritParams ramp.xds::get_skillset_XH
+#'
+#' @return the **XH** module skill set, as a list
+#' @keywords internal
+#'
+#' @seealso [SIRS]
+#' @export
+get_skillset_XH.SIRS = function(xds_obj,i){
+  skills =   list(
+    dts         = FALSE,
+    xde         = TRUE,
+    delay       = FALSE,
+    demography  = TRUE,
+    malaria     = FALSE,
+    pr_obs      = TRUE,
+    mda         = FALSE,
+    msat        = FALSE
+  )
+  return(skills)
+}
+#' @title Compute steady states for `SIRS` (**XH**)
+#' @description Compute steady states given daily FoI `foi` and fixed host density `H`.
+#' @note Delegate to [steady_state_X_SIRS], which dispatches on `xds_obj$xds`.
+#' @inheritParams ramp.xds::steady_state_X
+#' @return a named [numeric] vector containing `S`, `I`, and `R`
+#' @export
+steady_state_X.SIRS = function(foi, H, xds_obj, i=1){
+  steady_state_X_SIRS(foi, H, xds_obj, i)
+}
+
+#' @rdname steady_state_X.SIRS
+#' @export
+steady_state_X_SIRS = function(foi, H, xds_obj, i=1){
+  UseMethod("steady_state_X_SIRS", xds_obj$xds)
+}
+
+
+#' @title Compute steady states for `SIRS` (**XH**)
+#' @description Compute steady-state infection densities for the `SIRS` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' differential-equation system.
+#' @inheritParams steady_state_X_SIRS
+#' @return a named [numeric] vector containing `S`, `I`, and `R`
+#' @keywords internal
+#' @seealso [SIRS]
+#' @export
+steady_state_X_SIRS.xde = function(foi, H, xds_obj, i=1){
+  with(xds_obj$XH_obj[[i]],{
+    Ieq = foi*H*gamma/((r*gamma) + foi*(gamma+r))
+    Req = foi*r*H/((r*gamma) +foi*(gamma+r))
+    Seq = H-Ieq-Req
+    return(c(S=as.vector(Seq), I=as.vector(Ieq), R = as.vector(Req)))
+})}
+
+#' @title Compute steady states for `SIRS` (**XH**)
+#' @description Compute steady-state infection densities for the `SIRS` module
+#' given daily FoI `foi` and fixed host population density `H` for the
+#' discrete-time system.
+#' @inheritParams steady_state_X_SIRS
+#' @return a named [numeric] vector containing `S`, `I`, and `R`
+#' @keywords internal
+#' @seealso [SIRS]
+#' @export
+steady_state_X_SIRS.dts = function(foi, H,  xds_obj, i=1){
+  ar = exp(-foi)
+  with(xds_obj$XH_obj[[i]],{
+    Iteq = (ar*H*gamma)/(r*gamma + ar*(r+gamma))
+    Rteq = (ar*H*r)/(r*gamma + ar*(r+gamma))
+    Steq = H -Iteq-Rteq
+  return(c(S=Steq, I=Iteq, R=Rteq))
+})}
+
+
+
+
+
+#' Plot the density of infected individuals for the `SIRS` model
+#'
+#' @inheritParams ramp.xds::xds_plot_X
+#' @keywords internal
+#' @seealso [SIRS]
+#' @export
+xds_plot_X.SIRS = function(xds_obj, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, add=FALSE){
+  XH = xds_obj$outputs$orbits$XH[[i]]
+  times = xds_obj$outputs$time
+
+  if(add==FALSE)
+    plot(times, 0*times, type = "n", ylim = c(0, max(XH$H)),
+         ylab = "No of. Infected", xlab = "Time")
+  xds_lines_X_SIRS(times, XH, xds_obj$nStrata[i], clrs, llty)
 }
 
 
@@ -508,23 +619,3 @@ xds_lines_X_SIRS = function(times, XH, nStrata, clrs=c("darkblue","darkred","dar
       lines(times, I[,i], col=clrs[2], lty = llty[i])
       lines(times, R[,i], col=clrs[3], lty = llty[i])
     }})}
-
-
-
-
-
-#' Plot the density of infected individuals for the `SIRS` model
-#'
-#' @inheritParams ramp.xds::xds_plot_X
-#' @keywords internal
-#' @seealso [SIRS]
-#' @export
-xds_plot_X.SIRS = function(xds_obj, i=1, clrs=c("darkblue","darkred","darkgreen"), llty=1, add=FALSE){
-  XH = xds_obj$outputs$orbits$XH[[i]]
-  times = xds_obj$outputs$time
-
-  if(add==FALSE)
-    plot(times, 0*times, type = "n", ylim = c(0, max(XH$H)),
-         ylab = "No of. Infected", xlab = "Time")
-  xds_lines_X_SIRS(times, XH, xds_obj$nStrata[i], clrs, llty)
-}

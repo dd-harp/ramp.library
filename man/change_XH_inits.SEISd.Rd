@@ -17,8 +17,13 @@
 an \strong{\code{xds}} model object
 }
 \description{
-For the \code{SEISd} module (\strong{XH}) for the \eqn{i^{th}} host species,
-change initial values named in \code{options} leaving other values unchanged.
+Change initial values named in \code{options} for the \code{SEISd}
+module, leaving other values unchanged.
+Supported values are \code{H}, \code{E}, and \code{I}; \code{cases} is left unchanged.
+}
+\note{
+Stored initial values for this module are at
+\code{xds_obj$XH_obj[[i]]$inits}.
 }
 \section{State Variables}{
 
@@ -37,5 +42,7 @@ to model mass treatment.
 
 \seealso{
 \link{SEISd}
+
+\link{make_XH_inits_SEISd}, \link{setup_XH_inits.SEISd}
 }
 \keyword{internal}

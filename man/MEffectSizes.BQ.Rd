@@ -19,7 +19,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the BQ model
+Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the BQ model.
 }
 \section{Parameters}{
 
@@ -31,7 +31,7 @@ Implements \link[ramp.xds:MEffectSizes]{MEffectSizes} for the BQ model
 \item{\code{sigma_q}}{emigration rate during egg laying}
 \item{\code{mu}}{fraction of emigrating mosquitoes lost}
 \item{\code{eip} or \eqn{\tau}}{extrinsic incubation period; \eqn{\phi=1/\tau}}
-\item{\code{nu} or \eqn{\nu}}{egg batch rate --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
+\item{\code{nu} or \eqn{\nu}}{oviposition rate: the number of egg batches laid in each patch, per mosquito, per day --- use \link[ramp.xds:setup_nu]{ramp.xds::setup_nu} or \link[ramp.xds:setup_egg_batch_rates]{ramp.xds::setup_egg_batch_rates}}
 \item{\code{eggsPerBatch} or \eqn{\Gamma}}{number of eggs per batch}
 }
 

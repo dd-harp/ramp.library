@@ -12,18 +12,21 @@
 \item{i}{the host species index}
 }
 \value{
-a \link{list}
+a named \link{list} of parameter values
 }
 \description{
+Return the parameters for the \code{SIPd} module as a named list.
+}
+\note{
 Parameter values for the \eqn{i^{th}} host are
-stored as \code{xds_obj$XH_obj[[i]]}. This returns the stored parameter
-values as a list.
+stored as \code{xds_obj$XH_obj[[i]]}.
 }
 \section{Parameters}{
 
 The parameters returned by \link{get_XH_pars.SIPd} and modifiable by
 \link{change_XH_pars.SIPd} describe infection, treatment, and chemoprotection.
 \describe{
+\item{\code{q}}{test positivity (default \code{0.8})}
 \item{\code{b}}{transmission probability from mosquito to human}
 \item{\code{c}}{transmission probability from human to mosquito}
 \item{\code{r}}{clearance rate for infections}
@@ -34,6 +37,8 @@ The parameters returned by \link{get_XH_pars.SIPd} and modifiable by
 }
 
 \seealso{
+\link{make_XH_obj_SIPd}, \link{change_XH_pars.SIPd}
+
 \link{SIPd}, \link{make_XH_obj_SIPd}
 }
 \keyword{internal}

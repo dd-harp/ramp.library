@@ -18,10 +18,17 @@ make_XH_inits_SIPd(nStrata, options = list(), H = 1000, I = 1, P = 0)
 \item{P}{the initial number of humans under chemoprotection}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{SIPd} (\strong{XH})
+Create a named list of initial values for the \code{SIPd} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nStrata}.
+Scalars are expanded to that length.
+Initialize \code{cfoi} to zero in each stratum. This accessory value is constructed
+internally rather than independently set through \code{options}.
 }
 \section{State Variables}{
 
@@ -38,5 +45,7 @@ returns this auxiliary initial value under the name \code{cfoi}.
 
 \seealso{
 \link{SIPd}
+
+\link{setup_XH_inits.SIPd}, \link{change_XH_inits.SIPd}
 }
 \keyword{internal}

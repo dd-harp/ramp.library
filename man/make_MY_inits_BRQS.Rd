@@ -51,10 +51,15 @@ make_MY_inits_BRQS(
 \item{Qz}{infectious, gravid mosqutioes}
 }
 \value{
-a \link{list}
+a named \link{list} of initial values
 }
 \description{
-Make initial values for \code{BRQS} (\strong{MY})
+Create a named list of initial values for the \code{BRQS} module.
+Values in \code{options} override the defaults.
+}
+\details{
+Initial values must be numeric scalars or have length \code{nPatches}.
+Scalars are expanded to that length.
 }
 \section{State Variables}{
 
@@ -71,5 +76,7 @@ Make initial values for \code{BRQS} (\strong{MY})
 
 \seealso{
 \link{BRQS}, \link{setup_MY_inits.BRQS}
+
+\link{change_MY_inits.BRQS}
 }
 \keyword{internal}

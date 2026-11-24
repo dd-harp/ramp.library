@@ -95,7 +95,7 @@ distribution matrix and resident-bite fraction to compute stratum-level
 \section{Egg Laying}{
 
 Gravid mosquitoes lay eggs at rate \eqn{\nu}; egg production is the number
-of gravid mosquitoes multiplied by the egg batch rate and eggs per batch:
+of gravid mosquitoes multiplied by the oviposition rate and eggs per batch:
 \deqn{G=\nu(Q_u+Q_y+Q_z)\Gamma.}
 \link{F_eggs.BRQS} computes \eqn{G}, which is passed to \link[ramp.xds:EggLaying]{ramp.xds::EggLaying}
 for distribution among aquatic habitats.

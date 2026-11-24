@@ -2,11 +2,12 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{steady_state_X.SIPd}
 \alias{steady_state_X.SIPd}
-\title{Compute the steady states for the  dts \code{SIPd} model as a function of the daily EIR}
+\alias{steady_state_X_SIPd}
+\title{Compute steady states for \code{SIPd} (\strong{XH})}
 \usage{
 \method{steady_state_X}{SIPd}(foi, H, xds_obj, i = 1)
 
-\method{steady_state_X}{SIPd}(foi, H, xds_obj, i = 1)
+steady_state_X_SIPd(foi, H, xds_obj, i = 1)
 }
 \arguments{
 \item{foi}{the daily FoI}
@@ -18,16 +19,12 @@
 \item{i}{the host species index}
 }
 \value{
-the steady states as a named vector
-
-the steady states as a named list
+a named \link{list} for \code{xde} or a named \link{numeric} vector for \code{dts},
+each containing \code{S}, \code{I}, and \code{P}
 }
 \description{
-Compute the steady state of the  dts \code{SIPd} model as a function of the daily eir.
-
-Compute the steady state of the \code{SIPd} model as a function of the daily eir.
+Compute steady states given daily FoI \code{foi} and fixed host density \code{H}.
 }
-\seealso{
-\link{SIPd}
+\note{
+Delegate to \link{steady_state_X_SIPd}, which dispatches on \code{xds_obj$xds}.
 }
-\keyword{internal}

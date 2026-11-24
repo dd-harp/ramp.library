@@ -7,17 +7,23 @@
 \method{parse_XH_orbits}{SEISd}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }
 \value{
-none
+a \link{list}
 }
 \description{
-Implements \link[ramp.xds:parse_XH_orbits]{parse_XH_orbits} for the \code{SEISd} model
+Extract the model state outputs for the \code{SEISd} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{S = H-E-I}, \code{ni} using \link[ramp.xds:F_ni]{ramp.xds::F_ni}, and \code{pr}
+using \link[ramp.xds:F_prevalence]{ramp.xds::F_prevalence}. The \code{cases} state is not returned.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \seealso{
 \link{SEISd}

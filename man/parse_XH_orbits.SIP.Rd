@@ -7,21 +7,22 @@
 \method{parse_XH_orbits}{SIP}(outputs, xds_obj, i)
 }
 \arguments{
-\item{outputs}{an output matrix returned by \link[deSolve:deSolve]{deSolve}}
+\item{outputs}{a \link{matrix} of model state outputs}
 
 \item{xds_obj}{an \strong{\code{xds}} model object}
 
 \item{i}{the host species index}
 }
 \value{
-\code{SIP} module variables as a named list
+a \link{list}
 }
 \description{
-In \link[ramp.xds:xds_solve]{xds_solve}, after solving a system of equations,
-the orbits for \eqn{H}, \eqn{I} and \eqn{P} are
-pulled from the solutions matrix, and the model
-also computes \eqn{S=H-I-P}. The variables are returned
-as a named list.
+Extract the model state outputs for the \code{SIP} module
+from \code{outputs} and return them by name in a list.
+Also compute \code{S = H-I-P}.
+}
+\note{
+Variable indices are stored at \code{xds_obj$XH_obj[[i]]$ix}.
 }
 \seealso{
 \link{SIP}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIPd.R
 \name{check_XH.SIPd}
 \alias{check_XH.SIPd}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SIPd} (\strong{XH})}
 \usage{
 \method{check_XH}{SIPd}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SIPd} (\strong{XH})
 }
 \seealso{
 \link{SIPd}

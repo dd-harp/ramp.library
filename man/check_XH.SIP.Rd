@@ -2,7 +2,7 @@
 % Please edit documentation in R/malaria-XH-SIP.R
 \name{check_XH.SIP}
 \alias{check_XH.SIP}
-\title{Run checks before solving (\strong{XH})}
+\title{Check \code{SIP} (\strong{XH})}
 \usage{
 \method{check_XH}{SIP}(xds_obj, i)
 }
@@ -15,7 +15,7 @@
 an \strong{\code{xds}} model object
 }
 \description{
-Run checks before solving (\strong{XH})
+Check \code{SIP} (\strong{XH})
 }
 \seealso{
 \link{SIP}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/human-XH-SEIS.R
 \name{Update_XHt.SEIS}
 \alias{Update_XHt.SEIS}
-\title{DTS updating for the \code{SEIS} model for human / vertebrate host infections}
+\title{Update states for \code{SEIS} (\strong{XH})}
 \usage{
 \method{Update_XHt}{SEIS}(t, y, xds_obj, i)
 }
